@@ -1,0 +1,59 @@
+<!Doctype html>
+<html>
+<head>
+	<title>RECursion</title>
+	<!--Package Imports-->
+
+	<!-- Compiled and minified MATERIAL CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified MATERIAL JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+</head>
+<body>
+	<header>
+	<nav><!-- Navigation Color is controlled by class !-->
+		<div class="nav-wrapper #263238 blue-grey darken-3">
+			<a href="#" class="brand-logo"><img class="img" src="http://www.recursionnitd.in/images/log.png"></a>
+			<ul id="nav-mobile" class="right hide-on-med-and-down">
+				<li><a href="/events.html">Events</a></li>
+				<li><a href="/askREC.html">AskREC</a></li>
+				<li><a href="/start.html">Getting Started</a></li>
+				<li><a href="/login.html">Login</a></li>
+			</ul>
+		</div>
+	</nav>
+	</header>
+	<main>
+	{% block content %}
+	{% endblock content %}
+	</main>
+	<footer class="page-footer #263238 blue-grey darken-4"><!-- Footer Color is controlled by class !-->
+		<div class="container">
+			<div class="row">
+				<div class="col 16 s6">
+					<h5 class="white-text">Footer Content</h5>
+                	<p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
+              	</div>
+             	<div class="col l4 offset-l2 s12">
+                <h5 class="white-text">Links</h5>
+	                <ul>
+	                  <li><a class="grey-text text-lighten-3" href="#!">Events</a></li>
+	                  <li><a class="grey-text text-lighten-3" href="#!">AskREC</a></li>
+	                  <li><a class="grey-text text-lighten-3" href="#!">Getting Started</a></li>
+	                  <li><a class="grey-text text-lighten-3" href="#!">Login</a></li>
+	                </ul>
+              	</div>
+            </div>
+        </div>
+        <div class="footer-copyright" id="copyright">
+            <div class="container">
+            © 2018 Copyright RECursion
+            <a class="grey-text text-lighten-4 right" href="https://www.nitdgp.ac.in">College Link</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
