@@ -7,7 +7,7 @@
   main {
     flex: 1 0 auto;
   }
-  .img{
+  #logo{
   	height:70px;
   	filter: invert(1);
   }
