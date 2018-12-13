@@ -1,7 +1,11 @@
+<<<<<<< 443ac1cd90fb0fedcc28cf576b36cf8e07afab86
 from django.urls import path
 from .views import *
 from django.conf.urls import include,url
 from django.conf import settings
+from django.contrib import admin
+from django.urls import path
+from . import views
 
 urlpatterns = [
     path('add', add_question, name='add_question'),
@@ -16,3 +20,12 @@ urlpatterns = [
     path('comment/<int:id>/', add_comment, name='add_comment'),
     path('editcomment/<int:id>/', update_comment, name='update_comment'),
 ]
+app_name = 'recursion_website'
+
+urlpatterns = [
+	path('list/', views.member_list, name="list"),
+    path('create/',views.member_create, name="create"),
+    path('<int:id>/edit/',views.member_edit, name="edit"),
+    path('<int:id>/delete/',views.member_delete, name="delete")
+]
+
