@@ -9,6 +9,20 @@ from django.db import models
 from django.contrib.auth.models import User
  
 # Done
+
+class Members(models.Model):
+
+   name = models.CharField(max_length=100)  
+   year = models.CharField(max_length=20)  
+   position = models.CharField(max_length=100)  
+   branch = models.CharField(max_length=100)  
+   contact_details = models.CharField(max_length=200) 
+   experience = models.CharField(max_length=500)
+   class Meta:
+       managed = True
+       db_table = 'members'
+
+#Done 
 class Questions(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
