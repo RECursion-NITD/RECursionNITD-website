@@ -14,8 +14,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+<<<<<<< HEAD
+from django.urls import path,include
+
+app_name='website'
+
+urlpatterns = [
+    path('admin/', admin.site.urls, name="admin"),
+    path('members/',include('recursion_website.urls'))
+=======
 from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+>>>>>>> cb981e560a3e23deb796a99c56479f9464e862b8
 ]
