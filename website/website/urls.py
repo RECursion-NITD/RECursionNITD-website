@@ -14,10 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-<<<<<<< 2b49a4090b8c013f65e6a6d1b8512575cdca468c
 from django.contrib.auth import views as auth_views
 from django.urls import path,include
 from recursion_website import views
+from django.urls import path,include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,20 +27,10 @@ urlpatterns = [
     path('oauth/', include('social_django.urls', namespace='social')), 
     path('forum/',include('recursion_website.urls'))
     
-=======
-<<<<<<< HEAD
-from django.urls import path,include
 
 app_name='website'
 
 urlpatterns = [
     path('admin/', admin.site.urls, name="admin"),
     path('members/',include('recursion_website.urls'))
-=======
-from django.urls import path
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
->>>>>>> cb981e560a3e23deb796a99c56479f9464e862b8
->>>>>>> update urls.py
-]
