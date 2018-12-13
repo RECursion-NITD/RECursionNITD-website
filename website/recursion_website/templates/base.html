@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>RECursion-NITD Coding Community</title>
+	<meta charset="utf-8" />
+	{% load staticfiles %}
+	<link rel="stylesheet" href="{% static 'personal/css/bootstrap.min.css' %}" type = "text/css"/>
+	<meta name="viewport" content = "width=device-width, initial-scale=1.0">
+	
+	<style type="text/css">
+		html,
+		body {
+		  height:100%
+		}
+	</style>
+</head>
+
+<body class="body" style="background-color:#f6f6f6">
+	<div class="container-fluid" style="min-height:95%; ">
+		<div class="row">
+			  <div class="col-sm-2">
+				  <br>
+				  <left>
+					<img src="{% static 'personal/img/profile.jpg' %}" class="img-responsive" style='max-height:100px;' alt="face">
+				  </left>
+			  </div>
+			  <div class="col-sm-10">
+				  <br>
+				  <center>
+				  <h3>Coding, Teaching and Problem Setting</h3>
+				  </center>
+			  </div>
+		</div><hr>
+
+		<div class="row">
+        <div class="col-sm-3 col-md-2">
+            <br>
+
+            <br>
+            <!-- There's no "well" class in Bootstrap 4. The "card" class can be used instead. -->
+            <div class="card bs-sidebar" id="sidebar" style="background-color:#fff">
+                <nav class="nav nav-pills flex-column flex-sm-row2">
+                    <a class="flex-sm-fill text-sm-center nav-link" href="/">Home</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="/blog/">Blog</a>
+                    <a class="flex-sm-fill text-sm-center nav-link" href="/contact/">Contact</a>
+                </nav>
+            </div> <!--bs-sidebar-->
+        </div> <!--col-sm-3 col-md-2-->
+        <div class="col-sm-9 col-md-10 ">
+
+            <div class='container-fluid'>
+                <div class="row">
+                    <div class="col">
+                        <br><br>
+                        {% block content %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <p><a href="/contact/" target="blank">Contact</a> | <a href="" target="blank">LinkedIn</a> | <a href="" target="blank">Codechef</a> | <a href="" target="blank">Facebook</a> | <a href="" target="blank">Github</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
