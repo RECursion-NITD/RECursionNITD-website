@@ -20,7 +20,7 @@ def add_question(request):
        f = form.save(commit=False)
        f.user_id = request.user
        f.save()
-       return redirect('questions')
+       return redirect('list_questions')
 
     return render(request, 'recursion_website/questions-form.html', {'form': form})
 
@@ -50,9 +50,15 @@ def detail_questions(request, id):
 @login_required
 def update_questions(request, id):
     try:
-        questions =get_object_or_404( Questions,pk=id)
+        question =get_object_or_404( Questions,pk=id)
     except:
         return HttpResponse("id does not exist")
+    else:
+        form = Questionform(request.POST or None, instance=question)
+        if form.is_valid():
+             f= form.save(commit=False)
+             f.user_id = request.user
+             f.save()
+             return redirect('list_questions')
 
-
-    return render(request, 'questions-form.html', { 'questions': questions})  
+    return render(request, 'recursion_website/questions-form.html', { 'form': form})  
