@@ -17,6 +17,7 @@ class Questions(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    visibility = models.BooleanField(default=True)
     def __str__(self):
         return self.title
     class Meta:
@@ -71,7 +72,7 @@ class Answers(models.Model):
 class Comments(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, models.DO_NOTHING)
-    question = models.ForeignKey('Questions', models.DO_NOTHING)
+    question = models.ForeignKey(Questions, models.DO_NOTHING)
     # TO DO
     # AUTOGEN DATETIME
     created_at = models.DateTimeField()
