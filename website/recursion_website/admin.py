@@ -1,7 +1,9 @@
 from django.contrib import admin
+
 from .models import *
 
 # Register your models here.
+
 @admin.register(Questions)
 class QuestionsAdmin(admin.ModelAdmin):
    #readonly_fields = ['created_at','updated_at','user_id']
@@ -29,5 +31,6 @@ class UpvotesAdmin(admin.ModelAdmin):
 
 @admin.register(Follows)
 class FollowsAdmin(admin.ModelAdmin):
-    pass
+  pass
+
 
