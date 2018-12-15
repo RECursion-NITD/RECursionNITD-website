@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Questions</title>
+</head>
+<body>
+<div class="container">
+{% csrf_token %}
+ <h1 class="h2 Bootstrap heading (2rem = 32px) text-primary">Add Questions</h1>
+    
+
+
+    <!-- navigation bar -->
+    <nav class="navbar navbar-expand-sm bg-success navbar-dark h6 heading secondary text">
+        <!-- Links -->
+      <ul class="navbar-nav">
+
+
+        <li class="nav-item">
+           <a class="nav-link" href="{% url 'list_questions' %}">Forum</a>
+        </li>
+          <!-- Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            Manage Account
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">View Account</a>
+            <a class="dropdown-item" href="#">Edit Account </a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+          Questions
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">View my questions</a>
+            <a class="dropdown-item" href="{% url 'add_question' %}">Add New doubts</a>
+          </div>
+        </li>
+
+        <li>
+            <a class="nav-link" href="#">Log out</a>
+        </li>
+      </ul>
+    </nav>
+
+
+
+
+    <div class="jumbotron">
+
+            <ul>
+                    {% for question in questions %}
+                    <li><a href="{% url 'detail_questions' question.id %}">{{ question.title }}</a>
+                        <ul>
+                            {% if question.visibility == True %}
+                                <li>Added By: {{question.user_id}}
+                            </li>
+                            {% else %}
+                            <li>Added By: Anonymous</li>
+                            {% endif %}
+                            <li>Tags: <ul>
+                                {% for tagging in taggings %}
+                              {% if tagging.question == question %}
+                                 {% for tag in tags %}
+                                      {% if tagging.tag == tag %}
+                                         <li>{{tag.name}}</li>
+                                       {% endif %}
+                                 {% endfor %}
+                              {%endif%}
+                            {% endfor %}
+                            </ul>
+                            </li>
+                            <li>Answers: {{ question.answers_set.count }}</li>
+                            <li>Follows: {{ question.follows_set.count }}</li>
+                            <li>Posted On: {{question.created_at}}</li>
+                        </ul>
+                     </li>
+                    {% endfor %}
+                </ul>
+
+      </div>
+</div>
+</body>
+</html>

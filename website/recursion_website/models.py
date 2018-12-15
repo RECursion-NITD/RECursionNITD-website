@@ -14,10 +14,12 @@ class Questions(models.Model):
     description = models.TextField(blank=True, null=True)
     # TODO
     # AUTOGENERATE DATETIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    visibility = models.BooleanField(default=True)
+
+    visibility=models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
     class Meta:
@@ -102,7 +104,7 @@ class Events(models.Model):
 # DONE
 class Follows(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question = models.ForeignKey('Questions', on_delete=models.CASCADE)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     # TODO
     # AUTOGEN DATETIME
     created_at = models.DateTimeField()
@@ -133,20 +135,7 @@ class Follows(models.Model):
 #     class Meta:
 #         managed = True
 #         db_table = 'schema_migrations'
- 
-# DONE
-class Taggings(models.Model):
-    question = models.ForeignKey(Questions,on_delete=models.CASCADE)
-    tag = models.ForeignKey('Tags', on_delete=models.CASCADE)
-    # TBD
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    def __self__(self):
-        return self.question
-    class Meta:
-        managed = True
-        db_table = 'taggings'
- 
+
 # DONE
 class Tags(models.Model):
     name = models.CharField(max_length=30)
@@ -157,7 +146,21 @@ class Tags(models.Model):
         return self.name
     class Meta:
         managed = True
-        db_table = 'tags'
+        db_table = 'tags' 
+# DONE
+class Taggings(models.Model):
+    question = models.ForeignKey(Questions,on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
+    # TBD
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
+    def __self__(self):
+        return self.question
+    class Meta:
+        managed = True
+        db_table = 'taggings'
+ 
+
  
 # DONE
 class Upvotes(models.Model):
