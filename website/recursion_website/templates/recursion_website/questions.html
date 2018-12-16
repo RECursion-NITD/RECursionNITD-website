@@ -1,53 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-     <meta charset="UTF-8">
-    <meta charset="UTF-8">
+    
     <title>Dashboard</title>
 </head>
 <body>
-<div class="container">
+<div >
 {% csrf_token %}
- <h1 class="h2 Bootstrap heading (2rem = 32px) text-primary">Dashboard</h1>
+ <h1 >Dashboard</h1>
     
 
 
     <!-- navigation bar -->
-    <nav class="navbar navbar-expand-sm bg-success navbar-dark h6 heading secondary text">
+    <nav >
         <!-- Links -->
-      <ul class="navbar-nav">
+      <ul >
 
 
-        <li class="nav-item">
-           <a class="nav-link" href="{% url 'list_questions' %}">Forum</a>
+        <li >
+           <a  href="{% url 'list_questions' %}">Forum</a>
         </li>
           <!-- Dropdown -->
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        <li >
+          <a  href="#" id="navbardrop" >
             Manage Account
           </a>
           <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">View Account</a>
-            <a class="dropdown-item" href="#">Edit Account </a>
+            <a  href="#">View Account</a>
+            <a  href="#">Edit Account </a>
           </div>
         </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+        <li >
+          <a  href="#" id="navbardrop" >
           Questions
           </a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">View my questions</a>
-            <a class="dropdown-item" href="{% url 'add_question' %}">Add New doubts</a>
+          <div >
+            <a  href="#">View my questions</a>
+            <a  href="{% url 'add_question' %}">Add New doubts</a>
           </div>
         </li>
 
         <li>
-            <a class="nav-link" href="#">Log out</a>
+            <a  href="#">Log out</a>
         </li>
       </ul>
     </nav>
@@ -55,7 +50,7 @@
 
 
 
-    <div class="jumbotron">
+    <div >
 
             <ul>
                     {% for question in questions %}

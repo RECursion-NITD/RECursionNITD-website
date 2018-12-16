@@ -155,8 +155,8 @@ class Tags(models.Model):
         db_table = 'tags' 
 # DONE
 class Taggings(models.Model):
-    question = models.ForeignKey(Questions,on_delete=models.CASCADE)
-    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
+    question = models.ForeignKey(Questions,on_delete=models.CASCADE,blank=True,null=True)
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE,blank=True,null=True)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)

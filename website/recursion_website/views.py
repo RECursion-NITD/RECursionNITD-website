@@ -14,18 +14,26 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 
+def tagging_add(q_id,t_id):
+    
+    p = Taggings.objects.create(question=get_object_or_404(Questions,pk=q_id) ,tag=get_object_or_404(Tags,pk=t_id))
+    return
+
 
 @csrf_exempt
 def add_question(request):
     form = Questionform(request.POST or None)
     form2=Tagsform(request.POST or None)
-    if form.is_valid() and  form2.is_valid:  
+    if form.is_valid() and  form2.is_valid(): 
        f = form.save(commit=False)
        f2=form2.save(commit=False)  
        f.user_id = request.user
        f.save()
        f2.question=f.title
        f2.save()
+       q_id=f.id
+       t_id=f2.id
+       tagging_add(q_id,t_id)
        return redirect('list_questions')
 
     return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2})
