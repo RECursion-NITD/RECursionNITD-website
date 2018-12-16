@@ -16,13 +16,17 @@ from django.contrib.auth.forms import UserCreationForm
 @csrf_exempt
 def add_question(request):
     form = Questionform(request.POST or None)
-    if form.is_valid():
+    form2=Tagsform(request.POST or None)
+    if form.is_valid() and  form2.is_valid:  
        f = form.save(commit=False)
+       f2=form2.save(commit=False)  
        f.user_id = request.user
        f.save()
+       f2.question=f.title
+       f2.save()
        return redirect('list_questions')
 
-    return render(request, 'recursion_website/questions-form.html', {'form': form})
+    return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2})
 
 def list_questions(request):
     questions = Questions.objects.all()

@@ -18,6 +18,7 @@ class Questions(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     visibility=models.BooleanField(default=True)
+    tag = models.CharField(max_length=30,blank=True,null=True)
     def __str__(self):
         return self.title
     class Meta:
@@ -33,6 +34,7 @@ class Answers(models.Model):
     updated_at = models.DateTimeField()
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
+    
     def __str__(self):
         return self.description
     class Meta:
@@ -136,10 +138,11 @@ class Follows(models.Model):
 
 # DONE
 class Tags(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=30,blank=True,null=True)
     # TBD
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    question = models.CharField(max_length=100)
     def __self__(self):
         return self.name
     class Meta:
@@ -150,10 +153,11 @@ class Taggings(models.Model):
     question = models.ForeignKey(Questions,on_delete=models.CASCADE)
     tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
     # TBD
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     def __self__(self):
         return self.question
+
     class Meta:
         managed = True
         db_table = 'taggings'
