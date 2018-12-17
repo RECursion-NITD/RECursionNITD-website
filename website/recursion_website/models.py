@@ -152,7 +152,7 @@ class Tags(models.Model):
     # TBD
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    def __self__(self):
+    def __str__(self):
         return self.name
     class Meta:
         managed = True
@@ -165,7 +165,7 @@ class Upvotes(models.Model):
     # TBD
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    def __self__(self):
+    def __str__(self):
         return self.user
     class Meta:
         managed = True
@@ -185,7 +185,7 @@ class Profile(models.Model):
     nickname = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    def __self__(self):
+    def __str__(self):
         return self.name
     class Meta:
         managed = True
