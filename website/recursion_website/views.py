@@ -52,6 +52,8 @@ def list_questions(request):
 def detail_questions(request, id):
     try:
         questions =get_object_or_404( Questions,pk=id)
+       
+        
     except:
         return HttpResponse("id does not exist")
     answers = Answers.objects.all()
@@ -60,25 +62,38 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments }
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments, }
 
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
 @csrf_exempt
 def update_questions(request, id):
+   
+
     try:
         question =get_object_or_404( Questions,pk=id)
+        p=Taggings.objects.filter(question=question)
+        for k in p:           
+            if k.question.id==id:
+                tag=get_object_or_404(Tags,pk=k.tag.id)
+
+        
+       
     except:
         return HttpResponse("id does not exist")
     else:
         form = Questionform(request.POST or None, instance=question)
-        if form.is_valid():
-             f= form.save(commit=False)
-             f.user_id = request.user
-             f.save()
-             return redirect('list_questions')
+        form2=Tagsform(request.POST or None,instance=tag)
+        if form.is_valid() and  form2.is_valid(): 
+            f = form.save(commit=False)
+            f2=form2.save(commit=False)  
+            f.user_id = request.user
+            f.save()
+            f2.question=f.title
+            f2.save()
+            
+            return redirect('list_questions')
 
-
-    return render(request, 'recursion_website/questions-form.html', { 'form': form})  
+    return render(request, 'recursion_website/questions-form.html',  {'form': form,'form2':form2})
 

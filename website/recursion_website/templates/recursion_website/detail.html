@@ -57,7 +57,7 @@
             <ul>
                     <li>{{ questions.title }}
                         {% if request.user == questions.user_id %}
-                               <a href="{% url 'update_question' questions.id %}">Update this Question</a>
+                               <a href="{% url 'update_question' questions.id  %}">Update this Question</a>
                             {% endif %}
                         <ul>
                             {% if questions.visibility == True %}
