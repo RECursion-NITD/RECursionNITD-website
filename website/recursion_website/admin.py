@@ -1,7 +1,5 @@
 from django.contrib import admin
-
-from .models import *
-
+from .models import Questions,Tags,Taggings,Answers,Follows,Upvotes,Comments
 # Register your models here.
 
 @admin.register(Questions)
@@ -10,27 +8,27 @@ class QuestionsAdmin(admin.ModelAdmin):
    pass
 
 @admin.register(Tags)
-class TagsAdmin(admin.ModelAdmin):
+class TagAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Answers)
-class AnswersAdmin(admin.ModelAdmin):
+class AnswerAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Taggings)
-class TaggingsAdmin(admin.ModelAdmin):
+class TaggingAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Comments)
-class CommentsAdmin(admin.ModelAdmin):
+class CommentAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Upvotes)
-class UpvotesAdmin(admin.ModelAdmin):
+class UpvoteAdmin(admin.ModelAdmin):
     pass
 
 @admin.register(Follows)
-class FollowsAdmin(admin.ModelAdmin):
-  pass
+class FollowAdmin(admin.ModelAdmin):
+    pass
 
 

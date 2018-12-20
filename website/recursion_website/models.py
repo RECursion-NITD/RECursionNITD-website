@@ -17,18 +17,13 @@ class Questions(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-
-    visibility=models.BooleanField(default=True)
-
-    tag = models.CharField(max_length=30,blank=True,null=True)
-
-
-
+    visibility = models.BooleanField(default=True)
     def __str__(self):
         return self.title
     class Meta:
         managed = True
         db_table = 'questions'
+        verbose_name_plural = 'Questions'
  
 # Done
 class Answers(models.Model):
@@ -39,12 +34,12 @@ class Answers(models.Model):
     updated_at = models.DateTimeField()
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
-    
     def __str__(self):
         return self.description
     class Meta:
         managed = True
         db_table = 'answers'
+        verbose_name_plural = 'Answers'
  
 # # TBD
 # class ArInternalMetadata(models.Model):
@@ -89,6 +84,7 @@ class Comments(models.Model):
     class Meta:
         managed = True
         db_table = 'comments'
+        verbose_name_plural = 'Comments'
  
 # DONE
 class Events(models.Model):
@@ -109,7 +105,7 @@ class Events(models.Model):
 # DONE
 class Follows(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    question = models.ForeignKey('Questions', on_delete=models.CASCADE)
     # TODO
     # AUTOGEN DATETIME
     created_at = models.DateTimeField()
@@ -119,6 +115,7 @@ class Follows(models.Model):
     class Meta:
         managed = True
         db_table = 'follows'
+        verbose_name_plural = 'Follows'
  
  
 # class Identities(models.Model):
@@ -141,32 +138,35 @@ class Follows(models.Model):
 #         managed = True
 #         db_table = 'schema_migrations'
 
+
 # DONE
 class Tags(models.Model):
     name = models.CharField(max_length=30,blank=True,null=True)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    question = models.CharField(max_length=100)
     def __self__(self):
         return self.name
     class Meta:
         managed = True
-        db_table = 'tags' 
-# DONE
+        db_table = 'tags'
+        verbose_name_plural = ' Tags'
+
+
 class Taggings(models.Model):
     question = models.ForeignKey(Questions,on_delete=models.CASCADE,blank=True,null=True)
-    tag = models.ForeignKey(Tags, on_delete=models.CASCADE,blank=True,null=True)
+    tag = models.ForeignKey( Tags , on_delete=models.CASCADE,blank=True,null=True)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     def __self__(self):
         return self.question
-
     class Meta:
         managed = True
         db_table = 'taggings'
+        verbose_name_plural = 'Taggings'
  
+# DONE
 
  
 # DONE
@@ -181,6 +181,7 @@ class Upvotes(models.Model):
     class Meta:
         managed = True
         db_table = 'upvotes'
+        verbose_name_plural = 'Upvotes'
 """
 TODO
 - Roles : list containing tuples, with various grant level
