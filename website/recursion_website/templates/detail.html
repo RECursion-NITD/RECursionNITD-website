@@ -11,7 +11,7 @@
      <ul>
          <li>{{ questions.title }}
              {% if request.user == questions.user_id %}
-                    <a href="">Update this Question</a>
+                    <a href="{% url 'update_question' questions.id %}">Update this Question</a>
                  {% endif %}
              <ul>
                  {% if questions.visibility == True %}
@@ -68,7 +68,7 @@
                  </li>
 
                  <li>Posted On: {{questions.created_at}}
-                 <li>Last Updated On: {{questions.created_at}}</li>
+                 <li>Last Updated On: {{questions.updated_at}}</li>
              </ul>
           </li>
      </ul>
