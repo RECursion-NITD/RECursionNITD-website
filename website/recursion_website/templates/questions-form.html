@@ -1,10 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+     <meta charset="UTF-8">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Add Questions</title>
 </head>
 <body>
+<div >
+{% csrf_token %}
+ <h3>Add/Update Questions</h3>
+    <div >
 
+        <p>Enter the details below:</p><br>
+        <form method="POST">
+          <table>
+              {{ form }}
+          </table><p>Enter any number of tags upto 5:</p>
+            <table>
+            {{ form2 }}<span><p>&nbspTag 1:</p></span>
+          </table>
+            <table>
+            {{ form3 }}<span><p>&nbspTag 2:</p></span>
+          </table>
+             <table>
+            {{ form4 }}<span><p>&nbspTag 3:</p></span>
+          </table>
+             <table>
+            {{ form5 }}<span><p>&nbspTag 4:</p></span>
+          </table>
+             <table>
+            {{ form6 }}<span><p>&nbspTag 5:</p></span>
+          </table>
+              <br>
+          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+        </form>
+      </div>
+</div>
 </body>
 </html>
