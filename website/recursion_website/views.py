@@ -20,121 +20,31 @@ def tagging_add(q_id, t_id):
 @login_required
 def add_question(request):
     form = Questionform(request.POST or None)
-    f = form.save(commit=False)
-    form2 = Tagsform(request.POST or None)
-    f2 = form2.save(commit=False)
-    form3 = Tagsform(request.POST or None)
-    f3 = form3.save(commit=False)
-    form4 = Tagsform(request.POST or None)
-    f4 = form4.save(commit=False)
-    form5 = Tagsform(request.POST or None)
-    f5 = form5.save(commit=False)
-    form6 = Tagsform(request.POST or None)
-    f6 = form6.save(commit=False)
-    array = request.POST.getlist('name')
-    print(array)
-    count=1
-    for arr in array:
-        if count==1:
-            f2.name=arr
-        elif count==2:
-            f3.name=arr
-        elif count==3:
-            f4.name=arr
-        elif count==4:
-            f5.name=arr
-        elif count==5:
-            f6.name=arr
-        count+=1
 
+    Tagform = modelformset_factory(Tags, fields=('name',), extra=5)
+    if request.method=='POST':
+         form2 = Tagform(request.POST)
+    else:
+         form2 = Tagform(queryset=Tags.objects.none())
     if form.is_valid():
-       f.user_id = request.user
-       f.save()
-
-    if f2.name != '' and form2.is_valid():
-       list=Tags.objects.all()
-       flag=0
-       pos=0
-       for item in list:
-           if item.name==f2.name:
-               flag=1
-               pos=item.id
-       if flag==1:
-           t2_id = pos
-       elif flag==0:
-           f2.save()
-           t2_id = f2.id
-       q2_id = f.id
-       tagging_add(q2_id, t2_id)
-
-    if f3.name !='' and form3.is_valid():
-        list = Tags.objects.all()
-        flag = 0
-        pos = 0
-        for item in list:
-            if item.name == f3.name:
-                flag = 1
-                pos = item.id
-        if flag == 1:
-            t3_id = pos
-        elif flag == 0:
-            f3.save()
-            t3_id = f3.id
-        q3_id = f.id
-        tagging_add(q3_id, t3_id)
-
-    if f4.name !='' and form4.is_valid():
-        list = Tags.objects.all()
-        flag = 0
-        pos = 0
-        for item in list:
-            if item.name == f4.name:
-                flag = 1
-                pos = item.id
-        if flag == 1:
-            t4_id = pos
-        elif flag == 0:
-            f4.save()
-            t4_id = f4.id
-        q4_id = f.id
-        tagging_add(q4_id, t4_id)
-
-    if f5.name !='' and form5.is_valid():
-        list = Tags.objects.all()
-        flag = 0
-        pos = 0
-        for item in list:
-            if item.name == f5.name:
-                flag = 1
-                pos = item.id
-        if flag == 1:
-            t5_id = pos
-        elif flag == 0:
-            f5.save()
-            t5_id = f5.id
-        q5_id = f.id
-        tagging_add(q5_id, t5_id)
-
-    if f6.name !='' and form6.is_valid():
-        list = Tags.objects.all()
-        flag = 0
-        pos = 0
-        for item in list:
-            if item.name == f6.name:
-                flag = 1
-                pos = item.id
-        if flag == 1:
-            t6_id = pos
-        elif flag == 0:
-            f6.save()
-            t6_id = f6.id
-        q6_id = f.id
-        tagging_add(q6_id, t6_id)
-
+        f = form.save(commit=False)
+        f.user_id = request.user
+        form.save()
+    if form2.is_valid():
+        f2 = form2.save(commit=False)
+        for item in f2:
+            if Tags.objects.filter(name=item.name).exists():
+                q_id = f.id
+                t_id = Tags.objects.get(name=item.name).id
+            else:
+                item.save()
+                q_id=f.id
+                t_id=item.id
+            tagging_add(q_id, t_id)
     if form.is_valid():
-         return redirect('list_questions')
+        return redirect('list_questions')
 
-    return render(request, 'questions-form.html', {'form': form,'form2':form2, 'form3': form3 , 'form4': form4 , 'form5': form5 , 'form6': form6})
+    return render(request, 'questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
