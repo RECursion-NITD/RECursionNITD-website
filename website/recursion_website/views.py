@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.forms import modelformset_factory
 
 # Create your views here.
 
@@ -40,7 +41,10 @@ def add_question(request):
                 item.save()
                 q_id=f.id
                 t_id=item.id
-            tagging_add(q_id, t_id)
+            if Taggings.objects.filter(question=Questions.objects.get(pk=q_id), tag=Tags.objects.get(pk=t_id)).exists():
+                continue
+            else:
+                tagging_add(q_id, t_id)
     if form.is_valid():
         return redirect('list_questions')
 
