@@ -9,7 +9,6 @@
 </head>
 <body>
 <div >
-{% csrf_token %}
  <h3>Add/Update Questions</h3>
     <div >
 
@@ -17,21 +16,9 @@
         <form method="POST">
           <table>
               {{ form }}
-          </table><p>Enter any number of tags upto 5:</p>
+          </table><p>Enter any number of tags:</p>
             <table>
-            {{ form2 }}<span><p>&nbspTag 1:</p></span>
-          </table>
-            <table>
-            {{ form3 }}<span><p>&nbspTag 2:</p></span>
-          </table>
-             <table>
-            {{ form4 }}<span><p>&nbspTag 3:</p></span>
-          </table>
-             <table>
-            {{ form5 }}<span><p>&nbspTag 4:</p></span>
-          </table>
-             <table>
-            {{ form6 }}<span><p>&nbspTag 5:</p></span>
+            {{ form2.as_p }}
           </table>
               <br>
           <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
