@@ -19,6 +19,13 @@ def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
     return
 
+def bulk_tagging_add(question, tags):
+    taggings = []
+    for tag in tags:
+        taggings.append(Taggings(question=question, tag=tag))
+    Taggings.objects.bulk_create(taggings)
+    return    
+
 @login_required
 def add_question(request):
     form = Questionform(request.POST or None)
@@ -77,65 +84,40 @@ def detail_questions(request, id):
 @login_required
 def update_questions(request, id):
     try:
-        question =get_object_or_404( Questions,pk=id)
+        question = get_object_or_404(Questions, pk=id)
     except:
         return HttpResponse("id does not exist")
-    else:
-        form = Questionform(request.POST or None, instance=question)
-        Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
-        if request.method == 'POST':
-            form2 = Tagform(request.POST or None)
-        else:
-            question = Questions.objects.get(pk=id)
-            list=Taggings.objects.filter(question=Questions.objects.get(pk=id))
-            table=Tags.objects.none()
-            for instance in list:
-                item=Tags.objects.filter(pk=instance.tag.id)
-                table=table|item
-            form2 = Tagform(queryset=table)
+
+    form = Questionform(request.POST or None, instance=question)
+    Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
+    if request.method == 'POST':
+        form2 = Tagform(request.POST or None)
         if form.is_valid():
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
         if form2.is_valid():
-            f2 = form2.save(commit=False)
-            for item in f2:
-                print(item)
-                print(item.name)
-                print(item.id)
-                if item.id == None:
-                    if Tags.objects.filter(name=item.name).exists():
-                        q_id = f.id
-                        t_id = Tags.objects.get(name=item.name).id
-                    else:
-                        item.save()
-                        q_id = f.id
-                        t_id = item.id
-                    if Taggings.objects.filter(question=Questions.objects.get(pk=q_id), tag=Tags.objects.get(pk=t_id)).exists():
-                        continue
-                    else:
-                        tagging_add(q_id, t_id)
-                else:
-                   to_del = Taggings.objects.get(question=Questions.objects.get(pk=f.id), tag=Tags.objects.get(pk=item.id))
-                   print(Tags.objects.get(pk=item.id).name)
-                   to_del.delete()
-                   if item.name ==None:
-                       continue
-                   if Tags.objects.filter(name=item.name).exists():
-                       q_id = f.id
-                       t_id = Tags.objects.get(name=item.name).id
-                   else:
-                       obj=Tags.objects.create(name=item.name)
-                       obj.save()
-                       print(obj.name)
-                       print(obj.id)
-                       q_id = f.id
-                       t_id =obj.id
-                   if Taggings.objects.filter(question=Questions.objects.get(pk=q_id), tag=Tags.objects.get(pk=t_id)).exists():
-                       continue
-                   else:
-                       tagging_add(q_id, t_id)
-        if form.is_valid():
-            return redirect('list_questions')
+            to_del = Taggings.objects.filter(question=question)  # delete all prev taggings
+            if to_del.exists():
+                to_del.delete()
+            tagging_list = []
+            for item in form2:  # create new taggings
+                if item.cleaned_data.get("name") != None:  # if a tag was removed
+                    try:
+                        tag_name = item.cleaned_data.get('name')
+                        tag = get_object_or_404(Tags, name=tag_name)  # see if tag exists
+                    except:
+                        tag = Tags.objects.create(name=tag_name)  # if not create
 
-    return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+                    if tag not in tagging_list:
+                        tagging_list.append(tag)
+
+            bulk_tagging_add(question, tagging_list)  # use a bulk create function which accepts a list
+            return redirect('list_questions')
+    else:
+        question = Questions.objects.get(pk=id)
+        id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
+        id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
+        form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
+
+        return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
