@@ -100,9 +100,6 @@ def update_questions(request, id):
         if form2.is_valid():
             f2 = form2.save(commit=False)
             for item in f2:
-                print(item)
-                print(item.name)
-                print(item.id)
                 if item.id == None:
                     if Tags.objects.filter(name=item.name).exists():
                         q_id = f.id
@@ -117,7 +114,6 @@ def update_questions(request, id):
                         tagging_add(q_id, t_id)
                 else:
                    to_del = Taggings.objects.get(question=Questions.objects.get(pk=f.id), tag=Tags.objects.get(pk=item.id))
-                   print(Tags.objects.get(pk=item.id).name)
                    to_del.delete()
                    if item.name ==None:
                        continue
@@ -127,8 +123,6 @@ def update_questions(request, id):
                    else:
                        obj=Tags.objects.create(name=item.name)
                        obj.save()
-                       print(obj.name)
-                       print(obj.id)
                        q_id = f.id
                        t_id =obj.id
                    if Taggings.objects.filter(question=Questions.objects.get(pk=q_id), tag=Tags.objects.get(pk=t_id)).exists():
