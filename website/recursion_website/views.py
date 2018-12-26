@@ -41,18 +41,17 @@ def add_question(request):
         form.save()
     if form2.is_valid():
         f2 = form2.save(commit=False)
+        tagging_list = []
         for item in f2:
             if Tags.objects.filter(name=item.name).exists():
-                q_id = f.id
-                t_id = Tags.objects.get(name=item.name).id
+                tag = Tags.objects.get(name=item.name)
             else:
                 item.save()
-                q_id=f.id
-                t_id=item.id
-            if Taggings.objects.filter(question=Questions.objects.get(pk=q_id), tag=Tags.objects.get(pk=t_id)).exists():
-                continue
-            else:
-                tagging_add(q_id, t_id)
+                tag=item
+            if tag not in tagging_list:
+                tagging_list.append(tag)
+
+        bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
     if form.is_valid():
         return redirect('list_questions')
 
@@ -100,9 +99,7 @@ def update_questions(request, id):
             to_del = Taggings.objects.filter(question=question)  # delete all prev taggings
             if to_del.exists():
                 to_del.delete()
-            q_id = f.id
             tagging_list = []
-            t_id_list = []
             for item in form2:  # create new taggings
                 if item.cleaned_data.get("name") != None:  # if a tag was removed
                     try:
@@ -123,4 +120,3 @@ def update_questions(request, id):
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'questions-form.html', {'form': form, 'form2': form2, 'question': question})
-
