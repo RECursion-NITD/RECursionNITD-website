@@ -34,8 +34,8 @@ class Answers(models.Model):
     description = models.TextField()
     # TODO :
     # DATE TIME auto-generated
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
 
@@ -82,8 +82,8 @@ class Comments(models.Model):
     question = models.ForeignKey(Questions, models.DO_NOTHING)
     # TO DO
     # AUTOGEN DATETIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return self.body
@@ -119,8 +119,8 @@ class Follows(models.Model):
     question = models.ForeignKey('Questions', on_delete=models.CASCADE)
     # TODO
     # AUTOGEN DATETIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
         return str(self.id) + str(self.user)
@@ -191,8 +191,8 @@ class Upvotes(models.Model):
     user = models.ForeignKey(User, models.DO_NOTHING)
     answer = models.ForeignKey(Answers, models.DO_NOTHING)
     # TBD
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __self__(self):
         return self.user
