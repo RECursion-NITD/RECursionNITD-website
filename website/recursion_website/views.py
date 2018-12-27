@@ -140,3 +140,34 @@ def edit_following(request, id):
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
     return redirect('list_questions')
+
+@login_required
+def add_comment(request, id):
+    try:
+        question = get_object_or_404(Questions, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    form = Commentform(request.POST or None)
+    if form.is_valid():
+        f = form.save(commit=False)
+        f.question=question
+        f.user = request.user
+        form.save()
+        return redirect('list_questions')
+
+    return render(request, 'comment.html', {'form': form})
+
+@login_required
+def update_comment(request, id):
+    try:
+        comment =get_object_or_404(Comments, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        form = Commentform(request.POST or None, instance=comment)
+        if form.is_valid():
+            if request.user == comment.user:
+              form.save()
+            return redirect('list_questions')
+
+    return render(request, 'comment.html', {'form': form, 'comment': comment})
