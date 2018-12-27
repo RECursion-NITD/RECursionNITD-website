@@ -77,7 +77,11 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments }
+    user = request.user
+    flag=0
+    if Follows.objects.filter(question=questions, user=user).exists():
+        flag=1
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments , 'flag':flag }
     return render(request, 'detail.html', args)
 
 @login_required
@@ -120,3 +124,19 @@ def update_questions(request, id):
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'questions-form.html', {'form': form, 'form2': form2, 'question': question})
+
+@login_required
+def edit_following(request, id):
+    try:
+        question =get_object_or_404( Questions,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != question.user_id:
+       if Follows.objects.filter(question=question, user=user).exists():
+           follow = Follows.objects.get(question=question, user=user)
+           follow.delete()
+       else:
+           follow = Follows.objects.create(question=question, user=user)
+           follow.save()
+    return redirect('list_questions')
