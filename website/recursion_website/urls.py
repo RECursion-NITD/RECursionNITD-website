@@ -9,4 +9,6 @@ urlpatterns = [
     path('detail/<int:id>/', detail_questions, name='detail_questions'),
     path('update/<int:id>/', update_questions, name='update_question'),
     path('follow/<int:id>/', edit_following, name='edit_following'),
+    path('comment/<int:id>/', add_comment, name='add_comment'),
+    path('editcomment/<int:id>/', update_comment, name='update_comment'),
 ]

@@ -41,15 +41,21 @@
                  {% endfor %}
                  </ul>
                  </li>
-                 <li>Comments: <ul>
+                 <li>Comments: <a href="{% url 'add_comment' questions.id %}">Add a Comment</a>
+                     <ul>
                      {% for comment in comments %}
                    {% if comment.question == questions %}
 
-                              <li>{{comment.body}}<ul>
+                              <li>{{comment.body}}
+                                  {% if request.user == comment.user %}
+                                  <a href="{% url 'update_comment' comment.id %}">Update this Comment</a>
+                                  {% endif %}
+                                  <ul>
                                   <li>Added By:{{comment.user}}</li>
                                   <li>Posted On: {{comment.created_at}}</li>
                                   <li>Last Updated On: {{comment.updated_at}}</li>
-                              </ul></li>
+                                  </ul>
+                              </li>
                    {%endif%}
                  {% endfor %}
                  </ul>
