@@ -20,7 +20,15 @@
                  <li>Added By: Anonymous</li>
                  {% endif %}
                  <li>Description: {{questions.description}}</li>
-                 <li>Follows: {{ questions.follows_set.count }}</li>
+                 <li>Follows: {{ questions.follows_set.count }}
+                 {% if request.user != questions.user_id %}
+                    {% if flag == 0 %}
+                    <a href="{% url 'edit_following' questions.id %}">Follow</a>
+                    {% else %}
+                    <a href="{% url 'edit_following' questions.id %}">Unfollow</a>
+                    {% endif %}
+                 {% endif %}
+                 </li>
                  <li>Tags: <ul>
                      {% for tagging in taggings %}
                    {% if tagging.question == questions %}
@@ -40,6 +48,7 @@
                               <li>{{comment.body}}<ul>
                                   <li>Added By:{{comment.user}}</li>
                                   <li>Posted On: {{comment.created_at}}</li>
+                                  <li>Last Updated On: {{comment.updated_at}}</li>
                               </ul></li>
                    {%endif%}
                  {% endfor %}
