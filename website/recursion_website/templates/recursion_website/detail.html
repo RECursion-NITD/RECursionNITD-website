@@ -92,15 +92,20 @@
                             </ul>
                             </li>
                             <li>Answers: {% if request.user %}
-                                           <a href="">Answer this Question</a>
-                                          {% endif %}
+                                          {% if not ans.id %}
+                                          
+                                          <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>
+                                          {% else %}
+                                          <a href="{% url 'update_answer' ans.id  %}">update your answer</a>
+                                           {% endif %} 
+                                         {% endif %}
                                 <ul>
                                 {% for answer in answers %}
                               {% if answer.question_id == questions %}
            
                                          <li>{{answer.description}}
                                              {% if request.user == answer.user_id %}
-                                                <a href="">Update this Answer</a>
+                                                <a href="{% url 'update_answer' answer.id  %}">Update this Answer</a>
                                              {% endif %}
                                              <ul>
                                              <li>Added By:{{answer.user_id}}</li>

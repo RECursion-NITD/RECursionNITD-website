@@ -8,4 +8,6 @@ urlpatterns = [
     path('', list_questions ,name='list_questions'),
     path('detail/<int:id>/', detail_questions, name='detail_questions'),
     path('update/<int:id>/', update_questions, name='update_question'),
+    path('question/<int:id>/answer',add_answer,name='add_answer'),
+    path('answer/<int:id>',update_answer,name='update_answer'),
 ]

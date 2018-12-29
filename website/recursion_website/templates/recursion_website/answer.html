@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Answers</title>
+</head>
+<body>
+<div >
+        {% csrf_token %}
+ <h3>Add/Update Answer</h3>
+ <h2>Answer id:{{ans.id}}</h2>
+    <div >
+
+        <p>Enter the details below:</p><br>
+        <form method="POST">
+          <table>
+              {{ form }}
+          </table>
+              <br>
+          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+        </form>
+      </div>
+</div>
+</body>
+</html>

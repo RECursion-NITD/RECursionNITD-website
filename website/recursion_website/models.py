@@ -30,10 +30,11 @@ class Answers(models.Model):
     description = models.TextField()
     # TODO :
     # DATE TIME auto-generated
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
+    
     def __str__(self):
         return self.description
     class Meta:

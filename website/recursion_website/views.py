@@ -78,7 +78,12 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments }
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+    if ans.count()>0:
+        ans=ans[0]
+    else:
+        ans=None    
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -117,7 +122,49 @@ def update_questions(request, id):
     else:
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
+        print(id_list)
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
+        print(id_list)
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+
+@login_required
+def add_answer(request, id):
+    
+    try:
+        question = get_object_or_404(Questions, pk=id)
+        
+    except:
+        return HttpResponse("id does not exist")
+    if request.user!=question.user_id :   
+        form = Answerform(request.POST or None)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.question_id=question
+            f.user_id = request.user
+            
+            
+            form.save()
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+    else:
+        return HttpResponse("Questionnare can't answer") 
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
+    
+    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})     
+
+@login_required
+def update_answer(request, id):
+    try:
+        answer =get_object_or_404(Answers, pk=id)
+        question=answer.question_id
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        form = Answerform(request.POST or None, instance=answer)
+        if form.is_valid():
+            if request.user == answer.user_id:
+              form.save()
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
