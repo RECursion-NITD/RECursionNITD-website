@@ -187,7 +187,7 @@ def edit_following(request, id):
        else:
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
-    return redirect('list_questions')
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
 @login_required
 def add_comment(request, id):
@@ -201,7 +201,7 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
-        return redirect('list_questions')
+        return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form})
 
@@ -209,6 +209,7 @@ def add_comment(request, id):
 def update_comment(request, id):
     try:
         comment =get_object_or_404(Comments, pk=id)
+        question=answer.question_id
     except:
         return HttpResponse("id does not exist")
     else:
@@ -216,6 +217,6 @@ def update_comment(request, id):
         if form.is_valid():
             if request.user == comment.user:
               form.save()
-            return redirect('list_questions')
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})    
