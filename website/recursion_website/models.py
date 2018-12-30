@@ -78,10 +78,12 @@ class Comments(models.Model):
     question = models.ForeignKey(Questions, models.DO_NOTHING)
     # TO DO
     # AUTOGEN DATETIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+
     def __str__(self):
         return self.body
+
     class Meta:
         managed = True
         db_table = 'comments'
@@ -109,10 +111,12 @@ class Follows(models.Model):
     question = models.ForeignKey('Questions', on_delete=models.CASCADE)
     # TODO
     # AUTOGEN DATETIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+
     def __str__(self):
-        return str(self.id)+str(self.user)
+        return str(self.id) + str(self.user)
+
     class Meta:
         managed = True
         db_table = 'follows'

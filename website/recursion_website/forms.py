@@ -31,4 +31,11 @@ class Answerform(forms.ModelForm):
     
     class Meta:
         model = Answers
-        fields = ('description',)         
+        fields = ('description',)     
+
+class Commentform(forms.ModelForm):
+    body = models.TextField()
+
+    class Meta:
+        model = Comments
+        fields = ('body',)            

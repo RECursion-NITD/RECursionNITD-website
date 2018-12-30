@@ -82,8 +82,12 @@ def detail_questions(request, id):
     if ans.count()>0:
         ans=ans[0]
     else:
-        ans=None    
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans }
+        ans=None 
+    user = request.user
+    flag=0
+    if Follows.objects.filter(question=questions, user=user).exists():
+        flag=1       
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -168,3 +172,50 @@ def update_answer(request, id):
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+
+@login_required
+def edit_following(request, id):
+    try:
+        question =get_object_or_404( Questions,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != question.user_id:
+       if Follows.objects.filter(question=question, user=user).exists():
+           follow = Follows.objects.get(question=question, user=user)
+           follow.delete()
+       else:
+           follow = Follows.objects.create(question=question, user=user)
+           follow.save()
+    return redirect('list_questions')
+
+@login_required
+def add_comment(request, id):
+    try:
+        question = get_object_or_404(Questions, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    form = Commentform(request.POST or None)
+    if form.is_valid():
+        f = form.save(commit=False)
+        f.question=question
+        f.user = request.user
+        form.save()
+        return redirect('list_questions')
+
+    return render(request, 'recursion_website/comment.html', {'form': form})
+
+@login_required
+def update_comment(request, id):
+    try:
+        comment =get_object_or_404(Comments, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        form = Commentform(request.POST or None, instance=comment)
+        if form.is_valid():
+            if request.user == comment.user:
+              form.save()
+            return redirect('list_questions')
+
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})    
