@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
+
     <title>Dashboard</title>
 </head>
 <body>
 <div >
 {% csrf_token %}
  <h1 >Dashboard</h1>
-    
+
 
 
     <!-- navigation bar -->
@@ -54,7 +54,7 @@
 
             <ul>
                     {% for question in questions %}
-                    
+
                     <li><a href="{% url 'detail_questions' question.id  %}">{{ question.title }}</a>
                         <ul>
                             {% if question.visibility == True %}
