@@ -115,6 +115,16 @@
                                              <li>Posted On: {{answer.created_at}}</li>
                                              <li>Last Updated On: {{answer.updated_at}}</li>
                                              <li>Upvotes: {{ answer.upvotes_set.count }}</li>
+                                             {% if request.user != answer.user_id %}
+                                            
+                   {% if  answer.id in voted %}
+                   <a href="{% url 'voting' answer.id %}">Downvote</a>
+                   {% else %}
+                   <a href="{% url 'voting' answer.id %}">Upvote</a>
+                  {% endif %}
+                                            
+                  {% endif %} 
+
                                          </ul></li>
                               {%endif%}
                             {% endfor %}

@@ -179,8 +179,8 @@ class Upvotes(models.Model):
     user = models.ForeignKey(User, models.DO_NOTHING)
     answer = models.ForeignKey(Answers, models.DO_NOTHING)
     # TBD
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     def __self__(self):
         return self.user
     class Meta:

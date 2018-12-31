@@ -68,6 +68,7 @@ def list_questions(request):
     return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
+    
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -86,8 +87,15 @@ def detail_questions(request, id):
     user = request.user
     flag=0
     if Follows.objects.filter(question=questions, user=user).exists():
-        flag=1       
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag }
+        flag=1
+
+
+    votes=Upvotes.objects.filter(user=user).values("answer_id")
+    print(votes)
+    id_list = [id['answer_id'] for id in votes] #voted answers id
+    print(id_list)
+                
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -209,7 +217,7 @@ def add_comment(request, id):
 def update_comment(request, id):
     try:
         comment =get_object_or_404(Comments, pk=id)
-        question=answer.question_id
+        question=comment.question
     except:
         return HttpResponse("id does not exist")
     else:
@@ -219,4 +227,22 @@ def update_comment(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})    
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})  
+
+@login_required
+def voting(request, id):
+    try:
+        answer =get_object_or_404( Answers,pk=id)
+        question=answer.question_id
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != answer.user_id:
+       if Upvotes.objects.filter(answer=answer, user=user).exists():
+           upvote= Upvotes.objects.get(answer=answer, user=user)
+           upvote.delete()
+       else:
+           upvote = Upvotes.objects.create(answer=answer, user=user)
+           upvote.save()
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))    
+
