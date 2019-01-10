@@ -79,21 +79,25 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
-    if ans.count()>0:
-        ans=ans[0]
+    print(User.objects.filter(username=request.user))
+    if User.objects.filter(username=request.user).exists():
+        ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+        if ans.count()>0:
+            ans=ans[0]
+        else:
+            ans=None 
     else:
-        ans=None 
+        ans=None        
     user = request.user
     flag=0
-    if Follows.objects.filter(question=questions, user=user).exists():
-        flag=1
-
-
-    votes=Upvotes.objects.filter(user=user).values("answer_id")
-    print(votes)
-    id_list = [id['answer_id'] for id in votes] #voted answers id
-    print(id_list)
+    id_list=[]
+    if User.objects.filter(username=request.user).exists():
+        if Follows.objects.filter(question=questions, user=user).exists():
+            flag=1
+        votes=Upvotes.objects.filter(user=user).values("answer_id")
+        print(votes)
+        id_list = [id['answer_id'] for id in votes] #voted answers id
+        print(id_list)
                 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
