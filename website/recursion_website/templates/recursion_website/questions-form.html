@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Questions</title>
+</head>
+<body>
+<div >
+{% csrf_token %}
+ <h1 >Add Questions</h1>
+
+
+
+    <!-- navigation bar -->
+    <nav >
+        <!-- Links -->
+      <ul >
+
+
+        <li >
+           <a  href="{% url 'list_questions' %}">Forum</a>
+        </li>
+          <!-- Dropdown -->
+        <li >
+          <a href="#" >
+            Manage Account
+          </a>
+          <div >
+            <a  href="#">View Account</a>
+            <a href="#">Edit Account </a>
+          </div>
+        </li>
+
+        <li >
+          <a href="#" data-toggle="dropdown">
+          Questions
+          </a>
+          <div>
+            <a  href="#">View my questions</a>
+            <a  href="{% url 'add_question' %}">Add New doubts</a>
+          </div>
+        </li>
+
+        <li>
+            <a  href="#">Log out</a>
+        </li>
+      </ul>
+    </nav>
+
+
+
+
+    <div >
+
+        <h1 >Enter the details below:</h1><br>
+        <form method="POST">
+          <table>
+              {{ form }}
+          </table><p>Enter any number of tags upto 5:</p>
+            <table>
+            {{ form2 }}<span><p>&nbspTags:</p></span>
+          </table>
+            <table>
+
+              <br>
+          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+        </form>
+
+      </div>
+</div>
+</body>
+</html>
