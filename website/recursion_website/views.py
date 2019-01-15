@@ -68,20 +68,36 @@ def list_questions(request):
 
 def detail_questions(request, id):
     try:
-        questions =get_object_or_404( Questions,pk=id)
+        questions = get_object_or_404(Questions, pk=id)
     except:
         return HttpResponse("id does not exist")
     answers = Answers.objects.all()
     follows = Follows.objects.all()
     tags = Tags.objects.all()
     taggings = Taggings.objects.all()
-    upvotes=Upvotes.objects.all()
-    comments=Comments.objects.all()
+    upvotes = Upvotes.objects.all()
+    comments = Comments.objects.all()
+    if User.objects.filter(username=request.user).exists():
+        ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+        if ans.count() > 0:
+            ans = ans[0]
+        else:
+            ans = None
+    else:
+        ans = None
     user = request.user
-    flag=0
-    if Follows.objects.filter(question=questions, user=user).exists():
-        flag=1
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments , 'flag':flag }
+    flag = 0
+    id_list = []
+    if User.objects.filter(username=request.user).exists():
+        if Follows.objects.filter(question=questions, user=user).exists():
+            flag = 1
+        votes = Upvotes.objects.filter(user=user).values("answer_id")
+        print(votes)
+        id_list = [id['answer_id'] for id in votes]  # voted answers id
+        print(id_list)
+
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags': tags, 'taggings': taggings,
+            'upvotes': upvotes, 'comments': comments, 'ans': ans, 'flag': flag, 'voted': id_list, }
     return render(request, 'detail.html', args)
 
 @login_required
