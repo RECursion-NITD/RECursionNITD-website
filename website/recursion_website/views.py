@@ -13,7 +13,9 @@ from django.conf import settings
 from django.forms import modelformset_factory
 from itertools import chain
 
-# Create your views here.
+@login_required
+def home(request):
+    return render(request, 'home.html')
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -24,7 +26,7 @@ def bulk_tagging_add(question, tags):
     for tag in tags:
         taggings.append(Taggings(question=question, tag=tag))
     Taggings.objects.bulk_create(taggings)
-    return    
+    return
 
 @login_required
 def add_question(request):
@@ -68,7 +70,7 @@ def list_questions(request):
     return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
-    
+
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -79,26 +81,22 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    print(User.objects.filter(username=request.user))
-    if User.objects.filter(username=request.user).exists():
-        ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
-        if ans.count()>0:
-            ans=ans[0]
-        else:
-            ans=None 
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+    if ans.count()>0:
+        ans=ans[0]
     else:
-        ans=None        
+        ans=None
     user = request.user
     flag=0
-    id_list=[]
-    if User.objects.filter(username=request.user).exists():
-        if Follows.objects.filter(question=questions, user=user).exists():
-            flag=1
-        votes=Upvotes.objects.filter(user=user).values("answer_id")
-        print(votes)
-        id_list = [id['answer_id'] for id in votes] #voted answers id
-        print(id_list)
-                
+    if Follows.objects.filter(question=questions, user=user).exists():
+        flag=1
+
+
+    votes=Upvotes.objects.filter(user=user).values("answer_id")
+    print(votes)
+    id_list = [id['answer_id'] for id in votes] #voted answers id
+    print(id_list)
+
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
@@ -147,27 +145,27 @@ def update_questions(request, id):
 
 @login_required
 def add_answer(request, id):
-    
+
     try:
         question = get_object_or_404(Questions, pk=id)
-        
+
     except:
         return HttpResponse("id does not exist")
-    if request.user!=question.user_id :   
+    if request.user!=question.user_id :
         form = Answerform(request.POST or None)
         if form.is_valid():
             f = form.save(commit=False)
             f.question_id=question
             f.user_id = request.user
-            
-            
+
+
             form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
     else:
-        return HttpResponse("Questionnare can't answer") 
+        return HttpResponse("Questionnare can't answer")
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
-    
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})     
+
+    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
 
 @login_required
 def update_answer(request, id):
@@ -231,7 +229,7 @@ def update_comment(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})  
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -248,5 +246,4 @@ def voting(request, id):
        else:
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
-    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))    
-
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))

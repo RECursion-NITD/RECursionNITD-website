@@ -7,7 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import User
- 
+
 # Done
 class Questions(models.Model):
     title = models.CharField(max_length=100)
@@ -25,7 +25,7 @@ class Questions(models.Model):
         ordering = ['-created_at']
         db_table = 'questions'
         verbose_name_plural = 'Questions'
- 
+
 # Done
 class Answers(models.Model):
     description = models.TextField()
@@ -35,25 +35,25 @@ class Answers(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
-    
+
     def __str__(self):
         return self.description
     class Meta:
         managed = True
         db_table = 'answers'
         verbose_name_plural = 'Answers'
- 
+
 # # TBD
 # class ArInternalMetadata(models.Model):
 #     key = models.CharField(primary_key=True, max_length=-1)
 #     value = models.CharField(max_length=-1, blank=True, null=True)
 #     created_at = models.DateTimeField()
 #     updated_at = models.DateTimeField()
- 
+
 #     class Meta:
 #         managed = True
 #         db_table = 'ar_internal_metadata'
- 
+
 # Consult with anand
 # class CkeditorAssets(models.Model):
 #     data_file_name = models.CharField(max_length=-1)
@@ -64,14 +64,14 @@ class Answers(models.Model):
 #     height = models.IntegerField(blank=True, null=True)
 #     created_at = models.DateTimeField()
 #     updated_at = models.DateTimeField()
- 
+
 #     class Meta:
 #         managed = True
 #         db_table = 'ckeditor_assets'
- 
- 
- 
- 
+
+
+
+
 # DONE
 class Comments(models.Model):
     body = models.TextField()
@@ -89,7 +89,7 @@ class Comments(models.Model):
         managed = True
         db_table = 'comments'
         verbose_name_plural = 'Comments'
- 
+
 # DONE
 class Events(models.Model):
     title = models.CharField(max_length=30)
@@ -105,7 +105,7 @@ class Events(models.Model):
     class Meta:
         managed = True
         db_table = 'events'
- 
+
 # DONE
 class Follows(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -122,24 +122,24 @@ class Follows(models.Model):
         managed = True
         db_table = 'follows'
         verbose_name_plural = 'Follows'
- 
- 
+
+
 # class Identities(models.Model):
 #     uid = models.CharField(max_length=-1, blank=True, null=True)
 #     provider = models.CharField(max_length=-1, blank=True, null=True)
 #     created_at = models.DateTimeField()
 #     updated_at = models.DateTimeField()
 #     user_id = models.IntegerField(blank=True, null=True)
- 
+
 #     class Meta:
 #         managed = True
 #         db_table = 'identities'
- 
- 
- 
+
+
+
 # class SchemaMigrations(models.Model):
 #     version = models.CharField(primary_key=True, max_length=-1)
- 
+
 #     class Meta:
 #         managed = True
 #         db_table = 'schema_migrations'
@@ -171,10 +171,10 @@ class Taggings(models.Model):
         managed = True
         db_table = 'taggings'
         verbose_name_plural = 'Taggings'
- 
+
 # DONE
 
- 
+
 # DONE
 class Upvotes(models.Model):
     user = models.ForeignKey(User, models.DO_NOTHING)
@@ -203,7 +203,7 @@ class Profile(models.Model):
     nickname = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField()
-    def __self__(self):
+    def __str__(self):
         return self.name
     class Meta:
         managed = True

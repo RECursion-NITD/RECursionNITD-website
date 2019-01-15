@@ -24,18 +24,18 @@ class Tagsform(forms.ModelForm):
 class Taggingform(forms.ModelForm):
     class Meta:
         model = Taggings
-        fields = ('question', 'tag')             
+        fields = ('question', 'tag')
 
 class Answerform(forms.ModelForm):
     description = models.TextField()
-    
+
     class Meta:
         model = Answers
-        fields = ('description',)     
+        fields = ('description',)
 
 class Commentform(forms.ModelForm):
     body = models.TextField()
 
     class Meta:
         model = Comments
-        fields = ('body',)            
+        fields = ('body',)
