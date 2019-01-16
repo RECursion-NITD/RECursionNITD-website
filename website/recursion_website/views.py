@@ -93,9 +93,7 @@ def detail_questions(request, id):
 
 
     votes=Upvotes.objects.filter(user=user).values("answer_id")
-    print(votes)
     id_list = [id['answer_id'] for id in votes] #voted answers id
-    print(id_list)
 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
