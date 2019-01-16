@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Question details</title>
+</head>
+<body>
+<div class="container">
+{% csrf_token %}
+ <h1> Question detail</h1>
+
+
+
+    <!-- navigation bar -->
+    <nav>
+        <!-- Links -->
+      <ul>
+
+
+        <li >
+           <a  href="{% url 'list_questions' %}">Forum</a>
+        </li>
+          <!-- Dropdown -->
+        <li>
+          <a  href="#" id="navbardrop" >
+            Manage Account
+          </a>
+          <div >
+            <a  href="#">View Account</a>
+            <a  href="#">Edit Account </a>
+          </div>
+        </li>
+
+        <li >
+          <a  href="#" id="navbardrop" >
+          Questions
+          </a>
+          <div >
+            <a  href="#">View my questions</a>
+            <a  href="{% url 'add_question' %}">Add New doubts</a>
+          </div>
+        </li>
+
+        <li>
+            <a  href="#">Log out</a>
+        </li>
+      </ul>
+    </nav>
+
+
+
+
+    <div >
+
+            <ul>
+                    <li>{{ questions.title }}
+                        {% if request.user == questions.user_id %}
+                               <a href="{% url 'update_question' questions.id  %}">Update this Question</a>
+                            {% endif %}
+                        <ul>
+                            {% if questions.visibility == True %}
+                            <li>Added By: {{questions.user_id}}</li>
+                            {% else %}
+                            <li>Added By: Anonymous</li>
+                            {% endif %}
+                            <li>Description: {{questions.description}}</li>
+                            <li>Follows: {{ questions.follows_set.count }}
+                {% if request.user != questions.user_id %}
+                   {% if flag == 0 %}
+                   <a href="{% url 'edit_following' questions.id %}">Follow</a>
+                   {% else %}
+                   <a href="{% url 'edit_following' questions.id %}">Unfollow</a>
+                {% endif %}
+                {% endif %}
+                </li>
+                            <li>Comments: <a href="{% url 'add_comment' questions.id %}">Add a Comment</a>
+                       <ul>
+                       {% for comment in comments %}
+                     {% if comment.question == questions %}
+
+                                <li>{{comment.body}}
+                                    {% if request.user == comment.user %}
+                                    <a href="{% url 'update_comment' comment.id %}">Update this Comment</a>
+                                    {% endif %}
+                                    <ul>
+                                    <li>Added By:{{comment.user}}</li>
+                                    <li>Posted On: {{comment.created_at}}</li>
+                                    <li>Last Updated On: {{comment.updated_at}}</li>
+                                    </ul>
+                                </li>
+                     {%endif%}
+                   {% endfor %}
+                   </ul>
+                            </li>
+                            <li>Answers: {% if request.user %}
+                                          {% if not ans.id %}
+
+                                          <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>
+                                          {% else %}
+                                          <a href="{% url 'update_answer' ans.id  %}">update your answer</a>
+                                           {% endif %}
+                                         {% endif %}
+                                <ul>
+                                {% for answer in answers %}
+                              {% if answer.question_id == questions %}
+
+                                         <li>{{answer.description}}
+                                             {% if request.user == answer.user_id %}
+                                                <a href="{% url 'update_answer' answer.id  %}">Update this Answer</a>
+                                             {% endif %}
+                                             <ul>
+                                             <li>Added By:{{answer.user_id}}</li>
+                                             <li>Posted On: {{answer.created_at}}</li>
+                                             <li>Last Updated On: {{answer.updated_at}}</li>
+                                             <li>Upvotes: {{ answer.upvotes_set.count }}</li>
+                                             {% if request.user != answer.user_id %}
+                                            
+                   {% if  answer.id in voted %}
+                   <a href="{% url 'voting' answer.id %}">Downvote</a>
+                   {% else %}
+                   <a href="{% url 'voting' answer.id %}">Upvote</a>
+                  {% endif %}
+                                            
+                  {% endif %} 
+
+                                         </ul></li>
+                              {%endif%}
+                            {% endfor %}
+                            </ul>
+                            </li>
+
+                            <li>Posted On: {{questions.created_at}}
+                            <li>Last Updated On: {{questions.updated_at}}</li>
+                        </ul>
+                     </li>
+                </ul>
+
+      </div>
+</div>
+</body>
+</html>

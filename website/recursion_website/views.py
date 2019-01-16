@@ -13,7 +13,9 @@ from django.conf import settings
 from django.forms import modelformset_factory
 from itertools import chain
 
-# Create your views here.
+@login_required
+def home(request):
+    return render(request, 'home.html')
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -42,6 +44,7 @@ def add_question(request):
     if form2.is_valid():
         f2 = form2.save(commit=False)
         tagging_list = []
+        q_id = f.id
         for item in f2:
             if Tags.objects.filter(name=item.name).exists():
                 tag = Tags.objects.get(name=item.name)
@@ -55,7 +58,7 @@ def add_question(request):
     if form.is_valid():
         return redirect('list_questions')
 
-    return render(request, 'questions-form.html', {'form': form,'form2':form2,})
+    return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
@@ -64,9 +67,10 @@ def list_questions(request):
     tags=Tags.objects.all()
     taggings=Taggings.objects.all()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags, 'taggings':taggings}
-    return render(request, 'questions.html', args)
+    return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
+
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -77,12 +81,24 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+    if ans.count()>0:
+        ans=ans[0]
+    else:
+        ans=None
     user = request.user
     flag=0
     if Follows.objects.filter(question=questions, user=user).exists():
         flag=1
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments , 'flag':flag }
-    return render(request, 'detail.html', args)
+
+
+    votes=Upvotes.objects.filter(user=user).values("answer_id")
+    print(votes)
+    id_list = [id['answer_id'] for id in votes] #voted answers id
+    print(id_list)
+
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
+    return render(request, 'recursion_website/detail.html', args)
 
 @login_required
 def update_questions(request, id):
@@ -120,10 +136,52 @@ def update_questions(request, id):
     else:
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
+        print(id_list)
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
+        print(id_list)
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
-        return render(request, 'questions-form.html', {'form': form, 'form2': form2, 'question': question})
+        return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+
+@login_required
+def add_answer(request, id):
+
+    try:
+        question = get_object_or_404(Questions, pk=id)
+
+    except:
+        return HttpResponse("id does not exist")
+    if request.user!=question.user_id :
+        form = Answerform(request.POST or None)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.question_id=question
+            f.user_id = request.user
+
+
+            form.save()
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+    else:
+        return HttpResponse("Questionnare can't answer")
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
+
+    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
+
+@login_required
+def update_answer(request, id):
+    try:
+        answer =get_object_or_404(Answers, pk=id)
+        question=answer.question_id
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        form = Answerform(request.POST or None, instance=answer)
+        if form.is_valid():
+            if request.user == answer.user_id:
+              form.save()
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -139,7 +197,7 @@ def edit_following(request, id):
        else:
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
-    return redirect('list_questions')
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
 @login_required
 def add_comment(request, id):
@@ -153,14 +211,15 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
-        return redirect('list_questions')
+        return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'comment.html', {'form': form})
+    return render(request, 'recursion_website/comment.html', {'form': form})
 
 @login_required
 def update_comment(request, id):
     try:
         comment =get_object_or_404(Comments, pk=id)
+        question=comment.question
     except:
         return HttpResponse("id does not exist")
     else:
@@ -168,6 +227,23 @@ def update_comment(request, id):
         if form.is_valid():
             if request.user == comment.user:
               form.save()
-            return redirect('list_questions')
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'comment.html', {'form': form, 'comment': comment})
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+
+@login_required
+def voting(request, id):
+    try:
+        answer =get_object_or_404( Answers,pk=id)
+        question=answer.question_id
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != answer.user_id:
+       if Upvotes.objects.filter(answer=answer, user=user).exists():
+           upvote= Upvotes.objects.get(answer=answer, user=user)
+           upvote.delete()
+       else:
+           upvote = Upvotes.objects.create(answer=answer, user=user)
+           upvote.save()
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))

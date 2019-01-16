@@ -26,6 +26,12 @@ class Taggingform(forms.ModelForm):
         model = Taggings
         fields = ('question', 'tag')
 
+class Answerform(forms.ModelForm):
+    description = models.TextField()
+
+    class Meta:
+        model = Answers
+        fields = ('description',)
 
 class Commentform(forms.ModelForm):
     body = models.TextField()

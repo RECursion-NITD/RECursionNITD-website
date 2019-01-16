@@ -4,11 +4,13 @@
 
      <meta charset="UTF-8">
     <meta charset="UTF-8">
-    <title>Add Questions</title>
+    <title>Add Answers</title>
 </head>
 <body>
 <div >
- <h3>Add/Update Comment</h3>
+        {% csrf_token %}
+ <h3>Add/Update Answer</h3>
+ <h2>Answer id:{{ans.id}}</h2>
     <div >
 
         <p>Enter the details below:</p><br>
