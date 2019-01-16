@@ -53,5 +53,6 @@ docs/_build/
 .vscode/*
 
 #env
-.env
+*.env
 
+website/db.sqlite3

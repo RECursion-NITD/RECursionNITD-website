@@ -25,6 +25,7 @@ class Questions(models.Model):
 
     class Meta:
         managed = True
+        ordering = ['-created_at']
         db_table = 'questions'
         verbose_name_plural = 'Questions'
 
