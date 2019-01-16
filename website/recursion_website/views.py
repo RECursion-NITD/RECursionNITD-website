@@ -134,9 +134,7 @@ def update_questions(request, id):
     else:
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
-        print(id_list)
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
-        print(id_list)
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
