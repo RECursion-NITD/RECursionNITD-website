@@ -243,3 +243,11 @@ def voting(request, id):
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+def view_profile(request, id):
+    try:
+        profile=get_object_or_404(Profile, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    args = {'profile': profile,}
+    return render(request, 'profile.html', args)
