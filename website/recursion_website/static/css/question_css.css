@@ -1,0 +1,90 @@
+#answerBox{
+	text-align: center;
+}
+#followBox{
+	text-align: center;
+}
+#followValue{
+	color:#247BA0;
+}
+#answerValue{
+	margin: 0px;
+	color:#F95C39;
+}
+.card{
+	box-shadow: 2px 2px 2px grey;
+	margin:2px;
+	text-align:left;
+	background-color: white;
+}
+#questionDetail{
+	margin-top: 2px;
+	font-size:150%;
+	text-overflow: ellipsis;
+}
+#content{
+	margin-left: 10px;
+}
+#content li{
+	//border:1px red solid;
+}
+#tagList{
+	display:inline-block;
+	color:#F95C39;
+}
+#tagBox{
+	border:1px solid rgba(0,0,0,0.4);
+	padding: 1px;
+	font-size: 90%;
+	border-radius: 7px;
+	position: absolute;
+	bottom: 5px;
+	right: 30px;
+}
+#postedOn{
+	vertical-align: bottom;
+}
+#addedBy{
+}
+#addedNav{
+	background-color: rgba(0,0,0,0.4);
+}
+
+#haveAQ{
+	color:#F95C39;
+	font-size:400%;
+}
+#search{
+	margin-top:3px; 
+	max-width: 250px;
+	height:40px;
+	box-shadow:3px 3px 3px grey;
+	border-radius:25px 0 0 25px; 
+	display: inline-block;
+}
+#postQ{
+	background-color: #247BA0;
+	color: white;
+	box-shadow:3px 3px grey;
+	margin-bottom:5px; 
+}
+#searchButton{
+	height:40px;
+	position: relative;
+	left:-10px;
+	background-color:#F95C39;
+	color:white;
+	box-shadow:1px 1px grey;
+	border-radius:0 25px 25px 0;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
