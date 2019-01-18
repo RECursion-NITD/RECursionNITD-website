@@ -17,4 +17,5 @@ urlpatterns = [
     path('editcomment/<int:id>/', update_comment, name='update_comment'),
     path('createprofile/<int:id>/', create_profile, name='create_profile'),
     path('register/', user_register, name="user_register"),
+    path('updateprofile/<int:id>/', update_profile, name='update_profile'),
 ]

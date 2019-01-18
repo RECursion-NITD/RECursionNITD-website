@@ -267,7 +267,7 @@ def create_profile(request, id):
     if user != request.user:
         return HttpResponse("You cant Create or Update another User's Profile!")
     if Profile.objects.filter(user=user).exists():
-        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('update_profile', args=(id,)))
     if form.is_valid():
         if user == request.user :
           f = form.save(commit=False)
@@ -286,3 +286,25 @@ def user_register(request):
         form.save()
         return redirect('login')
     return render(request, 'register.html', {'form': form})
+
+@login_required
+def update_profile(request, id):
+    form= Profileform(request.POST or None)
+    try:
+        user=get_object_or_404(User, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    if user != request.user:
+        return HttpResponse("You cant Create or Update another User's Profile!")
+    try:
+        profile=get_object_or_404(Profile, user=user)
+    except:
+        return HttpResponseRedirect(reverse('create_profile', args=(id,)))
+    else:
+      form = Profileform(request.POST or None, instance=profile)
+      if form.is_valid():
+          if profile.user==request.user:
+             form.save()
+          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+
+    return render(request, 'create.html', {'form': form,})
