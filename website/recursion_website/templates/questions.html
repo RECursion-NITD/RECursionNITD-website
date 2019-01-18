@@ -10,7 +10,7 @@
 <body>
      <h2>Total Questions Asked: {{ questions.count }}</h2>
      <h2>Total Answers: {{ answers.count }}</h2>
-     <h3>Most Recent Tags</h3>
+     <h3>Most Recent Tags {{ limit }}</h3>
      <ul>
          {% for tag in tags_recent|slice:":10" %}
              <li>{{ tag.name }}</li>
@@ -18,7 +18,7 @@
      </ul>
      <h3>Most Popular Tags</h3>
      <ul>
-         {% for tag in tags_popular %}
+         {% for tag in tags_popular|slice:":10" %}
              <li>{{ tag.name }}</li>
          {% endfor %}
      </ul>

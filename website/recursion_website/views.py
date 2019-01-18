@@ -65,13 +65,24 @@ def list_questions(request):
     questions = Questions.objects.all()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
-    tags_recent=Tags.objects.all().order_by('-created_at')
-    tags=Tags.objects.all()
-    tags_popular=[]
     taggings=Taggings.objects.all()
-
-
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent,}
+    tags_recent=Tags.objects.all().order_by('-created_at')
+    tags_popular=[]
+    if tags_recent.count()>10:
+        limit=10
+    else:
+        limit=tags_recent.count()
+    for tag in tags_recent:
+        tagging = Taggings.objects.filter(tag=tag)
+        count=tagging.count()
+        tags_popular.append([count,tag])
+    tags_popular.sort(key=lambda x: x[0],reverse=True)
+    tags_recent_record=[]
+    tags_popular_record=[]
+    for i in range(limit):
+        tags_recent_record.append(tags_recent[i])
+        tags_popular_record.append(tags_popular[i][1])
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'limit':limit,}
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
