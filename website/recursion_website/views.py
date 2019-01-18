@@ -59,14 +59,14 @@ def add_question(request):
     if form.is_valid():
         return redirect('list_questions')
 
-    return render(request, 'questions-form.html', {'form': form,'form2':form2,})
+    return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
     taggings=Taggings.objects.all()
-    tags_recent=Tags.objects.all().order_by('-created_at')
+    tags_recent=Tags.objects.all().order_by('-updated_at')
     tags_popular=[]
     if tags_recent.count()>10:
         limit=10
@@ -112,7 +112,7 @@ def detail_questions(request, id):
     id_list = [id['answer_id'] for id in votes] #voted answers id
 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
-    return render(request, 'detail.html', args)
+    return render(request, 'recursion_website/detail.html', args)
 
 @login_required
 def update_questions(request, id):
@@ -153,7 +153,7 @@ def update_questions(request, id):
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
-        return render(request, 'questions-form.html', {'form': form, 'form2': form2, 'question': question})
+        return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
 
 @login_required
 def add_answer(request, id):
@@ -177,7 +177,7 @@ def add_answer(request, id):
         return HttpResponse("Questionnare can't answer")
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
 
-    return render(request, 'answer.html', {'form': form,'ans':ans})
+    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
 
 @login_required
 def update_answer(request, id):
@@ -193,7 +193,7 @@ def update_answer(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'answer.html', {'form': form, 'ans': answer})
+    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -225,7 +225,7 @@ def add_comment(request, id):
         form.save()
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'comment.html', {'form': form})
+    return render(request, 'recursion_website/comment.html', {'form': form})
 
 @login_required
 def update_comment(request, id):
@@ -241,7 +241,7 @@ def update_comment(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'comment.html', {'form': form, 'comment': comment})
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -323,3 +323,34 @@ def update_profile(request, id):
           return HttpResponseRedirect(reverse('view_profile', args=(id,)))
 
     return render(request, 'create.html', {'form': form,})
+
+def filter_question(request ,id):
+    try:
+        required_tag=get_object_or_404(Tags, pk=id)
+    except:
+        return HttpResponse("Tag does not exist!")
+    questions=[]
+    answers=Answers.objects.all()
+    follows=Follows.objects.all()
+    taggings=Taggings.objects.filter(tag=required_tag)
+    for tagging in taggings:
+        questions.append(tagging.question)
+    tags_recent=Tags.objects.all().order_by('-updated_at')
+    tags_popular = []
+    if tags_recent.count() > 10:
+        limit = 10
+    else:
+        limit = tags_recent.count()
+    for tag in tags_recent:
+        tagging = Taggings.objects.filter(tag=tag)
+        count = tagging.count()
+        tags_popular.append([count, tag])
+    tags_popular.sort(key=lambda x: x[0], reverse=True)
+    tags_recent_record = []
+    tags_popular_record = []
+    for i in range(limit):
+        tags_recent_record.append(tags_recent[i])
+        tags_popular_record.append(tags_popular[i][1])
+    questions.reverse()
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    return render(request, 'questions.html', args)

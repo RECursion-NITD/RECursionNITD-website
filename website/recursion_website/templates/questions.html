@@ -13,13 +13,13 @@
      <h3>Most Recent Tags {{ limit }}</h3>
      <ul>
          {% for tag in tags_recent %}
-             <li>{{ tag.name }}</li>
+            <li><a href="{% url 'filter_question' tag.id  %}">{{ tag.name }}</a></li>
          {% endfor %}
      </ul>
      <h3>Most Popular Tags</h3>
      <ul>
          {% for tag in tags_popular %}
-             <li>{{ tag.name }}</li>
+             <li><a href="{% url 'filter_question' tag.id  %}">{{ tag.name }}</a></li>
          {% endfor %}
      </ul>
      <ul>

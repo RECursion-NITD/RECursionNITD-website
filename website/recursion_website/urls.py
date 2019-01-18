@@ -18,4 +18,5 @@ urlpatterns = [
     path('createprofile/<int:id>/', create_profile, name='create_profile'),
     path('register/', user_register, name="user_register"),
     path('updateprofile/<int:id>/', update_profile, name='update_profile'),
+    path('filter/<int:id>/', filter_question, name='filter_question'),
 ]
