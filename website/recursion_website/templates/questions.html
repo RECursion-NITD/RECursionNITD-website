@@ -8,6 +8,8 @@
      <title>Document</title>
 </head>
 <body>
+     <h2>Total Questions Asked: {{ questions.count }}</h2>
+     <h2>Total Answers: {{ answers.count }}</h2>
      <ul>
          {% for question in questions %}
          <li><a href="{% url 'detail_questions' question.id %}">{{ question.title }}</a>
