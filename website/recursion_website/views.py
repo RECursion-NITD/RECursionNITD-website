@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.forms import modelformset_factory
+from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
 
 @login_required
@@ -58,7 +59,7 @@ def add_question(request):
     if form.is_valid():
         return redirect('list_questions')
 
-    return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
+    return render(request, 'questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
@@ -67,7 +68,7 @@ def list_questions(request):
     tags=Tags.objects.all()
     taggings=Taggings.objects.all()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags, 'taggings':taggings}
-    return render(request, 'recursion_website/questions.html', args)
+    return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
 
@@ -96,7 +97,7 @@ def detail_questions(request, id):
     id_list = [id['answer_id'] for id in votes] #voted answers id
 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
-    return render(request, 'recursion_website/detail.html', args)
+    return render(request, 'detail.html', args)
 
 @login_required
 def update_questions(request, id):
@@ -137,7 +138,7 @@ def update_questions(request, id):
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
-        return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+        return render(request, 'questions-form.html', {'form': form, 'form2': form2, 'question': question})
 
 @login_required
 def add_answer(request, id):
@@ -161,7 +162,7 @@ def add_answer(request, id):
         return HttpResponse("Questionnare can't answer")
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
 
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
+    return render(request, 'answer.html', {'form': form,'ans':ans})
 
 @login_required
 def update_answer(request, id):
@@ -177,7 +178,7 @@ def update_answer(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+    return render(request, 'answer.html', {'form': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -209,7 +210,7 @@ def add_comment(request, id):
         form.save()
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form})
+    return render(request, 'comment.html', {'form': form})
 
 @login_required
 def update_comment(request, id):
@@ -225,7 +226,7 @@ def update_comment(request, id):
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'comment.html', {'form': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -246,8 +247,42 @@ def voting(request, id):
 
 def view_profile(request, id):
     try:
-        profile=get_object_or_404(Profile, pk=id)
+        user=get_object_or_404(User, pk=id)
     except:
         return HttpResponse("User does not exist!")
+    try:
+        profile=get_object_or_404(Profile, user=user)
+    except:
+        return HttpResponse("User has not created a Profile yet!")
     args = {'profile': profile,}
     return render(request, 'profile.html', args)
+
+@login_required
+def create_profile(request, id):
+    form= Profileform(request.POST or None)
+    try:
+        user=get_object_or_404(User, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    if user != request.user:
+        return HttpResponse("You cant Create or Update another User's Profile!")
+    if Profile.objects.filter(user=user).exists():
+        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+    if form.is_valid():
+        if user == request.user :
+          f = form.save(commit=False)
+          f.user = user
+          form.save()
+          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+
+    return render(request, 'create.html', {'form': form,})
+
+def user_register(request):
+    form = UserCreationForm(request.POST or None)
+
+    if form.is_valid():
+        if User.objects.filter(username=['username']).exists():
+            return redirect('user_register')
+        form.save()
+        return redirect('login')
+    return render(request, 'register.html', {'form': form})
