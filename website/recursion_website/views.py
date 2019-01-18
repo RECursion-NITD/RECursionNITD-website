@@ -65,9 +65,13 @@ def list_questions(request):
     questions = Questions.objects.all()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
+    tags_recent=Tags.objects.all().order_by('-created_at')
     tags=Tags.objects.all()
+    tags_popular=[]
     taggings=Taggings.objects.all()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags, 'taggings':taggings}
+
+
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent,}
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):

@@ -160,7 +160,10 @@ class Tags(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.name
+        if self.name== None:
+            return "None"
+        else:
+            return self.name
 
     class Meta:
         managed = True

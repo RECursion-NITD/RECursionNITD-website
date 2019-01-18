@@ -10,6 +10,18 @@
 <body>
      <h2>Total Questions Asked: {{ questions.count }}</h2>
      <h2>Total Answers: {{ answers.count }}</h2>
+     <h3>Most Recent Tags</h3>
+     <ul>
+         {% for tag in tags_recent|slice:":10" %}
+             <li>{{ tag.name }}</li>
+         {% endfor %}
+     </ul>
+     <h3>Most Popular Tags</h3>
+     <ul>
+         {% for tag in tags_popular %}
+             <li>{{ tag.name }}</li>
+         {% endfor %}
+     </ul>
      <ul>
          {% for question in questions %}
          <li><a href="{% url 'detail_questions' question.id %}">{{ question.title }}</a>
