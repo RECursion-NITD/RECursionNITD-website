@@ -352,5 +352,6 @@ def filter_question(request ,id):
         tags_recent_record.append(tags_recent[i])
         tags_popular_record.append(tags_popular[i][1])
     questions.reverse()
+    taggings=Taggings.objects.all()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
     return render(request, 'questions.html', args)
