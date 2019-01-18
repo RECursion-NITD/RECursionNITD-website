@@ -12,13 +12,13 @@
      <h2>Total Answers: {{ answers.count }}</h2>
      <h3>Most Recent Tags {{ limit }}</h3>
      <ul>
-         {% for tag in tags_recent|slice:":10" %}
+         {% for tag in tags_recent %}
              <li>{{ tag.name }}</li>
          {% endfor %}
      </ul>
      <h3>Most Popular Tags</h3>
      <ul>
-         {% for tag in tags_popular|slice:":10" %}
+         {% for tag in tags_popular %}
              <li>{{ tag.name }}</li>
          {% endfor %}
      </ul>

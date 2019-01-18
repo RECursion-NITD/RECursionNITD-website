@@ -82,7 +82,7 @@ def list_questions(request):
     for i in range(limit):
         tags_recent_record.append(tags_recent[i])
         tags_popular_record.append(tags_popular[i][1])
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'limit':limit,}
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
