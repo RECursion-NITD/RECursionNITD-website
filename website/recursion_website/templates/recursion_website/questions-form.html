@@ -1,8 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-     <meta charset="UTF-8">
+{% extends 'base.html' %}
+{% block content %}
     <meta charset="UTF-8">
     <title>Add Questions</title>
 </head>
@@ -52,23 +49,21 @@
 
 
 
-    <div >
-
-        <h1 >Enter the details below:</h1><br>
-        <form method="POST">
+    <div class="container">
+        <center><h4 style="background: orange; text-align: center;border-radius: 10px;width: 50%;">Enter the details below</h4></center><br>
+        <center><form method="POST" class="card" style="padding: 20px; width: 100%; border-radius: 10px">
           <table>
               {{ form }}
           </table><p>Enter any number of tags upto 5:</p>
             <table>
             {{ form2 }}<span><p>&nbspTags:</p></span>
           </table>
-            <table>
+        
 
               <br>
-          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
-        </form>
+          <button type="submit" class="save btn btn-primary">SAVE</button>
+        </form></center>
 
       </div>
 </div>
-</body>
-</html>
+{% endblock %}

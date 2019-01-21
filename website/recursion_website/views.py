@@ -73,7 +73,8 @@ def list_questions(request):
     return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
-    
+    form = Commentform(request.POST or None)
+    form2 = Answerform(request.POST or None)
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -100,7 +101,7 @@ def detail_questions(request, id):
     id_list = [id['answer_id'] for id in votes] #voted answers id
     print(id_list)
                 
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list,'form': form,'form': form,'form2': form2 }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -155,20 +156,18 @@ def add_answer(request, id):
     except:
         return HttpResponse("id does not exist")
     if request.user!=question.user_id :   
-        form = Answerform(request.POST or None)
-        if form.is_valid():
-            f = form.save(commit=False)
+        form2 = Answerform(request.POST or None)
+        if form2.is_valid():
+            f = form2.save(commit=False)
             f.question_id=question
             f.user_id = request.user
-            
-            
-            form.save()
+            form2.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
     else:
         return HttpResponse("Questionnare can't answer") 
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
     
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})     
+    return render(request, 'recursion_website/answer.html', {'form2': form2,'ans':ans})     
 
 @login_required
 def update_answer(request, id):
@@ -178,13 +177,13 @@ def update_answer(request, id):
     except:
         return HttpResponse("id does not exist")
     else:
-        form = Answerform(request.POST or None, instance=answer)
-        if form.is_valid():
+        form2 = Answerform(request.POST or None, instance=answer)
+        if form2.is_valid():
             if request.user == answer.user_id:
-              form.save()
+              form2.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+    return render(request, 'recursion_website/answer.html', {'form2': form2, 'ans': answer})
 
 @login_required
 def edit_following(request, id):

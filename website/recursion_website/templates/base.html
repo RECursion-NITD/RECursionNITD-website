@@ -5,7 +5,30 @@
     <meta name="viewport"
           content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+
+    <!-- BACKEND Import -->
+
+    <!-- FRONTEND Import-->
+      <!--Package Imports-->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <script src="https://cTextode.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+      <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <!-- Import Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- Import Google Fonts-->
+<!--     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+ --> 
+<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">   
+      <!--File Imports-->
+      {% load staticfiles %}
+      <link rel="stylesheet" href="{% static 'css/base_css.css' %}"> 
+
+      <!-- Favicon import -->
+      <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
     
     {% block css %}
     {% endblock  %}
@@ -22,9 +45,157 @@
      
 </head>
 <body>
+ 
 
+ <nav class="navbar navbar-expand-md navbar-dark bg-dark py-0" style="background-color: #f19066;">
+    <div class="d-flex flex-grow-1 py-0">
+        <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+        <a class="navbar-brand" href="#">
+          <img src="/static/image/logoInvert.png" style="max-width:75px;" alt="logo">
+        </a>
+        <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
+            <img src="/static/image/log.png" width="20%" alt="logo">
+        </a>
+        <div class="w-100 text-right py-0">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+    <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
+        <ul class="navbar-nav ml-auto flex-nowrap"> 
+            <li class="nav-item active">
+                <a href="question.html" class="nav-link m-2 menu-item">AskREC</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link m-2 menu-item">Events</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link m-2 menu-item">Get Started</a>
+            </li>
+            {% if request.user %}
+             <li><a href="/registration/login.html" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
+           {% else %}
+              <ul class="nav navbar-nav">
+              <li class="dropdown nav-link m-2 menu-item">
+              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Manage Account<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li ><a  href="{% url 'list_questions' %}">Forum</a></li>
+                  <li><a href="#">View Account</a></li>
+                  <li><a href="#">Edit Account</a></li>
+                  <li><a href="#">View my questions</a></li>
+                  <li><a href="#">Logout</a></li>
+                </ul>
+              </li>
+              </ul>
+              {% endif %}
+        </ul>
+    </div>
+</nav>
+
+  {% block nav %}{% endblock nav%}
+  </header>
 {% block content %} 
 {% endblock %}
-    
+
+  <!--<footer class="page-footer" style="background:url('/static/image/footer_design.svg');"> Footer Color is controlled by class 
+    <a id="goTop">
+      <center class="circle">
+        {% load static %}
+        <img src="{% static 'image/rocket.png'%}" alt="go Top" onclick="window.scrollTo(0,-1000000)" style="margin-top: 2px;">
+      </center>
+    </a>
+    <div class="container-fluid" id="footerContainer">
+      <div class="row">
+        <div class="col-lg-3 col-sm-12">
+          <div class="columnContentText">
+            <h1 class="footerTitle">Links</h1>
+                    <ul>
+                      <li><a  href="#!" style="color: white;">Events</a></li>
+                      <li><a  href="#!" style="color: white;">AskREC</a></li>
+                      <li><a  href="#!" style="color: white;">Getting Started</a></li>
+                      <li><a  href="#!" style="color: skyblue;">Login</a></li>
+                    </ul>
+                </div>
+                </div>
+                <div class="col-lg-3 col-sm-12">
+                  <div class="columnContentText">
+                      <h1 class="footerTitle">Resources</h1>
+                  <ul>
+                    <li><a  href="#!" style="color: white;">Events</a></li>
+                    <li><a  href="#!" style="color: white;">AskREC</a></li>
+                    <li><a  href="#!" style="color: white;">Getting Started</a></li>
+                    <li><a  href="#!" style="color: skyblue;">Login</a></li>
+                  </ul>
+                  <div style="text-indent:20px;">
+                  <i class="fab fa-facebook-f" style="font-size:24px;"></i>
+                  <i class="fab fa-github" style="font-size:24px;"></i>
+                  </div>
+                </div>
+                </div>
+              <div class="col-lg-6 col-sm-12">
+                <div class="columnContent">
+                  <div class="mapouter"><div class="gmap_canvas"><iframe width="300" height="300" id="gmap_canvas" src="https://maps.google.com/maps?q=NIT%20Durgapur&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.pureblack.de/webdesign-hannover/"></a></div></div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright" id="copyright">
+            <div class="container-fluid" style="color:white;">
+            © 2018 Copyright RECursion
+            <a href="https://www.nitdgp.ac.in">
+            <i class="fa fa-bank" style="color:black;"></i></a>
+        </div>
+    </footer>-->
+<footer class="section footer-classic context-dark bg-image" style="background:linear-gradient(135deg, #cc4c2f 22%, rgba(255,0,0,0) 10%),
+            linear-gradient(135deg, #F95C39 80%, #cc4c2f 1%),
+            linear-gradient(45deg, #247ba0 95%, rgba(0,0,255,0) 30%);">
+            <a id="goTop">
+      <center class="circle">
+        {% load static %}
+        <img src="{% static 'image/rocket.png'%}" alt="go Top" onclick="window.scrollTo(0,-1000000)" style="margin-top: 2px;">
+      </center>
+    </a>
+        <div class="container">
+          <div class="row row-30">
+            <div class="col-md-4 col-xl-5">
+              <div class="pr-xl-4"><a class="brand" href="index.html"><img class="brand-logo-light" src="images/agency/logo-inverse-140x37.png" alt="" width="140" height="37" srcset="images/agency/logo-retina-inverse-280x74.png 2x"></a>
+                <p>RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.</p>
+                <!-- Rights-->
+                <p class="rights"><span>©  </span><span class="copyright-year">2018</span><span> </span><span>RECursion</span><span>. </span><span>All Rights Reserved.</span></p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h3>Contacts</h3>
+              <dl class="contact-list">
+                <dt>Address:</dt>
+                <dd>NIT Durgapur, Durgapur, W.B.</dd>
+              </dl>
+              <dl class="contact-list">
+                <dt>email:</dt>
+                <dd><a href="mailto:#">recursionnitd@gmail.com</a></dd>
+              </dl>
+              <dl class="contact-list">
+                <dt>phones:</dt>
+                <dd><a href="tel:#">+91 1234567890</a> <span>or</span> <a href="tel:#">+91 12354657902</a>
+                </dd>
+              </dl>
+            </div>
+            <div class="col-md-4 col-xl-3">
+              <h3>Links</h3>
+              <ul class="nav-list">
+                <li><a href="#">AskREC</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Get Started</a></li>
+                <li><a href="#">Team</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="row no-gutters social-container">
+          <div class="col"><a class="social-inner" href="#"><span class="icon mdi mdi-facebook"></span><span>Facebook</span></a></div>
+          <div class="col"><a class="social-inner" href="#"><span class="icon mdi mdi-github"></span><span>github</span></a></div>
+        </div>
+      </footer>
 </body>
 </html>
