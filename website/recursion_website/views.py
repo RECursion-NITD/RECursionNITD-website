@@ -65,7 +65,7 @@ def list_questions(request):
     questions = Questions.objects.all()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
-    taggings=Taggings.objects.all()
+    taggings_recent = Taggings.objects.all().order_by('-updated_at')
     tags_recent=Tags.objects.all().order_by('-updated_at')
     tags_popular=[]
     if tags_recent.count()>10:
@@ -80,9 +80,13 @@ def list_questions(request):
     tags_recent_record=[]
     tags_popular_record=[]
     for i in range(limit):
-        tags_recent_record.append(tags_recent[i])
         tags_popular_record.append(tags_popular[i][1])
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    count=0
+    while len(tags_recent_record)!= limit:
+        if taggings_recent[count].tag not in tags_recent_record:
+           tags_recent_record.append(taggings_recent[count].tag)
+        count+=1
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
@@ -336,6 +340,7 @@ def filter_question(request ,id):
     for tagging in taggings:
         questions.append(tagging.question)
     tags_recent=Tags.objects.all().order_by('-updated_at')
+    taggings_recent=Taggings.objects.all().order_by('-updated_at')
     tags_popular = []
     if tags_recent.count() > 10:
         limit = 10
@@ -349,9 +354,12 @@ def filter_question(request ,id):
     tags_recent_record = []
     tags_popular_record = []
     for i in range(limit):
-        tags_recent_record.append(tags_recent[i])
         tags_popular_record.append(tags_popular[i][1])
+    count=0
+    while len(tags_recent_record)!= limit:
+        if taggings_recent[count].tag not in tags_recent_record:
+           tags_recent_record.append(taggings_recent[count].tag)
+        count+=1
     questions.reverse()
-    taggings=Taggings.objects.all()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
     return render(request, 'questions.html', args)
