@@ -90,7 +90,7 @@ def list_questions(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
-    return render(request, 'questions.html', args)
+    return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
 
@@ -375,4 +375,4 @@ def filter_question(request ,id):
         count+=1
     questions.reverse()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
-    return render(request, 'questions.html', args)
+    return render(request, 'recursion_website/questions.html', args)
