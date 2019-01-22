@@ -18,6 +18,7 @@ class Questions(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     visibility = models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
     class Meta:
@@ -25,6 +26,7 @@ class Questions(models.Model):
         ordering = ['-created_at']
         db_table = 'questions'
         verbose_name_plural = 'Questions'
+
 
 # Done
 class Answers(models.Model):
@@ -42,6 +44,7 @@ class Answers(models.Model):
         managed = True
         db_table = 'answers'
         verbose_name_plural = 'Answers'
+
 
 # # TBD
 # class ArInternalMetadata(models.Model):
@@ -89,6 +92,7 @@ class Comments(models.Model):
         managed = True
         db_table = 'comments'
         verbose_name_plural = 'Comments'
+
 
 # DONE
 class Events(models.Model):
@@ -147,12 +151,17 @@ class Follows(models.Model):
 
 # DONE
 class Tags(models.Model):
-    name = models.CharField(max_length=30,blank=True,null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    def __self__(self):
-        return self.name
+
+    def __str__(self):
+        if self.name== None:
+            return "None"
+        else:
+            return self.name
+
     class Meta:
         managed = True
         db_table = 'tags'
@@ -160,17 +169,20 @@ class Tags(models.Model):
 
 
 class Taggings(models.Model):
-    question = models.ForeignKey(Questions,on_delete=models.CASCADE,blank=True,null=True)
-    tag = models.ForeignKey( Tags , on_delete=models.CASCADE,blank=True,null=True)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE, blank=True, null=True)
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE, blank=True, null=True)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    def __self__(self):
-        return self.question
+
+    def __str__(self):
+        return self.question.title + " : " + self.tag.name
+
     class Meta:
         managed = True
         db_table = 'taggings'
         verbose_name_plural = 'Taggings'
+
 
 # DONE
 
@@ -188,6 +200,8 @@ class Upvotes(models.Model):
         managed = True
         db_table = 'upvotes'
         verbose_name_plural = 'Upvotes'
+
+
 """
 TODO
 - Roles : list containing tuples, with various grant level

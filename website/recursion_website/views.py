@@ -11,6 +11,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.forms import modelformset_factory
+from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
 
 @login_required
@@ -40,7 +41,7 @@ def add_question(request):
     if form.is_valid():
         description=form.cleaned_data.get('description')
         if description.__len__()<10:
-            return HttpResponse("very short question's description::")  
+            return HttpResponse("very short question's description::")
         f = form.save(commit=False)
         f.user_id = request.user
         form.save()
@@ -67,10 +68,29 @@ def list_questions(request):
     questions = Questions.objects.all()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
-    tags=Tags.objects.all()
-    taggings=Taggings.objects.all()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags, 'taggings':taggings}
-    return render(request, 'recursion_website/questions.html', args)
+    taggings_recent = Taggings.objects.all().order_by('-updated_at')
+    tags_recent=Tags.objects.all().order_by('-updated_at')
+    tags_popular=[]
+    if tags_recent.count()>10:
+        limit=10
+    else:
+        limit=tags_recent.count()
+    for tag in tags_recent:
+        tagging = Taggings.objects.filter(tag=tag)
+        count=tagging.count()
+        tags_popular.append([count,tag])
+    tags_popular.sort(key=lambda x: x[0],reverse=True)
+    tags_recent_record=[]
+    tags_popular_record=[]
+    for i in range(limit):
+        tags_popular_record.append(tags_popular[i][1])
+    count=0
+    while len(tags_recent_record)!= limit:
+        if taggings_recent[count].tag not in tags_recent_record:
+           tags_recent_record.append(taggings_recent[count].tag)
+        count+=1
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
 
@@ -96,9 +116,7 @@ def detail_questions(request, id):
 
 
     votes=Upvotes.objects.filter(user=user).values("answer_id")
-    
     id_list = [id['answer_id'] for id in votes] #voted answers id
-    
 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
@@ -117,7 +135,7 @@ def update_questions(request, id):
         if form.is_valid():
             description=form.cleaned_data.get('description')
             if description.__len__()<10:
-                return HttpResponse("very short question's description::")  
+                return HttpResponse("very short question's description::")
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
@@ -142,9 +160,7 @@ def update_questions(request, id):
     else:
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
-        
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
-        
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
@@ -163,7 +179,7 @@ def add_answer(request, id):
             description=form.cleaned_data.get('description')
 
             if description.__len__()<10:
-                return HttpResponse("very short answer::") 
+                return HttpResponse("very short answer::")
             f = form.save(commit=False)
             f.question_id=question
             f.user_id = request.user
@@ -189,7 +205,7 @@ def update_answer(request, id):
         if form.is_valid():
             description=form.cleaned_data.get('description')
             if description.__len__()<10:
-                return HttpResponse("very short answer::") 
+                return HttpResponse("very short answer::")
             if request.user == answer.user_id:
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
@@ -261,12 +277,102 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-@login_required
 def view_profile(request, id):
     try:
-        profile=get_object_or_404(Profile, pk=id)
+        user=get_object_or_404(User, pk=id)
     except:
         return HttpResponse("User does not exist!")
+    try:
+        profile=get_object_or_404(Profile, user=user)
+    except:
+        return HttpResponse("User has not created a Profile yet!")
     args = {'profile': profile,}
-    return render(request, 'recursion_website/profile.html', args)
+    return render(request, 'profile.html', args)
 
+@login_required
+def create_profile(request, id):
+    form= Profileform(request.POST or None)
+    try:
+        user=get_object_or_404(User, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    if user != request.user:
+        return HttpResponse("You cant Create or Update another User's Profile!")
+    if Profile.objects.filter(user=user).exists():
+        return HttpResponseRedirect(reverse('update_profile', args=(id,)))
+    if form.is_valid():
+        if user == request.user :
+          f = form.save(commit=False)
+          f.user = user
+          form.save()
+          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+
+    return render(request, 'create.html', {'form': form,})
+
+def user_register(request):
+    form = UserCreationForm(request.POST or None)
+
+    if form.is_valid():
+        if User.objects.filter(username=['username']).exists():
+            return redirect('user_register')
+        form.save()
+        return redirect('login')
+    return render(request, 'register.html', {'form': form})
+
+@login_required
+def update_profile(request, id):
+    form= Profileform(request.POST or None)
+    try:
+        user=get_object_or_404(User, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    if user != request.user:
+        return HttpResponse("You cant Create or Update another User's Profile!")
+    try:
+        profile=get_object_or_404(Profile, user=user)
+    except:
+        return HttpResponseRedirect(reverse('create_profile', args=(id,)))
+    else:
+      form = Profileform(request.POST or None, instance=profile)
+      if form.is_valid():
+          if profile.user==request.user:
+             form.save()
+          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+
+    return render(request, 'create.html', {'form': form,})
+
+def filter_question(request ,id):
+    try:
+        required_tag=get_object_or_404(Tags, pk=id)
+    except:
+        return HttpResponse("Tag does not exist!")
+    questions=[]
+    answers=Answers.objects.all()
+    follows=Follows.objects.all()
+    taggings=Taggings.objects.filter(tag=required_tag)
+    for tagging in taggings:
+        questions.append(tagging.question)
+    tags_recent=Tags.objects.all().order_by('-updated_at')
+    taggings_recent=Taggings.objects.all().order_by('-updated_at')
+    tags_popular = []
+    if tags_recent.count() > 10:
+        limit = 10
+    else:
+        limit = tags_recent.count()
+    for tag in tags_recent:
+        tagging = Taggings.objects.filter(tag=tag)
+        count = tagging.count()
+        tags_popular.append([count, tag])
+    tags_popular.sort(key=lambda x: x[0], reverse=True)
+    tags_recent_record = []
+    tags_popular_record = []
+    for i in range(limit):
+        tags_popular_record.append(tags_popular[i][1])
+    count=0
+    while len(tags_recent_record)!= limit:
+        if taggings_recent[count].tag not in tags_recent_record:
+           tags_recent_record.append(taggings_recent[count].tag)
+        count+=1
+    questions.reverse()
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    return render(request, 'questions.html', args)
