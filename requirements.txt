@@ -3,3 +3,4 @@ mysqlclient==1.3.13
 pkg-resources==0.0.0
 python-decouple==3.1
 pytz==2018.7
+pip install socialauth

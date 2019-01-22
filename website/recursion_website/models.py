@@ -194,16 +194,19 @@ TODO
     Choice field.
 """
 class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=50)
     college = models.CharField(max_length=100)
     role = models.IntegerField(blank=True, null=True)
     dept = models.CharField(max_length=20, blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
-    nickname = models.URLField(blank=True, null=True)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    def __str__(self):
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def __self__(self):
         return self.name
+
     class Meta:
         managed = True

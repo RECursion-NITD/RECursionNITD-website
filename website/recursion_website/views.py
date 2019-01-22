@@ -38,6 +38,9 @@ def add_question(request):
     else:
          form2 = Tagform(queryset=Tags.objects.none())
     if form.is_valid():
+        description=form.cleaned_data.get('description')
+        if description.__len__()<10:
+            return HttpResponse("very short question's description::")  
         f = form.save(commit=False)
         f.user_id = request.user
         form.save()
@@ -93,9 +96,9 @@ def detail_questions(request, id):
 
 
     votes=Upvotes.objects.filter(user=user).values("answer_id")
-    print(votes)
+    
     id_list = [id['answer_id'] for id in votes] #voted answers id
-    print(id_list)
+    
 
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
@@ -112,6 +115,9 @@ def update_questions(request, id):
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
         if form.is_valid():
+            description=form.cleaned_data.get('description')
+            if description.__len__()<10:
+                return HttpResponse("very short question's description::")  
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
@@ -136,9 +142,9 @@ def update_questions(request, id):
     else:
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
-        print(id_list)
+        
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
-        print(id_list)
+        
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
         return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
@@ -154,6 +160,10 @@ def add_answer(request, id):
     if request.user!=question.user_id :
         form = Answerform(request.POST or None)
         if form.is_valid():
+            description=form.cleaned_data.get('description')
+
+            if description.__len__()<10:
+                return HttpResponse("very short answer::") 
             f = form.save(commit=False)
             f.question_id=question
             f.user_id = request.user
@@ -177,6 +187,9 @@ def update_answer(request, id):
     else:
         form = Answerform(request.POST or None, instance=answer)
         if form.is_valid():
+            description=form.cleaned_data.get('description')
+            if description.__len__()<10:
+                return HttpResponse("very short answer::") 
             if request.user == answer.user_id:
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
@@ -247,3 +260,13 @@ def voting(request, id):
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+@login_required
+def view_profile(request, id):
+    try:
+        profile=get_object_or_404(Profile, pk=id)
+    except:
+        return HttpResponse("User does not exist!")
+    args = {'profile': profile,}
+    return render(request, 'recursion_website/profile.html', args)
+
