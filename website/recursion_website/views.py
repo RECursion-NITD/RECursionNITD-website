@@ -276,22 +276,6 @@ def view_profile(request, id):
     args = {'profile': profile,}
     return render(request, 'profile.html', args)
 
-@login_required
-def create_profile(request):
-    form= Profileform(request.POST or None)
-    user=request.user
-    id=user.id
-    if Profile.objects.filter(user=user).exists():
-        return redirect('update_profile')
-    if form.is_valid():
-        if user == request.user :
-          f = form.save(commit=False)
-          f.user = user
-          form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
-
-    return render(request, 'create.html', {'form': form,})
-
 def user_register(request):
     form = UserCreationForm(request.POST or None)
 
@@ -303,21 +287,17 @@ def user_register(request):
                                 password=form.cleaned_data['password1'],
                                 )
         login(request, new_user)
-        return redirect('create_profile')
+        return redirect('edit_profile')
     return render(request, 'register.html', {'form': form})
 
 @login_required
-def update_profile(request):
+def edit_profile(request):
     form= Profileform(request.POST or None)
     user=request.user
     id = user.id
-    try:
-        profile=get_object_or_404(Profile, user=user)
-    except:
-        return redirect('create_profile')
-    else:
-      form = Profileform(request.POST or None, instance=profile)
-      if form.is_valid():
+    profile=get_object_or_404(Profile, user=user)
+    form = Profileform(request.POST or None, instance=profile)
+    if form.is_valid():
           if profile.user==request.user:
              form.save()
           return HttpResponseRedirect(reverse('view_profile', args=(id,)))
