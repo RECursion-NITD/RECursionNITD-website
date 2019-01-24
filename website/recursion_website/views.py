@@ -39,6 +39,9 @@ def add_question(request):
     else:
          form2 = Tagform(queryset=Tags.objects.none())
     if form.is_valid():
+        description = form.cleaned_data.get('description')
+        if description.__len__() < 10:
+            return HttpResponse("Very Short Question's Description!")
         f = form.save(commit=False)
         f.user_id = request.user
         form.save()
@@ -130,6 +133,9 @@ def update_questions(request, id):
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
         if form.is_valid():
+            description = form.cleaned_data.get('description')
+            if description.__len__() < 10:
+                return HttpResponse("Very Short Question's Description!")
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
@@ -170,11 +176,12 @@ def add_answer(request, id):
     if request.user!=question.user_id :
         form = Answerform(request.POST or None)
         if form.is_valid():
+            description = form.cleaned_data.get('description')
+            if description.__len__() < 10:
+                return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
             f.question_id=question
             f.user_id = request.user
-
-
             form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
     else:
@@ -193,6 +200,9 @@ def update_answer(request, id):
     else:
         form = Answerform(request.POST or None, instance=answer)
         if form.is_valid():
+            description = form.cleaned_data.get('description')
+            if description.__len__() < 10:
+                return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
               form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
