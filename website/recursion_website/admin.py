@@ -34,3 +34,7 @@ class FollowAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Events)    
+class EventAdmin(admin.ModelAdmin):
+    pass

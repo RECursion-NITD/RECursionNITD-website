@@ -13,6 +13,8 @@ from django.conf import settings
 from django.forms import modelformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required
 def home(request):
@@ -93,7 +95,7 @@ def list_questions(request):
     return render(request, 'recursion_website/questions.html', args)
 
 def detail_questions(request, id):
-
+    
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -104,20 +106,26 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
-    if ans.count()>0:
-        ans=ans[0]
+    print(User.objects.filter(username=request.user))
+    if User.objects.filter(username=request.user).exists():
+        ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+        if ans.count()>0:
+            ans=ans[0]
+        else:
+            ans=None 
     else:
-        ans=None
+        ans=None        
     user = request.user
     flag=0
-    if Follows.objects.filter(question=questions, user=user).exists():
-        flag=1
-
-
-    votes=Upvotes.objects.filter(user=user).values("answer_id")
-    id_list = [id['answer_id'] for id in votes] #voted answers id
-
+    id_list=[]
+    if User.objects.filter(username=request.user).exists():
+        if Follows.objects.filter(question=questions, user=user).exists():
+            flag=1
+        votes=Upvotes.objects.filter(user=user).values("answer_id")
+        print(votes)
+        id_list = [id['answer_id'] for id in votes] #voted answers id
+        print(id_list)
+                
     args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
@@ -277,9 +285,9 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-def view_profile(request, id):
+def view_profile(request, username):
     try:
-        user=get_object_or_404(User, pk=id)
+        user=get_object_or_404(User, username=username)
     except:
         return HttpResponse("User does not exist!")
     try:
@@ -290,22 +298,22 @@ def view_profile(request, id):
     return render(request, 'profile.html', args)
 
 @login_required
-def create_profile(request, id):
+def create_profile(request, username):
     form= Profileform(request.POST or None)
     try:
-        user=get_object_or_404(User, pk=id)
+        user=get_object_or_404(User, username=username)
     except:
         return HttpResponse("User does not exist!")
     if user != request.user:
         return HttpResponse("You cant Create or Update another User's Profile!")
     if Profile.objects.filter(user=user).exists():
-        return HttpResponseRedirect(reverse('update_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('update_profile', args=(username,)))
     if form.is_valid():
         if user == request.user :
           f = form.save(commit=False)
           f.user = user
           form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+          return HttpResponseRedirect(reverse('view_profile', args=(username,)))
 
     return render(request, 'create.html', {'form': form,})
 
@@ -320,10 +328,12 @@ def user_register(request):
     return render(request, 'register.html', {'form': form})
 
 @login_required
-def update_profile(request, id):
+def update_profile(request, username):
     form= Profileform(request.POST or None)
+    
     try:
-        user=get_object_or_404(User, pk=id)
+        user=get_object_or_404(User,username=username)
+       
     except:
         return HttpResponse("User does not exist!")
     if user != request.user:
@@ -331,13 +341,13 @@ def update_profile(request, id):
     try:
         profile=get_object_or_404(Profile, user=user)
     except:
-        return HttpResponseRedirect(reverse('create_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('create_profile', args=(username,)))
     else:
       form = Profileform(request.POST or None, instance=profile)
       if form.is_valid():
           if profile.user==request.user:
              form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+          return HttpResponseRedirect(reverse('view_profile', args=(username,)))
 
     return render(request, 'create.html', {'form': form,})
 
@@ -376,3 +386,64 @@ def filter_question(request ,id):
     questions.reverse()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
     return render(request, 'recursion_website/questions.html', args)
+
+def events(request):
+    events=Events.objects.all()
+    perms=0
+    if request.user.is_superuser:
+        perms=1
+    
+    form = Eventsform(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('events')   
+
+    form = Eventsform(None)
+    return render(request, 'recursion_website/events.html',{'form':form,'events': events,"perms":perms})
+
+def event_detail(request,id):
+    try:
+        event =get_object_or_404( Events,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        
+        return render(request,'recursion_website/event_detail.html',{'event':event})
+
+def event_update(request,id):
+    try:
+        event =get_object_or_404(Events, pk=id)
+       
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        perms=0
+        if request.user.is_superuser:
+            perms=1
+        else:
+            return HttpResponse("Go get perms,only admins")
+        form = Eventsform(request.POST or None, instance=event)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('event_detail', args=(id,)))
+
+    return render(request, 'recursion_website/events.html', {'form': form,"perms":perms})
+
+def upcoming_events(request):
+    today=timezone.now()
+    upto=today + timedelta(days=365)
+    events=Events.objects.filter(start_time__range=[today, upto])
+    perms=0
+    if request.user.is_superuser:
+        perms=1
+    form = Eventsform(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect('events')   
+    form = Eventsform(None)
+    return render(request, 'recursion_website/events.html',{'form':form,'events': events,"perms":perms,})
+    
+    
+
+
+

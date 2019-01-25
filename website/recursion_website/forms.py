@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth.models import User
 
 
+
+
 class Questionform(forms.ModelForm):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -42,13 +44,28 @@ class Commentform(forms.ModelForm):
 
 class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
-    email = models.TextField(max_length=50)
+    email = models.EmailField(max_length=50)
     college = models.TextField(max_length=100)
     role = models.IntegerField
-    dept = models.IntegerField
-    image_url = models.URLField
+    dept = models.CharField(max_length=50)
+    image_url = models.URLField(blank=True, null=True)
     nickname = models.TextField(max_length=100)
 
     class Meta:
         model = Profile
         fields = ('name', 'email', 'college', 'role', 'dept', 'image_url', 'nickname')
+
+class Eventsform(forms.ModelForm):
+    title = models.CharField(max_length=30)
+    description = models.TextField()
+    image_url = models.URLField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField() 
+
+    class Meta:
+        model=Events
+        fields=('title','description','image_url','start_time','end_time')
+        
+       
+       
+
