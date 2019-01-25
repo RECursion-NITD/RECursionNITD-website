@@ -44,11 +44,10 @@ class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
     email = models.TextField(max_length=50)
     college = models.TextField(max_length=100)
-    role = models.IntegerField
     dept = models.IntegerField
     image_url = models.URLField
     nickname = models.TextField(max_length=100)
 
     class Meta:
         model = Profile
-        fields = ('name', 'email', 'college', 'role', 'dept', 'image_url', 'nickname')
+        fields = ('name', 'email', 'college', 'dept', 'image_url', 'nickname')
