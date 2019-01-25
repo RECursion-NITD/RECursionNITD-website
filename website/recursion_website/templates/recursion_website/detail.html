@@ -94,7 +94,7 @@
                    {% endfor %}
                    </ul>
                             </li>
-                            <li>Answers: {% if request.user %}
+                            <li>Answers: {% if request.user != questions.user_id %}
                                           {% if not ans.id %}
 
                                           <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>

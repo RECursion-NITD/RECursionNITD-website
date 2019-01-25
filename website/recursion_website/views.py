@@ -181,6 +181,9 @@ def add_answer(request, id):
 
     except:
         return HttpResponse("id does not exist")
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)    
+    if ans.count()>0:
+        return HttpResponse("you have already answered,kindly update it instead")
     if request.user!=question.user_id :
         form = Answerform(request.POST or None)
         if form.is_valid():
