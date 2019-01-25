@@ -28,8 +28,12 @@
             Manage Account
           </a>
           <div >
-            <a  href="#">View Account</a>
-            <a  href="#">Edit Account </a>
+              {% if user.is_authenticated %}
+                               <a href="{% url 'view_profile' request.user.id  %}">View My Profile</a>
+              {% else %}
+                               <a href="{% url 'login' %}">Login</a>
+              {% endif %}
+              <a  href="#">Edit Account </a>
           </div>
         </li>
 
@@ -61,7 +65,7 @@
                             {% endif %}
                         <ul>
                             {% if questions.visibility == True %}
-                            <li>Added By: {{questions.user_id}}</li>
+                            <li>Added By: <a href="{% url 'view_profile' questions.user_id.id  %}">{{ questions.user_id }}</a></li>
                             {% else %}
                             <li>Added By: Anonymous</li>
                             {% endif %}
@@ -85,7 +89,7 @@
                                     <a href="{% url 'update_comment' comment.id %}">Update this Comment</a>
                                     {% endif %}
                                     <ul>
-                                    <li>Added By:{{comment.user}}</li>
+                                    <li>Added By:<a href="{% url 'view_profile' comment.user.id  %}">{{ comment.user }}</a></li>
                                     <li>Posted On: {{comment.created_at}}</li>
                                     <li>Last Updated On: {{comment.updated_at}}</li>
                                     </ul>
@@ -99,7 +103,7 @@
 
                                           <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>
                                           {% else %}
-                                          <a href="{% url 'update_answer' ans.id  %}">update your answer</a>
+                                          <a href="{% url 'update_answer' ans.id  %}">Update your Answer</a>
                                            {% endif %}
                                          {% endif %}
                                 <ul>
@@ -107,11 +111,8 @@
                               {% if answer.question_id == questions %}
 
                                          <li>{{answer.description}}
-                                             {% if request.user == answer.user_id %}
-                                                <a href="{% url 'update_answer' answer.id  %}">Update this Answer</a>
-                                             {% endif %}
                                              <ul>
-                                             <li>Added By:{{answer.user_id}}</li>
+                                             <li>Added By: <a href="{% url 'view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a></li>
                                              <li>Posted On: {{answer.created_at}}</li>
                                              <li>Last Updated On: {{answer.updated_at}}</li>
                                              <li>Upvotes: {{ answer.upvotes_set.count }}</li>
