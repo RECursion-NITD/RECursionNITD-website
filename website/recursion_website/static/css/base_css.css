@@ -4,7 +4,7 @@
     min-height: 100vh;
     flex-direction: column;
     background-color: #f1f1f1;
-
+    font-family: 'Ubuntu', sans-serif;
   }
   .list-group-item{
     background:inherit;
@@ -154,6 +154,7 @@ ul, ol {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .nav-list li a:before {
+/* .nav-list li a:before {fontfont */
     content: "\f14f";
     font: 400 21px/1 "Material Design Icons";
     color: #4d6de6;
