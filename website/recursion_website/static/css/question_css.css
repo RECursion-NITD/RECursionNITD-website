@@ -13,35 +13,41 @@
 }
 .card{
 	box-shadow: 2px 2px 2px grey;
-	margin:2px;
+	margin-left:2px;
 	text-align:left;
 	background-color: white;
 }
+.forumQ{
+}
 #questionDetail{
-	margin-top: 2px;
-	font-size:150%;
+	color:#5277CF;
+	font-size:110%;
+	overflow:hidden;
 	text-overflow: ellipsis;
 }
 #content{
 	margin-left: 10px;
 }
 #content li{
-	//border:1px red solid;
+	/*border:1px red solid;*/
 }
 #tagList{
-	display:inline-block;
 	color:#F95C39;
+	display: inline-block;
 }
-#tagBox{
-	border:1px solid rgba(0,0,0,0.4);
-	padding: 1px;
-	font-size: 90%;
-	border-radius: 7px;
-	position: absolute;
-	bottom: 5px;
-	right: 30px;
+hr{
+	margin: 0px;
+}
+#tagName{
+	background-color: #E1ECF4;
+	display: inline;
+	color:#6A73B4;
+	padding: 3px;
+	font-size: 70%;
+	border-radius: 1px;
 }
 #postedOn{
+	position: absolute;
 	vertical-align: bottom;
 }
 #addedBy{
@@ -52,7 +58,19 @@
 
 #haveAQ{
 	color:#F95C39;
-	font-size:400%;
+	font-size:325%;
+}
+input[type=text] {
+	width:2%;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}
+.text-muted{
+	font-size: 70%;
+}
+/* When the input field gets focus, change its width to 100% */
+input[type=text]:focus {
+  width: 150px;
 }
 #search{
 	margin-top:3px; 

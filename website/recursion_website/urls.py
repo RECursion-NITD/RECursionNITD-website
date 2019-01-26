@@ -14,5 +14,5 @@ urlpatterns = [
     path('answer/<int:id>/vote', voting, name='voting'),
     path('follow/<int:id>/', edit_following, name='edit_following'),
     path('comment/<int:id>/', add_comment, name='add_comment'),
-    path('editcomment/<int:id>/', update_comment, name='update_comment'),
+    path('editcomment/<int:id>/', update_comment, name='update_comment')
 ]
