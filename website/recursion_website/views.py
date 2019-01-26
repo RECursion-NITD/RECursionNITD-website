@@ -66,6 +66,7 @@ def add_question(request):
 
 def list_questions(request):
     questions = Questions.objects.all()
+    q_count=questions.count()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
     taggings_recent = Taggings.objects.all().order_by('-updated_at')
@@ -89,7 +90,7 @@ def list_questions(request):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
@@ -350,5 +351,6 @@ def filter_question(request ,id):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     questions.reverse()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
+    q_count=Questions.objects.all().count()
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     return render(request, 'questions.html', args)
