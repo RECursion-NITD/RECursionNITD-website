@@ -4,7 +4,8 @@
     min-height: 100vh;
     flex-direction: column;
     background-color: #f1f1f1;
-    font-family: 'Ubuntu', sans-serif;
+    /*font-family: 'Ubuntu', sans-serif;*/
+    font-family: 'Montserrat', sans-serif;
   }
   .list-group-item{
     background:inherit;

@@ -18,17 +18,16 @@
 {% block content %}
   <!-- <h2>Homepage</h2> -->
   {% if user.is_authenticated %}
-  <div class="alert alert-warning" role="alert">
-  	<strong>Welcome!</strong> 
- 	<p> {{ user.username }}!</p>
+  <div class="alert alert-warning" role="alert" >	 
+ 	<p><strong>Welcome</strong> {{ user.username }}!</p>
   </div>
   {% endif %}
   <div class="row">
   	<div class="col-sm-12 col-md-7 col-lg-8 ml-3">
   		<div class="card" style="background-color: inherit;border-style: none;">
   			<center>
-  				<h1 style="font-size:7vw;">RECursion</h1>
-  				<h5 style="font-size:2.5vw;">Programming Community of NIT Durgapur</h5>
+  				<h1 style="font-size:7vw; color:#F95C39;">RECursion</h1>
+  				<h5 style="font-size:2vw;color:#528CDD;">Programming Community of NIT Durgapur</h5>
   				<p style="padding-left:5vw;padding-right: 5vw;">We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
   			</center>
   		</div> 
