@@ -3,9 +3,56 @@
 {% block title %}
     RECursion
 {% endblock title %}
+
+{% block css%}
+<style>
+	.side-card{
+		border:1px solid #b1b1b1;
+		border-radius: 8px;
+		/*margin:1vw;*/
+	}
+</style>
+{% endblock%}
     
 
 {% block content %}
-  <h2>Homepage</h2>
-  <p>Hello {{ user.username }}!</p>
+  <!-- <h2>Homepage</h2> -->
+  {% if user.is_authenticated %}
+  <div class="alert alert-warning" role="alert">
+  	<strong>Welcome!</strong> 
+ 	<p> {{ user.username }}!</p>
+  </div>
+  {% endif %}
+  <div class="row">
+  	<div class="col-sm-12 col-md-7 col-lg-8 ml-3">
+  		<div class="card" style="background-color: inherit;border-style: none;">
+  			<center>
+  				<h1 style="font-size:7vw;">RECursion</h1>
+  				<h5 style="font-size:2.5vw;">Programming Community of NIT Durgapur</h5>
+  				<p style="padding-left:5vw;padding-right: 5vw;">We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
+  			</center>
+  		</div> 
+  	</div>
+  	<center class="col-sm-12 col-md-4 col-lg-3">
+  		<div class="card mb-3 side-card" style="padding-top: 1vw;padding-bottom: 0.5vw;">
+  			<h5>Pay Attention</h5>
+  			<hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
+  			Class at LG-14<br>
+  			Topics:DS Algo asdjkljsadkjkljkljsdjkjkwoieoiew<br>
+  			Date:26/1/19
+  			<hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
+  			<a href="#">Check out upcoming events!</a>
+  		</div>
+  		<!-- <div class="card  mb-3 side-card" style=""> -->
+  			<div class="row" >
+	  			<h5 class="col-7" style="float:left;">Have a question?</h5>
+	  			<h5 class="col-5"><a class="btn btn-outline-success" href="{% url 'list_questions' %}" style="width:100%;float:right;">AskREC</a></h5>
+  			</div>
+  		<!-- </div> -->
+  		<div class="row">
+  			<h5 class="col-7" style="float:left;">New to Programming?</h5>
+  			<h5 class="col-5" style="float:right;width:100%;"><button class="btn btn-outline-success">Get Started</button></h5>
+  		</div>
+  	</center>
+  </div>
 {% endblock %}
