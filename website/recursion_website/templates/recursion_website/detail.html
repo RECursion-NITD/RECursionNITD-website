@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 {% load staticfiles %}
       <link rel="stylesheet" href="{% static 'css/detail.css' %}">
       <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+      <script href="{% static 'js/detail.js' %}"></script>
 <head>
 
     <meta charset="UTF-8">
@@ -58,64 +60,61 @@
     <div >
 
           <!--Question Post Design Start-->  
-                    <div class="container card shadow-sm p-3 mb-5 bg-white rounded" style="width: 100%; min-height: 500px; padding: 10px;">
-                          <div class="container jumbotron" style="max-width: 1200px;background-color: #ffffff;border: 1px;border: solid;text-align: center;margin-bottom: 0px;margin-top: 0px;"><h4 style="color: #F95C39"><b>{{ questions.title }}</b></h4>
+                    <div class="container card shadow-sm p-3 mb-5 bg-white rounded" style="width: 100%; min-height: 500px; padding: 10px;">     
+                        <div class="row">
+                          <div class="col-8">
+                          <div class="container jumbotron" style="max-width: 1200px;background-color: #ffffff;text-align: left;margin-bottom: 0px;margin-top: 0px;"><h2>{{ questions.title }}</h2>
                             {% if request.user == questions.user_id %}
                             <a href="{% url 'update_question' questions.id  %}">Update this Question  </a>
                             {% endif %}
                             {% if questions.visibility == True %}
-                            <p class="text-muted time"><i>Asked by 
-                                                          <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar shadow-sm" style="height: 30px;width: 30px;border: 1.5px; border-radius: 50px; border-style: solid; border-color: #F95C39" alt="user profile image">
-                                                      {{questions.user_id}} on {{questions.created_at}} last updated on {{questions.updated_at}}</i></p>
+                            <p class="text-muted time">Asked by {{questions.user_id}} on {{questions.created_at}} last updated on {{questions.updated_at}}</p>
                             {% else %}
                             <p class="text-muted time"><i>Asked by Anonymous on {{questions.created_at}} last updated on {{questions.updated_at}}</i></p>
                             {% endif %}
                           </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="container jumbotron" style="background-color: #ffffff;">
+                              <center>
+                                <a href={% url 'add_question' %} class="btn btn-outline-primary">Ask A Question</a>
+                              </center>
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="container">
                           <div class="row">
-                          <div class="col-8">
-                          <center><div class="jumbotron shadow-sm p-3 mb-5 rounded" style="max-width: 1300px;background-color: white;margin: 0px;font-family: Ubuntu;width: 100%; min-height: 500px; padding: 10px;"><p style="text-align: justify;">
+                          <div class="col-lg-8 col-md-8 col-sm-12">
+                          <center><div class="jumbotron shadow-sm p-3 mb-5 rounded" style="max-width: 1300px;margin: 0px; width: 100%; padding: 10px;"><p style="text-align: justify;">
                               Description: {{questions.description}}</p>
                           </div></center>
-                          <div class="container" style="margin-bottom: 30px; margin-top: 0px;"><button class="btn btn-outline-primary><i class="fas fa-user-plus" style="color: white;"></i><a style="color: white">Follows: {{ questions.follows_set.count }}</a></button>
+                          <div class="container" style="margin-bottom: 30px; margin-top: 0px;">
+                            <button class="btn btn-outline-primary"><a><i class="fas fa-user-plus"></i>Follows: {{ questions.follows_set.count }}</a></button>
                 {% if request.user != questions.user_id %}
                    {% if flag == 0 %}
                    
-                   <button class="btn btn-outline-primary"><a href="{% url 'edit_following' questions.id %}" style="color: white">Follow</a></button>
+                   <button class="btn btn-outline-primary"><a href="{% url 'edit_following' questions.id %}">Follow</a></button>
                    {% else %}
-                   <button class="btn btn-outline-primary"><a href="{% url 'edit_following' questions.id %}" style="color: white">Unfollow</a></button>
+                   <button class="btn btn-outline-primary"><a href="{% url 'edit_following' questions.id %}">Unfollow</a></button>
                 {% endif %}
                 {% endif %}
 
-                <button class="btn-outline-primary" onclick="myFunction1()"><i class="fas fa-comment-alt" style="color: white;"></i><a style="color: white">Add Answer</a></button>
-                <button class="btn btn-outline-primary"  onclick="myFunction2()"><i class="fas fa-comment" style="color: white;"></i><a style="color: white">Add Comment</a></button>
+                <button class="btn btn-outline-primary" onclick="answerbtnFunction()"><i class="fas fa-comment-alt"></i><a>Add Answer</a></button>
+                <button class="btn btn-outline-primary"  onclick="commentbtnFunction()"><i class="fas fa-comment"></i><a>Add Comment</a></button>
 
                 {% if request.user %}
                   {% if not ans.id %}
-                      <button class="btn btn-outline-primary"><a href="{% url 'add_answer' questions.id  %}" style="color: white">Answer This Question</a></button>
+                      <button class="btn btn-outline-primary"><a href="{% url 'add_answer' questions.id  %}">Answer This Question</a></button>
                    {% else %}
-                      <button class="btn btn-outline-primary"><a href="{% url 'update_answer' ans.id  %}" style="color: white">Update Your Answer</a></button>
+                      <button class="btn btn-outline-primary"><a href="{% url 'update_answer' ans.id  %}">Update Your Answer</a></button>
                    {% endif %}
                    {% endif %}
                     </div>
-                  </div>
-                    <div style="col-4">
-                      <div style="card"><p> This is comment section</p>
-                      </div>
-                    </div>
-                  </div>
 
-              </div>
-
-                    
-             
-
-
-              
-
-
-                
-                   <!--Answer Input Box Start-->
-                                 <div class="container" id="myDIV1" style="display: none;">
+                    <div name="comment-and-answer">
+                      <!--Answer Input Box Start-->
+                                 <div class="container" id="answerDIV" style="display: none;">
                                       <div class="row">
                                           <div class="col-sm-12">
                                               <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
@@ -133,10 +132,14 @@
                                                   <div class="post-description"> 
                                                      <h5 class="text-muted" style="text-align:center;">Enter your answer details below:</h5><br>
                                                         <form method="POST" action="{% url 'add_comment' questions.id %}" style="padding: 25px; margin: 0px;">
-                                                        <table>
+                                                        <!-- <table>
                                                           {{ form2 }}
                                                         </table>
-                                                          <br>
+                                                          <br> -->
+                                                         {{ form2.description.label_tag }}
+                                                          {% render_field form2.description class="form-control" placeholder="Enter Answer Details" %}
+
+                                                          
                                                         <center><button type="submit" class="btn btn-dark"<i class="fa fa-share"></i>SAVE</button></center>
                                                        </form>
                                                    </div>
@@ -147,7 +150,7 @@
                <!--Answer Input Box End-->
 
                <!--Comment Input Box Start-->
-                                    <div class="container" id="myDIV2" style="display: none;">
+                                    <div class="container" id="commentDIV" style="display: none;">
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
@@ -165,9 +168,8 @@
                                                     <div class="post-description"> 
                                                        <h5 class="text-muted" style="text-align:center;">Enter your comment details below:</h5><br>
                                                           <form method="POST" action="{% url 'add_comment' questions.id %}" style="padding: 25px; margin: 0px;">
-                                                          <table>
-                                                            {{ form }}
-                                                          </table>
+                                                         {{ form.body.label_tag }}
+                                                          {% render_field form.body class="form-control" placeholder="Enter Comment Details" %}
                                                             <br>
                                                           <center><button type="submit" class="btn btn-dark"<i class="fa fa-share"></i>SAVE</button></center>
                                                          </form>
@@ -276,39 +278,30 @@
                
                   {%endif%}
                   {% endfor %}
+                 </div>
 
-                   
+                  </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                      <div class="jumbotron shadow-sm p-3 mb-5 rounded"><p> This is comment section</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                   
+              </div>
 
-                            
-                        
-                     
+                    
+             
+
+
               
+
+
+                
       </div>
       </div>
 </div>
 </body>
 
-<script>
-function myFunction1() {
-  var x = document.getElementById("myDIV1");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
-<script>
-function myFunction2() {
-  var x = document.getElementById("myDIV2");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}
-</script>
 
 {% endblock %}

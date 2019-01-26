@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load widget_tweaks %}
 {% block content %}
     <meta charset="UTF-8">
     <title>Add Questions</title>
@@ -50,18 +51,65 @@
 
 
     <div class="container">
-        <center><h4 style="background: orange; text-align: center;border-radius: 10px;width: 50%;">Enter the details below</h4></center><br>
-        <center><form method="POST" class="card" style="padding: 20px; width: 100%; border-radius: 10px">
-          <table>
-              {{ form }}
-          </table><p>Enter any number of tags upto 5:</p>
+       <form method="POST" class="card" style="padding: 20px; width: 100%; border-radius: 10px">
+
+      {{ form.title.label_tag }}
+      {% render_field form.title class="form-control" placeholder="Enter Question Title" %}
+      {{ form.description.label_tag }}
+      {% render_field form.description class="form-control" placeholder="Write Details, MarkDown is supported" %}
+      Uncheck This To Ask Anonymously :- {% render_field form.visibility class="form-control" %}
+
+      Tags : {{form2}}
+
+      <button type="submit" class="save btn btn-primary">SAVE</button>
+
+
+      <!-- =------------------= -->
+       
+<!--           <center><h4 style="background: orange; text-align: center;border-radius: 10px;width: 50%;">Enter the details below</h4></center><br>
+          <div class="form-group">
+            <label for="RECInputTitle">Title</label>
+            <input type="form-text" class="form-control" name="{{ form.title.RECInputTitle }}" aria-describedby="titleHelp" placeholder="Enter Question Title" required>
+            <small id="titleHelp" class="form-text text-muted">Keep it small and simple</small>
+          </div>
+          <div class="form-group">
+            <label for="RECInputText">Discription</label>
+            <textarea type="form-text" class="form-control" name="{{ form.description.RECInputText }}" placeholder="Write the details for your question."></textarea>
+          </div>
+ -->
+
+<!--           <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="{{ form.visibility.RECInputCheck1 }}">
+            <label class="form-check-label" for="RECInputCheck1">Visibility</label>
+          </div> -->
+<!--           <div class="container form-check">
+        <label class="customcheck" for="RECInputCheck1">Ask Anonymously
+          <input type="checkbox" name="{{ form.visibility.RECInputCheck1 }}">
+          <span class="checkmark"></span>
+        </label>
+         <p>Enter any number of tags upto 5:</p>
             <table>
             {{ form2 }}<span><p>&nbspTags:</p></span>
-          </table>
+          </table> -->
+          <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+        <!-- </form> -->
+         <!--  <table>
+            {% for title in form.title %}
+            <div class="form-group">
+            {{ title }}
+            {% endfor %}
+          </div>
+          <table>
+              {{ form }}
+          </table> -->
+<!--           <p>Enter any number of tags upto 5:</p>
+            <table>
+            {{ form2 }}<span><p>&nbspTags:</p></span>
+          </table> -->
         
 
               <br>
-          <button type="submit" class="save btn btn-primary">SAVE</button>
+          <!-- <button type="submit" class="save btn btn-primary">SAVE</button> -->
         </form></center>
 
       </div>
