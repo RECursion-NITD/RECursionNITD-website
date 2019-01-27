@@ -13,6 +13,10 @@ from django.conf import settings
 from django.forms import modelformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
+from django.core.files.base import ContentFile
+from io import BytesIO
+import urllib.request
+from PIL import Image
 
 @login_required
 def home(request):
@@ -28,6 +32,29 @@ def bulk_tagging_add(question, tags):
         taggings.append(Taggings(question=question, tag=tag))
     Taggings.objects.bulk_create(taggings)
     return
+
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
+    end=([url.endswith(e) for e in extension_list])
+    count=1;
+    for e in end:
+        if e == True:
+          if count==1:
+              type=".jpg"
+          elif count==2:
+              type=".jpeg"
+          elif count==3:
+              type=".png"
+          elif count==4:
+              type=".gif"
+        count+=1
+    return type
 
 @login_required
 def add_question(request):
@@ -312,9 +339,17 @@ def edit_profile(request):
     profile=get_object_or_404(Profile, user=user)
     form = Profileform(request.POST or None, instance=profile)
     if form.is_valid():
-          if profile.user==request.user:
+        image_url=form.cleaned_data['image_url']
+        type=valid_url_extension(image_url)
+        full_path='media/images/'+profile.user.username+type
+        try:
+            urllib.request.urlretrieve(image_url,full_path)
+        except:
+            return HttpResponse("Downloadable Image Not Found!")
+        if profile.user==request.user:
+             profile.image='../'+full_path
              form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
 
     return render(request, 'create.html', {'form': form,})
 

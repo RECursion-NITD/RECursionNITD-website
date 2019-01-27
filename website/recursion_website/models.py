@@ -230,6 +230,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=50, choices=role_choices ,default='3')
     dept = models.CharField(max_length=20, blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to='images/')
     nickname = models.CharField(max_length=100, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)

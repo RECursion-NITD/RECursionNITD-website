@@ -2,6 +2,7 @@ from django.urls import path
 from .views import *
 from django.conf.urls import include,url
 from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('add', add_question, name='add_question'),
@@ -18,4 +19,4 @@ urlpatterns = [
     path('register/', user_register, name="user_register"),
     path('editprofile/', edit_profile, name='edit_profile'),
     path('filter/<int:id>/', filter_question, name='filter_question'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
