@@ -1,5 +1,3 @@
-
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
@@ -16,8 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.forms import modelformset_factory
 from itertools import chain
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404,render, redirect
 from recursion_website.models import Members
 from django.contrib.auth.models import User
 from . import forms
@@ -255,8 +251,6 @@ def voting(request, id):
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))    
-=======
-# Create your views here.
 def member_list(request):
 
 	members = Members.objects.all().order_by('id')
@@ -291,6 +285,4 @@ def member_delete(request, id=None):
 	if request.method == 'GET':
 		member.delete()
 		return redirect('recursion_website:list')
-
-
 

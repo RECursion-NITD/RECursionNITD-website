@@ -40,10 +40,8 @@ class Commentform(forms.ModelForm):
         model = Comments
         fields = ('body',)           
 
-
 class CreateMember(forms.ModelForm):
 	class Meta:
 		model = models.Members
 		fields=['name','year','position','branch','contact_details','experience']
 		
-
