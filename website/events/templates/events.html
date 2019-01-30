@@ -30,7 +30,7 @@
                 </li>
                     
                 
-
+       <h1><a href="{% url 'upcoming_events'  %}">show upcoming events</a></h1>
     <ul>
         <h2>{% if events.count == 0  %}No events{% endif %}</h2>
         {% for event in events %}

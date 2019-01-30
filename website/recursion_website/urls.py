@@ -19,8 +19,5 @@ urlpatterns = [
     path('register/', user_register, name="user_register"),
     path('updateprofile/<str:username>/', update_profile, name='update_profile'),
     path('filter/<int:id>/', filter_question, name='filter_question'),
-    path('events_list/',events, name='events'),
-    path('event_detail/<int:id>/', event_detail, name='event_detail'),
-    path('event_update/<int:id>/', event_update, name='event_update'),
-    path('upcoming_event_list/',upcoming_events, name='upcoming_events'),
+    
 ]
