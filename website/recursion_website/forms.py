@@ -1,7 +1,7 @@
 from django import forms
 from .models import *
 from django.contrib.auth.models import User
-
+from . import models
 
 class Questionform(forms.ModelForm):
     title = models.CharField(max_length=100)
@@ -38,4 +38,10 @@ class Commentform(forms.ModelForm):
 
     class Meta:
         model = Comments
-        fields = ('body',)            
+        fields = ('body',)           
+
+class CreateMember(forms.ModelForm):
+	class Meta:
+		model = models.Members
+		fields=['name','year','position','branch','contact_details','experience']
+		
