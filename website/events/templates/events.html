@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Events</title>
+</head>
+<body>
+       
+                
+                {% csrf_token %}
+                <h1>EVENTS:</h1>
+                <li>
+                    {% if perms %} 
+                    <h1>Hello superuser:Add New Event</h1>
+                    <div >
+
+                            <p>Enter the details below:</p><br>
+                            <form method="POST">
+                              <table>
+                                  {{ form }}
+                              </table>
+                                  <br>
+                              <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+                            </form>
+                          </div>
+                    {% endif %}
+                </li>
+                    
+                
+       <h1><a href="{% url 'upcoming_events'  %}">show upcoming events</a></h1>
+    <ul>
+        <h2>{% if events.count == 0  %}No events{% endif %}</h2>
+        {% for event in events %}
+           <li><a href="{% url 'event_detail' event.id %}">{{ event}}</a>
+                {% if perms %}
+                <span>
+                    <a href="{% url 'event_update' event.id %}"> Update</a>
+                </span>
+                {% endif %}
+    </li>
+        {% endfor %}
+    </ul>
+</body>

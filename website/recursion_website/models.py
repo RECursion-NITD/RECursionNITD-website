@@ -11,7 +11,6 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
 # Done
 class Questions(models.Model):
     title = models.CharField(max_length=100)
@@ -25,7 +24,6 @@ class Questions(models.Model):
 
     def __str__(self):
         return self.title
-
     class Meta:
         managed = True
         ordering = ['-created_at']
@@ -45,7 +43,6 @@ class Answers(models.Model):
 
     def __str__(self):
         return self.description
-
     class Meta:
         managed = True
         db_table = 'answers'
@@ -79,6 +76,8 @@ class Answers(models.Model):
 #         db_table = 'ckeditor_assets'
 
 
+
+
 # DONE
 class Comments(models.Model):
     body = models.TextField()
@@ -97,24 +96,6 @@ class Comments(models.Model):
         db_table = 'comments'
         verbose_name_plural = 'Comments'
 
-
-# DONE
-class Events(models.Model):
-    title = models.CharField(max_length=30)
-    description = models.TextField()
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    # TODO
-    # AUTOGEN DATE TIME
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        managed = True
-        db_table = 'events'
 
 
 # DONE
@@ -145,6 +126,7 @@ class Follows(models.Model):
 #     class Meta:
 #         managed = True
 #         db_table = 'identities'
+
 
 
 # class SchemaMigrations(models.Model):
@@ -200,10 +182,8 @@ class Upvotes(models.Model):
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-
     def __self__(self):
         return self.user
-
     class Meta:
         managed = True
         db_table = 'upvotes'
@@ -215,8 +195,6 @@ TODO
 - Roles : list containing tuples, with various grant level
     Choice field.
 """
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)

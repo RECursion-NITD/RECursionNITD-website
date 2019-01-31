@@ -204,6 +204,9 @@ def add_answer(request, id):
 
     except:
         return HttpResponse("id does not exist")
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
+    if ans.count()>0:
+        return HttpResponse("you have already answered,kindly update it instead")
     if request.user!=question.user_id :
         form = Answerform(request.POST or None)
         if form.is_valid():
@@ -305,9 +308,9 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-def view_profile(request, id):
+def view_profile(request, username):
     try:
-        user=get_object_or_404(User, pk=id)
+        user=get_object_or_404(User, username=username)
     except:
         return HttpResponse("User does not exist!")
     try:
