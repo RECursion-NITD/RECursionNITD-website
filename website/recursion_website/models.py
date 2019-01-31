@@ -78,7 +78,6 @@ class Answers(models.Model):
 
 
 
-# DONE
 class Comments(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, models.DO_NOTHING)
@@ -95,6 +94,8 @@ class Comments(models.Model):
         managed = True
         db_table = 'comments'
         verbose_name_plural = 'Comments'
+
+       
 
 
 

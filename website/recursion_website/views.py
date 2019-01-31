@@ -308,17 +308,19 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-def view_profile(request, username):
+def view_profile(request, id):
     try:
-        user=get_object_or_404(User, username=username)
+        user=get_object_or_404(User, pk=id)
     except:
+        print(request.user.id) 
         return HttpResponse("User does not exist!")
     try:
         profile=get_object_or_404(Profile, user=user)
     except:
         return HttpResponse("User has not created a Profile yet!")
+        
     args = {'profile': profile,}
-    return render(request, 'profile.html', args)
+    return render(request, 'recursion_website/profile.html', args)
 
 def user_register(request):
     form = UserCreationForm(request.POST or None)
