@@ -19,12 +19,13 @@ from django.urls import path,include
 from recursion_website import views
 
 urlpatterns = [
-    path('', include('recursion_website.urls')),
+    path('',include('recursion_website.urls')),
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('recursion_website.urls'))
+    path('forum/',include('recursion_website.urls')),
+    path('events/',include('events.urls'))
 
 ]

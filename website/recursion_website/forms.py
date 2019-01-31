@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 import mimetypes
 
+
+
 class Questionform(forms.ModelForm):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -43,7 +45,7 @@ class Commentform(forms.ModelForm):
 
 class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
-    email = models.TextField(max_length=50)
+    email = models.EmailField(max_length=50)
     college = models.TextField(max_length=100)
     dept = models.IntegerField
     image_url = models.URLField
