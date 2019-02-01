@@ -19,7 +19,8 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 import urllib.request
 from PIL import Image
-
+from .validators import valid_url_extension
+from .validators import valid_url_mimetype
 
 def events(request):
     events=Events.objects.all()
@@ -34,7 +35,7 @@ def events(request):
         event = Events.objects.get(pk=id)
         image_url=form.cleaned_data['image_url']
         type=valid_url_extension(image_url)
-        full_path='media/images/'+'event_'+str(id)+type
+        full_path='media/images/'+'event_'+str(id)+ '.png'
         try:
             urllib.request.urlretrieve(image_url,full_path)
         except:

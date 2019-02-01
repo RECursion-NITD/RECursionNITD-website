@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 import mimetypes
-
+from .validators import *
 
 
 class Questionform(forms.ModelForm):
@@ -68,24 +68,4 @@ class Profileform(forms.ModelForm):
         model = Profile
         fields = ('name', 'email', 'college', 'dept', 'image_url', 'nickname')
 
-VALID_IMAGE_EXTENSIONS = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-]
 
-def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
-    return any([url.endswith(e) for e in extension_list])
-
-
-VALID_IMAGE_MIMETYPES = [
-    "image"
-]
-
-def valid_url_mimetype(url, mimetype_list=VALID_IMAGE_MIMETYPES):
-    mimetype, encoding = mimetypes.guess_type(url)
-    if mimetype:
-        return any([mimetype.startswith(m) for m in mimetype_list])
-    else:
-        return False
