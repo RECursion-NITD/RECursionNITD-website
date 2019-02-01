@@ -35,3 +35,7 @@ class FollowAdmin(admin.ModelAdmin):
 class ProfileAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(Comments_Answers)
+class Comments_AnswerAdmin(admin.ModelAdmin):
+    pass
+

@@ -23,7 +23,9 @@
                 </li>
                 <li>
                       <span>
-                            <img src="{{ event.image_url }}" alt="Event ">
+                           {% if event.image.url != Null%}
+                              <img src="{{ event.image.url }}" alt="Event Image">
+                           {% endif %}
                       </span> 
                 </li>
             </ul>

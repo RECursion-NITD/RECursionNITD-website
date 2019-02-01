@@ -10,4 +10,4 @@ urlpatterns=[
     path('update/<int:id>/', event_update, name='event_update'),
     path('upcoming_list/',upcoming_events, name='upcoming_events'),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

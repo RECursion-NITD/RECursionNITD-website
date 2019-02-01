@@ -98,20 +98,31 @@
                    {% endfor %}
                    </ul>
                             </li>
-                            <li>Answers: {% if request.user != questions.user_id %}
+                            <li>Answers:
                                           {% if not ans.id %}
 
                                           <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>
                                           {% else %}
                                           <a href="{% url 'update_answer' ans.id  %}">Update your Answer</a>
                                            {% endif %}
-                                         {% endif %}
+
                                 <ul>
                                 {% for answer in answers %}
                               {% if answer.question_id == questions %}
 
                                          <li>{{answer.description}}
                                              <ul>
+                                                <li><li>Comments: <a href="{% url 'add_comment_answer' answer.id %}">Add a Comment</a></li>
+                                             { % for comment in comments_answers %}
+                                                 <li>{{ comment.body }}</li>
+                                                 <ul>
+                                                    <li>Added By: <a href="{% url 'view_profile' comment.user.id  %}">{{ comment.user }}</a></li>
+                                                    <li>Posted On: {{answer.created_at}}</li>
+                                                    <li>Last Updated On: {{answer.updated_at}}</li>
+                                                 </ul>
+                                                 { % endfor %}
+                                             </ul>
+                                             </li>
                                              <li>Added By: <a href="{% url 'view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a></li>
                                              <li>Posted On: {{answer.created_at}}</li>
                                              <li>Last Updated On: {{answer.updated_at}}</li>

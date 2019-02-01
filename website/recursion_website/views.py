@@ -132,6 +132,7 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
+    comments_answers=Comments_Answers.objects.all()
     if User.objects.filter(username=request.user).exists():
         ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
         if ans.count() > 0:
@@ -149,7 +150,7 @@ def detail_questions(request, id):
         votes = Upvotes.objects.filter(user=user).values("answer_id")
         id_list = [id['answer_id'] for id in votes]  # voted answers id
 
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
+    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -207,9 +208,8 @@ def add_answer(request, id):
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
     if ans.count()>0:
         return HttpResponse("you have already answered,kindly update it instead")
-    if request.user!=question.user_id :
-        form = Answerform(request.POST or None)
-        if form.is_valid():
+    form = Answerform(request.POST or None)
+    if form.is_valid():
             description = form.cleaned_data.get('description')
             if description.__len__() < 10:
                 return HttpResponse("Very Short Answer!")
@@ -218,8 +218,7 @@ def add_answer(request, id):
             f.user_id = request.user
             form.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
-    else:
-        return HttpResponse("Questionnare can't answer")
+
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
 
     return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
@@ -394,3 +393,36 @@ def filter_question(request ,id):
     q_count=Questions.objects.all().count()
     args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     return render(request, 'questions.html', args)
+
+
+@login_required
+def add_comment_answer(request, id):
+    try:
+        answer = get_object_or_404(Answers, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    form = Commentform(request.POST or None)
+    if form.is_valid():
+        f = form.save(commit=False)
+        f.answer=answer
+        f.user = request.user
+        form.save()
+        return HttpResponseRedirect(reverse('detail_questions', args=(answer.id,)))
+
+    return render(request, 'recursion_website/comment.html', {'form': form})
+
+@login_required
+def update_comment_answer(request, id):
+    try:
+        comment =get_object_or_404(Comments, pk=id)
+        question=comment.question
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        form = Commentform(request.POST or None, instance=comment)
+        if form.is_valid():
+            if request.user == comment.user:
+              form.save()
+            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
