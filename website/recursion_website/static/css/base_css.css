@@ -31,6 +31,10 @@
   .tabManage a:hover{
     color: #B4CECF;
   }
+  .dropdown-menu{
+    font-size: 80%;
+    background:#f4f4f4;
+  }
   .navMobile li a{
     color:white;
   }
@@ -38,7 +42,7 @@
     color:white;
   }
   header{
-    background-image:url("/static/image/footer_design.svg");
+    /*background-image:url("/static/image/footer_design.svg");*/
   	box-shadow:0px 0px 10px grey;
   }
   main {

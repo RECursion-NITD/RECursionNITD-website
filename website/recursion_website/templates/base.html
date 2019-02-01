@@ -12,8 +12,8 @@
       <!--Package Imports-->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
       <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
       <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
       <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
@@ -63,7 +63,8 @@
     <div class="d-flex flex-grow-1 py-0">
         <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
         <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="/static/image/logoInvert.png" style="max-width:75px;" alt="logo">
+          {% load staticfiles %}
+          <img src="{% static 'image/logoInvert.png'%}" style="max-width:75px;" alt="logo">
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
             <img src="/static/image/logo.png" width="20%" alt="logo">
@@ -77,7 +78,7 @@
     <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
         <ul class="navbar-nav ml-auto flex-nowrap"> 
             <li class="nav-item active">
-                <a href="question.html" class="nav-link m-2 menu-item">AskREC</a>
+                <a href="{% url 'list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link m-2 menu-item">Events</a>
@@ -190,7 +191,7 @@
               </dl>
               <dl class="contact-list">
                 <dt>email:</dt>
-                <dd><a href="mailto:#">recursionnitd@gmail.com</a></dd>
+                <dd><a href="mailto:#">recursionnitd[AT]gmail[dot]com</a></dd>
               </dl>
               <dl class="contact-list">
                 <dt>phones:</dt>
