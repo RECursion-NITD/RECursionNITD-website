@@ -18,7 +18,6 @@ from io import BytesIO
 import urllib.request
 from PIL import Image
 
-@login_required
 def home(request):
     return render(request, 'home.html')
 
@@ -102,7 +101,6 @@ def list_questions(request):
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
-
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -186,6 +184,7 @@ def add_answer(request, id):
 
     except:
         return HttpResponse("id does not exist")
+
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
     if ans.count()>0:
         return HttpResponse("you have already answered,kindly update it instead")
@@ -198,10 +197,10 @@ def add_answer(request, id):
             f.question_id=question
             f.user_id = request.user
             form.save()
+
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
-
     return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
 
 @login_required
@@ -218,10 +217,10 @@ def update_answer(request, id):
             if description.__len__() < 10:
                 return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
-              form.save()
+              form2.save()
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+    return render(request, 'recursion_website/answer.html', {'form2': form2, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
