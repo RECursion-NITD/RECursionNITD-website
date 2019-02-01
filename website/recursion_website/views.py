@@ -401,28 +401,30 @@ def add_comment_answer(request, id):
         answer = get_object_or_404(Answers, pk=id)
     except:
         return HttpResponse("id does not exist")
-    form = Commentform(request.POST or None)
+    form = Comment_Answerform(request.POST or None)
     if form.is_valid():
+        question_id=answer.question_id
         f = form.save(commit=False)
         f.answer=answer
         f.user = request.user
         form.save()
-        return HttpResponseRedirect(reverse('detail_questions', args=(answer.id,)))
+        return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form})
 
 @login_required
 def update_comment_answer(request, id):
     try:
-        comment =get_object_or_404(Comments, pk=id)
-        question=comment.question
+        comment =get_object_or_404(Comments_Answers, pk=id)
+        answer=comment.answer
     except:
         return HttpResponse("id does not exist")
     else:
-        form = Commentform(request.POST or None, instance=comment)
+        question_id=answer.question_id
+        form = Comment_Answerform(request.POST or None, instance=comment)
         if form.is_valid():
             if request.user == comment.user:
               form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+            return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})

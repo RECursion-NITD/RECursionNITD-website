@@ -43,6 +43,13 @@ class Commentform(forms.ModelForm):
         model = Comments
         fields = ('body',)
 
+class Comment_Answerform(forms.ModelForm):
+    body = models.TextField()
+
+    class Meta:
+        model = Comments_Answers
+        fields = ('body',)
+
 class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
     email = models.EmailField(max_length=50)
