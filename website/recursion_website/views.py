@@ -33,28 +33,6 @@ def bulk_tagging_add(question, tags):
     Taggings.objects.bulk_create(taggings)
     return
 
-VALID_IMAGE_EXTENSIONS = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-]
-
-def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
-    end=([url.endswith(e) for e in extension_list])
-    count=1;
-    for e in end:
-        if e == True:
-          if count==1:
-              type=".jpg"
-          elif count==2:
-              type=".jpeg"
-          elif count==3:
-              type=".png"
-          elif count==4:
-              type=".gif"
-        count+=1
-    return type
 
 @login_required
 def add_question(request):
@@ -345,7 +323,7 @@ def edit_profile(request):
     if form.is_valid():
         image_url=form.cleaned_data['image_url']
         type=valid_url_extension(image_url)
-        full_path='media/images/'+profile.user.username+type
+        full_path='media/images/'+profile.user.username+ '.png'
         try:
             urllib.request.urlretrieve(image_url,full_path)
         except:

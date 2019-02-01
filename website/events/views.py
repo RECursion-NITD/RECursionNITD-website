@@ -21,29 +21,6 @@ import urllib.request
 from PIL import Image
 
 
-VALID_IMAGE_EXTENSIONS = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-]
-
-def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
-    end=([url.endswith(e) for e in extension_list])
-    count=1;
-    for e in end:
-        if e == True:
-          if count==1:
-              type=".jpg"
-          elif count==2:
-              type=".jpeg"
-          elif count==3:
-              type=".png"
-          elif count==4:
-              type=".gif"
-        count+=1
-    return type
-
 def events(request):
     events=Events.objects.all()
     perms=0
@@ -95,7 +72,7 @@ def event_update(request,id):
             id = event.id
             image_url = form.cleaned_data['image_url']
             type = valid_url_extension(image_url)
-            full_path = 'media/images/' + 'event_' + str(id) + 'png'
+            full_path = 'media/images/' + 'event_' + str(id) + '.png'
             try:
                 urllib.request.urlretrieve(image_url, full_path)
             except:
