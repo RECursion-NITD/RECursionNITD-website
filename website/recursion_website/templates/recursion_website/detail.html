@@ -16,44 +16,6 @@
 {% csrf_token %}
 <h1> Question detail</h1>
 
-
-    <!-- navigation bar 
-    <nav>
-         Links
-      <ul>
-
-
-        <li >
-           <a  href="{% url 'list_questions' %}">Forum</a>
-        </li>
-           Dropdown 
-        <li>
-          <a  href="#" id="navbardrop" >
-            Manage Account
-          </a>
-          <div >
-            <a  href="#">View Account</a>
-            <a  href="#">Edit Account </a>
-          </div>
-        </li>
-
-        <li >
-          <a  href="#" id="navbardrop" >
-          Questions
-          </a>
-          <div >
-            <a  href="#">View my questions</a>
-            <a  href="{% url 'add_question' %}">Add New doubts</a>
-          </div>
-        </li>
-
-        <li>
-            <a  href="#">Log out</a>
-        </li>
-      </ul>
-    </nav>-->
-
-
     <div >
 
           <!--Question Post Design Start-->  
@@ -176,9 +138,6 @@
                                             </div>
                                         </div>  
                  <!--Comment Input Box End-->  
-
-
-
             
                    {% for answer in answers %}
                    {% if answer.question_id == questions %}
@@ -263,15 +222,6 @@
                                       </div>
                                   </div>  
                <!--Comment View Box End-->
-
-
-
-               
-
-
-
-
-
                
                   {%endif%}
                   {% endfor %}
@@ -285,16 +235,7 @@
                   </div>
                 </div>
 
-              </div>
-
-                    
-             
-
-
-              
-
-
-                
+              </div>                
       </div>
       </div>
 </div>

@@ -5,10 +5,7 @@
 
 {% block content %}
 <center class="container" style="margin-top:7.5%;">
-<!-- <div class="card" style="padding: 5px;max-width:60vw;box-shadow: 1px 1px 5px #b1b1b1;"> -->
-  <!-- <a href="{% url 'list_questions' %}" style="float:right;"> -->
-  <!-- {% load static%} -->
-  <!-- <i class="fas fa-times fa-lg mt-2" style="width:4vw;float:right;color:#6C757D;"></i></a> -->
+
       <center><h1 class="mb-0 mt-2" style="color: #F95C39;font-size: 7vw; font-family: 'Montserrat', sans-serif;">RECursion</h1></center><br>
       <center><h5 class="mb-4" style="font-size: 2.2vw;color:#528CDD;">Programming community of NIT Durgapur
 </h5></center>
@@ -17,11 +14,8 @@
       <center>
       {% csrf_token %}
       <p>
-         <!-- <span class="ml-2 mb-2"style="float: left;">Login</span>  --><br>
-        <!-- {{ form }} -->
         {% render_field form.username class="form-control mb-3 ml-2 mr-2" style="background:white;" placeholder="Username" %}
-        <!-- {{ form.username }}<br> -->
-        <!-- {{ form.password }} -->
+
         {% render_field form.password class="form-control ml-2 mr-2" style="background:white;" placeholder="Password" %}
       </p>
     </center>
