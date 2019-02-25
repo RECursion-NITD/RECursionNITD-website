@@ -15,8 +15,6 @@ class Eventsform(forms.ModelForm):
 
     def clean_image_url(self):
         url = self.cleaned_data['image_url'].lower()
-        print(valid_url_extension(url))
-        print(valid_url_mimetype(url))
         if not valid_url_extension(url) or not valid_url_mimetype(url):
             raise forms.ValidationError(_("Not a valid Image. The URL must have an image extensions (.jpg/.jpeg/.png)"))
         return url

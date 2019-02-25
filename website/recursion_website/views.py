@@ -17,6 +17,14 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 import urllib.request
 from PIL import Image
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import render, redirect
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
 
 @login_required
 def home(request):
@@ -300,18 +308,46 @@ def view_profile(request, id):
     return render(request, 'recursion_website/profile.html', args)
 
 def user_register(request):
-    form = UserCreationForm(request.POST or None)
-
-    if form.is_valid():
-        if User.objects.filter(username=['username']).exists():
-            return redirect('user_register')
-        form.save()
-        new_user = authenticate(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password1'],
-                                )
-        login(request, new_user)
-        return redirect('edit_profile')
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            subject = 'Activate Your RECursion Account'
+            message = render_to_string('account_activation_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token': account_activation_token.make_token(user),
+            })
+            user.email_user(subject, message)
+            return redirect('account_activation_sent')
+    else:
+        form = SignUpForm()
     return render(request, 'register.html', {'form': form})
+
+def account_activation_sent(request):
+    return render(request, 'account_activation_sent.html')
+
+
+def activate(request, uidb64, token, backend='django.contrib.auth.backends.ModelBackend'):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.profile.email_confirmed = True
+        user.save()
+        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        return redirect('edit_profile')
+    else:
+        return render(request, 'account_activation_invalid.html')
+
 
 @login_required
 def edit_profile(request):
