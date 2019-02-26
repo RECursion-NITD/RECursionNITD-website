@@ -23,13 +23,14 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from .tokens import account_activation_token
+from .tokens import password_reset_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
-
+from django.contrib.auth.forms import SetPasswordForm
 
 @login_required
 def home(request):
@@ -464,3 +465,53 @@ def change_password(request):
     return render(request, 'registration/change_password.html', {
         'form': form
     })
+
+def password_reset(request):
+    if request.method == 'POST':
+        form = EmailForm(request.POST)
+        if form.is_valid():
+            email=form.cleaned_data['email']
+            if(User.objects.filter(email=email).count()>1):
+                return HttpResponse("Email Already Used!")
+            user = User.objects.get(email=email)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            subject = 'Reset Your RECursion Account Password'
+            message = render_to_string('registration/password_reset_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                'token': password_reset_token.make_token(user),
+            })
+            user.email_user(subject, message)
+            return redirect('password_reset_done')
+    else:
+        form = EmailForm()
+    return render(request, 'registration/password_reset_form.html', {'form': form})
+
+def password_reset_done(request):
+    return render(request, 'registration/password_reset_done.html')
+
+
+def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.backends.ModelBackend'):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            user.is_active = True
+            user.save()
+            return redirect('password_reset_complete')
+        return render(request, 'registration/password_reset_confirm.html', {'form': form})
+    else:
+        return render(request, 'registration/password_reset_invalid.html')
+
+def password_reset_complete(request):
+    return render(request, 'registration/password_reset_complete.html')
