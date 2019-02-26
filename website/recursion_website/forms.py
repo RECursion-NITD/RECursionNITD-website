@@ -69,6 +69,8 @@ class Profileform(forms.ModelForm):
         fields = ('name', 'college', 'dept', 'image_url', 'nickname')
 
 
+
+
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Mandatory')
 

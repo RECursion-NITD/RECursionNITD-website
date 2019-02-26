@@ -15,12 +15,13 @@
              </span>
              <ul>
                  <li>Username: {{ request.user }}</li>
-                 <li>Email: {{ profile.email }}</li>
+                 <li>Email: {{ request.user.email }}</li>
                  <li>College: {{ profile.college }}</li>
                  <li>Role: {{ profile.role }}</li>
                  <li>Department: {{ profile.dept }}</li>
                  <li>Nickname: {{ profile.nickname }}</li>
                  <li>Joined RECursion: {{ profile.created_at }}</li>
              </ul>
+
 </body>
 </html>
