@@ -34,6 +34,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'recursion_website.apps.RecursionWebsiteConfig',
     'events.apps.EventsConfig',
+    'user_profile.apps.UserProfileConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

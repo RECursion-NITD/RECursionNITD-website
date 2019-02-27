@@ -11,7 +11,9 @@
              <h2>User Profile</h2>
              <span>
              <h3>{{ profile.name }}</h3>
-             <img src="{{ profile.image.url }}" alt="Profile Picture">
+             {% if profile.image %}
+                 <img src="{{ profile.image.url }}" alt="Profile Picture">
+             {% endif %}
              </span>
              <ul>
                  <li>Username: {{ request.user }}</li>
