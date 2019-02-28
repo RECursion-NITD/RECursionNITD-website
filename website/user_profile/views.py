@@ -140,7 +140,6 @@ def password_reset(request):
             if (User.objects.filter(email=email).count() > 1):
                 return HttpResponse("Email Already Used!")
             user = User.objects.get(email=email)
-            user.is_active = False
             user.save()
             current_site = get_current_site(request)
             subject = 'Reset Your RECursion Account Password'
