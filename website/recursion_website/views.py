@@ -197,9 +197,21 @@ def update_questions(request, id):
 
             bulk_tagging_add(question, tagging_list)  # use a bulk create function which accepts a list
             profiles = Profile.objects.filter(role=2)
+            follows = Follows.objects.filter(question=question)
             messages = ()
             for profile in profiles:
                 user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('update_question_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            for follow in follows:
+                user = follow.user
                 current_site = get_current_site(request)
                 subject = 'New Activity in AskREC'
                 message = render_to_string('update_question_email.html', {
@@ -240,9 +252,21 @@ def add_answer(request, id):
             f.user_id = request.user
             form.save()
             profiles = Profile.objects.filter(role=2)
+            follows=Follows.objects.filter(question=question)
             messages = ()
             for profile in profiles:
                 user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('new_answer_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            for follow in follows:
+                user = follow.user
                 current_site = get_current_site(request)
                 subject = 'New Activity in AskREC'
                 message = render_to_string('new_answer_entry_email.html', {
@@ -275,9 +299,21 @@ def update_answer(request, id):
             if request.user == answer.user_id:
               form.save()
               profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question)
               messages = ()
               for profile in profiles:
                   user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('answer_update_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
                   current_site = get_current_site(request)
                   subject = 'New Activity in AskREC'
                   message = render_to_string('answer_update_email.html', {
@@ -321,9 +357,21 @@ def add_comment(request, id):
         f.user = request.user
         form.save()
         profiles = Profile.objects.filter(role=2)
+        follows=Follows.objects.filter(question=question)
         messages = ()
         for profile in profiles:
             user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': question,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        for follow in follows:
+            user = follow.user
             current_site = get_current_site(request)
             subject = 'New Activity in AskREC'
             message = render_to_string('new_comment_entry_email.html', {
@@ -351,9 +399,21 @@ def update_comment(request, id):
             if request.user == comment.user:
               form.save()
               profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question)
               messages = ()
               for profile in profiles:
                   user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
                   current_site = get_current_site(request)
                   subject = 'New Activity in AskREC'
                   message = render_to_string('update_comment_email.html', {
@@ -439,9 +499,21 @@ def add_comment_answer(request, id):
         f.user = request.user
         form.save()
         profiles = Profile.objects.filter(role=2)
+        follows=Follows.objects.filter(question=question_id)
         messages = ()
         for profile in profiles:
             user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_answer_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': answer.question_id,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        for follow in follows:
+            user = follow.user
             current_site = get_current_site(request)
             subject = 'New Activity in AskREC'
             message = render_to_string('new_answer_comment_entry_email.html', {
@@ -470,9 +542,21 @@ def update_comment_answer(request, id):
             if request.user == comment.user:
               form.save()
               profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question_id)
               messages = ()
               for profile in profiles:
                   user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_answer_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': answer.question_id,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
                   current_site = get_current_site(request)
                   subject = 'New Activity in AskREC'
                   message = render_to_string('update_answer_comment_email.html', {

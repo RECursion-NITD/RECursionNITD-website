@@ -114,15 +114,17 @@
                                              <li>Comments: <a href="{% url 'add_comment_answer' answer.id %}">Add a Comment</a>
                                                  <ul>
                                                      {% for comment_a in comments_answers %}
-                                                       <li>{{ comment_a.body }}</li>
-                                                       {% if comment_a.user == request.user %}
-                                                         <a href="{% url 'update_comment_answer' comment_a.id %}">Update this Comment</a>
+                                                       {% if comment_a.answer == answer %}
+                                                         <li>{{ comment_a.body }}</li>
+                                                         {% if comment_a.user == request.user %}
+                                                           <a href="{% url 'update_comment_answer' comment_a.id %}">Update this Comment</a>
+                                                         {% endif %}
+                                                         <ul>
+                                                         <li>Added By: <a href="{% url 'view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a></li>
+                                                         <li>Posted On: {{answer.created_at}}</li>
+                                                         <li>Last Updated On: {{answer.updated_at}}</li>
+                                                         </ul>
                                                        {% endif %}
-                                                       <ul>
-                                                       <li>Added By: <a href="{% url 'view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a></li>
-                                                       <li>Posted On: {{answer.created_at}}</li>
-                                                       <li>Last Updated On: {{answer.updated_at}}</li>
-                                                       </ul>
                                                      {% endfor %}
                                                  </ul>
                                              <li>Added By: <a href="{% url 'view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a></li>
