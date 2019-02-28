@@ -220,7 +220,8 @@ def update_questions(request, id):
                     'question': question,
                 })
                 msg = (subject, message, 'webmaster@localhost', [user.email])
-                messages += (msg,)
+                if msg not in messages:
+                    messages += (msg,)
             result = send_mass_mail(messages, fail_silently=False)
             return redirect('list_questions')
     else:
@@ -275,7 +276,8 @@ def add_answer(request, id):
                     'question': question,
                 })
                 msg = (subject, message, 'webmaster@localhost', [user.email])
-                messages += (msg,)
+                if msg not in messages:
+                    messages += (msg,)
             result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
@@ -322,7 +324,8 @@ def update_answer(request, id):
                       'question': question,
                   })
                   msg = (subject, message, 'webmaster@localhost', [user.email])
-                  messages += (msg,)
+                  if msg not in messages:
+                     messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
@@ -380,7 +383,8 @@ def add_comment(request, id):
                 'question': question,
             })
             msg = (subject, message, 'webmaster@localhost', [user.email])
-            messages += (msg,)
+            if msg not in messages:
+                messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
@@ -422,7 +426,8 @@ def update_comment(request, id):
                       'question': question,
                   })
                   msg = (subject, message, 'webmaster@localhost', [user.email])
-                  messages += (msg,)
+                  if msg not in messages:
+                     messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
@@ -522,7 +527,8 @@ def add_comment_answer(request, id):
                 'question': answer.question_id,
             })
             msg = (subject, message, 'webmaster@localhost', [user.email])
-            messages += (msg,)
+            if msg not in messages:
+                messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
@@ -565,7 +571,8 @@ def update_comment_answer(request, id):
                       'question': answer.question_id,
                   })
                   msg = (subject, message, 'webmaster@localhost', [user.email])
-                  messages += (msg,)
+                  if msg not in messages:
+                     messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
