@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
+from user_profile.models import Profile
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
@@ -31,6 +32,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
+from django.core.mail import send_mass_mail
 
 @login_required
 def home(request):
@@ -79,6 +81,20 @@ def add_question(request):
 
         bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
     if form.is_valid():
+        profiles=Profile.objects.filter(role = 2)
+        messages=()
+        for profile in profiles:
+           user = profile.user
+           current_site = get_current_site(request)
+           subject = 'New Activity in AskREC'
+           message = render_to_string('new_question_entry_email.html', {
+              'user': user,
+              'domain': current_site.domain,
+              'question' : Questions.objects.get(pk=f.id),
+           })
+           msg=(subject, message, 'webmaster@localhost', [user.email])
+           messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
         return redirect('list_questions')
 
     return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
@@ -180,6 +196,20 @@ def update_questions(request, id):
                         tagging_list.append(tag)
 
             bulk_tagging_add(question, tagging_list)  # use a bulk create function which accepts a list
+            profiles = Profile.objects.filter(role=2)
+            messages = ()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('update_question_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            result = send_mass_mail(messages, fail_silently=False)
             return redirect('list_questions')
     else:
         question = Questions.objects.get(pk=id)
@@ -209,6 +239,20 @@ def add_answer(request, id):
             f.question_id=question
             f.user_id = request.user
             form.save()
+            profiles = Profile.objects.filter(role=2)
+            messages = ()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('new_answer_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
@@ -230,6 +274,20 @@ def update_answer(request, id):
                 return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
               form.save()
+              profiles = Profile.objects.filter(role=2)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('answer_update_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
@@ -262,6 +320,20 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
+        profiles = Profile.objects.filter(role=2)
+        messages = ()
+        for profile in profiles:
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': question,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form})
@@ -278,6 +350,20 @@ def update_comment(request, id):
         if form.is_valid():
             if request.user == comment.user:
               form.save()
+              profiles = Profile.objects.filter(role=2)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
@@ -352,6 +438,20 @@ def add_comment_answer(request, id):
         f.answer=answer
         f.user = request.user
         form.save()
+        profiles = Profile.objects.filter(role=2)
+        messages = ()
+        for profile in profiles:
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_answer_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': answer.question_id,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form})
@@ -369,6 +469,20 @@ def update_comment_answer(request, id):
         if form.is_valid():
             if request.user == comment.user:
               form.save()
+              profiles = Profile.objects.filter(role=2)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_answer_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': answer.question_id,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
