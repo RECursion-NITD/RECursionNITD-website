@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+	<div class="member-list">
+		<h2>Members:</h2>
+		{% for member in members %}
+			<h3>Name : {{ member.name }}</h3>
+			<h3>Year : {{ member.year }}</h3>
+			<h3>Position : {{ member.position }}</h3>
+			<h3>Branch : {{ member.branch }}</h3>
+			<h3>Contact Details : {{ member.contact_details }}</h3>
+			<h3>Experience : {{ member.experience }}</h3>
+			<a class="btn btn-warning" href="{%  url 'members:edit' member.id %}">Edit</a>
+            <a class="btn btn-danger" href="{%  url 'members:delete' member.id %}">Delete</a>
+		{% endfor %}
+	</div>
+
+{% endblock %}
