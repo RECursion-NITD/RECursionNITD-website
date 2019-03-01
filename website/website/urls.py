@@ -28,5 +28,6 @@ urlpatterns = [
     path('forum/',include('recursion_website.urls')),
     path('events/',include('events.urls')),
     path('profile/',include('user_profile.urls')),
+    path('members/',include('members.urls')),
 
 ]
