@@ -49,24 +49,25 @@ def view_profile(request, id):
 
 
 def user_register(request):
+    form = SignUpForm(request.POST or None)
     if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Activate Your RECursion Account'
-            message = render_to_string('account_activation_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('account_activation_sent')
-    else:
-        form = SignUpForm()
+      if request.POST.get('ajax_check') == "True":
+          if form.is_valid():
+              user = form.save(commit=False)
+              user.is_active = False
+              user.save()
+              current_site = get_current_site(request)
+              subject = 'Activate Your RECursion Account'
+              message = render_to_string('account_activation_email.html', {
+                  'user': user,
+                  'domain': current_site.domain,
+                  'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                  'token': account_activation_token.make_token(user),
+              })
+              user.email_user(subject, message)
+              return HttpResponse("Please confirm your email address to complete the Registration. ")
+          form = EmailForm(None)
+          return HttpResponse('Invalid Credentials!')
     return render(request, 'register.html', {'form': form})
 
 
@@ -98,61 +99,66 @@ def edit_profile(request):
     id = user.id
     profile = get_object_or_404(Profile, user=user)
     form = Profileform(request.POST or None, instance=profile)
-    if form.is_valid():
-        image_url = form.cleaned_data['image_url']
-        type = valid_url_extension(image_url)
-        full_path = 'media/images/' + profile.user.username + '.png'
-        try:
-            urllib.request.urlretrieve(image_url, full_path)
-        except:
-            return HttpResponse("Downloadable Image Not Found!")
-        if profile.user == request.user:
-            profile.image = '../' + full_path
-            form.save()
-        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
-
+    if request.POST.get('ajax_check') == "True":
+      if form.is_valid():
+          image_url = form.cleaned_data['image_url']
+          type = valid_url_extension(image_url)
+          full_path = 'media/images/' + profile.user.username + '.png'
+          try:
+              urllib.request.urlretrieve(image_url, full_path)
+          except:
+              return HttpResponse("Downloadable Image Not Found!")
+          if profile.user == request.user:
+              profile.image = '../' + full_path
+              form.save()
+              return HttpResponse('Information Updated Successfully!')
+      form = Profileform(None)
+      return HttpResponse('Invalid Credentials!')
     return render(request, 'create.html', {'form': form, })
 
 
 @login_required
 def change_password(request):
+    form = PasswordChangeForm(request.user, request.POST or None)
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
-        else:
-            messages.error(request, 'Please correct the Error below.')
-    else:
-        form = PasswordChangeForm(request.user)
+        if request.POST.get('ajax_check') == "True":
+          if form.is_valid():
+              user = form.save()
+              update_session_auth_hash(request, user)  # Important!
+              messages.success(request, 'Your password was successfully updated!')
+              return HttpResponse("Password Changed Successfully!")
+          else:
+              messages.error(request, 'Please correct the Error below.')
+          form = PasswordChangeForm(request.user)
+          return HttpResponse('Invalid Credentials!')
     return render(request, 'registration/change_password.html', {
         'form': form
     })
 
 
 def password_reset(request):
+    form = EmailForm(request.POST or None)
     if request.method == 'POST':
-        form = EmailForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            if (User.objects.filter(email=email).count() > 1):
-                return HttpResponse("Email Already Used!")
-            user = User.objects.get(email=email)
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Reset Your RECursion Account Password'
-            message = render_to_string('registration/password_reset_email.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
-                'token': password_reset_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect('password_reset_done')
-    else:
-        form = EmailForm()
+        if request.POST.get('ajax_check') == "True":
+          if form.is_valid():
+              email = form.cleaned_data['email']
+              if (User.objects.filter(email=email).count() > 1):
+                  return HttpResponse("Email Already Used!")
+              user = User.objects.get(email=email)
+              user.save()
+              current_site = get_current_site(request)
+              subject = 'Reset Your RECursion Account Password'
+              message = render_to_string('registration/password_reset_email.html', {
+                  'user': user,
+                  'domain': current_site.domain,
+                  'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                  'token': password_reset_token.make_token(user),
+              })
+              user.email_user(subject, message)
+              return HttpResponse("We've emailed you instructions for setting your password, if an account exists with the email you entered! You should receive them shortly."
+                                  "If you don't receive an email, please make sure you've entered the address you registered with, and check your spam folder.")
+          form = EmailForm(None)
+          return HttpResponse('Invalid')
     return render(request, 'registration/password_reset_form.html', {'form': form})
 
 
@@ -174,7 +180,7 @@ def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.
             update_session_auth_hash(request, user)  # Important!
             user.is_active = True
             user.save()
-            return redirect('password_reset_complete')
+            return redirect('login')
         return render(request, 'registration/password_reset_confirm.html', {'form': form})
     else:
         return render(request, 'registration/password_reset_invalid.html')
