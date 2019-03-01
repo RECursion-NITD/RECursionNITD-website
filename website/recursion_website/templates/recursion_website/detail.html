@@ -98,6 +98,16 @@
                    {% endfor %}
                    </ul>
                             </li>
+                            <li>Tags:
+                          <ul>
+                         {% for tagging in taggings %}
+                     {% if tagging.question == questions %}
+
+                                <li>{{ tagging.tag }}</li>
+                     {%endif%}
+                   {% endfor %}
+                          </ul>
+                       </li>
                             <li>Answers:
                                           {% if not ans.id %}
 
