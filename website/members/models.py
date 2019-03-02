@@ -18,6 +18,7 @@ class Members(models.Model):
    branch = models.CharField(max_length=100)  
    contact_details = models.CharField(max_length=200) 
    experience = models.CharField(max_length=500)
+   profile_picture=models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=100,null=True)
    class Meta:
        managed = True
        db_table = 'members'
