@@ -57,6 +57,7 @@ docs/_build/
 
 website/db.sqlite3
 
+<<<<<<< HEAD
 # Environments
 .env
 .venv
@@ -65,3 +66,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+=======
+website/db.sqlite3
+>>>>>>> 5d59cee... udating gitignore
