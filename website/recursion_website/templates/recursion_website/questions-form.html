@@ -58,7 +58,9 @@
         <form method="POST">
           <table>
               {{ form }}
-          </table><p>Enter any number of tags upto 5:</p>
+              {{ form.media }}
+          </table>
+          <p>Enter any number of tags upto 5:</p>
             <table>
             {{ form2 }}<span><p>&nbspTags:</p></span>
           </table>
@@ -67,6 +69,7 @@
               <br>
           <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
         </form>
+
 
       </div>
 </div>
