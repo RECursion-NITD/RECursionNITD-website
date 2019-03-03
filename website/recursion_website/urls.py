@@ -16,5 +16,7 @@ urlpatterns = [
     path('comment/<int:id>/', add_comment, name='add_comment'),
     path('comment_answer/<int:id>/', add_comment_answer, name='add_comment_answer'),
     path('editcomment/<int:id>/', update_comment, name='update_comment'),
+    path('editcomment_answer/<int:id>/', update_comment_answer, name='update_comment_answer'),
     path('filter/<int:id>/', filter_question, name='filter_question'),
+    url(r'^markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

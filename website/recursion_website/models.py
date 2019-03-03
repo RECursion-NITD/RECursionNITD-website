@@ -33,7 +33,7 @@ class Questions(models.Model):
 
 # Done
 class Answers(models.Model):
-    description = models.TextField()
+    description = models.TextField(blank=True)
     # TODO :
     # DATE TIME auto-generated
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -112,7 +112,6 @@ class Comments_Answers(models.Model):
         managed = True
         db_table = 'comments_answers'
         verbose_name_plural = 'Comments_Answers'
-
 
 # DONE
 class Follows(models.Model):
