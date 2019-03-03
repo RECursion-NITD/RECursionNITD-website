@@ -79,7 +79,18 @@
                 {% endif %}
                 {% endif %}
                 </li>
-                            <li>Comments: <a href="{% url 'add_comment' questions.id %}">Add a Comment</a>
+                <p>Enter the comment details below:</p><br>
+                <form class='my-com-form' method="POST"  data-url="{% url 'add_comment' questions.id  %}"> {% csrf_token %}
+                  <table>
+                      {{ comform }}
+                    <input type="hidden" name="ajax_call" value="True">
+                  </table>
+                      <br>
+                  <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ADD COMMENT</button>
+                </form>
+                                         <div id='com'>here comment</div>
+                                          <div id='update_com' hidden>
+                                          </div>
                        <ul>
                        {% for comment in comments %}
                      {% if comment.question == questions %}
@@ -109,9 +120,20 @@
                           </ul>
                        </li>
                             <li>Answers:
+                            <li>
+                              Answers: 
                                           {% if not ans.id %}
-
-                                          <a href="{% url 'add_answer' questions.id  %}">Answer this Question</a>
+                                          <form class='my-ans-form' method="POST"  data-url="{% url 'add_answer' questions.id %}"> {% csrf_token %}
+                                            <table>
+                                                {{ ansform }}
+                                                <input type="hidden" name="ajax_call" value="True">
+                                            </table>
+                                                <br>
+                                            <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ANSWER</button>
+                                          </form>
+                                          <div id='ans'>here ans</div>
+                                          <div id='update_ans' hidden>
+                                          </div>
                                           {% else %}
                                           <a href="{% url 'update_answer' ans.id  %}">Update your Answer</a>
                                            {% endif %}
@@ -167,3 +189,160 @@
 </div>
 </body>
 </html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      var $comForm = $('.my-com-form')
+      $comForm.submit(function(event){
+      event.preventDefault()
+      var $formData = $(this).serialize()
+
+      var $thisURL = $comForm.attr('data-url')
+    console.log($thisURL);
+    $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleComFormSuccess,
+        error: handleFormError,
+    })
+    console.log($formData)
+
+    Update_com={}
+    function handleComFormSuccess(data, textStatus, jqXHR){
+            console.log(data)
+            var Data = JSON.parse(data)
+            console.log(Data)
+            Update_com=Data
+            $('.my-com-form').hide()
+            if (Data.Success == "Success")
+            {
+              var result="";
+            result+="Title: "+Data.body+"<a href=/forum/editcomment/"+Data.id+ ">"+"Update"+"<a>"+"  Comment is added <br/>";
+            console.log(result);
+            $('#com').html(result);
+            $('#com').show()
+            $comForm[0].reset();
+            console.log("sucecssfully inserted")
+            }
+            else
+            {
+              console.log("unsuccessfull")
+            }
+        }
+
+
+
+        var $update = $('#com')
+            $("#com").click(function(e){
+            e.preventDefault()
+            $("#com").hide()
+            $form_data =
+            {
+               "id":Update_com.id,
+               "title":Update_com.title,
+               "description":Update_com.description,
+               'start_time':Update_com.start_time,
+               'end_time':Update_com.end_time,
+            },
+            console.log($form_data)
+
+        $.ajax({
+        method: "GET",
+        url: "/forum/editcomment/"+Update_com.id,
+        data:$form_data ,
+        success: function (data)
+        {
+           console.log(data)
+           $("#update_com").html(data)
+        },
+        error:handleFormError,
+     })
+        $("#update_com").show()
+        })    //end of update click
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+})
+
+
+
+      var $ansForm = $('.my-ans-form')
+      $ansForm.submit(function(event){
+      event.preventDefault()
+      var $formData = $(this).serialize()
+
+      var $thisURL = $ansForm.attr('data-url')
+    console.log($thisURL);
+    $.ajax({
+        method: "POST",
+        url: $thisURL,
+        data: $formData,
+        success: handleansFormSuccess,
+        error: handleFormError,
+    })
+    console.log($formData)
+
+    Update_ans={}
+    function handleansFormSuccess(data, textStatus, jqXHR){
+            console.log(data)
+            var Data = JSON.parse(data)
+            console.log(Data)
+            Update_ans=Data
+            $('.my-ans-form').hide()
+            if (Data.Success == "Success")
+            {
+              var result="";
+            result+="Title:"+Data.description+"<a href=/forum/answer/"+Data.id+">"+"Update"+"<a>"+" Answer is added <br/>";
+            console.log(result);
+            $('#ans').html(result);
+            $('#ans').show()
+            $ansForm[0].reset();
+            console.log("sucecssfully inserted")
+            }
+            else
+            {
+              console.log("unsuccessfull")
+            }
+        }
+
+
+
+        var $update = $('#ans')
+            $("#ans").click(function(e){
+            e.preventDefault()
+            $("#ans").hide()
+            $form_data =
+            {
+               "id":Update_ans.id,
+               "title":Update_ans.title,
+               "description":Update_ans.description,
+               'start_time':Update_ans.start_time,
+               'end_time':Update_ans.end_time,
+            },
+            console.log($form_data)
+
+        $.ajax({
+        method: "GET",
+        url: "/forum/answer/"+Update_ans.id,
+        data:$form_data ,
+        success: function (data)
+        {
+           console.log(data)
+           $("#update_ans").html(data)
+        },
+        error:handleFormError,
+     })
+        $("#update_ans").show()
+        })    //end of update click
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+})
+      })
+ </script>

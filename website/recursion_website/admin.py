@@ -34,4 +34,3 @@ class FollowAdmin(admin.ModelAdmin):
 @admin.register(Comments_Answers)
 class Comments_AnswerAdmin(admin.ModelAdmin):
     pass
-

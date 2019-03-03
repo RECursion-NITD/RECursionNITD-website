@@ -33,6 +33,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 from django.core.mail import send_mass_mail
+import json
+import datetime
+
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 @login_required
 def home(request):
@@ -49,6 +53,28 @@ def bulk_tagging_add(question, tags):
     Taggings.objects.bulk_create(taggings)
     return
 
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
+    end=([url.endswith(e) for e in extension_list])
+    count=1
+    for e in end:
+        if e == True:
+          if count==1:
+              type=".jpg"
+          elif count==2:
+              type=".jpeg"
+          elif count==3:
+              type=".png"
+          elif count==4:
+              type=".gif"
+        count+=1
+    return type
 
 @login_required
 def add_question(request):
@@ -130,6 +156,8 @@ def list_questions(request):
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
+    comform = Commentform(request.POST or None)
+    ansform = Answerform(request.POST or None)
 
     try:
         questions =get_object_or_404( Questions,pk=id)
@@ -159,7 +187,8 @@ def detail_questions(request, id):
         votes = Upvotes.objects.filter(user=user).values("answer_id")
         id_list = [id['answer_id'] for id in votes]  # voted answers id
 
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
+
+    args = {'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -245,9 +274,11 @@ def add_answer(request, id):
     if ans.count()>0:
         return HttpResponse("you have already answered,kindly update it instead")
     form = Answerform(request.POST or None)
-    if form.is_valid():
+    if request.POST.get('ajax_call') == "True" :
+        if form.is_valid():
             description = form.cleaned_data.get('description')
-            if description.__len__() < 10:
+            print(description)
+            if len(description) < 10:
                 return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
             f.question_id=question
@@ -280,11 +311,24 @@ def add_answer(request, id):
                 if msg not in messages:
                     messages += (msg,)
             result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+            user= request.user
+            f_q_id=Questions.objects.get(pk=id)
+            f.question_id=f_q_id
+            f.user_id =user
+            f.save()
 
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
-
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'description':f.description,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+        else :
+            return HttpResponse("we failed to insert in db")
+    else:
+        return render(request, 'recursion_website/answer.html', {'form': form})
 
 @login_required
 def update_answer(request, id):
@@ -300,7 +344,7 @@ def update_answer(request, id):
             if description.__len__() < 10:
                 return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
-              form.save()
+              f=form.save()
               profiles = Profile.objects.filter(role=2)
               follows=Follows.objects.filter(question=question)
               messages = ()
@@ -328,9 +372,19 @@ def update_answer(request, id):
                   if msg not in messages:
                      messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+              return HttpResponse(json.dumps({
+                  'id':f.id,
+                  'description':f.description,
+                  'created_at' :f.created_at,
+                  'updated_at' :f.updated_at,
+                  'user_id':request.user.username,
+                  'Success':'Success'
+                    }))
+        else:
+             return HttpResponse("Invalid")
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+
+    return render(request, 'recursion_website/answer.html', {'upform': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -388,6 +442,17 @@ def add_comment(request, id):
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+        user= request.user
+        return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+    else:
+        return  HttpResponse("Invalid")
 
     return render(request, 'recursion_website/comment.html', {'form': form})
 
@@ -430,9 +495,16 @@ def update_comment(request, id):
                   if msg not in messages:
                      messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':request.user.username,
+              'Success':'Success'
+            }))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'recursion_website/comment.html', {'upform': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -578,4 +650,3 @@ def update_comment_answer(request, id):
             return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
-
