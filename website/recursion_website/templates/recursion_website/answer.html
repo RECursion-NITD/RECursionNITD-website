@@ -4,24 +4,65 @@
 
      <meta charset="UTF-8">
     <meta charset="UTF-8">
-    <title>Add Answers</title>
+    <title>Update Answers</title>
 </head>
 <body>
 <div >
         {% csrf_token %}
  <h3>Add/Update Answer</h3>
- <h2>Answer id:{{ans.id}}</h2>
     <div >
 
         <p>Enter the details below:</p><br>
-        <form method="POST">
-          <table>
-              {{ form }}
-          </table>
-              <br>
-          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
-        </form>
+        <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+                <table>
+                    {{ upform }}
+                    <input type="hidden" name="ajax_update" value="True">
+                </table>
+                    <br>
+                <button type="submit" class="save btn btn-primary" style="margin-left:150px;">UPDATE</button>
+              </form>
       </div>
+      <div id='msg'>
+            doosra
+        </div>
 </div>
 </body>
 </html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("form.my-update-form").submit(function(task){
+            task.preventDefault()
+            console.log("update1")
+            $("#update_ans").hide()
+
+
+        var $formData = $("form.my-update-form").serialize()
+        console.log("form  "+$formData)
+            $.ajax({
+        method: "POST",
+        url:$("form.my-update-form").attr('data-url') ,
+        data:$formData ,
+        success: function (data)
+        {
+           console.log("update")
+           console.log("updatweeeeeeeeeee" +data)
+           $("#ans").show()
+           Data=JSON.parse(data)
+           Update=Data
+           result="";
+           result+="Answer given =:"+Data.description+"<a href=/answer/"+Data.id+">"+"Update"+"<a>"+" Event is added <br/>";
+           console.log(result);
+            $('#ans').html(result);
+        },
+        error:handleFormError,
+     }) 
+            })
+            function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+    })
+</script>

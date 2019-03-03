@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Events</title>
+
+<body>
+       
+   
+    <h1>EVENTS:</h1>
+    <li>
+        {% if perms %} 
+        <h1>Hello superuser:Add New Event</h1>
+        <div >
+
+                <p>Enter the details below:</p><br>
+                <form class='my-ajax-form' method="POST"  data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+                  <table>
+                      {{ form }}
+                      <input type="hidden" name="ajax_check" value="True">
+                  </table>
+                      <br>
+                  <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+                </form>
+              </div>
+              {% else %}
+              <p><a href="/login/">LOGIN</a></p>
+        {% endif %}
+    </li>
+    <div id='msg'>
+    </div>
+    <div id='update' hidden>
+   
+    </div>
+                
+     
+</body>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var $myForm = $('.my-ajax-form')
+        $myForm.submit(function(event){
+            event.preventDefault()
+            var $formData = $(this).serialize()
+            var $thisURL = $myForm.attr('data-url') 
+            
+            $.ajax({
+                method: "POST",
+                url: $thisURL,
+                data: $formData,
+                success: handleFormSuccess,
+                error: handleFormError,
+            });
+        })
+        var Update={}
+        function handleFormSuccess(data, textStatus, jqXHR){
+            console.log(data)
+            var Data=JSON.parse(data)
+            Update=Data
+            if (Data.Success == "Success")
+            {
+            var result="";
+            result+="Title:"+Data.title+"<a href=/events/update/"+Data.id+">"+"Update"+"<a>"+" Event is added <br/>";
+            console.log(result);
+            $('#msg').html(result);
+            $myForm[0].reset();
+
+            }
+            else{
+                console.log("ERrrrrror")
+            } 
+           
+        }
+        var $update = $('#msg')
+            $("#msg").click(function(e){
+            e.preventDefault()
+            $("#msg").hide()
+            $form_data = 
+            {
+               "id":Update.id,
+               "title":Update.title,
+               "description":Update.description,
+               'start_time':Update.start_time,
+               'end_time':Update.end_time,
+            },
+            console.log($form_data)
+
+        $.ajax({
+        method: "GET",
+        url: "/events/update/"+Update.id+"/",
+        data:$form_data ,
+        success: function (data)
+        {
+           console.log(data)
+           $("#update").html(data)
+        },
+        error:handleFormError,
+     })
+        $("#update").show()      
+        })    //end of update click
+        
+            function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+   
+        
+    })
+    </script>

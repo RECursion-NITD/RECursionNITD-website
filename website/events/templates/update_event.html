@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Events</title>
+
+<body>
+       
+   
+    <h1>EVENTS:</h1>
+    <li>
+        {% if perms %} 
+        <h1>Hello superuser:Update Event</h1>
+        <div >
+                <p>Enter the details below:</p><br>
+                <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+                  <table>
+                      {{ upform }}
+                      <input type="hidden" name="ajax_update" value="True">
+                  </table>
+                      <br>
+                  <button type="submit" class="save btn btn-primary" style="margin-left:150px;">UPDATE</button>
+                </form>
+              </div>
+              {% else %}
+              <p><a href="/login/">LOGIN</a></p>
+        {% endif %}
+    </li>
+    <div id='msg'>
+        doosra
+    </div>
+                
+     
+</body>
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("form.my-update-form").submit(function(task){
+            task.preventDefault()
+            console.log("update1")
+            $("#update").hide()
+
+
+        var $formData = $("form.my-update-form").serialize()
+        console.log("form  "+$formData)
+            $.ajax({
+        method: "POST",
+        url:$("form.my-update-form").attr('data-url') ,
+        data:$formData ,
+        success: function (data)
+        {
+           console.log("update")
+           console.log("updatweeeeeeeeeee" +data)
+           $("#msg").show()
+           Data=JSON.parse(data)
+           Update=Data
+           result="";
+           result+="Title:"+Data.title+"<a href=/events/update/"+Data.id+">"+"Update"+"<a>"+" Event is added <br/>";
+           console.log(result);
+            $('#msg').html(result);
+        },
+        error:handleFormError,
+     }) 
+            })
+            function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+    })
+</script>

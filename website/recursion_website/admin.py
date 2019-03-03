@@ -31,7 +31,4 @@ class UpvoteAdmin(admin.ModelAdmin):
 class FollowAdmin(admin.ModelAdmin):
     pass
 
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    pass
 

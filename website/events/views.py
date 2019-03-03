@@ -15,8 +15,14 @@ from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
 from django.utils import timezone
 from datetime import timedelta
+from django.core.files.base import ContentFile
+from io import BytesIO
+import urllib.request
+from PIL import Image
+import json
+import datetime
 
-
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 def events(request):
     events=Events.objects.all()
     perms=0
@@ -25,11 +31,39 @@ def events(request):
     
     form = Eventsform(request.POST or None)
     if form.is_valid():
+       
         form.save()
+       
         return redirect('events')   
 
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
+
+def event_create(request):
+    perms=0
+    if request.user.is_superuser:
+        perms=1
+    
+    form = Eventsform(request.POST or None)
+    if request.POST.get('ajax_check') == "True" :
+
+        if form.is_valid():
+            title=request.POST.get('title')
+            f=form.save()
+            print(f.id)
+            Id=f.id
+            return HttpResponse(json.dumps({
+            'title':title,
+            'description':f.description,
+            'image_url':f.image_url,
+            'start_time':f.start_time,
+            'end_time':f.end_time,
+            "id":Id,
+            'Success':"Success"
+            }))
+        form = Eventsform(None)
+        return HttpResponse('Invalid')    
+    return render(request, 'create_event.html',{'form':form,"perms":perms})
 
 def event_detail(request,id):
     try:
@@ -41,6 +75,7 @@ def event_detail(request,id):
         return render(request,'event_detail.html',{'event':event})
 
 def event_update(request,id):
+    print("call")
     try:
         event =get_object_or_404(Events, pk=id)
        
@@ -52,12 +87,29 @@ def event_update(request,id):
             perms=1
         else:
             return HttpResponse("Go get perms,only admins")
-        form = Eventsform(request.POST or None, instance=event)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('event_detail', args=(id,)))
-
-    return render(request, 'events.html', {'form': form,"perms":perms})
+        upform = Eventsform(request.POST or None, instance=event)
+        print("out")
+        print(upform)
+        if request.method == "POST":
+           
+            if request.user :  #of no use
+                
+                if upform.is_valid():
+                  
+                    f=upform.save()
+                    Id=f.id
+                    title=f.title
+                    return HttpResponse(json.dumps({
+                    'title':title,
+                    'description':f.description,
+                    'image_url':f.image_url,
+                    'start_time':f.start_time,
+                    'end_time':f.end_time,
+                    "id":Id,
+                    'Success':"Success"
+                    }))
+                return HttpResponse("Invalid")
+        return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
 def upcoming_events(request):
     today=timezone.now()

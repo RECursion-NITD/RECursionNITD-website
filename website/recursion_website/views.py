@@ -17,6 +17,10 @@ from django.core.files.base import ContentFile
 from io import BytesIO
 import urllib.request
 from PIL import Image
+import json
+import datetime
+
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 @login_required
 def home(request):
@@ -42,7 +46,7 @@ VALID_IMAGE_EXTENSIONS = [
 
 def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
     end=([url.endswith(e) for e in extension_list])
-    count=1;
+    count=1
     for e in end:
         if e == True:
           if count==1:
@@ -121,6 +125,8 @@ def list_questions(request):
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
+    comform = Commentform(request.POST or None)
+    ansform = Answerform(request.POST or None)
 
     try:
         questions =get_object_or_404( Questions,pk=id)
@@ -149,7 +155,7 @@ def detail_questions(request, id):
         votes = Upvotes.objects.filter(user=user).values("answer_id")
         id_list = [id['answer_id'] for id in votes]  # voted answers id
 
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
+    args = {'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -198,31 +204,32 @@ def update_questions(request, id):
 
 @login_required
 def add_answer(request, id):
-
-    try:
-        question = get_object_or_404(Questions, pk=id)
-
-    except:
-        return HttpResponse("id does not exist")
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
-    if ans.count()>0:
-        return HttpResponse("you have already answered,kindly update it instead")
-    if request.user!=question.user_id :
-        form = Answerform(request.POST or None)
+    form = Answerform(request.POST or None)
+    if request.POST.get('ajax_call') == "True" :
         if form.is_valid():
             description = form.cleaned_data.get('description')
-            if description.__len__() < 10:
+            print(description)
+            if len(description) < 10:
                 return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
-            f.question_id=question
-            f.user_id = request.user
-            form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+            user= request.user
+            f_q_id=Questions.objects.get(pk=id)
+            f.question_id=f_q_id
+            f.user_id =user
+            f.save()
+            
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'description':f.description,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+        else :
+            return HttpResponse("we failed to insert in db")
     else:
-        return HttpResponse("Questionnare can't answer")
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
-
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
+        return render(request, 'recursion_website/answer.html', {'form': form})
 
 @login_required
 def update_answer(request, id):
@@ -238,10 +245,19 @@ def update_answer(request, id):
             if description.__len__() < 10:
                 return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
-              form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+                f=form.save()
+                return HttpResponse(json.dumps({
+                  'id':f.id,
+               'description':f.description,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':request.user.username,
+              'Success':'Success'
+                    }))
+            return HttpResponse("Invalid")
+            
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+    return render(request, 'recursion_website/answer.html', {'upform': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -271,7 +287,17 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
-        return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+        user= request.user
+        return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+    else:
+        return  HttpResponse("Invalid")       
 
     return render(request, 'recursion_website/comment.html', {'form': form})
 
@@ -286,10 +312,17 @@ def update_comment(request, id):
         form = Commentform(request.POST or None, instance=comment)
         if form.is_valid():
             if request.user == comment.user:
-              form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+              f=form.save()
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':request.user.username,
+              'Success':'Success'
+            }))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'recursion_website/comment.html', {'upform': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -308,55 +341,7 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-def view_profile(request, id):
-    try:
-        user=get_object_or_404(User, pk=id)
-    except:
-        print(request.user.id) 
-        return HttpResponse("User does not exist!")
-    try:
-        profile=get_object_or_404(Profile, user=user)
-    except:
-        return HttpResponse("User has not created a Profile yet!")
-        
-    args = {'profile': profile,}
-    return render(request, 'recursion_website/profile.html', args)
 
-def user_register(request):
-    form = UserCreationForm(request.POST or None)
-
-    if form.is_valid():
-        if User.objects.filter(username=['username']).exists():
-            return redirect('user_register')
-        form.save()
-        new_user = authenticate(username=form.cleaned_data['username'],
-                                password=form.cleaned_data['password1'],
-                                )
-        login(request, new_user)
-        return redirect('edit_profile')
-    return render(request, 'register.html', {'form': form})
-
-@login_required
-def edit_profile(request):
-    form= Profileform(request.POST or None)
-    user=request.user
-    id = user.id
-    profile=get_object_or_404(Profile, user=user)
-    form = Profileform(request.POST or None, instance=profile)
-    if form.is_valid():
-        image_url=form.cleaned_data['image_url']
-        type=valid_url_extension(image_url)
-        full_path='media/images/'+profile.user.username+type
-        try:
-            urllib.request.urlretrieve(image_url,full_path)
-        except:
-            return HttpResponse("Downloadable Image Not Found!")
-        if profile.user==request.user:
-             profile.image='../'+full_path
-             form.save()
-        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
-
-    return render(request, 'create.html', {'form': form,})
 
 def filter_question(request ,id):
     try:

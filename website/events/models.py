@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 # DONE
 class Events(models.Model):
     title = models.CharField(max_length=30)
     description = models.TextField()
     image_url = models.URLField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to='images/')
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     # TODO
