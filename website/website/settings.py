@@ -26,14 +26,14 @@ SECRET_KEY = '9%b%-x(_!zd(ffdc!s=8j(clv&(_92d!+lh@#o9&t8*y40v1+3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'recursion_website.apps.RecursionWebsiteConfig',
     'events.apps.EventsConfig',
+    'recursion_website.apps.RecursionWebsiteConfig',
     'user_profile.apps.UserProfileConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'social_django',
     'widget_tweaks',
     'members.apps.MembersConfig',
+    'markdownx',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +153,8 @@ STATIC_URL = '/static/'
 MEDIA_URL ='/media/'
 
 MEDIA_ROOT=os.path.join(BASE_DIR,'../website/media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')

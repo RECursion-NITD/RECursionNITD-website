@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+An existing Answer to an existing Question has been Updated in AskREC:
+
+{{ question.title }}
+http://{{ domain }}{% url 'detail_questions' question.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}

@@ -3,12 +3,11 @@ from .models import *
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 import mimetypes
-
-
+from .validators import *
+from django.contrib.auth.forms import UserCreationForm
 
 class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=50)
     college = models.TextField(max_length=100)
     dept = models.IntegerField
     image_url = models.URLField
@@ -22,26 +21,21 @@ class Profileform(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('name', 'email', 'college', 'dept', 'image_url', 'nickname')
-
-VALID_IMAGE_EXTENSIONS = [
-    ".jpg",
-    ".jpeg",
-    ".png",
-    ".gif",
-]
-
-def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
-    return any([url.endswith(e) for e in extension_list])
+        fields = ('name', 'college', 'dept', 'image_url', 'nickname')
 
 
-VALID_IMAGE_MIMETYPES = [
-    "image"
-]
 
-def valid_url_mimetype(url, mimetype_list=VALID_IMAGE_MIMETYPES):
-    mimetype, encoding = mimetypes.guess_type(url)
-    if mimetype:
-        return any([mimetype.startswith(m) for m in mimetype_list])
-    else:
-        return False
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(max_length=254, help_text='Mandatory')
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password1', 'password2', )
+
+class EmailForm(forms.ModelForm):
+    email = forms.EmailField(max_length=254, help_text='Mandatory')
+
+    class Meta:
+        model = User
+        fields = ('email',)
