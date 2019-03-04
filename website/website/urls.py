@@ -18,6 +18,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import path,include
 from django.conf.urls import url, include
 from recursion_website import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('',include('recursion_website.urls')),
@@ -32,4 +34,4 @@ urlpatterns = [
     path('profile/',include('user_profile.urls')),
     path('members/',include('members.urls')),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
