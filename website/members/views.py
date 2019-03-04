@@ -6,17 +6,22 @@ from . import forms
 # Create your views here.
 def member_list(request):
 
-	members = Members.objects.all().order_by('id')
+	members = Members.objects.all().order_by('year_of_graduation')
 	args={'form' : forms.CreateMember , 'members' : members}
 	return render(request, 'members/members_list.html' , args)
 def member_create(request):
 	if request.method == "POST":
-		form=forms.CreateMember(request.POST)
+
+		form=forms.CreateMember(request.POST,request.FILES)
+
 		if form.is_valid():
 			#save member to database
 			new_member=form.save(commit=False)
 			new_member.save()
 			return redirect('members:list')
+		else:
+			return render(request,'members/members_create.html',{'form':form})
+
 
 	else:
 		form=forms.CreateMember()
