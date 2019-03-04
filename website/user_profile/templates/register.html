@@ -1,31 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends 'base_loginpage.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/login_css.css' %}">
 
-     <meta charset="UTF-8">
-    <meta charset="UTF-8">
-    <title>Register</title>
-</head>
+    {% block title %}Register{% endblock %}
 <body>
-<div >
- <h3>Register</h3>
-    <div >
+{% block content %}
+    <div>
+        <center class="container" style="margin-top:7.5%;">
+            <center><h1 class="mb-0 mt-2" style="color: #F95C39;font-size: 7vw; font-family: 'Montserrat', sans-serif;">RECursion</h1><br>
+            
+                <h5 class="mb-4" style="font-size: 2.2vw;color:#528CDD;">Programming community of NIT Durgapur
+                </h5>
+            </center>
 
-        <p>Enter the details below:</p><br>
-        <form class='my-ajax-form' method="POST"  data-url='{{ request.build_absolute_uri|safe }}'>
-          <table>
-              {{ form }}
-              <input type="hidden" name="ajax_check" value="True">
-          </table>
-              <br>
-          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
-        </form>
-      </div>
-    <div id='msg'>
+            <div class="row">
+                <!-- REGISTER FORM -->
+                <form class="my-ajax-form col-sm-12 col-md-5 col-lg-12 mb-3" style="margin:auto;"class="form-group" method="POST"  data-url='{{ request.build_absolute_uri|safe }}'>
+                <!-- <p>Enter the details below:</p><br> -->
+                      <!-- {{ form }} -->
+                          {% csrf_token %}
+                          {% for field in form.visible_fields %}
+                            <div class="row form-group ml-auto mr-auto">
+                              <div class=" offset-lg-2 col-lg-3" style="text-align:left;">
+                                {{ field.label_tag}}
+                              </div>
+                              <div class="col-lg-5">  
+                              {% if form.is_bound %}
+                                {% if field.errors %}
+                                  {% render_field field class="form-control is-invalid" %}
+                                {% else %}
+                                  {% render_field field class="form-control is-valid" %}
+                                {% endif %}
+                              {% else %}
+                                {% render_field field class="form-control" %}
+                              {% endif %}
+                              </div>
+                            </div>
+                          {% endfor %}
+                      <input type="hidden" name="ajax_check" value="True">
+                     <br>
+                  <center><button type="submit" class="save btn btn-outline-success">SAVE</button></center>
+                </form>
 
+            </div>
+            <hr style="color:#b1b1b1;">
+            <div style="font-size: 90%;"><span><a>About</a> </span>&emsp;<span> <a>Team</a> </span>&emsp;<span> <a>Contact</a> </span>&emsp;<!-- <span class="text-muted" style="float: right;position: absolute;bottom: 10px;right:10px;">Copyright©
+                <script>document.write(new Date().getFullYear())</script> </span> -->
+            </div>
+        </center>
     </div>
-</div>
-</body>
+</body>{% endblock %}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
