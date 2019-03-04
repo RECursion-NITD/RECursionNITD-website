@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="create-member">
 		<h2>Register a New Member</h2>
-		<form class="site-form" action="{% url 'members:create' %}" method="post">
+		<form enctype="multipart/form-data" class="site-form" action="{% url 'members:create' %}" method="post">
 			{% csrf_token %}
 			{{form.as_p}}
 			<input type="Submit" value="Create">
