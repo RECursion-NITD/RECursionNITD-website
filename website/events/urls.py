@@ -10,5 +10,5 @@ urlpatterns=[
     path('detail/<int:id>/', event_detail, name='event_detail'),
     path('update/<int:id>/', event_update, name='event_update'),
     path('upcoming_list/',upcoming_events, name='upcoming_events'),
-
+    path('',events, name='events'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
