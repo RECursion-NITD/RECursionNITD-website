@@ -34,10 +34,20 @@ def events(request):
         perms=1
 
     form = Eventsform(request.POST or None)
+
+    form = Eventsform(None)
+    return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
+
+def event_create(request):
+    perms=0
+    if request.user.is_superuser:
+        perms=1
+
+    form = Eventsform(request.POST or None)
+    #import pdb;pdb.set_trace();
     if form.is_valid():
-        f = form.save()
-        id = f.id
-        event = Events.objects.get(pk=id)
+
+        event=form.save(commit=False)
         image_url=form.cleaned_data['image_url']
         type=valid_url_extension(image_url)
         full_path='media/images/'+'event_'+str(id)+ '.png'
@@ -49,33 +59,6 @@ def events(request):
         event.save()
         return redirect('events')
 
-    form = Eventsform(None)
-    return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
-
-def event_create(request):
-    perms=0
-    if request.user.is_superuser:
-        perms=1
-
-    form = Eventsform(request.POST or None)
-    if request.POST.get('ajax_check') == "True" :
-
-        if form.is_valid():
-            title=request.POST.get('title')
-            f=form.save()
-            print(f.id)
-            Id=f.id
-            return HttpResponse(json.dumps({
-            'title':title,
-            'description':f.description,
-            'image_url':f.image_url,
-            'start_time':f.start_time,
-            'end_time':f.end_time,
-            "id":Id,
-            'Success':"Success"
-            }))
-        form = Eventsform(None)
-        return HttpResponse('Invalid')
     return render(request, 'create_event.html',{'form':form,"perms":perms})
 
 def event_detail(request,id):
@@ -100,37 +83,21 @@ def event_update(request,id):
         else:
             return HttpResponse("Go get perms,only admins")
         upform = Eventsform(request.POST or None, instance=event)
-        print("out")
-        print(upform)
+
         if request.method == "POST":
+            if upform.is_valid():
 
-            if request.user :  #of no use
-
-                if upform.is_valid():
-
-                    f=upform.save()
-                    id = event.id
-                    image_url = form.cleaned_data['image_url']
-                    type = valid_url_extension(image_url)
-                    full_path = 'media/images/' + 'event_' + str(id) + '.png'
-                    try:
-                        urllib.request.urlretrieve(image_url, full_path)
-                    except:
-                        return HttpResponse("Downloadable Image Not Found!")
-                    event.image = '../' + full_path
-                    event.save()
-                    Id=f.id
-                    title=f.title
-                    return HttpResponse(json.dumps({
-                    'title':title,
-                    'description':f.description,
-                    'image_url':f.image_url,
-                    'start_time':f.start_time,
-                    'end_time':f.end_time,
-                    "id":Id,
-                    'Success':"Success"
-                    }))
-                return HttpResponse("Invalid")
+                event=upform.save(commit=False)
+                image_url=upform.cleaned_data['image_url']
+                type=valid_url_extension(image_url)
+                full_path='media/images/'+'event_'+str(id)+ '.png'
+                try:
+                    urllib.request.urlretrieve(image_url,full_path)
+                except:
+                    return HttpResponse("Downloadable Image Not Found!")
+                event.image='../'+full_path
+                event.save()
+                return redirect('events')
         return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
 def upcoming_events(request):
