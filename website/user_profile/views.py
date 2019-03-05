@@ -148,8 +148,8 @@ def password_reset(request):
         if request.POST.get('ajax_check') == "True":
           if form.is_valid():
               email = form.cleaned_data['email']
-              if (User.objects.filter(email=email).count() > 1):
-                  return HttpResponse("Email Already Used!")
+              if not User.objects.filter(email=email).exists():
+                  return HttpResponse("No user with that Email exists.")
               user = User.objects.get(email=email)
               user.save()
               current_site = get_current_site(request)
