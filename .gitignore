@@ -55,8 +55,7 @@ docs/_build/
 #env
 *.env
 
-website/db.sqlite3
-
+website/db.sqlit
 # Environments
 .env
 .venv
@@ -65,3 +64,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+/website/db.sqlite3
+/website/recursion_website/migrations/0*.py	
+*.pyc
+__pycache__/
+website/db.sqlite3
+

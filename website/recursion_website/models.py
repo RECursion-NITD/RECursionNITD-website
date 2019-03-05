@@ -7,6 +7,9 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Done
 class Questions(models.Model):
@@ -30,7 +33,7 @@ class Questions(models.Model):
 
 # Done
 class Answers(models.Model):
-    description = models.TextField()
+    description = models.TextField(blank=True)
     # TODO :
     # DATE TIME auto-generated
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -75,7 +78,6 @@ class Answers(models.Model):
 
 
 
-# DONE
 class Comments(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, models.DO_NOTHING)
@@ -93,7 +95,23 @@ class Comments(models.Model):
         db_table = 'comments'
         verbose_name_plural = 'Comments'
 
+       
+class Comments_Answers(models.Model):
+    body = models.TextField()
+    user = models.ForeignKey(User, models.DO_NOTHING)
+    answer = models.ForeignKey(Answers, models.DO_NOTHING)
+    # TO DO
+    # AUTOGEN DATETIME
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
+    def __str__(self):
+        return self.body
+
+    class Meta:
+        managed = True
+        db_table = 'comments_answers'
+        verbose_name_plural = 'Comments_Answers'
 
 # DONE
 class Follows(models.Model):
@@ -192,20 +210,3 @@ TODO
 - Roles : list containing tuples, with various grant level
     Choice field.
 """
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    email = models.CharField(max_length=50)
-    college = models.CharField(max_length=100)
-    role = models.IntegerField(blank=True, null=True)
-    dept = models.CharField(max_length=20, blank=True, null=True)
-    image_url = models.URLField(blank=True, null=True)
-    nickname = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-
-    def __self__(self):
-        return self.name
-
-    class Meta:
-        managed = True

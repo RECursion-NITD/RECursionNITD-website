@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
+from user_profile.models import Profile
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
@@ -13,10 +14,30 @@ from django.conf import settings
 from django.forms import modelformset_factory
 from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
-from django.utils import timezone
-from datetime import timedelta
+from django.core.files.base import ContentFile
+from io import BytesIO
+import urllib.request
+from PIL import Image
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import render, redirect
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+from .tokens import account_activation_token
+from .tokens import password_reset_token
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_text
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import SetPasswordForm
+from django.core.mail import send_mass_mail
+import json
+import datetime
 
-@login_required
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
+
 def home(request):
     return render(request, 'home.html')
 
@@ -31,6 +52,29 @@ def bulk_tagging_add(question, tags):
     Taggings.objects.bulk_create(taggings)
     return
 
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
+    end=([url.endswith(e) for e in extension_list])
+    count=1
+    for e in end:
+        if e == True:
+          if count==1:
+              type=".jpg"
+          elif count==2:
+              type=".jpeg"
+          elif count==3:
+              type=".png"
+          elif count==4:
+              type=".gif"
+        count+=1
+    return type
+
 @login_required
 def add_question(request):
     form = Questionform(request.POST or None)
@@ -41,9 +85,9 @@ def add_question(request):
     else:
          form2 = Tagform(queryset=Tags.objects.none())
     if form.is_valid():
-        description=form.cleaned_data.get('description')
-        if description.__len__()<10:
-            return HttpResponse("very short question's description::")
+        description = form.cleaned_data.get('description')
+        if description.__len__() < 10:
+            return HttpResponse("Very Short Question's Description!")
         f = form.save(commit=False)
         f.user_id = request.user
         form.save()
@@ -62,12 +106,27 @@ def add_question(request):
 
         bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
     if form.is_valid():
+        profiles=Profile.objects.filter(role = 2)
+        messages=()
+        for profile in profiles:
+           user = profile.user
+           current_site = get_current_site(request)
+           subject = 'New Activity in AskREC'
+           message = render_to_string('new_question_entry_email.html', {
+              'user': user,
+              'domain': current_site.domain,
+              'question' : Questions.objects.get(pk=f.id),
+           })
+           msg=(subject, message, 'webmaster@localhost', [user.email])
+           messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
         return redirect('list_questions')
 
     return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
+    q_count=questions.count()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
     taggings_recent = Taggings.objects.all().order_by('-updated_at')
@@ -91,11 +150,14 @@ def list_questions(request):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
-    return render(request, 'recursion_website/questions.html', args)
+
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
-    
+    comform = Commentform(request.POST or None)
+    ansform = Answerform(request.POST or None)
+
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
@@ -106,27 +168,26 @@ def detail_questions(request, id):
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.all()
-    print(User.objects.filter(username=request.user))
+    comments_answers=Comments_Answers.objects.all()
     if User.objects.filter(username=request.user).exists():
-        ans=Answers.objects.filter(user_id=request.user).filter(question_id=questions)
-        if ans.count()>0:
-            ans=ans[0]
+        ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
+        if ans.count() > 0:
+            ans = ans[0]
         else:
-            ans=None 
+            ans = None
     else:
-        ans=None        
+        ans=None
     user = request.user
     flag=0
-    id_list=[]
+    id_list = []
     if User.objects.filter(username=request.user).exists():
         if Follows.objects.filter(question=questions, user=user).exists():
-            flag=1
-        votes=Upvotes.objects.filter(user=user).values("answer_id")
-        print(votes)
-        id_list = [id['answer_id'] for id in votes] #voted answers id
-        print(id_list)
-                
-    args = {'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'ans':ans,'flag':flag,'voted':id_list, }
+            flag = 1
+        votes = Upvotes.objects.filter(user=user).values("answer_id")
+        id_list = [id['answer_id'] for id in votes]  # voted answers id
+
+
+    args = {'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -141,9 +202,9 @@ def update_questions(request, id):
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
         if form.is_valid():
-            description=form.cleaned_data.get('description')
-            if description.__len__()<10:
-                return HttpResponse("very short question's description::")
+            description = form.cleaned_data.get('description')
+            if description.__len__() < 10:
+                return HttpResponse("Very Short Question's Description!")
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
@@ -164,6 +225,33 @@ def update_questions(request, id):
                         tagging_list.append(tag)
 
             bulk_tagging_add(question, tagging_list)  # use a bulk create function which accepts a list
+            profiles = Profile.objects.filter(role=2)
+            follows = Follows.objects.filter(question=question)
+            messages = ()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('update_question_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            for follow in follows:
+                user = follow.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('update_question_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+            result = send_mass_mail(messages, fail_silently=False)
             return redirect('list_questions')
     else:
         question = Questions.objects.get(pk=id)
@@ -181,28 +269,66 @@ def add_answer(request, id):
 
     except:
         return HttpResponse("id does not exist")
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)    
+
+    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
     if ans.count()>0:
         return HttpResponse("you have already answered,kindly update it instead")
-    if request.user!=question.user_id :
-        form = Answerform(request.POST or None)
+    form = Answerform(request.POST or None)
+    if request.POST.get('ajax_call') == "True" :
         if form.is_valid():
-            description=form.cleaned_data.get('description')
-
-            if description.__len__()<10:
-                return HttpResponse("very short answer::")
+            description = form.cleaned_data.get('description')
+            print(description)
+            if len(description) < 10:
+                return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
             f.question_id=question
             f.user_id = request.user
-
-
             form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
-    else:
-        return HttpResponse("Questionnare can't answer")
-    ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
+            profiles = Profile.objects.filter(role=2)
+            follows=Follows.objects.filter(question=question)
+            messages = ()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('new_answer_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+            for follow in follows:
+                user = follow.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('new_answer_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question': question,
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+            result = send_mass_mail(messages, fail_silently=False)
+            user= request.user
+            f_q_id=Questions.objects.get(pk=id)
+            f.question_id=f_q_id
+            f.user_id =user
+            f.save()
 
-    return render(request, 'recursion_website/answer.html', {'form': form,'ans':ans})
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'description':f.description,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+        else :
+            return HttpResponse("we failed to insert in db")
+    else:
+        return render(request, 'recursion_website/answer.html', {'form': form})
 
 @login_required
 def update_answer(request, id):
@@ -214,14 +340,51 @@ def update_answer(request, id):
     else:
         form = Answerform(request.POST or None, instance=answer)
         if form.is_valid():
-            description=form.cleaned_data.get('description')
-            if description.__len__()<10:
-                return HttpResponse("very short answer::")
+            description = form.cleaned_data.get('description')
+            if description.__len__() < 10:
+                return HttpResponse("Very Short Answer!")
             if request.user == answer.user_id:
-              form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+              f=form.save()
+              profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('answer_update_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('answer_update_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  if msg not in messages:
+                     messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
+              return HttpResponse(json.dumps({
+                  'id':f.id,
+                  'description':f.description,
+                  'created_at' :f.created_at,
+                  'updated_at' :f.updated_at,
+                  'user_id':request.user.username,
+                  'Success':'Success'
+                    }))
+        else:
+             return HttpResponse("Invalid")
 
-    return render(request, 'recursion_website/answer.html', {'form': form, 'ans': answer})
+
+    return render(request, 'recursion_website/answer.html', {'upform': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -251,7 +414,45 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
+        profiles = Profile.objects.filter(role=2)
+        follows=Follows.objects.filter(question=question)
+        messages = ()
+        for profile in profiles:
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': question,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        for follow in follows:
+            user = follow.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': question,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            if msg not in messages:
+                messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+        user= request.user
+        return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':user.username,
+              'Success':'Success'
+            }))
+    else:
+        return  HttpResponse("Invalid")
 
     return render(request, 'recursion_website/comment.html', {'form': form})
 
@@ -267,9 +468,43 @@ def update_comment(request, id):
         if form.is_valid():
             if request.user == comment.user:
               form.save()
-            return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+              profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': question,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  if msg not in messages:
+                     messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
+            return HttpResponse(json.dumps({
+              'id':f.id,
+              'body':f.body,
+              'created_at' :f.created_at,
+              'updated_at' :f.updated_at,
+              'user_id':request.user.username,
+              'Success':'Success'
+            }))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'recursion_website/comment.html', {'upform': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -288,71 +523,8 @@ def voting(request, id):
            upvote.save()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-def view_profile(request, username):
-    try:
-        user=get_object_or_404(User, username=username)
-    except:
-        return HttpResponse("User does not exist!")
-    try:
-        profile=get_object_or_404(Profile, user=user)
-    except:
-        return HttpResponse("User has not created a Profile yet!")
-    args = {'profile': profile,}
-    return render(request, 'profile.html', args)
 
-@login_required
-def create_profile(request, username):
-    form= Profileform(request.POST or None)
-    try:
-        user=get_object_or_404(User, username=username)
-    except:
-        return HttpResponse("User does not exist!")
-    if user != request.user:
-        return HttpResponse("You cant Create or Update another User's Profile!")
-    if Profile.objects.filter(user=user).exists():
-        return HttpResponseRedirect(reverse('update_profile', args=(username,)))
-    if form.is_valid():
-        if user == request.user :
-          f = form.save(commit=False)
-          f.user = user
-          form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(username,)))
 
-    return render(request, 'create.html', {'form': form,})
-
-def user_register(request):
-    form = UserCreationForm(request.POST or None)
-
-    if form.is_valid():
-        if User.objects.filter(username=['username']).exists():
-            return redirect('user_register')
-        form.save()
-        return redirect('login')
-    return render(request, 'register.html', {'form': form})
-
-@login_required
-def update_profile(request, username):
-    form= Profileform(request.POST or None)
-    
-    try:
-        user=get_object_or_404(User,username=username)
-       
-    except:
-        return HttpResponse("User does not exist!")
-    if user != request.user:
-        return HttpResponse("You cant Create or Update another User's Profile!")
-    try:
-        profile=get_object_or_404(Profile, user=user)
-    except:
-        return HttpResponseRedirect(reverse('create_profile', args=(username,)))
-    else:
-      form = Profileform(request.POST or None, instance=profile)
-      if form.is_valid():
-          if profile.user==request.user:
-             form.save()
-          return HttpResponseRedirect(reverse('view_profile', args=(username,)))
-
-    return render(request, 'create.html', {'form': form,})
 
 def filter_question(request ,id):
     try:
@@ -387,12 +559,95 @@ def filter_question(request ,id):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     questions.reverse()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, }
-    return render(request, 'recursion_website/questions.html', args)
+    q_count=Questions.objects.all().count()
+    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    return render(request, 'questions.html', args)
 
 
-    
-    
+@login_required
+def add_comment_answer(request, id):
+    try:
+        answer = get_object_or_404(Answers, pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    form = Comment_Answerform(request.POST or None)
+    if form.is_valid():
+        question_id=answer.question_id
+        f = form.save(commit=False)
+        f.answer=answer
+        f.user = request.user
+        form.save()
+        profiles = Profile.objects.filter(role=2)
+        follows=Follows.objects.filter(question=question_id)
+        messages = ()
+        for profile in profiles:
+            user = profile.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_answer_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': answer.question_id,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            messages += (msg,)
+        for follow in follows:
+            user = follow.user
+            current_site = get_current_site(request)
+            subject = 'New Activity in AskREC'
+            message = render_to_string('new_answer_comment_entry_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'question': answer.question_id,
+            })
+            msg = (subject, message, 'webmaster@localhost', [user.email])
+            if msg not in messages:
+                messages += (msg,)
+        result = send_mass_mail(messages, fail_silently=False)
+        return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
+    return render(request, 'recursion_website/comment.html', {'form': form})
 
+@login_required
+def update_comment_answer(request, id):
+    try:
+        comment =get_object_or_404(Comments_Answers, pk=id)
+        answer=comment.answer
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        question_id=answer.question_id
+        form = Comment_Answerform(request.POST or None, instance=comment)
+        if form.is_valid():
+            if request.user == comment.user:
+              form.save()
+              profiles = Profile.objects.filter(role=2)
+              follows=Follows.objects.filter(question=question_id)
+              messages = ()
+              for profile in profiles:
+                  user = profile.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_answer_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': answer.question_id,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  messages += (msg,)
+              for follow in follows:
+                  user = follow.user
+                  current_site = get_current_site(request)
+                  subject = 'New Activity in AskREC'
+                  message = render_to_string('update_answer_comment_email.html', {
+                      'user': user,
+                      'domain': current_site.domain,
+                      'question': answer.question_id,
+                  })
+                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  if msg not in messages:
+                     messages += (msg,)
+              result = send_mass_mail(messages, fail_silently=False)
+            return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
+    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})

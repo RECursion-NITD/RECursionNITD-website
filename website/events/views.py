@@ -15,6 +15,16 @@ from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
 from django.utils import timezone
 from datetime import timedelta
+from django.core.files.base import ContentFile
+from io import BytesIO
+import urllib.request
+from PIL import Image
+import json
+import datetime
+from .validators import valid_url_extension
+from .validators import valid_url_mimetype
+
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 
 def events(request):
@@ -22,14 +32,34 @@ def events(request):
     perms=0
     if request.user.is_superuser:
         perms=1
-    
+
     form = Eventsform(request.POST or None)
-    if form.is_valid():
-        form.save()
-        return redirect('events')   
 
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
+
+def event_create(request):
+    perms=0
+    if request.user.is_superuser:
+        perms=1
+
+    form = Eventsform(request.POST or None)
+    #import pdb;pdb.set_trace();
+    if form.is_valid():
+
+        event=form.save(commit=False)
+        image_url=form.cleaned_data['image_url']
+        type=valid_url_extension(image_url)
+        full_path='media/images/'+'event_'+str(id)+ '.png'
+        try:
+            urllib.request.urlretrieve(image_url,full_path)
+        except:
+            return HttpResponse("Downloadable Image Not Found!")
+        event.image='../'+full_path
+        event.save()
+        return redirect('events')
+
+    return render(request, 'create_event.html',{'form':form,"perms":perms})
 
 def event_detail(request,id):
     try:
@@ -37,13 +67,13 @@ def event_detail(request,id):
     except:
         return HttpResponse("id does not exist")
     else:
-        
         return render(request,'event_detail.html',{'event':event})
 
 def event_update(request,id):
+    print("call")
     try:
         event =get_object_or_404(Events, pk=id)
-       
+
     except:
         return HttpResponse("id does not exist")
     else:
@@ -52,12 +82,23 @@ def event_update(request,id):
             perms=1
         else:
             return HttpResponse("Go get perms,only admins")
-        form = Eventsform(request.POST or None, instance=event)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('event_detail', args=(id,)))
+        upform = Eventsform(request.POST or None, instance=event)
 
-    return render(request, 'events.html', {'form': form,"perms":perms})
+        if request.method == "POST":
+            if upform.is_valid():
+
+                event=upform.save(commit=False)
+                image_url=upform.cleaned_data['image_url']
+                type=valid_url_extension(image_url)
+                full_path='media/images/'+'event_'+str(id)+ '.png'
+                try:
+                    urllib.request.urlretrieve(image_url,full_path)
+                except:
+                    return HttpResponse("Downloadable Image Not Found!")
+                event.image='../'+full_path
+                event.save()
+                return redirect('events')
+        return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
 def upcoming_events(request):
     today=timezone.now()
@@ -69,6 +110,6 @@ def upcoming_events(request):
     form = Eventsform(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('events')   
+        return redirect('events')
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})

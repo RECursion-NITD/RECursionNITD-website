@@ -1,14 +1,22 @@
 from django import forms
 from .models import *
 from django.contrib.auth.models import User
-
-
-
+from django.utils.translation import ugettext as _
+import mimetypes
+from .validators import *
+from django.contrib.auth.forms import UserCreationForm
+from markdownx.fields import MarkdownxFormField
+from markdownx.utils import markdownify
 
 class Questionform(forms.ModelForm):
     title = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    description = MarkdownxFormField()
     visibility = models.BooleanField(max_length=10, default=True)
+
+    def clean_description(self):
+        data = self.cleaned_data['description']
+        data = markdownify(data)
+        return data
 
     class Meta:
         model = Questions
@@ -29,34 +37,38 @@ class Taggingform(forms.ModelForm):
         fields = ('question', 'tag')
 
 class Answerform(forms.ModelForm):
-    description = models.TextField()
+    description = MarkdownxFormField()
+
+    def clean_description(self):
+        data = self.cleaned_data['description']
+        data = markdownify(data)
+        return data
+
 
     class Meta:
         model = Answers
         fields = ('description',)
 
 class Commentform(forms.ModelForm):
-    body = models.TextField()
+    body = MarkdownxFormField()
+
+    def clean_body(self):
+        data = self.cleaned_data['body']
+        data = markdownify(data)
+        return data
 
     class Meta:
         model = Comments
         fields = ('body',)
 
-class Profileform(forms.ModelForm):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=50)
-    college = models.TextField(max_length=100)
-    role = models.IntegerField
-    dept = models.CharField(max_length=50)
-    image_url = models.URLField(blank=True, null=True)
-    nickname = models.TextField(max_length=100)
+class Comment_Answerform(forms.ModelForm):
+    body = MarkdownxFormField()
+
+    def clean_body(self):
+        data = self.cleaned_data['body']
+        data = markdownify(data)
+        return data
 
     class Meta:
-        model = Profile
-        fields = ('name', 'email', 'college', 'role', 'dept', 'image_url', 'nickname')
-
-
-        
-       
-       
-
+        model = Comments_Answers
+        fields = ('body',)
