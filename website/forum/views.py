@@ -122,7 +122,7 @@ def add_question(request):
         result = send_mass_mail(messages, fail_silently=False)
         return redirect('list_questions')
 
-    return render(request, 'recursion_website/questions-form.html', {'form': form,'form2':form2,})
+    return render(request, 'forum/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
     questions = Questions.objects.all()
@@ -188,7 +188,7 @@ def detail_questions(request, id):
 
 
     args = {'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
-    return render(request, 'recursion_website/detail.html', args)
+    return render(request, 'forum/detail.html', args)
 
 @login_required
 def update_questions(request, id):
@@ -259,7 +259,7 @@ def update_questions(request, id):
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
-        return render(request, 'recursion_website/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+        return render(request, 'forum/questions-form.html', {'form': form, 'form2': form2, 'question': question})
 
 @login_required
 def add_answer(request, id):
@@ -328,7 +328,7 @@ def add_answer(request, id):
         else :
             return HttpResponse("we failed to insert in db")
     else:
-        return render(request, 'recursion_website/answer.html', {'form': form})
+        return render(request, 'forum/answer.html', {'form': form})
 
 @login_required
 def update_answer(request, id):
@@ -380,11 +380,10 @@ def update_answer(request, id):
                   'user_id':request.user.username,
                   'Success':'Success'
                     }))
-        else:
-             return HttpResponse("Invalid")
+       
 
 
-    return render(request, 'recursion_website/answer.html', {'upform': form, 'ans': answer})
+    return render(request, 'forum/answer.html', {'upform': form, 'ans': answer})
 
 @login_required
 def edit_following(request, id):
@@ -441,7 +440,6 @@ def add_comment(request, id):
             if msg not in messages:
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
-        return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
         user= request.user
         return HttpResponse(json.dumps({
               'id':f.id,
@@ -454,7 +452,7 @@ def add_comment(request, id):
     else:
         return  HttpResponse("Invalid")
 
-    return render(request, 'recursion_website/comment.html', {'form': form})
+    return render(request, 'forum/comment.html', {'form': form})
 
 @login_required
 def update_comment(request, id):
@@ -467,7 +465,7 @@ def update_comment(request, id):
         form = Commentform(request.POST or None, instance=comment)
         if form.is_valid():
             if request.user == comment.user:
-              form.save()
+              f=form.save()
               profiles = Profile.objects.filter(role=2)
               follows=Follows.objects.filter(question=question)
               messages = ()
@@ -504,7 +502,7 @@ def update_comment(request, id):
               'Success':'Success'
             }))
 
-    return render(request, 'recursion_website/comment.html', {'upform': form, 'comment': comment})
+    return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})
 
 @login_required
 def voting(request, id):
@@ -606,7 +604,7 @@ def add_comment_answer(request, id):
         result = send_mass_mail(messages, fail_silently=False)
         return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form})
+    return render(request, 'forum/comment.html', {'form': form})
 
 @login_required
 def update_comment_answer(request, id):
@@ -650,4 +648,4 @@ def update_comment_answer(request, id):
               result = send_mass_mail(messages, fail_silently=False)
             return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
-    return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'forum/comment.html', {'form': form, 'comment': comment})

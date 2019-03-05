@@ -241,10 +241,10 @@
       </div>
       </div>
 </div>
-</body>
 
 
-{% endblock %}
+
+
                 </li>
                 <p>Enter the comment details below:</p><br>
                 <form class='my-com-form' method="POST"  data-url="{% url 'add_comment' questions.id  %}"> {% csrf_token %}
@@ -255,8 +255,8 @@
                       <br>
                   <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ADD COMMENT</button>
                 </form>
-                                         <div id='com'>here comment</div>
-                                          <div id='update_com' hidden>
+                                         <div id='com'></div>
+                                          <div id='update_com' > 
                                           </div>
                        <ul>
                        {% for comment in comments %}
@@ -286,7 +286,7 @@
                    {% endfor %}
                           </ul>
                        </li>
-                            <li>Answers:
+                           
                             <li>
                               Answers: 
                                           {% if not ans.id %}
@@ -299,7 +299,7 @@
                                             <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ANSWER</button>
                                           </form>
                                           <div id='ans'>here ans</div>
-                                          <div id='update_ans' hidden>
+                                          <div id='update_ans' >
                                           </div>
                                           {% else %}
                                           <a href="{% url 'update_answer' ans.id  %}">Update your Answer</a>
@@ -355,7 +355,8 @@
       </div>
 </div>
 </body>
-</html>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
@@ -382,7 +383,7 @@
             var Data = JSON.parse(data)
             console.log(Data)
             Update_com=Data
-            $('.my-com-form').hide()
+            $('form.my-com-form').hide()
             if (Data.Success == "Success")
             {
               var result="";
@@ -404,15 +405,9 @@
         var $update = $('#com')
             $("#com").click(function(e){
             e.preventDefault()
-            $("#com").hide()
+           
             $form_data =
-            {
-               "id":Update_com.id,
-               "title":Update_com.title,
-               "description":Update_com.description,
-               'start_time':Update_com.start_time,
-               'end_time':Update_com.end_time,
-            },
+            {},
             console.log($form_data)
 
         $.ajax({
@@ -421,12 +416,14 @@
         data:$form_data ,
         success: function (data)
         {
+          $("#com").hide()
            console.log(data)
            $("#update_com").html(data)
+           $("#update_com").show()
         },
         error:handleFormError,
      })
-        $("#update_com").show()
+       
         })    //end of update click
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
@@ -483,13 +480,7 @@
             e.preventDefault()
             $("#ans").hide()
             $form_data =
-            {
-               "id":Update_ans.id,
-               "title":Update_ans.title,
-               "description":Update_ans.description,
-               'start_time':Update_ans.start_time,
-               'end_time':Update_ans.end_time,
-            },
+            {},
             console.log($form_data)
 
         $.ajax({
@@ -513,3 +504,4 @@
 })
       })
  </script>
+{% endblock %}

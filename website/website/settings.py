@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'events.apps.EventsConfig',
-    'recursion_website.apps.RecursionWebsiteConfig',
+    'forum.apps.ForumConfig',
     'user_profile.apps.UserProfileConfig',
     'django.contrib.admin',
     'django.contrib.auth',

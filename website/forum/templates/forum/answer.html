@@ -13,13 +13,13 @@
     <div >
 
         <p>Enter the details below:</p><br>
-        <form method="POST">
+       <!--  <form method="POST">
           <table>
-              {{ form2 }}
+              
           </table>
               <br>
           <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
-        </form>
+        </form> -->
         <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
                 <table>
                     {{ upform }}
@@ -31,9 +31,7 @@
               </form>
 
       </div>
-      <div id='msg'>
-            doosra
-        </div>
+     
 </div>
 </body>
 </html>
@@ -58,13 +56,14 @@
         {
            console.log("update")
            console.log("updatweeeeeeeeeee" +data)
-           $("#ans").show()
+           
            Data=JSON.parse(data)
            Update=Data
            result="";
            result+="Answer given =:"+Data.description+"<a href=/answer/"+Data.id+">"+"Update"+"<a>"+" Event is added <br/>";
            console.log(result);
             $('#ans').html(result);
+            $("#ans").show()
         },
         error:handleFormError,
      })
