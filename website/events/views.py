@@ -23,9 +23,16 @@ import json
 import datetime
 from .validators import valid_url_extension
 from .validators import valid_url_mimetype
+from django.core.exceptions import PermissionDenied
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+def superuser_only(function):
+   def _inner(request, *args, **kwargs):
+       if not request.user.is_superuser:
+           raise PermissionDenied
+       return function(request, *args, **kwargs)
+   return _inner
 
 def events(request):
     events=Events.objects.all()
@@ -38,6 +45,7 @@ def events(request):
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
 
+@superuser_only
 def event_create(request):
     perms=0
     if request.user.is_superuser:
@@ -69,6 +77,7 @@ def event_detail(request,id):
     else:
         return render(request,'event_detail.html',{'event':event})
 
+@superuser_only
 def event_update(request,id):
     print("call")
     try:
