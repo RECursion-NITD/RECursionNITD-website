@@ -53,6 +53,8 @@ def user_register(request):
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
+              if User.objects.get(email=form.cleaned_data['email']):
+                  return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False
               user.save()
@@ -66,8 +68,12 @@ def user_register(request):
               })
               user.email_user(subject, message)
               return HttpResponse("Please confirm your email address to complete the Registration. ")
+          if form.errors:
+              for field in form:
+                  for error in field.errors:
+                      return HttpResponse(error)
           form = EmailForm(None)
-          return HttpResponse('Invalid Credentials!')
+
     return render(request, 'register.html', {'form': form})
 
 
