@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Create Profile</title>
+</head>
+<body>
+<div >
+ <h3>Create Profile</h3>
+    <div >
+
+        <p>Enter the details below:</p><br>
+        <form class='my-ajax-form' method="POST"  data-url='{{ request.build_absolute_uri|safe }}'>
+          <table>
+              {{ form }}
+              <input type="hidden" name="ajax_check" value="True">
+          </table>
+              <br>
+          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+        </form>
+        <p><a href="{% url 'change_password'  %}">Change Your Password</a></p>
+      </div>
+    <div id='msg'>
+
+    </div>
+</div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var $myForm = $('.my-ajax-form')
+        $myForm.submit(function(event){
+            event.preventDefault()
+            var $formData = $(this).serialize()
+            console.log($formData)
+            var $thisURL = $myForm.attr('data-url')
+
+            $.ajax({
+                method: "POST",
+                url: $thisURL,
+                data: $formData,
+                success: handleFormSuccess,
+                error: handleFormError,
+            })
+        })
+
+         function handleFormSuccess(data, textStatus, jqXHR){
+            console.log(data)
+            console.log(textStatus)
+            console.log(jqXHR)
+            $("#msg").html(data)
+
+
+
+        }
+
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+    })
+    </script>
+</html>
