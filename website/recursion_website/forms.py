@@ -11,7 +11,7 @@ from markdownx.utils import markdownify
 class Questionform(forms.ModelForm):
     title = models.CharField(max_length=100)
     description = MarkdownxFormField()
-    visibility = models.BooleanField(max_length=10, default=True)
+    anonymous_ask = models.BooleanField(max_length=10, default=False)
 
     def clean_description(self):
         data = self.cleaned_data['description']
@@ -20,7 +20,7 @@ class Questionform(forms.ModelForm):
 
     class Meta:
         model = Questions
-        fields = ('title', 'description', 'visibility')
+        fields = ('title', 'description', 'anonymous_ask')
 
 
 class Tagsform(forms.ModelForm):
