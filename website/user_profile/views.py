@@ -53,7 +53,7 @@ def user_register(request):
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
-              if User.objects.get(email=form.cleaned_data['email']):
+              if User.objects.filter(email=form.cleaned_data['email']).exists():
                   return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False

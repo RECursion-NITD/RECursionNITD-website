@@ -178,6 +178,8 @@ def detail_questions(request, id):
     else:
         ans=None
     user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
     flag=0
     id_list = []
     if User.objects.filter(username=request.user).exists():
@@ -187,7 +189,7 @@ def detail_questions(request, id):
         id_list = [id['answer_id'] for id in votes]  # voted answers id
 
 
-    args = {'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
+    args = {'user_permission':user_permission,'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'recursion_website/detail.html', args)
 
 @login_required
@@ -343,7 +345,10 @@ def update_answer(request, id):
             description = form.cleaned_data.get('description')
             if description.__len__() < 10:
                 return HttpResponse("Very Short Answer!")
-            if request.user == answer.user_id:
+            user = request.user
+            user_profile = Profile.objects.get(user=user)
+            user_permission = user_profile.role
+            if request.user == answer.user_id or user_permission == '2' or user_permission == '1':
               f=form.save()
               profiles = Profile.objects.filter(role=2)
               follows=Follows.objects.filter(question=question)
@@ -466,7 +471,10 @@ def update_comment(request, id):
     else:
         form = Commentform(request.POST or None, instance=comment)
         if form.is_valid():
-            if request.user == comment.user:
+            user = request.user
+            user_profile = Profile.objects.get(user=user)
+            user_permission = user_profile.role
+            if request.user == comment.user or user_permission == '2' or user_permission == '1':
               form.save()
               profiles = Profile.objects.filter(role=2)
               follows=Follows.objects.filter(question=question)
@@ -619,7 +627,10 @@ def update_comment_answer(request, id):
         question_id=answer.question_id
         form = Comment_Answerform(request.POST or None, instance=comment)
         if form.is_valid():
-            if request.user == comment.user:
+            user = request.user
+            user_profile = Profile.objects.get(user=user)
+            user_permission = user_profile.role
+            if request.user == comment.user or user_permission == '2' or user_permission == '1':
               form.save()
               profiles = Profile.objects.filter(role=2)
               follows=Follows.objects.filter(question=question_id)
@@ -651,3 +662,47 @@ def update_comment_answer(request, id):
             return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
 
     return render(request, 'recursion_website/comment.html', {'form': form, 'comment': comment})
+
+
+@login_required
+def delete_answer(request, id):
+    try:
+        answer =get_object_or_404( Answers,pk=id)
+        print(answer)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
+    question=answer.question_id
+    if user_permission == '2' or user_permission == '1':
+           answer.delete()
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+@login_required
+def delete_comment(request, id):
+    try:
+        comment =get_object_or_404( Comments,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
+    question = comment.question
+    if user_permission == '2' or user_permission == '1':
+           comment.delete()
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+@login_required
+def delete_answer_comment(request, id):
+    try:
+        answer_comment =get_object_or_404( Comments_Answers,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
+    question = answer_comment.answer.question_id
+    if user_permission == '2' or user_permission == '1':
+           answer_comment.delete()
+    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
