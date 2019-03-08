@@ -175,12 +175,12 @@ def detail_questions(request, id):
         questions =get_object_or_404( Questions,pk=id)
     except:
         return HttpResponse("id does not exist")
-    answers = Answers.objects.all()
-    follows = Follows.objects.all()
+    answers = Answers.objects.filter(question_id = questions)
+    follows = Follows.objects.all(question = questions)
     tags = Tags.objects.all()
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
-    comments=Comments.objects.all()
+    comments=Comments.objects.all(question = questions)
     comments_answers=Comments_Answers.objects.all()
     if User.objects.filter(username=request.user).exists():
         ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
