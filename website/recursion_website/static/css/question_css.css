@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Rajdhani');
+
 #answerBox{
 	text-align: center;
 }
@@ -38,7 +40,7 @@
 hr{
 	margin: 0px;
 }
-#tagName{
+.tagName{
 	background-color: #E1ECF4;
 	display: inline;
 	color:#6A73B4;
@@ -105,4 +107,12 @@ input[type=text]:focus {
   text-decoration: none;
   display: block;
   text-align: left;
+}
+
+
+.inline{
+	display: inline-block;
+}
+.number{
+	font-family:'Rajdhani',sans-serif;
 }

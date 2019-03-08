@@ -25,7 +25,7 @@
                 <div class="card-body">
                     <blockquote class="mb-0">
 
-                        <p>{{questions.description}}</p>
+                        <p>{{questions.description|safe}}</p>
                         <!--Tags Start-->
                         <div class="mt-5">
                             {% for tagging in taggings %} {% if tagging.question == questions %}
