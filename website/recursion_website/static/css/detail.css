@@ -1,106 +1,25 @@
-
-
-/* Comment View Box CSS */
-.panel-shadow {
-    box-shadow: rgba(0, 0, 0, 0.3) 1px 1px 1px;
+.container-fluid{
+  padding-top: 3vw;
 }
-.panel-white {
-  border: 1px solid #fff;
-}
-.panel-white  .panel-heading {
-  color: #333;
-  background-color: #fff;
-  border-color: #ddd;
-}
-.panel-white  .panel-footer {
-  background-color: #fff;
-  border-color: #ddd;
-}
-
-.post .post-heading {
-  height: 95px;
-  padding: 20px 15px;
-}
-.post .post-heading .avatar {
-  width: 60px;
-  height: 60px;
-  display: block;
-  margin-right: 15px;
-}
-.post .post-heading .meta .title {
-  margin-bottom: 0;
-}
-.post .post-heading .meta .title a {
-  color: black;
-}
-.post .post-heading .meta .title a:hover {
-  color: #aaaaaa;
-}
-.post .post-heading .meta .time {
-  margin-top: 8px;
-  color: #999;
-}
-.post .post-image .image {
-  width: 100%;
-  height: auto;
-}
-.post .post-description {
-  padding: 15px;
-}
-.post .post-description p {
-  font-size: 14px;
-}
-.post .post-description .stats {
-  margin-top: 20px;
-}
-.post .post-description .stats .stat-item {
+#qTitle{
   display: inline-block;
-  margin-right: 15px;
 }
-.post .post-description .stats .stat-item .icon {
-  margin-right: 8px;
+#qDivide{
+  color:#f3f3f3;
+  margin-bottom: 8px;
+  margin-top: 0px;
 }
-.post .post-footer {
-  border-top: 1px solid #ddd;
-  padding: 15px;
+.tag{
+  font-size: 80%;
 }
-.post .post-footer .input-group-addon a {
-  color: #454545;
+.voteReply{
+  background: #ffffff;
+  border: 1px solid #f3f3f3;
 }
-.post .post-footer .comments-list {
-  padding: 0;
-  margin-top: 20px;
-  list-style-type: none;
+.commentBorder{
+  border-left: 1px solid #f9c359; 
+  margin-left:0.5px;
 }
-.post .post-footer .comments-list .comment {
-  display: block;
-  width: 100%;
-  margin: 20px 0;
-}
-.post .post-footer .comments-list .comment .avatar {
-  width: 35px;
-  height: 35px;
-}
-.post .post-footer .comments-list .comment .comment-heading {
-  display: block;
-  width: 100%;
-}
-.post .post-footer .comments-list .comment .comment-heading .user {
-  font-size: 14px;
-  font-weight: bold;
-  display: inline;
-  margin-top: 0;
-  margin-right: 10px;
-}
-.post .post-footer .comments-list .comment .comment-heading .time {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 0;
-  display: inline;
-}
-.post .post-footer .comments-list .comment .comment-body {
-  margin-left: 50px;
-}
-.post .post-footer .comments-list .comment > .comments-list {
-  margin-left: 50px;
+.answerBorder{
+  border-left:1px solid #267CA1;
 }

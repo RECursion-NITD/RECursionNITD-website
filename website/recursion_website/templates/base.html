@@ -89,7 +89,7 @@
            {% else %}
               <ul class="nav navbar-nav">
               <li class="dropdown nav-link m-2 menu-item">
-              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Manage Account<span class="caret"></span></a>
+              <a class="dropdown-toggle tab" data-toggle="dropdown" href="{% static 'edit_profile' %}  id="tabManage">Manage Account<span class="caret"></span></a>
                 <ul class="dropdown-menu" style="padding: 2px;color:black;">
                   <li ><a  href="{% url 'list_questions' %}">Forum</a></li>
                   <li><a href="#">View Account</a></li>
@@ -152,7 +152,7 @@
             <div class="col-md-4 col-xl-3">
               <h3>Links</h3>
               <ul class="nav-list">
-                <li><a href="#">AskREC</a></li>
+                <li><a href="{% url 'list_questions' %}">AskREC</a></li>
                 <li><a href="#">Events</a></li>
                 <li><a href="#">Get Started</a></li>
                 <li><a href="#">Team</a></li>
