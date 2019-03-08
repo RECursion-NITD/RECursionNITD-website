@@ -35,6 +35,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.core.mail import send_mass_mail
 import json
 import datetime
+from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
@@ -126,6 +127,16 @@ def add_question(request):
 
 def list_questions(request):
     questions = Questions.objects.all()
+    paginator = Paginator(questions, 5)
+    page = request.GET.get('page')
+    try:
+        questions_list = paginator.page(page)
+    except PageNotAnInteger:
+        questions_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+        questions_list = paginator.page(paginator.num_pages)
     q_count=questions.count()
     answers=Answers.objects.all()
     follows=Follows.objects.all()
@@ -151,7 +162,9 @@ def list_questions(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
 
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    if request.is_ajax():
+        return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
@@ -162,12 +175,12 @@ def detail_questions(request, id):
         questions =get_object_or_404( Questions,pk=id)
     except:
         return HttpResponse("id does not exist")
-    answers = Answers.objects.all()
-    follows = Follows.objects.all()
+    answers = Answers.objects.filter(question_id = questions)
+    follows = Follows.objects.all(question = questions)
     tags = Tags.objects.all()
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
-    comments=Comments.objects.all()
+    comments=Comments.objects.all(question = questions)
     comments_answers=Comments_Answers.objects.all()
     if User.objects.filter(username=request.user).exists():
         ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
@@ -566,9 +579,21 @@ def filter_question(request ,id):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
+    q_count = Questions.objects.all().count() #For displaying total number of questions
     questions.reverse()
-    q_count=Questions.objects.all().count()
-    args = {'questions':questions, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    paginator = Paginator(questions, 5)
+    page = request.GET.get('page')
+    try:
+        questions_list = paginator.page(page)
+    except PageNotAnInteger:
+        questions_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+        questions_list = paginator.page(paginator.num_pages)
+    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    if request.is_ajax():
+        return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
 
 
