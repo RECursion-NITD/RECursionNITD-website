@@ -33,7 +33,7 @@
                                       {% if tagging.question == question %}
                                         {% for tag in tags %}
                                           {% if tagging.tag == tag %}
-                                            <li id="tagName" class="font-italic text-muted">{{tag.name}}</li>
+                                            <li class="tagName" class="font-italic text-muted">{{tag.name}}</li>
                                           {% endif %}
                                         {% endfor %}
                                       {%endif%}

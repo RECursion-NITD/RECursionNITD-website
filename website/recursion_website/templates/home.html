@@ -6,11 +6,18 @@
 
 {% block css%}
 <style>
-	.side-card{
-		border:1px solid #b1b1b1;
-		border-radius: 8px;
-		/*margin:1vw;*/
-	}
+  .side-card{
+    border:1px solid #b1b1b1;
+    border-radius: 8px;
+    /*margin:1vw;*/
+  }
+  .sponsorImg{
+    max-width: 120px;
+    max-height:120px;
+  }
+  body{
+    overflow-x: hidden;
+  }
 </style>
 {% endblock%}
     
@@ -18,40 +25,61 @@
 {% block content %}
   <!-- <h2>Homepage</h2> -->
   {% if user.is_authenticated %}
-  <div class="alert alert-warning" role="alert" >	 
- 	<p><strong>Welcome</strong> {{ user.username }}!</p>
+  <script type="text/javascript">
+    $('#selector').delay(1000).fadeOut('slow');
+    setTimeout(display(), 2000);
+    display(){
+      document.getElementById("selector").style.display = "none";
+      x.
+    }
+  </script>
+  <div class="alert alert-warning" role="alert" id="selector">   
+  <p><strong>Welcome</strong> {{ user.username }}!</p>
   </div>
   {% endif %}
   <div class="row">
-  	<div class="col-sm-12 col-md-7 col-lg-8 ml-3">
-  		<div class="card" style="background-color: inherit;border-style: none;">
-  			<center>
-  				<h1 style="font-size:7vw; color:#F95C39;">RECursion</h1>
-  				<h5 style="font-size:2vw;color:#528CDD;">Programming Community of NIT Durgapur</h5>
-  				<p style="padding-left:5vw;padding-right: 5vw;">We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
-  			</center>
-  		</div> 
-  	</div>
-  	<center class="col-sm-12 col-md-4 col-lg-3">
-  		<div class="card mb-3 side-card" style="padding-top: 1vw;padding-bottom: 0.5vw;">
-  			<h5>Pay Attention</h5>
-  			<hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
-  			Class at LG-14<br>
-  			Topics:DS Algo asdjkljsadkjkljkljsdjkjkwoieoiew<br>
-  			Date:26/1/19
-  			<hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
-  			<a href="#">Check out upcoming events!</a>
-  		</div>
-  		<!-- <div class="card  mb-3 side-card" style=""> -->
-  			<div class="row" >
-	  			<h5 class="col-7" style="float:left;">Have a question?</h5>
-	  			<h5 class="col-5"><a class="btn btn-outline-success" href="{% url 'list_questions' %}" style="width:100%;float:right;">AskREC</a></h5>
-  			</div>
-  		<!-- </div> -->
-  		<div class="row">
-  			<h5 class="col-7" style="float:left;">New to Programming?</h5>
-  			<h5 class="col-5" style="float:right;width:100%;"><button class="btn btn-outline-success">Get Started</button></h5>
-  		</div>
-  	</center>
+    <div class="col-sm-12 col-md-7 col-lg-12">
+      <div class="card pl-3 pr-5" style="background-color: inherit;border-style: none;margin-top: 6vw;margin-bottom: 1vw;">
+        <center>
+          <h1 style="font-size:7vw; color:#F95C39;">RECursion</h1>
+          <h5 style="font-size:2vw;color:#528CDD;">Programming Community of NIT Durgapur</h5>
+          <p style="">We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
+        </center>
+      </div> 
+    </div>
+    <!-- <center class=""> -->
+      <div class="offset-1 col-sm-12 col-md-3 col-lg-3 card mb-3 side-card" style="padding-top: 1vw;padding-bottom: 0.5vw;">
+        <h5>Pay Attention</h5>
+        <hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
+        Class at LG-14<br>
+        Topics:DS Algo asdjkljsadkjkljkljsdjkjkwoieoiew<br>
+        Date:26/1/19
+        <hr class="mt-0 mb-0" style="background:#b1b1b1;border:1px solid #b1b1b1;border-radius: 8px;">
+        <a href="#">Check out upcoming events!</a>
+      </div>
+      <!-- <div class="card  mb-3 side-card" style=""> -->
+        <div class="card col-sm-12 col-md-3 col-lg-3 ml-3">
+          <h5 class="col-7" style="float:left;">Have a question?</h5>
+          <h5 class="col-5"><a class="btn btn-outline-success" href="{% url 'list_questions' %}" style="width:100%;float:right;">AskREC</a></h5>
+        </div>
+      <!-- </div> -->
+      <div class=" card col-sm-12 col-md-3 col-lg-3 ml-3">
+        <h5 class="col-7" style="float:left;">New to Programming?</h5>
+        <h5 class="col-5" style="float:right;width:100%;"><button class="btn btn-outline-success">Get Started</button></h5>
+      </div>
+    <!-- </center> -->
+    <div class="container-fluid row mt-4">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <center class="text-muted">Our Sponsors<br>
+          {% load static %}
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/jetbrain.svg.png' %}">
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hackerrank.png' %}">
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}">
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/codechef.png' %}">
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hiredive.jpg' %}">
+          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/grabon.png' %}">
+        </center>
+      </div>
+    </div>
   </div>
 {% endblock %}
