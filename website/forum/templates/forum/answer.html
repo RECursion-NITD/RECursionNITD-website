@@ -42,28 +42,30 @@
     $(document).ready(function(){
         $("form.my-update-form").submit(function(task){
             task.preventDefault()
-            console.log("update1")
-            $("#update_ans").hide()
+            $("#update_ans").hide()//hiding update form when new form was added
 
 
-        var $formData = $("form.my-update-form").serialize()
+        var $formData = $(this).serialize()
         console.log("form  "+$formData)
             $.ajax({
         method: "POST",
-        url:$("form.my-update-form").attr('data-url') ,
+        url:$(this).attr('data-url') ,
         data:$formData ,
         success: function (data)
         {
-           console.log("update")
            console.log("updatweeeeeeeeeee" +data)
            
            Data=JSON.parse(data)
            Update=Data
            result="";
-           result+="Answer given =:"+Data.description+"<a href=/answer/"+Data.id+">"+"Update"+"<a>"+" Event is added <br/>";
+           result+="ANSWER  =:"+Data.body+"<a href=/forum/amswer/"+Data.id+">"+"  Update"  +"<a>"+"      ANSWER is added <br/>";
            console.log(result);
             $('#ans').html(result);
             $("#ans").show()
+            $("#u_ans_form"+Data.id).hide()//hiding update form when update form was clicked
+            update_ans_res=''
+            update_ans_res+="ANSWER =:"+Data.description+  "<a class = \"u_ans\" ans-id= \"{{answer.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
+            $(".u_ans#ans_id_"+Data.id).html( update_ans_res).show()
         },
         error:handleFormError,
      })

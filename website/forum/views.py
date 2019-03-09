@@ -399,7 +399,7 @@ def edit_following(request, id):
        else:
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
-    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
 
 @login_required
 def add_comment(request, id):
@@ -456,6 +456,7 @@ def add_comment(request, id):
 
 @login_required
 def update_comment(request, id):
+    print(id)
     try:
         comment =get_object_or_404(Comments, pk=id)
         question=comment.question
@@ -464,6 +465,8 @@ def update_comment(request, id):
     else:
         form = Commentform(request.POST or None, instance=comment)
         if form.is_valid():
+            print("id jsdcj  " )
+            print(id)
             if request.user == comment.user:
               f=form.save()
               profiles = Profile.objects.filter(role=2)
@@ -519,7 +522,7 @@ def voting(request, id):
        else:
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
-    return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
 
 
 
@@ -602,7 +605,7 @@ def add_comment_answer(request, id):
             if msg not in messages:
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
-        return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
+        return HttpResponseRedirect(reverse('forum:detail_questions', args=(question_id.id,)))
 
     return render(request, 'forum/comment.html', {'form': form})
 
@@ -646,6 +649,6 @@ def update_comment_answer(request, id):
                   if msg not in messages:
                      messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponseRedirect(reverse('detail_questions', args=(question_id.id,)))
+            return HttpResponseRedirect(reverse('forum:detail_questions', args=(question_id.id,)))
 
     return render(request, 'forum/comment.html', {'form': form, 'comment': comment})

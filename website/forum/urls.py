@@ -3,8 +3,11 @@ from .views import *
 from django.conf.urls import include,url
 from django.conf import settings
 from django.conf.urls.static import static
+from user_profile import urls
 
+app_name="forum"
 urlpatterns = [
+    path('profile/', include('user_profile.urls')),
     path('add', add_question, name='add_question'),
     path('', list_questions ,name='list_questions'),
     path('detail/<int:id>/', detail_questions, name='detail_questions'),

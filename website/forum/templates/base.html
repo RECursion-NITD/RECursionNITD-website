@@ -76,7 +76,7 @@
     <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
         <ul class="navbar-nav ml-auto flex-nowrap"> 
             <li class="nav-item active">
-                <a href="{% url 'list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
+                <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link m-2 menu-item">Events</a>
@@ -91,7 +91,7 @@
               <li class="dropdown nav-link m-2 menu-item">
               <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Manage Account<span class="caret"></span></a>
                 <ul class="dropdown-menu" style="padding: 2px;color:black;">
-                  <li ><a  href="{% url 'list_questions' %}">Forum</a></li>
+                  <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li>
                   <li><a href="#">View Account</a></li>
                   <li><a href="#">Edit Account</a></li>
                   <li><a href="#">View my questions</a></li>

@@ -20,15 +20,15 @@ from django.conf.urls import url, include
 from forum import views
 
 urlpatterns = [
-    path('',include('forum.urls')),
-    path('profile/',include('user_profile.urls')),
+   
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('forum.urls')),
-    path('events/',include('events.urls')),
-    path('profile/',include('user_profile.urls')),
+    path('forum/',include('forum.urls',namespace='forum')),
+    path('events/',include('events.urls',namespace='events')),
+    path('profile/',include('user_profile.urls',namespace='user_profile')),
+    url(r'^markdownx/', include('markdownx.urls')),
 
 ]

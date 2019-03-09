@@ -15,7 +15,7 @@
 {% block content %}
   <center>
     <h1 id="haveAQ">Have a question?</h1>
-    <a class="waves-effect waves-light btn" href="{% url 'add_question' %}">
+    <a class="waves-effect waves-light btn" href="{% url 'forum:add_question' %}">
       <button type="button" class="btn btn-outline-primary">
       Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button></a>
         <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
@@ -48,7 +48,7 @@
                   </li>
                 <div class="col-sm-6">
                   <div>
-                  <a id="questionDetail" href="{% url 'detail_questions' question.id  %}"><strong>{{ question.title }}</strong></a><br></div>
+                  <a id="questionDetail" href="{% url 'forum:detail_questions' question.id  %}"><strong>{{ question.title }}</strong></a><br></div>
                   <li id="postedOn" class="text-muted">{{question.created_at}}</li>
                 </div>
                 <div class="col-sm-6 col-lg-3">
