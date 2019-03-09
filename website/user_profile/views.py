@@ -49,6 +49,9 @@ def view_profile(request, id):
 
 
 def user_register(request):
+    if request.user.is_authenticated :
+        id=request.user.id
+        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
     form = SignUpForm(request.POST or None)
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
