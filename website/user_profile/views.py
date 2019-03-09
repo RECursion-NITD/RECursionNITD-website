@@ -32,6 +32,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import *
+import random
 
 def view_profile(request, id):
     try:
@@ -104,22 +105,23 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
 
 @login_required
 def edit_profile(request):
-    form = Profileform(request.POST or None)
     user = request.user
     id = user.id
     profile = get_object_or_404(Profile, user=user)
-    form = Profileform(request.POST or None, instance=profile)
+    form = Profileform(request.POST or None, request.FILES or None,  instance=profile)
     if form.is_valid():
-        image_url = form.cleaned_data['image_url']
-        type = valid_url_extension(image_url)
-        full_path = 'media/images/' + profile.user.username + '.png'
-        try:
-            urllib.request.urlretrieve(image_url, full_path)
-        except:
-            return HttpResponse("Downloadable Image Not Found!")
-        if profile.user == request.user:
-            profile.image = '../' + full_path
-            form.save()
+        form.save()
+        if form.cleaned_data['image'] is None:
+          image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
+          type = valid_url_extension(image_url)
+          full_path = 'media/images/' + profile.user.username + '.png'
+          try:
+              urllib.request.urlretrieve(image_url, full_path)
+          except:
+              return HttpResponse("Downloadable Image Not Found!")
+          if profile.user == request.user:
+              profile.image = '../' + full_path
+              form.save()
         return HttpResponseRedirect(reverse('view_profile', args=(id,)))
     return render(request, 'create.html', {'form': form, })
 

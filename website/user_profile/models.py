@@ -10,6 +10,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+import os
+
+def content_file_name(instance,filename):
+	print("dfdfdfdf")
+	ext="png"
+	filename="%s.%s" % (instance.user.username,ext)
+	return os.path.join('images/',filename)
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -23,7 +30,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=50, choices=role_choices ,default='3')
     dept = models.CharField(max_length=20, blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
-    image = models.ImageField(blank=True, null=True, upload_to='images/')
+    image = models.ImageField(blank=True, null=True, upload_to=content_file_name)
     nickname = models.CharField(max_length=100, blank=True, null=True)
     email_confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
