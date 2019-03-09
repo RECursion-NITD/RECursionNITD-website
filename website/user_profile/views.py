@@ -33,7 +33,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import *
 
-def view_profile(request, id):
+def view_profile(request, id=None):
+    print(id)
+    if id == None:
+        id = request.user.id
     try:
         user = get_object_or_404(User, pk=id)
     except:
