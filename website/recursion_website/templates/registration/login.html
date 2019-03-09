@@ -19,7 +19,10 @@
         {% render_field form.password class="form-control ml-2 mr-2" style="background:white;" placeholder="Password" %}
       </p>
     </center>
-      <button type="submit"class="btn btn-outline-success"style="float:right;">Login</button>
+    <!-- SIGN UP -->
+      <a href="{% url 'user_register' %}" class="btn btn-outline-success ml-2"style="float:left;">Signup</a>
+      <!-- LOGIN  -->
+      <button type="submit" class="btn btn-outline-success"style="float:right;">Login</button>
     </form>
     <div class="col-sm-10 col-md-5 col-lg-5" style="margin-top: auto;margin-bottom: auto;">
       <div style="background-color:#343A40;padding:10px;border-radius: 4px;margin-right:2vw; float:left;
