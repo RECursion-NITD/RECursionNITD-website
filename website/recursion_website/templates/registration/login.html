@@ -20,6 +20,9 @@
       </p>
     </center>
       <button type="submit"class="btn btn-outline-success"style="float:right;">Login</button>
+      {% if form.errors %}
+         <p class="text-warning">Username or Password is Incorrect!</p>
+      {% endif %}
     </form>
     <div class="col-sm-10 col-md-5 col-lg-5" style="margin-top: auto;margin-bottom: auto;">
       <div style="background-color:#343A40;padding:10px;border-radius: 4px;margin-right:2vw; float:left;
