@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
 from user_profile.models import Profile
+from events.models import Events
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
@@ -40,7 +41,10 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def home(request):
-    return render(request, 'home.html')
+    n=3
+    events=Events.objects.all().order_by('-start_time')[:n:1]
+    args={'events':events,}
+    return render(request, 'home.html', args)
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -176,11 +180,11 @@ def detail_questions(request, id):
     except:
         return HttpResponse("id does not exist")
     answers = Answers.objects.filter(question_id = questions)
-    follows = Follows.objects.all(question = questions)
+    follows = Follows.objects.filter(question = questions)
     tags = Tags.objects.all()
     taggings = Taggings.objects.all()
     upvotes=Upvotes.objects.all()
-    comments=Comments.objects.all(question = questions)
+    comments=Comments.objects.filter(question = questions)
     comments_answers=Comments_Answers.objects.all()
     if User.objects.filter(username=request.user).exists():
         ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
@@ -190,9 +194,12 @@ def detail_questions(request, id):
             ans = None
     else:
         ans=None
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    user_permission = user_profile.role
+    if request.user.is_authenticated:
+        user = request.user
+        user_profile = Profile.objects.get(user=user)
+        user_permission = user_profile.role
+    else:
+        user_permission = '10'
     flag=0
     id_list = []
     if User.objects.filter(username=request.user).exists():
