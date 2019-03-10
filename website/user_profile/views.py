@@ -33,6 +33,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import *
 import random
+from recursion_website.models import *
+
 
 def view_profile(request, id):
     try:
@@ -44,8 +46,28 @@ def view_profile(request, id):
         profile = get_object_or_404(Profile, user=user)
     except:
         return HttpResponse("User has not created a Profile yet!")
-
-    args = {'profile': profile, }
+    questions = Questions.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    answers = Answers.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    comments = Comments.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    comments_ans= Comments_Answers.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    required = []
+    for question in questions:
+        required.append(question)
+    for answer in answers:
+        required.append(answer)
+    for comment in comments:
+        required.append(comment)
+    for com_a in comments_ans:
+        required.append(com_a)
+    required.sort(key=lambda x: x.updated_at, reverse=True)
+    activity=[]
+    k=0
+    for req in required:
+        activity.append(req)
+        k+=1
+        if k == 10:
+            break
+    args = {'profile': profile, 'activity':activity, }
     return render(request, 'profile/profile.html', args)
 
 

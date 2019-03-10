@@ -24,6 +24,20 @@
                  <li>Nickname: {{ profile.nickname }}</li>
                  <li>Joined RECursion: {{ profile.created_at }}</li>
              </ul>
+             <li>Recent Activity</li>
+             <ul>
+                 {% for act in activity %}
+                    {% if act.get_cname == "Question" %}
+                      <li>Question: {{ act.title }}</li>
+                    {% elif act.get_cname == "Answer" %}
+                      <li>Answer: {{ act.description }}</li>
+                    {% elif act.get_cname == "Comment" %}
+                      <li>Comment: {{ act.body }}</li>
+                    {% else %}
+                      <li>Comment on Answer: {{ act.body }}</li>
+                    {% endif %}
+                 {% endfor %}
+             </ul>
 
 </body>
 </html>

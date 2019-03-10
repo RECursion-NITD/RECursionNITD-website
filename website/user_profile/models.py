@@ -13,7 +13,6 @@ from django.dispatch import receiver
 import os
 
 def content_file_name(instance,filename):
-	print("dfdfdfdf")
 	ext="png"
 	filename="%s.%s" % (instance.user.username,ext)
 	return os.path.join('images/',filename)
