@@ -58,13 +58,13 @@
            Data=JSON.parse(data)
            Update=Data
            result="";
-           result+="ANSWER  =:"+Data.body+"<a href=/forum/amswer/"+Data.id+">"+"  Update"  +"<a>"+"      ANSWER is added <br/>";
+           result+="ANSWER  =:"+Data.description+"<a href=/forum/answer/"+Data.id+">"+"  Update"  +"<a>"+"      ANSWER is added <br/>";
            console.log(result);
             $('#ans').html(result);
             $("#ans").show()
             $("#u_ans_form"+Data.id).hide()//hiding update form when update form was clicked
             update_ans_res=''
-            update_ans_res+="ANSWER =:"+Data.description+  "<a class = \"u_ans\" ans-id= \"{{answer.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
+            update_ans_res+="ANSWER =:"+ Data.description +  "<a class = \"u_ans\" ans-id= \"{{ans.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
             $(".u_ans#ans_id_"+Data.id).html( update_ans_res).show()
         },
         error:handleFormError,

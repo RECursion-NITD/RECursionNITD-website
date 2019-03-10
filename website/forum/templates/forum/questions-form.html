@@ -58,7 +58,7 @@
       {{ form.description.label_tag }}
       {% render_field form.description class="form-control" placeholder="Write Details, MarkDown is supported" %}
       Uncheck This To Ask Anonymously :- {% render_field form.visibility class="form-control" %}
-
+      {{form.errors}}<!-- todo render each error per field -->
       Tags : {{form2}}
 
       <button type="submit" class="save btn btn-primary">SAVE</button>

@@ -35,6 +35,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.core.mail import send_mass_mail
 import json
 import datetime
+import html2markdown
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
@@ -81,47 +82,43 @@ def add_question(request):
 
     Tagform = modelformset_factory(Tags, fields=('name',), extra=5)
     if request.method=='POST':
-         form2 = Tagform(request.POST)
+        form2 = Tagform(request.POST)
+        if form.is_valid() and form2.is_valid():
+            f = form.save(commit=False)
+            f.user_id = request.user
+            form.save()
+            f2 = form2.save(commit=False)
+            tagging_list = []
+            q_id = f.id
+            for item in f2:
+                if Tags.objects.filter(name=item.name).exists():
+                    tag = Tags.objects.get(name=item.name)
+                else:
+                    item.save()
+                    tag=item
+                if tag not in tagging_list:
+                    tagging_list.append(tag)
+
+            bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
+            profiles=Profile.objects.filter(role = 2)
+            messages=()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in AskREC'
+                message = render_to_string('new_question_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'question' : Questions.objects.get(pk=f.id),
+                })
+                msg=(subject, message, 'webmaster@localhost', [user.email])
+                messages += (msg,)
+                result = send_mass_mail(messages, fail_silently=False)
+            return redirect('forum:list_questions')
+
     else:
          form2 = Tagform(queryset=Tags.objects.none())
-    if form.is_valid():
-        description = form.cleaned_data.get('description')
-        if description.__len__() < 10:
-            return HttpResponse("Very Short Question's Description!")
-        f = form.save(commit=False)
-        f.user_id = request.user
-        form.save()
-    if form2.is_valid():
-        f2 = form2.save(commit=False)
-        tagging_list = []
-        q_id = f.id
-        for item in f2:
-            if Tags.objects.filter(name=item.name).exists():
-                tag = Tags.objects.get(name=item.name)
-            else:
-                item.save()
-                tag=item
-            if tag not in tagging_list:
-                tagging_list.append(tag)
-
-        bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
-    if form.is_valid():
-        profiles=Profile.objects.filter(role = 2)
-        messages=()
-        for profile in profiles:
-           user = profile.user
-           current_site = get_current_site(request)
-           subject = 'New Activity in AskREC'
-           message = render_to_string('new_question_entry_email.html', {
-              'user': user,
-              'domain': current_site.domain,
-              'question' : Questions.objects.get(pk=f.id),
-           })
-           msg=(subject, message, 'webmaster@localhost', [user.email])
-           messages += (msg,)
-        result = send_mass_mail(messages, fail_silently=False)
-        return redirect('list_questions')
-
+    
     return render(request, 'forum/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
@@ -201,14 +198,11 @@ def update_questions(request, id):
     Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
-        if form.is_valid():
+        if form.is_valid() and  form2.is_valid():
             description = form.cleaned_data.get('description')
-            if description.__len__() < 10:
-                return HttpResponse("Very Short Question's Description!")
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
-        if form2.is_valid():
             to_del = Taggings.objects.filter(question=question)  # delete all prev taggings
             if to_del.exists():
                 to_del.delete()
@@ -252,14 +246,16 @@ def update_questions(request, id):
                 if msg not in messages:
                     messages += (msg,)
             result = send_mass_mail(messages, fail_silently=False)
-            return redirect('list_questions')
+            return redirect('forum:list_questions')
     else:
+        question.description = html2markdown.convert(question.description)
+        form = Questionform(instance=question) 
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
         form2 = Tagform(queryset=Tags.objects.filter(id__in=id_list))  # populate form with tags
 
-        return render(request, 'forum/questions-form.html', {'form': form, 'form2': form2, 'question': question})
+    return render(request, 'forum/questions-form.html', {'form': form, 'form2': form2, 'question': question})
 
 @login_required
 def add_answer(request, id):
@@ -339,48 +335,51 @@ def update_answer(request, id):
         return HttpResponse("id does not exist")
     else:
         form = Answerform(request.POST or None, instance=answer)
-        if form.is_valid():
-            description = form.cleaned_data.get('description')
-            if description.__len__() < 10:
-                return HttpResponse("Very Short Answer!")
-            if request.user == answer.user_id:
-              f=form.save()
-              profiles = Profile.objects.filter(role=2)
-              follows=Follows.objects.filter(question=question)
-              messages = ()
-              for profile in profiles:
-                  user = profile.user
-                  current_site = get_current_site(request)
-                  subject = 'New Activity in AskREC'
-                  message = render_to_string('answer_update_email.html', {
-                      'user': user,
-                      'domain': current_site.domain,
-                      'question': question,
-                  })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
-                  messages += (msg,)
-              for follow in follows:
-                  user = follow.user
-                  current_site = get_current_site(request)
-                  subject = 'New Activity in AskREC'
-                  message = render_to_string('answer_update_email.html', {
-                      'user': user,
-                      'domain': current_site.domain,
-                      'question': question,
-                  })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
-                  if msg not in messages:
-                     messages += (msg,)
-              result = send_mass_mail(messages, fail_silently=False)
-              return HttpResponse(json.dumps({
-                  'id':f.id,
-                  'description':f.description,
-                  'created_at' :f.created_at,
-                  'updated_at' :f.updated_at,
-                  'user_id':request.user.username,
-                  'Success':'Success'
-                    }))
-       
+        if request.method == 'POST':
+            if form.is_valid():
+                description = form.cleaned_data.get('description')
+                if description.__len__() < 10:
+                    return HttpResponse("Very Short Answer!")
+                if request.user == answer.user_id:
+                    f=form.save()
+                    profiles = Profile.objects.filter(role=2)
+                    follows=Follows.objects.filter(question=question)
+                    messages = ()
+                    for profile in profiles:
+                        user = profile.user
+                        current_site = get_current_site(request)
+                        subject = 'New Activity in AskREC'
+                        message = render_to_string('answer_update_email.html', {
+                            'user': user,
+                            'domain': current_site.domain,
+                            'question': question,
+                        })
+                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        messages += (msg,)
+                    for follow in follows:
+                        user = follow.user
+                        current_site = get_current_site(request)
+                        subject = 'New Activity in AskREC'
+                        message = render_to_string('answer_update_email.html', {
+                            'user': user,
+                            'domain': current_site.domain,
+                            'question': question,
+                        })
+                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        if msg not in messages:
+                            messages += (msg,)
+                    result = send_mass_mail(messages, fail_silently=False)
+                    return HttpResponse(json.dumps({
+                        'id':f.id,
+                        'description':f.description,
+                        'created_at' :f.created_at,
+                        'updated_at' :f.updated_at,
+                        'user_id':request.user.username,
+                        'Success':'Success'
+                            }))
+        
+        answer.description=html2markdown.convert(answer.description)
+        form=Answerform(instance=answer)
 
 
     return render(request, 'forum/answer.html', {'upform': form, 'ans': answer})
@@ -463,48 +462,51 @@ def update_comment(request, id):
     except:
         return HttpResponse("id does not exist")
     else:
-        form = Commentform(request.POST or None, instance=comment)
-        if form.is_valid():
-            print("id jsdcj  " )
-            print(id)
-            if request.user == comment.user:
-              f=form.save()
-              profiles = Profile.objects.filter(role=2)
-              follows=Follows.objects.filter(question=question)
-              messages = ()
-              for profile in profiles:
-                  user = profile.user
-                  current_site = get_current_site(request)
-                  subject = 'New Activity in AskREC'
-                  message = render_to_string('update_comment_email.html', {
-                      'user': user,
-                      'domain': current_site.domain,
-                      'question': question,
-                  })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
-                  messages += (msg,)
-              for follow in follows:
-                  user = follow.user
-                  current_site = get_current_site(request)
-                  subject = 'New Activity in AskREC'
-                  message = render_to_string('update_comment_email.html', {
-                      'user': user,
-                      'domain': current_site.domain,
-                      'question': question,
-                  })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
-                  if msg not in messages:
-                     messages += (msg,)
-              result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponse(json.dumps({
-              'id':f.id,
-              'body':f.body,
-              'created_at' :f.created_at,
-              'updated_at' :f.updated_at,
-              'user_id':request.user.username,
-              'Success':'Success'
-            }))
-
+        if request.method == 'POST':
+            form = Commentform(request.POST or None, instance=comment)
+            if form.is_valid():
+                print("id jsdcj  " )
+                print(id)
+                if request.user == comment.user:
+                    f=form.save()
+                    profiles = Profile.objects.filter(role=2)
+                    follows=Follows.objects.filter(question=question)
+                    messages = ()
+                    for profile in profiles:
+                        user = profile.user
+                        current_site = get_current_site(request)
+                        subject = 'New Activity in AskREC'
+                        message = render_to_string('update_comment_email.html', {
+                            'user': user,
+                            'domain': current_site.domain,
+                            'question': question,
+                        })
+                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        messages += (msg,)
+                    for follow in follows:
+                        user = follow.user
+                        current_site = get_current_site(request)
+                        subject = 'New Activity in AskREC'
+                        message = render_to_string('update_comment_email.html', {
+                            'user': user,
+                            'domain': current_site.domain,
+                            'question': question,
+                        })
+                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        if msg not in messages:
+                            messages += (msg,)
+                    result = send_mass_mail(messages, fail_silently=False)
+                    return HttpResponse(json.dumps({
+                    'id':f.id,
+                    'body':f.body,
+                    'created_at' :f.created_at,
+                    'updated_at' :f.updated_at,
+                    'user_id':request.user.username,
+                    'Success':'Success'
+                    }))
+        
+        comment.body=html2markdown.convert(comment.body)
+        form=Commentform(instance=comment)
     return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})
 
 @login_required
