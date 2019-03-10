@@ -101,7 +101,7 @@ class Comments(models.Model):
         return self.body
 
     def get_cname(self):
-        class_name = "Answer"
+        class_name = "Comment"
         return class_name
 
     class Meta:
