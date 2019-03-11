@@ -16,6 +16,7 @@ urlpatterns = [
         password_reset_confirm, name='password_reset_confirm'),
     path('reset/done/', password_reset_complete, name='password_reset_complete'),
     path('viewprofile/<int:id>/', view_profile, name='view_profile'),
+    path('viewprofile/', view_profile, name='view_profile'),
     path('register/', user_register, name="user_register"),
     path('editprofile/', edit_profile, name='edit_profile'),
     url(r'^markdownx/', include('markdownx.urls')),

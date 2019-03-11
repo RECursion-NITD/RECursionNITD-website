@@ -31,9 +31,12 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.models import *
 
-
-def view_profile(request, id):
+def view_profile(request, id=None):
+    print(id)
+    if id == None:
+        id = request.user.id
     try:
         user = get_object_or_404(User, pk=id)
     except:
@@ -53,6 +56,8 @@ def user_register(request):
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
+              if User.objects.filter(email=form.cleaned_data['email']).exists():
+                  return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False
               user.save()
@@ -65,9 +70,14 @@ def user_register(request):
                   'token': account_activation_token.make_token(user),
               })
               user.email_user(subject, message)
+              print("sddsdsdsd")
               return HttpResponse("Please confirm your email address to complete the Registration. ")
+          if form.errors:
+              for field in form:
+                  for error in field.errors:
+                      return HttpResponse(error)
           form = EmailForm(None)
-          return HttpResponse('Invalid Credentials!')
+
     return render(request, 'register.html', {'form': form})
 
 
@@ -99,42 +109,37 @@ def edit_profile(request):
     id = user.id
     profile = get_object_or_404(Profile, user=user)
     form = Profileform(request.POST or None, instance=profile)
-    if request.POST.get('ajax_check') == "True":
-      if form.is_valid():
-          image_url = form.cleaned_data['image_url']
-          type = valid_url_extension(image_url)
-          full_path = 'media/images/' + profile.user.username + '.png'
-          try:
-              urllib.request.urlretrieve(image_url, full_path)
-          except:
-              return HttpResponse("Downloadable Image Not Found!")
-          if profile.user == request.user:
-              profile.image = '../' + full_path
-              form.save()
-              return HttpResponse('Information Updated Successfully!')
-      form = Profileform(None)
-      return HttpResponse('Invalid Credentials!')
+    if form.is_valid():
+        image_url = form.cleaned_data['image_url']
+        type = valid_url_extension(image_url)
+        full_path = 'media/images/' + profile.user.username + '.png'
+        try:
+            urllib.request.urlretrieve(image_url, full_path)
+        except:
+            return HttpResponse("Downloadable Image Not Found!")
+        if profile.user == request.user:
+            profile.image = '../' + full_path
+            form.save()
+        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
     return render(request, 'create.html', {'form': form, })
 
 
 @login_required
 def change_password(request):
-    form = PasswordChangeForm(request.user, request.POST or None)
     if request.method == 'POST':
-        if request.POST.get('ajax_check') == "True":
-          if form.is_valid():
-              user = form.save()
-              update_session_auth_hash(request, user)  # Important!
-              messages.success(request, 'Your password was successfully updated!')
-              return HttpResponse("Password Changed Successfully!")
-          else:
-              messages.error(request, 'Please correct the Error below.')
-          form = PasswordChangeForm(request.user)
-          return HttpResponse('Invalid Credentials!')
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('edit_profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
     return render(request, 'registration/change_password.html', {
         'form': form
     })
-
 
 def password_reset(request):
     form = EmailForm(request.POST or None)
@@ -142,8 +147,8 @@ def password_reset(request):
         if request.POST.get('ajax_check') == "True":
           if form.is_valid():
               email = form.cleaned_data['email']
-              if (User.objects.filter(email=email).count() > 1):
-                  return HttpResponse("Email Already Used!")
+              if not User.objects.filter(email=email).exists():
+                  return HttpResponse("No user with that Email exists.")
               user = User.objects.get(email=email)
               user.save()
               current_site = get_current_site(request)

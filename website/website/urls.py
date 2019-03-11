@@ -18,7 +18,8 @@ from django.contrib.auth import views as auth_views
 from django.urls import path,include
 from django.conf.urls import url, include
 from forum import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
    
     path('admin/', admin.site.urls),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('forum/',include('forum.urls',namespace='forum')),
     path('events/',include('events.urls',namespace='events')),
     path('profile/',include('user_profile.urls',namespace='user_profile')),
+    path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

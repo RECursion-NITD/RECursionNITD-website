@@ -20,7 +20,7 @@ class Questions(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    visibility = models.BooleanField(default=True)
+    anonymous_ask = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
@@ -39,7 +39,7 @@ class Answers(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
     user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    question_id = models.ForeignKey(Questions, on_delete=models.DO_NOTHING)
+    question_id = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.description
@@ -81,7 +81,7 @@ class Answers(models.Model):
 class Comments(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, models.DO_NOTHING)
-    question = models.ForeignKey(Questions, models.DO_NOTHING)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     # TO DO
     # AUTOGEN DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -99,7 +99,7 @@ class Comments(models.Model):
 class Comments_Answers(models.Model):
     body = models.TextField()
     user = models.ForeignKey(User, models.DO_NOTHING)
-    answer = models.ForeignKey(Answers, models.DO_NOTHING)
+    answer = models.ForeignKey(Answers, on_delete=models.CASCADE)
     # TO DO
     # AUTOGEN DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -193,7 +193,7 @@ class Taggings(models.Model):
 # DONE
 class Upvotes(models.Model):
     user = models.ForeignKey(User, models.DO_NOTHING)
-    answer = models.ForeignKey(Answers, models.DO_NOTHING)
+    answer = models.ForeignKey(Answers, on_delete=models.CASCADE)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)

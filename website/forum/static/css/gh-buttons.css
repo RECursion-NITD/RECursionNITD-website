@@ -1,0 +1,401 @@
+/* ------------------------------------------
+ * CSS3 GITHUB button_ghS (Nicolas Gallagher)
+ * Licensed under Unlicense
+ * http://github.com/necolas/css3-github-button_ghs
+ * --------------------------------------- */
+
+
+/* =============================================================================
+   Base button_gh
+   ========================================================================== */
+
+.button_gh {
+    position: relative;
+    overflow: visible;
+    display: inline-block;
+    padding: 0.5em 1em;
+    border: 1px solid #d4d4d4;
+    margin: 0;
+    text-decoration: none;
+    text-align: center;
+    text-shadow: 1px 1px 0 #fff;
+    font:11px/normal sans-serif;
+    color: #333;
+    white-space: nowrap;
+    cursor: pointer;
+    outline: none;
+    background-color: #ececec;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#f4f4f4), to(#ececec));
+    background-image: -moz-linear-gradient(#f4f4f4, #ececec);
+    background-image: -ms-linear-gradient(#f4f4f4, #ececec);
+    background-image: -o-linear-gradient(#f4f4f4, #ecPecec);
+    background-image: linear-gradient(#f4f4f4, #ececec);
+    -moz-background-clip: padding; /* for Firefox 3.6 */
+    background-clip: padding-box;
+    border-radius: 0.2em;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+.button_gh:hover,
+.button_gh:focus,
+.button_gh:active,
+.button_gh.active {
+    border-color: #3072b3;
+    border-bottom-color: #2a65a0;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #fff;
+    background-color: #3c8dde;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#599bdc), to(#3072b3));
+    background-image: -moz-linear-gradient(#599bdc, #3072b3);
+    background-image: -o-linear-gradient(#599bdc, #3072b3);
+    background-image: linear-gradient(#599bdc, #3072b3);
+}
+
+.button_gh:active,
+.button_gh.active {
+    border-color: #2a65a0;
+    border-bottom-color: #3884cd;
+    background-color: #3072b3;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#3072b3), to(#599bdc));
+    background-image: -moz-linear-gradient(#3072b3, #599bdc);
+    background-image: -ms-linear-gradient(#3072b3, #599bdc);
+    background-image: -o-linear-gradient(#3072b3, #599bdc);
+    background-image: linear-gradient(#3072b3, #599bdc);
+}
+
+/* overrides extra padding on button_gh elements in Firefox */
+.button_gh::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+
+/* =============================================================================
+   button_gh icons
+   ========================================================================== */
+
+.button_gh.icon:before {
+    content: "";
+    position: relative;
+    top: 1px;
+    float:left;
+    width: 12px;
+    height: 12px;
+    margin: 0 0.75em 0 -0.25em;
+    background: url(gh-icons.png) 0 99px no-repeat;
+}
+
+.button_gh.arrowup.icon:before { background-position: 0 0; }
+.button_gh.arrowup.icon:hover:before,
+.button_gh.arrowup.icon:focus:before,
+.button_gh.arrowup.icon:active:before { background-position: -12px 0; }
+
+.button_gh.arrowdown.icon:before { background-position: 0 -12px; }
+.button_gh.arrowdown.icon:hover:before,
+.button_gh.arrowdown.icon:focus:before,
+.button_gh.arrowdown.icon:active:before { background-position: -12px -12px; }
+
+.button_gh.arrowleft.icon:before { background-position: 0 -24px; }
+.button_gh.arrowleft.icon:hover:before,
+.button_gh.arrowleft.icon:focus:before,
+.button_gh.arrowleft.icon:active:before { background-position: -12px -24px; }
+
+.button_gh.arrowright.icon:before { float:right; margin: 0 -0.25em 0 0.5em; background-position: 0 -36px; }
+.button_gh.arrowright.icon:hover:before,
+.button_gh.arrowright.icon:focus:before,
+.button_gh.arrowright.icon:active:before { background-position: -12px -36px; }
+
+.button_gh.approve.icon:before { background-position: 0 -48px; }
+.button_gh.approve.icon:hover:before,
+.button_gh.approve.icon:focus:before,
+.button_gh.approve.icon:active:before { background-position: -12px -48px; }
+
+.button_gh.add.icon:before { background-position: 0 -288px; }
+.button_gh.add.icon:hover:before,
+.button_gh.add.icon:focus:before,
+.button_gh.add.icon:active:before { background-position: -12px -288px; }
+
+.button_gh.remove.icon:before { background-position: 0 -60px; }
+.button_gh.remove.icon:hover:before,
+.button_gh.remove.icon:focus:before,
+.button_gh.remove.icon:active:before { background-position: -12px -60px; }
+
+.button_gh.log.icon:before { background-position: 0 -72px; }
+.button_gh.log.icon:hover:before,
+.button_gh.log.icon:focus:before,
+.button_gh.log.icon:active:before { background-position: -12px -72px; }
+
+.button_gh.calendar.icon:before { background-position: 0 -84px; }
+.button_gh.calendar.icon:hover:before,
+.button_gh.calendar.icon:focus:before,
+.button_gh.calendar.icon:active:before { background-position: -12px -84px; }
+
+.button_gh.chat.icon:before { background-position: 0 -96px; }
+.button_gh.chat.icon:hover:before,
+.button_gh.chat.icon:focus:before,
+.button_gh.chat.icon:active:before { background-position: -12px -96px; }
+
+.button_gh.clock.icon:before { background-position: 0 -108px; }
+.button_gh.clock.icon:hover:before,
+.button_gh.clock.icon:focus:before,
+.button_gh.clock.icon:active:before { background-position: -12px -108px; }
+
+.button_gh.settings.icon:before { background-position: 0 -120px; }
+.button_gh.settings.icon:hover:before,
+.button_gh.settings.icon:focus:before,
+.button_gh.settings.icon:active:before { background-position: -12px -120px; }
+
+.button_gh.comment.icon:before { background-position: 0 -132px; }
+.button_gh.comment.icon:hover:before,
+.button_gh.comment.icon:focus:before,
+.button_gh.comment.icon:active:before { background-position: -12px -132px; }
+
+.button_gh.fork.icon:before { background-position: 0 -144px; }
+.button_gh.fork.icon:hover:before,
+.button_gh.fork.icon:focus:before,
+.button_gh.fork.icon:active:before { background-position: -12px -144px; }
+
+.button_gh.like.icon:before { background-position: 0 -156px; }
+.button_gh.like.icon:hover:before,
+.button_gh.like.icon:focus:before,
+.button_gh.like.icon:active:before { background-position: -12px -156px; }
+
+.button_gh.favorite.icon:before { background-position: 0 -348px; }
+.button_gh.favorite.icon:hover:before,
+.button_gh.favorite.icon:focus:before,
+.button_gh.favorite.icon:active:before { background-position: -12px -348px; }
+
+.button_gh.home.icon:before { background-position: 0 -168px; }
+.button_gh.home.icon:hover:before,
+.button_gh.home.icon:focus:before,
+.button_gh.home.icon:active:before { background-position: -12px -168px; }
+
+.button_gh.key.icon:before { background-position: 0 -180px; }
+.button_gh.key.icon:hover:before,
+.button_gh.key.icon:focus:before,
+.button_gh.key.icon:active:before { background-position: -12px -180px; }
+
+.button_gh.lock.icon:before { background-position: 0 -192px; }
+.button_gh.lock.icon:hover:before,
+.button_gh.lock.icon:focus:before,
+.button_gh.lock.icon:active:before { background-position: -12px -192px; }
+
+.button_gh.unlock.icon:before { background-position: 0 -204px; }
+.button_gh.unlock.icon:hover:before,
+.button_gh.unlock.icon:focus:before,
+.button_gh.unlock.icon:active:before { background-position: -12px -204px; }
+
+.button_gh.loop.icon:before { background-position: 0 -216px; }
+.button_gh.loop.icon:hover:before,
+.button_gh.loop.icon:focus:before,
+.button_gh.loop.icon:active:before { background-position: -12px -216px; }
+
+.button_gh.search.icon:before { background-position: 0 -228px; }
+.button_gh.search.icon:hover:before,
+.button_gh.search.icon:focus:before,
+.button_gh.search.icon:active:before { background-position: -12px -228px; }
+
+.button_gh.mail.icon:before { background-position: 0 -240px; }
+.button_gh.mail.icon:hover:before,
+.button_gh.mail.icon:focus:before,
+.button_gh.mail.icon:active:before { background-position: -12px -240px; }
+
+.button_gh.move.icon:before { background-position: 0 -252px; }
+.button_gh.move.icon:hover:before,
+.button_gh.move.icon:focus:before,
+.button_gh.move.icon:active:before { background-position: -12px -252px; }
+
+.button_gh.edit.icon:before { background-position: 0 -264px; }
+.button_gh.edit.icon:hover:before,
+.button_gh.edit.icon:focus:before,
+.button_gh.edit.icon:active:before { background-position: -12px -264px; }
+
+.button_gh.pin.icon:before { background-position: 0 -276px; }
+.button_gh.pin.icon:hover:before,
+.button_gh.pin.icon:focus:before,
+.button_gh.pin.icon:active:before { background-position: -12px -276px; }
+
+.button_gh.reload.icon:before { background-position: 0 -300px; }
+.button_gh.reload.icon:hover:before,
+.button_gh.reload.icon:focus:before,
+.button_gh.reload.icon:active:before { background-position: -12px -300px; }
+
+.button_gh.rss.icon:before { background-position: 0 -312px; }
+.button_gh.rss.icon:hover:before,
+.button_gh.rss.icon:focus:before,
+.button_gh.rss.icon:active:before { background-position: -12px -312px; }
+
+.button_gh.tag.icon:before { background-position: 0 -324px; }
+.button_gh.tag.icon:hover:before,
+.button_gh.tag.icon:focus:before,
+.button_gh.tag.icon:active:before { background-position: -12px -324px; }
+
+.button_gh.trash.icon:before { background-position: 0 -336px; }
+.button_gh.trash.icon:hover:before,
+.button_gh.trash.icon:focus:before,
+.button_gh.trash.icon:active:before { background-position: -12px -336px; }
+
+.button_gh.user.icon:before { background-position: 0 -360px; }
+.button_gh.user.icon:hover:before,
+.button_gh.user.icon:focus:before,
+.button_gh.user.icon:active:before { background-position: -12px -360px; }
+
+
+/* =============================================================================
+   button_gh extensions
+   ========================================================================== */
+
+/* Primary button_gh
+   ========================================================================== */
+
+.button_gh.primary {
+    font-weight: bold;
+}
+
+/* Danger button_gh
+   ========================================================================== */
+
+.button_gh.danger {
+    color: #900;
+}
+
+.button_gh.danger:hover,
+.button_gh.danger:focus,
+.button_gh.danger:active {
+    border-color: #b53f3a;
+    border-bottom-color: #a0302a;
+    color: #fff;
+    background-color: #dc5f59;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#dc5f59), to(#b33630));
+    background-image: -moz-linear-gradient(#dc5f59, #b33630);
+    background-image: -ms-linear-gradient(#dc5f59, #b33630);
+    background-image: -o-linear-gradient(#dc5f59, #b33630);
+    background-image: linear-gradient(#dc5f59, #b33630);
+}
+
+.button_gh.danger:active,
+.button_gh.danger.active {
+    border-color: #a0302a;
+    border-bottom-color: #bf4843;
+    background-color: #b33630;
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#b33630), to(#dc5f59));
+    background-image: -moz-linear-gradient(#b33630, #dc5f59);
+    background-image: -ms-linear-gradient(#b33630, #dc5f59);
+    background-image: -o-linear-gradient(#b33630, #dc5f59);
+    background-image: linear-gradient(#b33630, #dc5f59);
+}
+
+/* Pill button_gh
+   ========================================================================== */
+
+.button_gh.pill {
+    border-radius: 50em;
+}
+
+/* Disabled button_gh
+   ========================================================================== */
+
+.button_gh.disable {
+    opacity: 0.5;
+}
+
+/* Big button_gh
+   ========================================================================== */
+
+.button_gh.big {
+    font-size: 14px;
+}
+
+.button_gh.big.icon:before {
+    top: 0;
+}
+
+
+/* =============================================================================
+   button_gh groups
+   ========================================================================== */
+
+/* Standard group
+   ========================================================================== */
+
+.button_gh-group {
+    display: inline-block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* IE hacks */
+    zoom: 1;
+    *display: inline;
+}
+
+.button_gh + .button_gh,
+.button_gh + .button_gh-group,
+.button_gh-group + .button_gh,
+.button_gh-group + .button_gh-group {
+    margin-left: 15px;
+}
+
+.button_gh-group li {
+    float: left;
+    padding: 0;
+    margin: 0;
+}
+
+.button_gh-group .button_gh {
+    float: left;
+    margin-left: -1px;
+}
+
+.button_gh-group > .button_gh:not(:first-child):not(:last-child),
+.button_gh-group li:not(:first-child):not(:last-child) .button_gh {
+    border-radius: 0;
+}
+
+.button_gh-group > .button_gh:first-child,
+.button_gh-group li:first-child .button_gh {
+    margin-left: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.button_gh-group > .button_gh:last-child,
+.button_gh-group li:last-child > .button_gh {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Minor group
+   ========================================================================== */
+
+.button_gh-group.minor-group .button_gh {
+    border: 1px solid #d4d4d4;
+    text-shadow: none;
+    background-image: none;
+    background-color: #fff;
+}
+
+.button_gh-group.minor-group .button_gh:hover,
+.button_gh-group.minor-group .button_gh:focus {
+    background-color: #599bdc;
+}
+
+.button_gh-group.minor-group .button_gh:active,
+.button_gh-group.minor-group .button_gh.active {
+    background-color: #3072b3;
+}
+
+.button_gh-group.minor-group .button_gh.icon:before {
+    opacity: 0.8;
+}
+
+/* =============================================================================
+   button_gh container (mixing button_ghs and groups, e.g., nav bar)
+   ========================================================================== */
+
+.button_gh-container .button_gh,
+.button_gh-container .button_gh-group {
+    vertical-align: top;
+}
