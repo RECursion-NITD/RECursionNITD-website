@@ -17,22 +17,20 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path,include
 from django.conf.urls import url, include
-from recursion_website import views
+from forum import views
 from django.conf import settings
 from django.conf.urls.static import static
-
 urlpatterns = [
-    path('profile/',include('user_profile.urls')),
+   
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('',include('recursion_website.urls')),
     path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('',include('recursion_website.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('recursion_website.urls')),
-    path('events/',include('events.urls')),
-    path('profile/',include('user_profile.urls')),
+    path('forum/',include('forum.urls',namespace='forum')),
+    path('events/',include('events.urls',namespace='events')),
+    path('profile/',include('user_profile.urls',namespace='user_profile')),
     path('members/',include('members.urls')),
+    url(r'^markdownx/', include('markdownx.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

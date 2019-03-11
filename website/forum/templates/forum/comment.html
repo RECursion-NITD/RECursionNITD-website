@@ -1,0 +1,90 @@
+
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Questions</title>
+</head>
+<body>
+<div class="container">
+<!-- <div class="card" style="margin: 25px; border-radius: 10px;">
+ <h3 style="text-align:center;">Add/Update Comment</h3>
+    <div>
+        <h5 style="text-align:center;">Enter the details below:</h5><br>
+        <form method="POST" style="padding: 25px;">
+          <table>
+             FORM
+          </table>
+              <br>
+          <center><button type="submit" class="save btn btn-primary">SAVE</button></center>
+        </form>
+    </div>
+</div>
+<div > -->
+ <h3>Add/Update Comment</h3>
+    <div >
+
+        <p>Enter the details below:</p><br>
+
+        <form class='my-update1-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+                <table>
+                    {{ upform }}
+                    {{upform.media}}
+                    <input type="hidden" name="ajax_update" value="True">
+                </table>
+                    <br>
+                <button type="submit" class="save btn btn-primary" style="margin-left:150px;">UPDATE</button>
+              </form>
+      </div>
+</div>
+
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("form.my-update1-form").submit(function(task){
+            task.preventDefault()
+            $("#update_com").hide()//hiding update form when new form was added
+            
+            
+
+        var $formData = $(this).serialize()
+        console.log("form  "+$formData)
+            $.ajax({
+        method: "POST",
+        url:$(this).attr('data-url') ,
+        
+        data:$formData ,
+        success: function (data)
+        {
+           console.log("updatweeeeeeeeeee" +data)
+           Data=JSON.parse(data)
+           Update=Data
+           result="";
+           result+="COMMENT  =:"+Data.body+"<a href=/forum/editcomment/"+Data.id+">"+"  Update"  +"<a>"+"      COMMENT is added <br/>";
+           console.log(result);
+            $('#com').html(result);
+            $("#com").show()
+            $("#u_com_form"+Data.id).hide()//hiding update form when update form was clicked
+            update_com_res=''
+            update_com_res+="COMMENTss=:"+Data.body+  "<a class = \"u_com\" com-id= \"{{comment.id}}\"  href=/forum/editcomment/"+Data.id+">Update this Comment</a>"
+            $(".u_com#com_id_"+Data.id).html( update_com_res).show()
+        },
+        error:handleFormError,
+        
+     })
+            })
+            function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+
+        
+    })
+</script>
+</html>
+

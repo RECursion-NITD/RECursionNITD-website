@@ -25,7 +25,7 @@ class Profile(models.Model):
     image_url = models.URLField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to='images/')
     nickname = models.CharField(max_length=100, blank=True, null=True)
-    email_confirmed = models.BooleanField(default=False)
+    #email_confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
 

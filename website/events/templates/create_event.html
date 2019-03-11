@@ -18,7 +18,7 @@
         <div >
 
                 <p>Enter the details below:</p><br>
-                <form action = "{% url 'event_create' %}" method="POST" >
+                <form action = "{% url 'event:event_create' %}" method="POST" >
                   {% csrf_token %}
                   <table>
                       {{ form }}
@@ -40,4 +40,3 @@
 
 
 </body>
-

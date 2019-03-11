@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+    {% block title %}Dashboard{% endblock %}
+{% block css %}
+    {% load static  %}
+    <link rel="stylesheet" href="{% static 'css/question_css.css'%}">
+{% endblock %}
+<body>
+<div>
+{% csrf_token %}
+ <!--<h1 >Dashboard</h1>-->
+
+    <!-- navigation bar -->
+    {% block nav  %}
+    {% endblock%}
+{% block content %}
+  <center>
+    <h1 id="haveAQ">Have a question?</h1>
+    <a class="waves-effect waves-light btn" href="{% url 'forum:add_question' %}">
+      <button type="button" class="btn btn-outline-primary">
+      Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button></a>
+        <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
+        <input type="text" name="search" placeholder="Search Tag">
+        <!--<form class="form-inline my-2 my-lg-0" style="float: right;position: relative;right:5%;">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>-->
+  </center>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-9">
+        <ul>
+            <div class="card mr-0">
+          <div id="questions-list">
+            {% include 'list.html' %}
+              </div>
+                   </div>
+                  <!-- <div class="col-sm-2 col-lg-2" style="height:50px; width: 50px; background-color: red;"> -->
+                </ul>
+              </div>
+              <div class="col-3">
+                <div class="card ml-0">
+                  <div class="ml-3 mr-auto" style="">
+                    <h2 class="number" style="display:inline-block;justify-content: center;">{{ questions.count }}</h2> questions<br>
+                     <h2 class="number" style="display:inline-block;">{{ answers.count }}</h2> answers<br><hr>
+                     <br> 
+                     <h4>Most Recent Tags {{ limit }}</h4>
+                     <ul>
+                         {% for tag in tags_recent %}
+                            <li style="display:inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                         {% endfor %}<br><br><hr><br>
+                     </ul>
+                     <h4>Most Popular Tags</h4>
+                     <ul>
+                         {% for tag in tags_popular %}
+                             <li style="display: inline-block;"><a class="tagName" styele="font-size:100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                         {% endfor %}
+                     </ul><br>
+                  </div>
+              </div>
+             </div>
+          </div>
+        </div>
+
+      <!-- </div> -->
+
+
+
+
+</body>
+{% endblock %}
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+
+    var page=1;
+    var empty_page=false;
+    var block_request=false;
+
+    $(window).scroll(function(){
+      var margin=$(document).height()-$(window).height();
+      if ($(window).scrollTop()>margin && empty_page==false && block_request==false)
+      block_request=true;
+      page+=1;
+      $.get('?page=' + page, function(data) {
+        if(data=='')
+          {
+            empty_page=true;
+          }
+        else
+          {
+          $('#questions-list').append(data);
+          }
+       });
+       });
+</script>
+{% endblock %}

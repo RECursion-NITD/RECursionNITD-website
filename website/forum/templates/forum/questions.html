@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Document</title>
+</head>
+<body>
+     <h2>Total Questions Asked: {{ questions.count }}</h2>
+     <h2>Total Answers: {{ answers.count }}</h2>
+     <h3>Most Recent Tags {{ limit }}</h3>
+     <ul>
+         {% for tag in tags_recent %}
+            <li><a href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+         {% endfor %}
+     </ul>
+     <h3>Most Popular Tags</h3>
+     <ul>
+         {% for tag in tags_popular %}
+             <li><a href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+         {% endfor %}
+     </ul>
+     <ul>
+         {% for question in questions %}
+         <li><a href="{% url 'forum:detail_questions' question.id %}">{{ question.title }}</a>
+             <ul>
+                 {% if question.visibility == True %}
+                     <li>Added By: {{question.user_id}}
+                 </li>
+                 {% else %}
+                 <li>Added By: Anonymous</li>
+                 {% endif %}
+                 <li>Tags: <ul>
+                     {% for tagging in taggings %}
+                   {% if tagging.question == question %}
+                      {% for tag in tags %}
+                           {% if tagging.tag == tag %}
+                              <li>{{tag.name}}</li>
+                            {% endif %}
+                      {% endfor %}
+                   {%endif%}
+                 {% endfor %}
+                 </ul>
+                 </li>
+                 <li>Answers: {{ question.answers_set.count }}</li>
+                 <li>Follows: {{ question.follows_set.count }}</li>
+                 <li>Posted On: {{question.created_at}}</li>
+             </ul>
+          </li>
+         {% endfor %}
+     </ul>
+</body>
+</html>
+{% extends 'base.html' %}
+    {% block title %}Dashboard{% endblock %}
+{% block css %}
+    {% load static  %}
+    <link rel="stylesheet" href="{% static 'css/question_css.css'%}">
+{% endblock %}
+<body>
+<div>
+{% csrf_token %}
+ <!--<h1 >Dashboard</h1>-->
+
+    <!-- navigation bar -->
+    {% block nav  %}
+    {% endblock%}
+{% block content %}
+  <center>
+    <h1 id="haveAQ">Have a question?</h1>
+    <a class="waves-effect waves-light btn" href="{% url 'forum:add_question' %}">
+      <button type="button" class="btn btn-outline-primary">
+      Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button></a>
+        <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
+        <input type="text" name="search" placeholder="🔍">
+        <!--<form class="form-inline my-2 my-lg-0" style="float: right;position: relative;right:5%;">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>-->
+  </center>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <ul>
+            <div class="card" id="forumQ"><hr class="mt-2" style="opacity: 0;">
+          {% for question in questions %}
+          <li class="col-sm-12 col-lg-12" id="content">
+                <ul id="attributeList">
+              <div class="row">
+                  <li class="col-sm-4 col-md-3 col-lg-1">
+                    <div id="answerBox">
+                      <div id="answerValue" ><h4 class="mb-0">{{ question.answers_set.count }}</h4></div>
+                      <span class="mt-0 text-muted" style="font-size: 65%;">answer</span>
+                    </div>
+                  </li>
+                  <li class="col-sm-4 col-md-3 col-lg-1">
+                    <div id="followBox">
+                      <h4 id="followValue" class="mb-0">{{ question.follows_set.count }}</h4>
+                      <span class="mt-0 text-muted">follow</span>
+                    </div>
+                  </li>
+                <div class="col-sm-6 col-md-12 col-lg-7">
+                  <div>
+                  <a id="questionDetail" href="{% url 'forum:detail_questions' question.id  %}">{{ question.title }}</a><br></div>
+                  <li id="tagList">
+                                  <ul>
+                                    {% for tagging in taggings %}
+                                      {% if tagging.question == question %}
+                                        {% for tag in tags %}
+                                          {% if tagging.tag == tag %}
+                                            <li id="tagName" class="font-italic">{{tag.name}}</li>
+                                          {% endif %}
+                                        {% endfor %}
+                                      {%endif%}
+                                    {% endfor %}
+                                  </ul>
+                                </li>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-2">
+                  <div id="addedBy" class="text-muted">
+                    {% if question.visibility == True %}
+                    <li>Added By: {{question.user_id}}</li>
+                    {% else %}
+                    <li>Added By: Anonymous</li>
+                    {% endif %}
+                    </div>
+                  <li id="postedOn" class="text-muted">{{question.created_at}}</li>
+                                 
+                              </div>
+                              </ul>
+                     </li><hr class="mt-2">
+                    {% endfor %}
+                   </div>
+                  <!-- <div class="col-sm-2 col-lg-2" style="height:50px; width: 50px; background-color: red;"> -->
+                </ul>
+              </div>
+              <div class="col-sm-12 col-md-3 col-lg-3">
+                <div class="card" style="margin-bottom: 15px;">
+                  <h4>Total Answers: 10 </h4>
+                  <h4>Tota Comments: 50 </h4>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                  <h4>Total Answers: 10 </h4>
+                  <h4>Tota Comments: 50 </h4>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                  <h4>Total Answers: 10 </h4>
+                  <h4>Tota Comments: 50 </h4>
+                </div>
+
+                <div class="card" style="margin-bottom: 15px;">
+                  <h4>Total Answers: 10 </h4>
+                  <h4>Tota Comments: 50 </h4>
+                </div>
+              </div>
+             </div>
+              </div>
+
+            </div>
+
+      <!-- </div> -->
+
+
+
+{% endblock %}
+</body>
+

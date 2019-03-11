@@ -29,8 +29,9 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'members.apps.MembersConfig',
     'events.apps.EventsConfig',
-    'recursion_website.apps.RecursionWebsiteConfig',
+    'forum.apps.ForumConfig',
     'user_profile.apps.UserProfileConfig',
     'django.contrib.admin',
     'django.contrib.auth',

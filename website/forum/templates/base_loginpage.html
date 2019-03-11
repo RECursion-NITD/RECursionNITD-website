@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- BACKEND Import -->
+
+    <!-- FRONTEND Import-->
+      <!--Package Imports-->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+      <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+      <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> -->
+      <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+    <!-- Import Font Awesome Icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- Import Google Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+    
+      <!--File Imports-->
+      {% load staticfiles %}
+      <link rel="stylesheet" href="{% static 'css/base_loginpage_css.css' %}"> 
+      <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+      <!-- Favicon import -->
+      <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
+
+      <style>
+      /* sc-component-id: sc-keyframes-dEBWTR */
+@-webkit-keyframes dEBWTR{
+0%{background-color:#2d9ee4;}33%{background-color:#cf2de4;}66%{background-color:#732de4;}100%{background-color:#2d9ee4;}} @keyframes dEBWTR{0%{background-color:#2d9ee4;}33%{background-color:#cf2de4;}66%{background-color:#732de4;}100%{background-color:#2d9ee4;}
+}</style>
+    {% block css %}
+    {% endblock  %}
+    
+    {% block js %}
+        
+    {% endblock js %}
+        
+        
+     <title>
+        {% block title %}
+        {% endblock %}
+     </title>
+     
+</head>
+{% load static %} 
+<body style="background:#F3F7F7;/*url({% static 'image/loginpage4.jpg' %})*/;/*background-color:#2d9ee4;
+background-image:linear-gradient( 90deg, rgba(255,0,0,1), rgba(0,255,255,1) );background-blend-mode:overlay;-webkit-animation:dEBWTR 16s linear infinite;animation:dEBWTR 16s linear infinite;*/background-size: 100vw 100vh;" >
+ 
+{% block nav %}{% endblock nav%}
+{% block content %} 
+{% endblock %}
+</body>
+</html>
