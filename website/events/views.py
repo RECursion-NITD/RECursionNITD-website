@@ -23,10 +23,18 @@ import json
 import datetime
 from .validators import valid_url_extension
 from .validators import valid_url_mimetype
+from django.core.exceptions import PermissionDenied
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+def superuser_only(function):
+   def _inner(request, *args, **kwargs):
+       if not request.user.is_superuser:
+           raise PermissionDenied
+       return function(request, *args, **kwargs)
+   return _inner
 
+@superuser_only
 def events(request):
     events=Events.objects.all()
     perms=0
@@ -38,6 +46,7 @@ def events(request):
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
 
+@superuser_only
 def event_create(request):
     perms=0
     if request.user.is_superuser:
@@ -61,6 +70,7 @@ def event_create(request):
 
     return render(request, 'create_event.html',{'form':form,"perms":perms})
 
+@superuser_only
 def event_detail(request,id):
     try:
         event =get_object_or_404( Events,pk=id)
@@ -69,6 +79,7 @@ def event_detail(request,id):
     else:
         return render(request,'event_detail.html',{'event':event})
 
+@superuser_only
 def event_update(request,id):
     print("call")
     try:
@@ -100,6 +111,7 @@ def event_update(request,id):
                 return redirect('events')
         return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
+@superuser_only
 def upcoming_events(request):
     today=timezone.now()
     upto=today + timedelta(days=365)
@@ -113,3 +125,6 @@ def upcoming_events(request):
         return redirect('events')
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
+
+def calender(request):
+    return render(request,"calender.html")

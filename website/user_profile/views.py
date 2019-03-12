@@ -31,9 +31,14 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.models import *
+import random
+from forum.models import *
 
-
-def view_profile(request, id):
+def view_profile(request, id=None):
+    print(id)
+    if id == None:
+        id = request.user.id
     try:
         user = get_object_or_404(User, pk=id)
     except:
@@ -43,16 +48,41 @@ def view_profile(request, id):
         profile = get_object_or_404(Profile, user=user)
     except:
         return HttpResponse("User has not created a Profile yet!")
-
-    args = {'profile': profile, }
+    questions = Questions.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    answers = Answers.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    comments = Comments.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    comments_ans= Comments_Answers.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    required = []
+    for question in questions:
+        required.append(question)
+    for answer in answers:
+        required.append(answer)
+    for comment in comments:
+        required.append(comment)
+    for com_a in comments_ans:
+        required.append(com_a)
+    required.sort(key=lambda x: x.updated_at, reverse=True)
+    activity=[]
+    k=0
+    for req in required:
+        activity.append(req)
+        k+=1
+        if k == 10:
+            break
+    args = {'profile': profile, 'activity':activity, }
     return render(request, 'profile/profile.html', args)
 
 
 def user_register(request):
+    if request.user.is_authenticated :
+        id=request.user.id
+        return HttpResponseRedirect(reverse('user_profile:view_profile', args=(id,)))
     form = SignUpForm(request.POST or None)
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
+              if User.objects.filter(email=form.cleaned_data['email']).exists():
+                  return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False
               user.save()
@@ -65,9 +95,14 @@ def user_register(request):
                   'token': account_activation_token.make_token(user),
               })
               user.email_user(subject, message)
+              print("sddsdsdsd")
               return HttpResponse("Please confirm your email address to complete the Registration. ")
+          if form.errors:
+              for field in form:
+                  for error in field.errors:
+                      return HttpResponse(error)
           form = EmailForm(None)
-          return HttpResponse('Invalid Credentials!')
+
     return render(request, 'register.html', {'form': form})
 
 
@@ -87,21 +122,21 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.profile.email_confirmed = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('edit_profile')
+        return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
 
 
 @login_required
 def edit_profile(request):
-    form = Profileform(request.POST or None)
     user = request.user
     id = user.id
     profile = get_object_or_404(Profile, user=user)
-    form = Profileform(request.POST or None, instance=profile)
-    if request.POST.get('ajax_check') == "True":
-      if form.is_valid():
-          image_url = form.cleaned_data['image_url']
+    form = Profileform(request.POST or None, request.FILES or None,  instance=profile)
+    if form.is_valid():
+        form.save()
+        if form.cleaned_data['image'] is None:
+          image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
           type = valid_url_extension(image_url)
           full_path = 'media/images/' + profile.user.username + '.png'
           try:
@@ -111,30 +146,26 @@ def edit_profile(request):
           if profile.user == request.user:
               profile.image = '../' + full_path
               form.save()
-              return HttpResponse('Information Updated Successfully!')
-      form = Profileform(None)
-      return HttpResponse('Invalid Credentials!')
+        return HttpResponseRedirect(reverse('user_profile:view_profile', args=(id,)))
     return render(request, 'create.html', {'form': form, })
 
 
 @login_required
 def change_password(request):
-    form = PasswordChangeForm(request.user, request.POST or None)
     if request.method == 'POST':
-        if request.POST.get('ajax_check') == "True":
-          if form.is_valid():
-              user = form.save()
-              update_session_auth_hash(request, user)  # Important!
-              messages.success(request, 'Your password was successfully updated!')
-              return HttpResponse("Password Changed Successfully!")
-          else:
-              messages.error(request, 'Please correct the Error below.')
-          form = PasswordChangeForm(request.user)
-          return HttpResponse('Invalid Credentials!')
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('edit_profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
     return render(request, 'registration/change_password.html', {
         'form': form
     })
-
 
 def password_reset(request):
     form = EmailForm(request.POST or None)
@@ -142,8 +173,8 @@ def password_reset(request):
         if request.POST.get('ajax_check') == "True":
           if form.is_valid():
               email = form.cleaned_data['email']
-              if (User.objects.filter(email=email).count() > 1):
-                  return HttpResponse("Email Already Used!")
+              if not User.objects.filter(email=email).exists():
+                  return HttpResponse("No user with that Email exists.")
               user = User.objects.get(email=email)
               user.save()
               current_site = get_current_site(request)

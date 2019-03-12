@@ -1,0 +1,59 @@
+{% for question in questions %} 
+<li class="col-sm-12 col-lg-12 ques_div mt-2" id="content">
+    <ul id="attributeList">
+        <div class="row mb-2">
+            <!-- IMAGE BLOCK -->
+            <div class="col-sm-1">
+                {% for p in profile %}
+                    {% if p.user == question.user_id %}
+                      {% if not question.anonymous_ask  %}
+                <img src="{{ p.image.url }}" class="rounded-circle mt-auto" width="65px" height="65px" alt="img">
+                    {% else %}
+                <img src="https://www.colourbox.com/preview/28009197-anonymous-user.jpg" width="65px" height="65px" alt="img">      
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}    
+            </div>    
+            <div class="col-sm-7">
+                <div>
+                    <a id="questionDetail" href="{% url 'forum:detail_questions' question.id  %}">
+                        <strong>{{ question.title }}</strong></a>
+                    <br>
+                </div>
+                <div id="addedBy" class="text-muted">
+                    {% if question.anonymous_ask == False %}
+                    <li>Added by {{question.user_id}} on</li>
+                    {% else %}
+                    <li>Added by Anonymous on</li>
+                    {% endif %}
+                </div>
+                <li id="postedOn" class="text-muted">{{question.created_at}}</li>
+                <br>
+                <li id="tagList">
+                    <ul>
+                        {% for tagging in taggings %} 
+                          {% if tagging.question == question %} 
+                            {% for tag in tags %} 
+                              {% if tagging.tag == tag %}
+                              <li class="tagName" class="font-italic text-muted">{{tag.name}}</li>
+                              {% endif %} 
+                            {% endfor %} 
+                          {%endif%} 
+                        {% endfor %}
+                    </ul>
+                </li>
+            </div>
+                <!-- <div id="AnswerFollow_block" style="display: inline-block;"> -->
+                    <div class="col-sm-6 col-md-3 col-lg-2 mt-auto mb-auto" id="answerBox" style="vertical-align: middle;">
+                      <span id="followValue" style="font-size:70%;">{{ question.answers_set.count }} answers
+                      </span>
+                    </div>
+                    <div class="col-sm-4 col-md-3 col-lg-2 mt-auto mb-auto" id="followBox" style="vertical-align: middle;">
+                      <span id="answerValue" style="font-size: 70%;">{{ question.follows_set.count }} follows</span>
+                    </div>
+                <!-- </div> -->
+          </div>
+    </ul>
+</li>
+<hr> 
+{% endfor %}

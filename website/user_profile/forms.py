@@ -9,8 +9,7 @@ from django.contrib.auth.forms import UserCreationForm
 class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
     college = models.TextField(max_length=100)
-    dept = models.IntegerField
-    image_url = models.URLField
+    dept = models.IntegerField()
     nickname = models.TextField(max_length=100)
 
     def clean_image_url(self):
@@ -21,7 +20,7 @@ class Profileform(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('name', 'college', 'dept', 'image_url', 'nickname')
+        fields = ('name', 'college', 'dept', 'image', 'nickname')
 
 
 

@@ -16,13 +16,27 @@
              {% endif %}
              </span>
              <ul>
-                 <li>Username: {{ request.user }}</li>
-                 <li>Email: {{ request.user.email }}</li>
+                 <li>Username: {{ profile.user }}</li>
+                 <li>Email: {{ profile.user.email }}</li>
                  <li>College: {{ profile.college }}</li>
                  <li>Role: {{ profile.role }}</li>
                  <li>Department: {{ profile.dept }}</li>
                  <li>Nickname: {{ profile.nickname }}</li>
                  <li>Joined RECursion: {{ profile.created_at }}</li>
+             </ul>
+             <li>Recent Activity</li>
+             <ul>
+                 {% for act in activity %}
+                    {% if act.get_cname == "Question" %}
+                      <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
+                    {% elif act.get_cname == "Answer" %}
+                      <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a>
+                    {% elif act.get_cname == "Comment" %}
+                      <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a>
+                    {% else %}
+                      <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Question: {{ act.answer.question_id.title }}</a>
+                    {% endif %}
+                 {% endfor %}
              </ul>
 
 </body>
