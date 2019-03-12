@@ -33,10 +33,13 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import *
 import random
-from recursion_website.models import *
+from forum.models import *
 
 
-def view_profile(request, id):
+def view_profile(request, id=None):
+    print(id)
+    if id == None:
+        id = request.user.id
     try:
         user = get_object_or_404(User, pk=id)
     except:
@@ -74,7 +77,7 @@ def view_profile(request, id):
 def user_register(request):
     if request.user.is_authenticated :
         id=request.user.id
-        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('user_profile:view_profile', args=(id,)))
     form = SignUpForm(request.POST or None)
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
@@ -120,7 +123,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.profile.email_confirmed = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return redirect('edit_profile')
+        return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
 
@@ -144,7 +147,7 @@ def edit_profile(request):
           if profile.user == request.user:
               profile.image = '../' + full_path
               form.save()
-        return HttpResponseRedirect(reverse('view_profile', args=(id,)))
+        return HttpResponseRedirect(reverse('user_profile:view_profile', args=(id,)))
     return render(request, 'create.html', {'form': form, })
 
 

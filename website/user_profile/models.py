@@ -14,7 +14,7 @@ import os
 
 def content_file_name(instance,filename):
 	ext="png"
-	filename="%s.%s" % (instance.user.username,ext)
+	filename= str(instance.user.username)+"."+str(ext)
 	return os.path.join('images/',filename)
 
 class Profile(models.Model):

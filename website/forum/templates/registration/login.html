@@ -1,0 +1,56 @@
+{% extends 'base_loginpage.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/login_css.css' %}">
+
+{% block content %}
+<center class="container" style="margin-top:7.5%;">
+
+      <center><h1 class="mb-0 mt-2" style="color: #F95C39;font-size: 7vw; font-family: 'Montserrat', sans-serif;">RECursion</h1></center><br>
+      <center><h5 class="mb-4" style="font-size: 2.2vw;color:#528CDD;">Programming community of NIT Durgapur
+</h5></center>
+  <div class="row">
+    <form class="col-sm-10 col-md-5 col-lg-5 mb-3" style="margin-right:7vw;margin-left: 2vw;" method="post" class="form-group">
+      <center>
+      {% csrf_token %}
+      <p>
+        {% render_field form.username class="form-control mb-3 ml-2 mr-2" style="background:white;" placeholder="Username" %}
+
+        {% render_field form.password class="form-control ml-2 mr-2" style="background:white;" placeholder="Password" %}
+      </p>
+    </center>
+    <!-- SIGN UP -->
+      <a href="{% url 'user_profile:user_register' %}" class="btn btn-outline-success ml-2"style="float:left;">Signup</a>
+      <!-- LOGIN  -->
+      <button type="submit" class="btn btn-outline-success"style="float:right;">Login</button>
+        {% if form.errors %}
+         <p class="text-warning">Username or Password is Incorrect!</p>
+        {% endif %}
+    </form>
+    <div class="col-sm-10 col-md-5 col-lg-5" style="margin-top: auto;margin-bottom: auto;">
+      <div style="background-color:#343A40;padding:10px;border-radius: 4px;margin-right:2vw; float:left;
+      width:100%;font-size: 90%;">
+        <a href="{% url 'social:begin' 'github' %}"
+        style="color:white;">Login with GitHub&nbsp;
+        <i class="fab fa-github"></i></a>
+      </div><br><br>
+      <div style="background-color:#DF4930;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
+     <a  href="{% url 'social:begin' 'google-oauth2' %}" 
+      style="color:white;">Login with Google&nbsp;
+     <i class="fab fa-google"></i>
+      </a></div><br><br>
+    <div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
+    <a  href="{% url 'social:begin' 'google-oauth2' %}" 
+    style="color:white;">Login with Facebook&nbsp;
+  <i class="fab fa-facebook-f"></i></a>
+  </div>
+</div>
+</div><hr style="color:#b1b1b1;">
+<div style="font-size: 90%;"><span><a>About</a> </span>&emsp;<span> <a>Team</a> </span>&emsp;<span> <a>Contact</a> </span>&emsp;<span class="text-muted" style="float: right;position: absolute;bottom: 10px;right:10px;">Copyright©<script>document.write(new Date().getFullYear())</script> </span>
+</div>
+</center>
+
+
+
+
+{% endblock %}
