@@ -119,7 +119,7 @@ def add_question(request):
 
     else:
          form2 = Tagform(queryset=Tags.objects.none())
-    
+
     return render(request, 'forum/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
@@ -162,7 +162,7 @@ def list_questions(request):
     args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
-    return render(request, 'questions.html', args)
+    return render(request, 'forum/questions.html', args)
 
 def detail_questions(request, id):
     comform = Commentform(request.POST or None)
@@ -188,8 +188,11 @@ def detail_questions(request, id):
     else:
         ans=None
     user = request.user
-    user_profile = Profile.objects.get(user=user)
-    user_permission = user_profile.role
+    user_permission = 3
+    print(user)
+    if(request.user.is_authenticated):
+        user_profile = Profile.objects.get(user=user)
+        user_permission = user_profile.role
     flag=0
     id_list = []
     if User.objects.filter(username=request.user).exists():
@@ -264,7 +267,7 @@ def update_questions(request, id):
             return redirect('forum:list_questions')
     else:
         question.description = html2markdown.convert(question.description)
-        form = Questionform(instance=question) 
+        form = Questionform(instance=question)
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
@@ -395,7 +398,7 @@ def update_answer(request, id):
                         'user_id':request.user.username,
                         'Success':'Success'
                             }))
-        
+
         answer.description=html2markdown.convert(answer.description)
         form=Answerform(instance=answer)
 
@@ -523,7 +526,7 @@ def update_comment(request, id):
                     'user_id':request.user.username,
                     'Success':'Success'
                     }))
-        
+
         comment.body=html2markdown.convert(comment.body)
         form=Commentform(instance=comment)
     return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})

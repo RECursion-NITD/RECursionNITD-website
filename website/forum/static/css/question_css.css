@@ -2,20 +2,21 @@
 
 #answerBox{
 	text-align: center;
+	display: inline-block;
 }
 #followBox{
 	text-align: center;
+	display: inline-block;
 }
 #followValue{
 	color:#247BA0;
 }
 #answerValue{
-	margin: 0px;
 	color:#F95C39;
 }
 .card{
-	box-shadow: 2px 2px 2px grey;
-	margin-left:2px;
+	box-shadow: 1px 1px 1px #dddddd;
+	margin-left:0px;
 	text-align:left;
 	background-color: white;
 }
@@ -49,31 +50,29 @@ hr{
 	border-radius: 1px;
 }
 #postedOn{
-	position: absolute;
-	vertical-align: bottom;
+	display: inline-block;
 }
 #addedBy{
+	display: inline-block;
 }
 #addedNav{
 	background-color: rgba(0,0,0,0.4);
 }
 
 #haveAQ{
-	color:#F95C39;
-	font-size:325%;
 }
-input[type=text] {
+/*input[type=text] {
 	width:2%;
   -webkit-transition: width 0.4s ease-in-out;
   transition: width 0.4s ease-in-out;
-}
+}*/
 .text-muted{
 	font-size: 70%;
 }
 /* When the input field gets focus, change its width to 100% */
-input[type=text]:focus {
+/*input[type=text]:focus {
   width: 150px;
-}
+}*/
 #search{
 	margin-top:3px; 
 	max-width: 250px;
