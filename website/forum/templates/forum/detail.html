@@ -10,7 +10,6 @@
         <div class="col-lg-9 col-md-9 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0" id="qTitle">{{ questions.title }}</h4> 
                     {% if request.user != questions.user_id %}
                     {% if flag == 0 %}
                     <a href="{% url 'forum:edit_following' questions.id %}">
@@ -24,7 +23,7 @@
                 </div>
                 <div class="card-body">
                     <blockquote class="mb-0">
-
+                      <h2 class="card-title mb-0" id="qTitle">{{ questions.title }}</h2> 
                         <p>{{questions.description|safe}}</p>
                         <!--Tags Start-->
                         <div class="mt-5">
@@ -193,6 +192,7 @@
             <!--Follow,Comment,Answer End-->
 
             <br>
+ <!-- --------------------------------------------------------AKM---------------------------------------------->
             <h3>Answer(s)</h3>
             <hr> {% for answer in answers %} {% if answer.question_id == questions %}
             <div class="container answerBorder">

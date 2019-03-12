@@ -6,10 +6,11 @@
             <div class="col-sm-1">
                 {% for p in profile %}
                     {% if p.user == question.user_id %}
-                      {% if p.image %}
-                <img src="{{ p.image.url }}" class="rounded-circle mt-auto" width="25px" height="25px" alt="img">
-
-                      {% endif %}
+                      {% if not question.anonymous_ask  %}
+                <img src="{{ p.image.url }}" class="rounded-circle mt-auto" width="65px" height="65px" alt="img">
+                    {% else %}
+                <img src="https://www.colourbox.com/preview/28009197-anonymous-user.jpg" width="65px" height="65px" alt="img">      
+                    {% endif %}
                     {% endif %}
                 {% endfor %}    
             </div>    
@@ -20,7 +21,7 @@
                     <br>
                 </div>
                 <div id="addedBy" class="text-muted">
-                    {% if question.visibility == True %}
+                    {% if question.anonymous_ask == False %}
                     <li>Added by {{question.user_id}} on</li>
                     {% else %}
                     <li>Added by Anonymous on</li>

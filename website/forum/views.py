@@ -166,7 +166,7 @@ def list_questions(request):
     args = {'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
-    return render(request, 'forum/questions.html', args)
+    return render(request, 'questions.html', args)
 
 def detail_questions(request, id):
     comform = Commentform(request.POST or None)

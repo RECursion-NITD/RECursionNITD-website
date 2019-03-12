@@ -9,6 +9,7 @@ urlpatterns=[
     path('create/', event_create, name='event_create'),
     path('list/',events, name='events'),
     path('detail/<int:id>/', event_detail, name='event_detail'),
+    path('calender/', calender, name='calender'),
     path('update/<int:id>/', event_update, name='event_update'),
     path('upcoming_list/',upcoming_events, name='upcoming_events'),
     path('',events, name='events'),

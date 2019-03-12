@@ -11,7 +11,7 @@
 {% block content %}
 <div class="container">
   <a href="{% url 'home' %}" class="text-muted">< Back to Home</a>
-  <h2 class="mt-3"id="haveAQ">Have a yyyyyyyyyyyyxxx?</h2>
+  <h2 class="mt-3"id="haveAQ">Have a question?</h2>
   <center>
       <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
       <!--<form class="form-inline my-2 my-lg-0" style="float: right;position: relative;right:5%;">
@@ -49,16 +49,18 @@
               <div class="ml-0">
                   <div class=" mr-auto" style="">
                     <div class="card p-2">
-                      <h2 class="number" style="display:inline-block;justify-content: center;">{{ questions.count }}</h2> questions
-                      <br>
-                      <h3 class="number" style="display:inline-block;">{{ answers.count }}</h3>
-                      <span style="display:inline-block;">answers</span> 
+                      <h2 style="display:inline-block;justify-content: center;">
+                        <span class="number">{{ q_count }}</span>
+                      <small>questions</small></h2>
+                      <h3  style="display:inline-block;">
+                        <span class="number">{{ answers.count }}</span>
+                       <small>answers<small></h3>
                     </div>
                       <br>
                       <h4>Most Recent Tags {{ limit }}</h4>
                       <ul>
                           {% for tag in tags_recent %}
-                          <li style="display:inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display:inline-block;"><a class="tagName" style="font-size: 100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                           <br>
                           <br>
@@ -68,7 +70,7 @@
                       <h4>Most Popular Tags</h4>
                       <ul>
                           {% for tag in tags_popular %}
-                          <li style="display: inline-block;"><a class="tagName" styele="font-size:100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display: inline-block;"><a class="tagName" style="font-size:100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                       </ul>
                       <br>

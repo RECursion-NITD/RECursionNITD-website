@@ -11,7 +11,7 @@
 {% block content %}
 <div class="container">
   <a href="{% url 'home' %}" class="text-muted">< Back to Home</a>
-  <h2 class="mt-3"id="haveAQ">Have a Question?</h2>
+  <h2 class="mt-3"id="haveAQ">Falsy Quiestionairo?</h2>
   <center>
       <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
       <!--<form class="form-inline my-2 my-lg-0" style="float: right;position: relative;right:5%;">
@@ -29,11 +29,11 @@
                 ">
                   <i class="fas fa-search"></i>
                 </a>
-                <a class="btn" href="{% url 'forum:add_question' %}" style="float: right;">
-                    <button type="button" class="btn btn-outline-primary" 
-                    style="float:right;">
-                    Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
+                <div class="ml-auto mr-4">
+                <a  class="ml-auto"href="{% url 'forum:add_question' %}" style="float: right;">
+                    Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;
                 </a>
+                </div>
               </div><hr>
               <ul>
                   <div class="mr-0 mt-2">
