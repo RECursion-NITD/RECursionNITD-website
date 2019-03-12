@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'members.apps.MembersConfig',
+    # 'members.apps.MembersConfig',
     'events.apps.EventsConfig',
     'forum.apps.ForumConfig',
     'user_profile.apps.UserProfileConfig',
