@@ -4,10 +4,11 @@
         <div class="row mb-2">
             <!-- IMAGE BLOCK -->
             <div class="col-sm-1">
-                {% for p in profile %} 
-                    {% if p.user == comment.user %} 
+                {% for p in profile %}
+                    {% if p.user == question.user_id %}
                       {% if p.image %}
-                <img src="{p.image.url}" class="rounded-circle mt-auto" alt="img">
+                <img src="{{ p.image.url }}" class="rounded-circle mt-auto" width="25px" height="25px" alt="img">
+
                       {% endif %}
                     {% endif %}
                 {% endfor %}    

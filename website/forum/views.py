@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
 from user_profile.models import *
+from events.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
@@ -41,7 +42,10 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def home(request):
-    return render(request, 'home.html')
+    n=3
+    events=Events.objects.all().order_by('-start_time')[:n:1]
+    args={'events':events,}
+    return render(request, 'home.html', args)
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -158,8 +162,8 @@ def list_questions(request):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
-
-    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    profiles=Profile.objects.all()
+    args = {'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'forum/questions.html', args)
@@ -187,12 +191,12 @@ def detail_questions(request, id):
             ans = None
     else:
         ans=None
-    user = request.user
-    user_permission = 3
-    print(user)
-    if(request.user.is_authenticated):
+    if request.user.is_authenticated:
+        user = request.user
         user_profile = Profile.objects.get(user=user)
         user_permission = user_profile.role
+    else:
+        user_permission = '10'
     flag=0
     id_list = []
     if User.objects.filter(username=request.user).exists():
