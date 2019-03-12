@@ -35,7 +35,6 @@ from django.contrib.auth.models import *
 import random
 from forum.models import *
 
-
 def view_profile(request, id=None):
     print(id)
     if id == None:
