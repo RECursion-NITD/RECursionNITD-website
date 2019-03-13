@@ -158,7 +158,7 @@ def list_questions(request):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    while len(tags_recent_record)< len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
@@ -583,7 +583,7 @@ def filter_question(request ,id):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    while len(tags_recent_record) < len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
