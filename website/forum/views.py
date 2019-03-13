@@ -107,6 +107,8 @@ def add_question(request):
             bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
             profiles=Profile.objects.filter(role = 2)
             messages=()
+            follow = Follows.objects.create(question=Questions.objects.get(pk=f.id), user=request.user)
+            follow.save()
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
