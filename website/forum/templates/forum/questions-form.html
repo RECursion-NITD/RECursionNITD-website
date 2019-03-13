@@ -58,8 +58,11 @@
       {{ form.description.label_tag }}
       {% render_field form.description class="form-control" placeholder="Write Details, MarkDown is supported" %}
        {{form.media}}
-        Uncheck This To Ask Anonymously :- {% render_field form.visibility class="form-control" %}
-      {{form.errors}}<!-- todo render each error per field -->
+
+       Uncheck This To Ask Anonymously :- 
+      {% render_field form.anonymous_ask class="form-control" %}
+     <span>{{form.errors}}<!-- todo render each error per field --></span>
+      
       
       Tags : {{form2}}
 
