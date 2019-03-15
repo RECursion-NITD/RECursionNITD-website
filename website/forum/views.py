@@ -107,6 +107,8 @@ def add_question(request):
             bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
             profiles=Profile.objects.filter(role = 2)
             messages=()
+            follow = Follows.objects.create(question=Questions.objects.get(pk=f.id), user=request.user)
+            follow.save()
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
@@ -158,7 +160,7 @@ def list_questions(request):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    while len(tags_recent_record)< len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
@@ -583,7 +585,7 @@ def filter_question(request ,id):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    while len(tags_recent_record) < len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
