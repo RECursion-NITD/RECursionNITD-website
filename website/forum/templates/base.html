@@ -62,7 +62,8 @@
         <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
         <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
-          <img src="{% static 'image/logoInvert.png'%}" style="max-width:75px;" alt="logo">
+          <img src="{% static 'image/logoInvert.png'%}" style="max-width:65px;" alt="logo">
+          <strong>REC</strong>ursion
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
             <img src="/static/image/logo.png" width="20%" alt="logo">
@@ -79,7 +80,7 @@
                 <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
             <li class="nav-item {% block Events_active %}{% endblock %}">
-                <a href="#" class="nav-link m-2 menu-item">Events</a>
+                <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
             </li>
             <li class="nav-item {% block getStart_active %}{% endblock %}">
                 <a href="#" class="nav-link m-2 menu-item">Get Started</a>
@@ -90,11 +91,11 @@
               <ul class="nav navbar-nav">
               <li class="dropdown nav-link m-2 menu-item nav-item">
               <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Manage Account<span class="caret"></span></a>
-                <ul class="dropdown-menu" style="padding: 2px;color:black;">
+                <ul class="dropdown-menu ml-2" style="padding: 2px;color:black;">
                   <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li>
-                  <li><a href="#">View Account</a></li>
-                  <li><a href="#">Edit Account</a></li>
-                  <li><a href="#">View my questions</a></li>
+                  <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
+                  <!-- <li><a href="{% url 'user_profile:edit_profile' %}">Edit Account</a></li> -->
+                  <li><a href="{% url 'profile:view_profile' %}">View my activity</a></li>
                   <li><a href="{% url 'logout' %}">Logout</a></li>
                 </ul>
               </li>

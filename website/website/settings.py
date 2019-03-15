@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'members.apps.MembersConfig',
+    # 'members.apps.MembersConfig',
     'events.apps.EventsConfig',
     'forum.apps.ForumConfig',
     'user_profile.apps.UserProfileConfig',
@@ -119,6 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
+LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 
 SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
@@ -153,7 +154,8 @@ MEDIA_ROOT=os.path.join(BASE_DIR,'../website/media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-MEDIA_URL='/media/'
-MEDIA_ROOT=os.path.join(BASE_DIR,'members/media')
+
+#PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+#STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+#MEDIA_URL='/media/'
+#MEDIA_ROOT=os.path.join(BASE_DIR,'members/media')

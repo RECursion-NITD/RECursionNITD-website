@@ -21,7 +21,7 @@ from forum import views
 from django.conf import settings
 from django.conf.urls.static import static
 urlpatterns = [
-   
+
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('forum/',include('forum.urls',namespace='forum')),
     path('events/',include('events.urls',namespace='events')),
     path('profile/',include('user_profile.urls',namespace='user_profile')),
-    path('members/',include('members.urls')),
+    # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

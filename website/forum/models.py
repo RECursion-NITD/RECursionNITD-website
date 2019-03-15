@@ -24,6 +24,11 @@ class Questions(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_cname(self):
+        class_name = "Question"
+        return class_name
+
     class Meta:
         managed = True
         ordering = ['-created_at']
@@ -43,6 +48,11 @@ class Answers(models.Model):
 
     def __str__(self):
         return self.description
+
+    def get_cname(self):
+        class_name = "Answer"
+        return class_name
+
     class Meta:
         managed = True
         db_table = 'answers'
@@ -90,6 +100,10 @@ class Comments(models.Model):
     def __str__(self):
         return self.body
 
+    def get_cname(self):
+        class_name = "Comment"
+        return class_name
+
     class Meta:
         managed = True
         db_table = 'comments'
@@ -107,6 +121,10 @@ class Comments_Answers(models.Model):
 
     def __str__(self):
         return self.body
+
+    def get_cname(self):
+        class_name = "Comment_A"
+        return class_name
 
     class Meta:
         managed = True

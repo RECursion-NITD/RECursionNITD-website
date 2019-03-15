@@ -9,22 +9,21 @@
 
         <div class="col-lg-9 col-md-9 col-sm-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title mb-0" id="qTitle">{{ questions.title }}</h4> 
+                <div id="edit_follow" f-id="{{questions.id}}" class="card-header">
                     {% if request.user != questions.user_id %}
                     {% if flag == 0 %}
                     <a href="{% url 'forum:edit_following' questions.id %}">
-                        <button style="float: right;" type="button" class="button_gh big">Follow | <i class="far fa-heart"></i> {{ questions.follows_set.count }}</button>
+                        <button id="follow_btn" style="float: right;" type="button" class="button_gh big">Follow | <i class="far fa-heart"></i> {{ questions.follows_set.count }}</button>
                     </a>
                     {% else %}
                     <a href="{% url 'forum:edit_following' questions.id %}">
-                        <button style="float: right;" type="button" class="button_gh big">Unfollow | <i class="far fa-heart"></i> {{ questions.follows_set.count }}</button>
+                        <button id="unfollow_btn" style="float: right;" type="button" class="button_gh big">Unfollow | <i class="fas fa-heart"></i> {{ questions.follows_set.count }}</button>
                     </a>
                     {% endif %} {% endif %}
                 </div>
                 <div class="card-body">
                     <blockquote class="mb-0">
-
+                      <h2 class="card-title mb-0" id="qTitle">{{ questions.title }}</h2> 
                         <p>{{questions.description|safe}}</p>
                         <!--Tags Start-->
                         <div class="mt-5">
@@ -100,21 +99,7 @@
 
 
                 <!--Answer Input Box Start-->
-                <div class="container" id="answerDIV" style="">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
-                                <div class="post-heading">
-                                    <div class="pull-left image">
-                                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar shadow" style="border: 1.5px; border-radius: 50px; border-style: solid; border-color: #F95C39" alt="user profile image">
-                                    </div>
-                                    <div class="pull-left meta">
-                                        <div class="title h5">
-                                            <a href="{% url 'user_profile:view_profile' user.id %}"><b>{{user}}</b></a>
-                                            is answering
-                                        </div>
-                                    </div>
-                                </div> 
+              
                                 <div class="post-description"> 
                                    
                                         Answers: 
@@ -150,21 +135,7 @@
                     </div>  
 <!--Answer Input Box End-->
 <!--Comment Input Box Start-->
-                                    <div class="container" id="commentDIV">
-                                        <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
-                                                    <div class="post-heading">
-                                                        <div class="pull-left image">
-                                                            <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar shadow" style="border: 1.5px; border-radius: 50px; border-style: solid; border-color: #F95C39" alt="user profile image">
-                                                        </div>
-                                                        <div class="pull-left meta">
-                                                            <div class="title h5">
-                                                                <a href="{% url 'user_profile:view_profile' request.user.id %}"><b>{{user}}</b></a>
-                                                                is commenting
-                                                            </div>
-                                                        </div>
-                                                    </div> 
+                                    
                                                     <div class="post-description"> 
                                                       
                                                         
@@ -193,6 +164,7 @@
             <!--Follow,Comment,Answer End-->
 
             <br>
+ <!-- --------------------------------------------------------AKM---------------------------------------------->
             <h3>Answer(s)</h3>
             <hr> {% for answer in answers %} {% if answer.question_id == questions %}
             <div class="container answerBorder">
@@ -212,14 +184,16 @@
                                     <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
                                     <span style="float:right;margin-bottom: 0px;">
                             <a href="{% url 'forum:add_comment_answer' answer.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                            <span >
                               {% if request.user != answer.user_id %}
                               {% if  answer.id in voted %}
-                              <a href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;&nbsp;
+                              <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;&nbsp;
                               {% else %}
-                              <a href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                              <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                               {% endif %}
                               {% endif %}
-                              <a class="text-right small"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a>
+                              <a  id="vote_count_{{answer.id}}" class="text-right small"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a>
+                            </span>
                             </span>
                                 </div>
                             </div>
@@ -297,6 +271,67 @@
        $('.my-ans-form').toggle()
        })
 
+
+  /*   edit follow*/
+  $('#edit_follow').click(function(event)
+  {
+      event.preventDefault()
+      var id=$(this).attr("f-id")
+      $.ajax({
+        method: "GET",
+        url:"/forum/follow/"+id,
+        success: function(data)
+                {
+                    console.log(id)
+                    console.log(data)
+                    var Data = JSON.parse(data)
+                   if( Data.Success == "followed")
+                   {
+                       $('#follow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
+                       $('#unfollow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
+
+                   }
+                   else if( Data.Success == "unfollowed" )
+                   {
+                    $('#unfollow_btn').html("Follow | <i class=\"far fa-heart\"></i> "+Data.count)
+                    $('#follow_btn').html("Follow | <i class=\"far fa-heart\"></i> "+Data.count)
+                   }
+                },
+        error: handleFormError,
+    })
+
+  })
+
+  /*   edit ans voting*/
+  $('.voting_box').click(function(event)
+  {
+      event.preventDefault()
+      var id=$(this).attr("ans-id")
+      $.ajax({
+        method: "GET",
+        url:"/forum/answer/"+id+"/vote",
+        success: function(data)
+                {
+                    console.log(id)
+                    console.log(data)
+                    var Data = JSON.parse(data)
+                   if( Data.Success == "upvoted")
+                   {
+                       $('#downvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#upvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                   else if( Data.Success == "downvoted" )
+                   {
+                    $('#downvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#upvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                },
+        error: handleFormError,
+    })
+
+  })
        
 
 

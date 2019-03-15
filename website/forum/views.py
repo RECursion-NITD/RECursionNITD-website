@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
 from user_profile.models import *
+from events.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
@@ -41,7 +42,10 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def home(request):
-    return render(request, 'home.html')
+    n=3
+    events=Events.objects.all().order_by('-start_time')[:n:1]
+    args={'events':events,}
+    return render(request, 'home.html', args)
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Questions, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -119,7 +123,7 @@ def add_question(request):
 
     else:
          form2 = Tagform(queryset=Tags.objects.none())
-    
+
     return render(request, 'forum/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
@@ -158,8 +162,8 @@ def list_questions(request):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
-
-    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    profiles=Profile.objects.all()
+    args = {'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
@@ -187,9 +191,12 @@ def detail_questions(request, id):
             ans = None
     else:
         ans=None
-    user = request.user
-    user_profile = Profile.objects.get(user=user)
-    user_permission = user_profile.role
+    if request.user.is_authenticated:
+        user = request.user
+        user_profile = Profile.objects.get(user=user)
+        user_permission = user_profile.role
+    else:
+        user_permission = '10'
     flag=0
     id_list = []
     if User.objects.filter(username=request.user).exists():
@@ -264,7 +271,7 @@ def update_questions(request, id):
             return redirect('forum:list_questions')
     else:
         question.description = html2markdown.convert(question.description)
-        form = Questionform(instance=question) 
+        form = Questionform(instance=question)
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
         id_list = [id['tag_id'] for id in id_list]  # convert the returned dictionary list into a simple list
@@ -395,7 +402,7 @@ def update_answer(request, id):
                         'user_id':request.user.username,
                         'Success':'Success'
                             }))
-        
+
         answer.description=html2markdown.convert(answer.description)
         form=Answerform(instance=answer)
 
@@ -413,10 +420,21 @@ def edit_following(request, id):
        if Follows.objects.filter(question=question, user=user).exists():
            follow = Follows.objects.get(question=question, user=user)
            follow.delete()
+           count=Follows.objects.filter(question=question).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'unfollowed'
+                            }))
        else:
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
-    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
+           count=Follows.objects.filter(question=question).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'followed'
+                            }))
+
+    
 
 @login_required
 def add_comment(request, id):
@@ -523,7 +541,7 @@ def update_comment(request, id):
                     'user_id':request.user.username,
                     'Success':'Success'
                     }))
-        
+
         comment.body=html2markdown.convert(comment.body)
         form=Commentform(instance=comment)
     return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})
@@ -536,14 +554,27 @@ def voting(request, id):
     except:
         return HttpResponse("id does not exist")
     user = request.user
+    count=0
     if user != answer.user_id:
        if Upvotes.objects.filter(answer=answer, user=user).exists():
            upvote= Upvotes.objects.get(answer=answer, user=user)
            upvote.delete()
+           if Upvotes.objects.filter(answer=answer).exists():
+               count=Upvotes.objects.filter(answer=answer).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'downvoted'
+                            }))
        else:
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
-    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
+           if Upvotes.objects.filter(answer=answer).exists():
+               count=Upvotes.objects.filter(answer=answer).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'upvoted'
+                            }))
+    
 
 
 

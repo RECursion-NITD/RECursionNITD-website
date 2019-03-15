@@ -34,6 +34,7 @@ def superuser_only(function):
        return function(request, *args, **kwargs)
    return _inner
 
+@superuser_only
 def events(request):
     events=Events.objects.all()
     perms=0
@@ -69,6 +70,7 @@ def event_create(request):
 
     return render(request, 'create_event.html',{'form':form,"perms":perms})
 
+@superuser_only
 def event_detail(request,id):
     try:
         event =get_object_or_404( Events,pk=id)
@@ -109,6 +111,7 @@ def event_update(request,id):
                 return redirect('events')
         return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
+@superuser_only
 def upcoming_events(request):
     today=timezone.now()
     upto=today + timedelta(days=365)
@@ -122,3 +125,6 @@ def upcoming_events(request):
         return redirect('events')
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
+
+def calender(request):
+    return render(request,"calender.html")

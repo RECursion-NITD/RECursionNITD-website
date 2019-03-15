@@ -3,7 +3,7 @@
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-    background-color: #f1f1f1;
+    background-color: #fafafa;
     /*font-family: 'Ubuntu', sans-serif;*/
     font-family: 'Montserrat', sans-serif;
   }
@@ -26,10 +26,10 @@
     margin: 0px;
   }
   .tab{
-    color: #9A9DA0;
+    color:#8E9689;
   }
   .tab:hover{
-    color:#BABDC0;
+    color:#dddddd;
     text-decoration:none;
   }
   .dropdown-menu{
