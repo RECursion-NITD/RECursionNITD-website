@@ -9,7 +9,7 @@
 <body>
 <div >
         {% csrf_token %}
- <h3>Add/Update Answer</h3>
+ <h3 class="text-muted ml-auto mr-auto">Add/Update Answer</h3>
     <div >
 
         <p>Enter the details below:</p><br>
@@ -22,7 +22,7 @@
         </form> -->
         <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
                 <table>
-                    {{ upform }}
+                    {{upform.description}}
                     {{upform.media}}
                     <input type="hidden" name="ajax_update" value="True">
                 </table>
@@ -58,13 +58,13 @@
            Data=JSON.parse(data)
            Update=Data
            result="";
-           result+="ANSWER  =:"+Data.description+"<a href=/forum/answer/"+Data.id+">"+"  Update"  +"<a>"+"      ANSWER is added <br/>";
+           result+=Data.description+"<a href=/forum/answer/"+Data.id+">"+"  Update"  +"<a>"+" <br/>";
            console.log(result);
             $('#ans').html(result);
             $("#ans").show()
             $("#u_ans_form"+Data.id).hide()//hiding update form when update form was clicked
             update_ans_res=''
-            update_ans_res+="ANSWER =:"+ Data.description +  "<a class = \"u_ans\" ans-id= \"{{ans.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
+            update_ans_res+=Data.description +  "<a class = \"u_ans\" ans-id= \"{{ans.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
             $(".u_ans#ans_id_"+Data.id).html( update_ans_res).show()
         },
         error:handleFormError,

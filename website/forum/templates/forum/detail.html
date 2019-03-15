@@ -3,6 +3,9 @@
 <link rel="stylesheet" href="{% static 'css/tag.css' %}">
 <link rel="stylesheet" href="{% static 'css/gh-buttons.css' %}">
 
+{% load static %}
+<script src="{% static 'app.js' %}"></script>
+
 <div class="container-fluid card" style="">
     {% csrf_token %}
     <div class="row">
@@ -73,48 +76,24 @@
                     </div>
                 </div>
                 {%endif%} {% endfor %}
-                <div id='com'>  </div>
-                <div id='update_com' >  </div>
+<!--76-->                <!-- <div id='com'>  </div>
+                <div id='update_com' >  </div> -->
 
             </div>
             <!--Follow,Comment,Answer Start-->
 
             <div class="container" style="margin: 10px">
-                {% if not ans.id %}
-               
-                    <button type="button" id='add_ans_but' class="button_gh big">Add Answer <i class="far fa-comment-dots"></i></button>
-                
-                {% else %}
-               <!--  <a href="#">
-                    <button type="button" class="button_gh big">Update Your Answer <i class="far fa-comment-dots"></i></button>
-                </a> -->
-                <div  ><div id='ans_id_{{ans.id}}' class = "u_ans" ans-id= "{{ans.id}}"> <a   href="{% url 'forum:update_answer' ans.id %}"> <button type="button" class="button_gh big">Update Your Answer <i class="far fa-comment-dots"></i></button> </a></div>
-                                                     <div id='u_ans_form{{ans.id}}' com-id= "{{ans.id}}"> </div>
-                                                   </div>
-                {% endif %}
-               <button type="button" id='add_com_but' class="button_gh big"> <i class="far fa-comment-dots">Add Comment</i></button> <i class="far fa-comments"></i>
+               <button type="button" id='add_com_but' class="button_gh big" style="display: inline-block;"> <i class="far fa-comment-dots">Add Comment</i></button> <i class="far fa-comments"></i>
 
                
-               <!-- this is added -->
+<!----------- this is added -->
 
 
                 <!--Answer Input Box Start-->
                 <div class="container" id="answerDIV" style="">
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
-                                <div class="post-heading">
-                                    <div class="pull-left image">
-                                        <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar shadow" style="border: 1.5px; border-radius: 50px; border-style: solid; border-color: #F95C39" alt="user profile image">
-                                    </div>
-                                    <div class="pull-left meta">
-                                        <div class="title h5">
-                                            <a href="{% url 'user_profile:view_profile' user.id %}"><b>{{user}}</b></a>
-                                            is answering
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div class="post-description"> 
+                                <div class="post-description" style="display: none;"> 
                                    
                                         Answers: 
                         {% if not ans.id %}
@@ -128,11 +107,11 @@
                               <br>
                               
                                       {{ ansform.description.label_tag }}
-                                      {{ ansform.media }}
+                                      
                                         {% render_field ansform.description class="form-control" placeholder="Enter Answer Details" %}
-                          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ANSWER</button>
+                          <button type="submit" class="save btn btn-outline-primary" style="margin-left:150px;">ANSWER falsy</button>
                         </form>
-                        <div id='ans'></div>
+                        <div id='ans'><h1>SSS</h1></div>
                         <div id='update_ans' >
                         </div>
                         {% else %}
@@ -143,27 +122,33 @@
                                      
                                      </form>
                                  </div>
-                                </div>
                             </div>
                         </div>
                     </div>  
 <!--Answer Input Box End-->
+                    <!-- ANSWER FORM START -->
+                         <form class='my-ans-form' method="POST"  data-url="{% url 'forum:add_answer' questions.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
+                          <h5 class="text-muted" style="text-align:center;">Enter your answer details below:</h5><br>
+                          <table>
+                           <!--    {{ ansform }} -->
+                              <input type="hidden" name="ajax_call" value="True">
+                          </table>
+                              <br>
+                              
+                                      {{ ansform.description.label_tag }}
+                                      {{ ansform.media }}
+                                        {% render_field ansform.description class="form-control" placeholder="Enter Answer Details" %}
+                          <button type="submit" class="save btn btn-outline-success ml-3">Answer Good</button>
+                        </form>
+                        <!-- <div id='ans'></div>
+                        <div id='update_ans'>
+                        </div> -->
+                        <!-- {{ans.description|safe}}</br> -->
+                        <!-- ANSWER FORM END -->
 <!--Comment Input Box Start-->
                                     <div class="container" id="commentDIV">
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <div class="panel panel-white post shadow-sm" style="margin-bottom: 20px; background-color: white;border-top: 1.5px; border-radius: 6px;border-style: solid; border-top-color: #F95C39;">
-                                                    <div class="post-heading">
-                                                        <div class="pull-left image">
-                                                            <img src="http://bootdey.com/img/Content/user_1.jpg" class="img-circle avatar shadow" style="border: 1.5px; border-radius: 50px; border-style: solid; border-color: #F95C39" alt="user profile image">
-                                                        </div>
-                                                        <div class="pull-left meta">
-                                                            <div class="title h5">
-                                                                <a href="{% url 'user_profile:view_profile' request.user.id %}"><b>{{user}}</b></a>
-                                                                is commenting
-                                                            </div>
-                                                        </div>
-                                                    </div> 
                                                     <div class="post-description"> 
                                                       
                                                         
@@ -176,13 +161,12 @@
                                                             <input type="hidden" name="ajax_call" value="True">
                                                           </table>
                                                               <br>
-                                                          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ADD COMMENT</button>
+                                                          <button type="submit" class="save btn btn-outline-primary" style="margin-left:150px;">Add Comment</button>
                                                         </form>
                                                               
                                                      </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                         </div>  
                  <!--Comment Input Box End-->  
 
@@ -193,7 +177,26 @@
 
             <br>
  <!-- --------------------------------------------------------AKM---------------------------------------------->
+                        
             <h3>Answer(s)</h3>
+            {% if not ans.id %}
+               
+                    <button type="button" id='add_ans_but' class="button_gh big">Add Answer <i class="far fa-comment-dots"></i></button>
+                
+                {% else %}
+               <!--  <a href="#">
+                    <button type="button" class="button_gh big">Update Your Answer <i class="far fa-comment-dots"></i></button>
+                </a> -->
+                <div>
+                  <div id='ans_id_{{ans.id}}' class = "u_ans" ans-id= "{{ans.id}}"> 
+                    <a href="{% url 'forum:update_answer' ans.id %}"> 
+                      <button type="button" class="button_gh big" style="display: inline-block;">Update Your Answer <i class="far fa-comment-dots"></i></button>   
+                    </a>
+                  </div>
+                  <div id='u_ans_form{{ans.id}}' com-id= "{{ans.id}}"> 
+                  </div>
+                </div>
+                {% endif %}
             <hr> {% for answer in answers %} {% if answer.question_id == questions %}
             <div class="container answerBorder">
                 <div class="row">
@@ -208,6 +211,8 @@
                             <div class="comment-content col-md-11 col-sm-10 mb-2 p-2" style="background: #fafafa;">
                                 <div class="comment-body">
                                     {{answer.description|safe}}
+                        <div id='ans'></div>
+                        <div id='update_ans'></div>
                                     <br>
                                     <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
                                     <span style="float:right;margin-bottom: 0px;">
@@ -279,11 +284,9 @@
 </div>
 </div>
 
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
-    $(document).ready(function(){
+      $(document).ready(function(){
 
       $('.my-com-form').hide()
       $('.my-ans-form').hide()
@@ -502,6 +505,6 @@
 
 
       })
- </script>
+</script>
 {% endblock %}
 
