@@ -5,6 +5,8 @@
 {% endblock title %}
 
 {% block css%}
+{% load static %}
+<link href="{% static 'css/home.css'%}">
 <style>
   .side-card{
     border:1px solid #b1b1b1;
@@ -19,31 +21,27 @@
     overflow-x: hidden;
   }
 </style>
-{% endblock%}
-    
+{% endblock%}  
 
 {% block content %}
   <!-- <h2>Homepage</h2> -->
-  {% if user.is_authenticated %}
-  <script type="text/javascript">
-    $('#selector').delay(1000).fadeOut('slow');
-    setTimeout(display(), 2000);
-    display(){
-      document.getElementById("selector").style.display = "none";
-      x.
-    }
-  </script>
-  <div class="alert alert-warning" role="alert" id="selector">   
-  <p><strong>Welcome</strong> {{ user.username }}!</p>
-  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js"></script>
+  <!-- <script type="text/javascript" src=""></s -->
+    {% if user.is_authenticated %}
+    <script>
+      $.notify("Welcome {{ user.username }}!", 
+      { className:"success",position:"top right" }
+      );
+    </script>
   {% endif %}
   <div class="row">
     <div class="col-sm-12 col-md-7 col-lg-12">
-      <div class="card pl-3 pr-5" style="background-color: inherit;border-style: none;margin-top: 6vw;margin-bottom: 1vw;">
+      <div class="card pl-3 pr-5" style="background-color: inherit;border-style: none;margin-top: 4vw;margin-bottom: 1vw;">
         <center>
           <h1 style="font-size:7vw; color:#F95C39;">RECursion</h1>
           <h5 style="font-size:2vw;color:#528CDD;">Programming Community of NIT Durgapur</h5>
-          <p style="">We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
+          <p>We are programming community of NIT Durgapur, with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse student's participation in inter-colligiate contest like ACM-ICPC and get better ranks.</p>
         </center>
       </div> 
     </div>

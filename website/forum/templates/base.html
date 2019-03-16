@@ -62,7 +62,7 @@
         <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
         <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
-          <img src="{% static 'image/logoInvert.png'%}" style="max-width:65px;" alt="logo">
+          <img id="logoREC" src="{% static 'image/logoInvert.png'%}" style="max-width:65px;" alt="logo">
           <strong>REC</strong>ursion
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
@@ -90,12 +90,12 @@
            {% else %}
               <ul class="nav navbar-nav">
               <li class="dropdown nav-link m-2 menu-item nav-item">
-              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Manage Account<span class="caret"></span></a>
+              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome, {{user.username}} <span class="caret"></span></a>
                 <ul class="dropdown-menu ml-2" style="padding: 2px;color:black;">
-                  <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li>
+                  <!-- <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li> -->
                   <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
-                  <!-- <li><a href="{% url 'user_profile:edit_profile' %}">Edit Account</a></li> -->
-                  <li><a href="{% url 'profile:view_profile' %}">View my activity</a></li>
+                  <li><a href="{% url 'profile:view_profile' %}">Manage Profile</a></li>
+                  <li><a href="{% url 'user_profile:edit_profile' %}">Edit Profile</a></li>
                   <li><a href="{% url 'logout' %}">Logout</a></li>
                 </ul>
               </li>
@@ -115,7 +115,7 @@
             linear-gradient(135deg, #2d3436 90%, #3e4446 1%),
             linear-gradient(45deg, #353b48 95%, rgba(0,0,255,0) 30%);">
             <a id="goTop">
-      <center class="circle">
+      <center class="circle" onclick="window.scrollTo(0,-1000000)">
         {% load static %}
         <img src="{% static 'image/rocket.png'%}" alt="go Top" onclick="window.scrollTo(0,-1000000)" style="margin-top: 2px;">
       </center>
@@ -123,7 +123,7 @@
         <div class="container">
           <div class="row row-30">
             <div class="col-md-4 col-xl-5">
-              <div class="pr-xl-4"><a class="brand" href="index.html"><img class="brand-logo-light" src="images/agency/logo-inverse-140x37.png" alt="" width="140" height="37" srcset="images/agency/logo-retina-inverse-280x74.png 2x"></a>
+              <div class="pr-xl-4">
                 <p>RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.</p>
                 <strong>Contribute to this community</strong><br>
                 <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
@@ -155,7 +155,7 @@
               <h3 class="ml-0">Links</h3>
               <ul class="nav-list ml-1">
                 <li><a href="{% url 'forum:list_questions' %}">AskREC</a></li>
-                <li><a href="#">Events</a></li>
+                <li><a href="{% url 'events:calender' %}">Events</a></li>
                 <li><a href="#">Get Started</a></li>
                 <li><a href="#">Team</a></li>
               </ul>

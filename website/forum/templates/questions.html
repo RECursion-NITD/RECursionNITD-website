@@ -23,20 +23,23 @@
       <div class="row">
           <div class="col-lg-9 col-sm-12 mt-2">
             <div class="card ml-0">
-              <div class="block">
-                <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left; max-width: 30%;">
-                <a href="#" class="ml-2 p-2" style="position:relative;background:#E0EAF5;color:white;top:15px;
-                ">
-                  <i class="fas fa-search"></i>
-                </a>
-                <a class="btn" href="{% url 'forum:add_question' %}" style="float: right;">
-                    <button type="button" class="btn btn-outline-primary" 
-                    style="float:right;">
+              <div class="block row">
+                <div class="col-sm-12 col-lg-6">
+                  <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left;width:75%;">
+                  <a href="#" class="ml-2 p-2" style="position:relative;background:#E0EAF5;color:white;top:15px;
+                  ">
+                    <i class="fas fa-search"></i>
+                  </a>
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                <a class="btn" href="{% url 'forum:add_question' %}" id="postQ">
+                    <button type="button" class="btn btn-outline-primary">
                     Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
                 </a>
+                </div>
               </div><hr>
               <ul>
-                  <div class="mr-0 mt-2">
+                  <div class="ml-0 mr-0 mt-2">
                       <div id="questions-list">
                           {% include 'list.html' %}
                       </div>
@@ -54,7 +57,7 @@
                       <small>questions</small></h2>
                       <h3  style="display:inline-block;">
                         <span class="number">{{ answers.count }}</span>
-                       <small>answers<small></h3>
+                       <small>answers</small></h3>
                     </div>
                       <br>
                       <h4>Most Recent Tags {{ limit }}</h4>
@@ -62,6 +65,7 @@
                           {% for tag in tags_recent %}
                           <li style="display:inline-block;"><a class="tagName" style="font-size: 100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
+                          </a>
                           <br>
                           <br>
                           <hr>
@@ -74,6 +78,10 @@
                           {% endfor %}
                       </ul>
                       <br>
+                      <a href="{% url 'forum:list_questions' %}" class="mr-3"style="float:right;">
+                      <button type="button" class="btn btn-sm btn-outline-primary">
+                          Clear Filter&nbsp;&nbsp;<i class="far fa-trash-alt"></i>&nbsp;</button>
+                      </a>
                   </div>
               </div>
           </div>
