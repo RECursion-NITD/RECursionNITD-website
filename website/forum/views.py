@@ -272,7 +272,9 @@ def update_questions(request, id):
             result = send_mass_mail(messages, fail_silently=False)
             return redirect('forum:list_questions')
     else:
-        question.description = html2markdown.convert(question.description)
+        import html2text
+        h = html2text.HTML2Text()
+        question.description = h.handle(question.description)
         form = Questionform(instance=question)
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
@@ -404,8 +406,9 @@ def update_answer(request, id):
                         'user_id':request.user.username,
                         'Success':'Success'
                             }))
-
-        answer.description=html2markdown.convert(answer.description)
+        import html2text
+        h = html2text.HTML2Text()
+        answer.description = h.handle(answer.description)
         form=Answerform(instance=answer)
 
 
@@ -533,7 +536,9 @@ def update_comment(request, id):
                     'Success':'Success'
                     }))
 
-        comment.body=html2markdown.convert(comment.body)
+        import html2text
+        h = html2text.HTML2Text()
+        comment.body = h.handle(comment.body)
         form=Commentform(instance=comment)
     return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})
 
