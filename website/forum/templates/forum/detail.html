@@ -34,7 +34,7 @@
                             <a href="#" class="tag" style="font-size:82%;">{{ tagging.tag }}</a> {%endif%} {% endfor %}
                         </div>
                         <!--Tags End-->
-                        <p class="small card-text"><i>{% if questions.visibility == True %}
+                        <p class="small card-text"><i>{% if questions.anonymous_ask == True %}
               Asked by: <a href="{% url 'user_profile:view_profile' questions.user_id.id  %}">{{ questions.user_id }}</a>
               {% else %}
               Asked by: Anonymous

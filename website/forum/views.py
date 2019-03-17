@@ -42,7 +42,7 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def home(request):
-    n=3
+    n=1
     events=Events.objects.all().order_by('-start_time')[:n:1]
     args={'events':events,}
     return render(request, 'home.html', args)
