@@ -1,25 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
 
-     <meta charset="UTF-8">
-    <meta charset="UTF-8">
-    <title>Update Answers</title>
-</head>
-<body>
-<div >
-        {% csrf_token %}
- <h3 class="text-muted ml-auto mr-auto">Add/Update Answer</h3>
-    <div >
-
-        <p>Enter the details below:</p><br>
-       <!--  <form method="POST">
-          <table>
-              
-          </table>
-              <br>
-          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
-        </form> -->
         <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
                 <table>
                     {{upform.description}}
@@ -30,11 +9,6 @@
                 <button type="submit" class="save btn btn-primary" style="margin-left:150px;">UPDATE</button>
               </form>
 
-      </div>
-     
-</div>
-</body>
-</html>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -42,7 +16,7 @@
     $(document).ready(function(){
         $("form.my-update-form").submit(function(task){
             task.preventDefault()
-            $("#update_ans").hide()//hiding update form when new form was added
+            
 
 
         var $formData = $(this).serialize()
@@ -53,23 +27,35 @@
         data:$formData ,
         success: function (data)
         {
-           console.log("updatweeeeeeeeeee" +data)
-           
-           Data=JSON.parse(data)
-           Update=Data
-           result="";
-           result+=Data.description+"<a href=/forum/answer/"+Data.id+">"+"  Update"  +"<a>"+" <br/>";
-           console.log(result);
-            $('#ans').html(result);
-            $("#ans").show()
-            $("#u_ans_form"+Data.id).hide()//hiding update form when update form was clicked
-            update_ans_res=''
-            update_ans_res+=Data.description +  "<a class = \"u_ans\" ans-id= \"{{ans.id}}\"  href=/forum/answer/"+Data.id+">Update this Answer</a>"
-            $(".u_ans#ans_id_"+Data.id).html( update_ans_res).show()
+            console.log(data)
+            $('form.my-update-form').hide()
+            $('#div_answers').html(data)
+            $(".u_ans").show()
         },
         error:handleFormError,
      })
             })
+
+            $('.u_ans').click(function(e){
+            e.preventDefault()
+            var id= $(this).attr('ans-id')
+           console.log(id)
+           $(this).toggle()//hiding update link
+            $('#ans_body_'+id).hide()
+            
+        $.ajax({
+        method: "GET",
+        url: "/forum/answer/"+id,
+        success: function (data)
+        {
+           var id_name = "#u_ans_form"+id
+           console.log(id_name)
+           $(id_name).html(data).show()
+        },
+        error:handleFormError,
+     })
+  
+    })   
             function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)

@@ -160,6 +160,7 @@ def list_questions(request):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
+    # import pdb;pdb.set_trace();
     while len(tags_recent_record)< len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
@@ -185,6 +186,7 @@ def detail_questions(request, id):
     upvotes=Upvotes.objects.all()
     comments=Comments.objects.filter(question = questions)
     comments_answers=Comments_Answers.objects.all()
+    profile=Profile.objects.all()
     if User.objects.filter(username=request.user).exists():
         ans = Answers.objects.filter(user_id=request.user).filter(question_id=questions)
         if ans.count() > 0:
@@ -208,7 +210,7 @@ def detail_questions(request, id):
         id_list = [id['answer_id'] for id in votes]  # voted answers id
 
 
-    args = {'user_permission':user_permission,'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
+    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'ansform':ansform,'questions': questions, 'answers': answers, 'follows': follows, 'tags':tags, 'taggings':taggings, 'upvotes':upvotes, 'comments':comments,'comments_answers':comments_answers,'ans':ans,'flag':flag,'voted':id_list, }
     return render(request, 'forum/detail.html', args)
 
 @login_required
@@ -217,7 +219,7 @@ def update_questions(request, id):
         question = get_object_or_404(Questions, pk=id)
     except:
         return HttpResponse("id does not exist")
-
+    # import pdb;pdb.set_trace();
     form = Questionform(request.POST or None, instance=question)
     Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
     if request.method == 'POST':
@@ -306,8 +308,11 @@ def add_answer(request, id):
             f.question_id=question
             f.user_id = request.user
             form.save()
-            profiles = Profile.objects.filter(role=2)
+            profiles = Profile.objects.filter(role=2) # only role 2 profile
             follows=Follows.objects.filter(question=question)
+            comments_answers=Comments_Answers.objects.all()
+            profile=Profile.objects.all()  # all user profile
+            answers=Answers.objects.all()
             messages = ()
             for profile in profiles:
                 user = profile.user
@@ -339,14 +344,8 @@ def add_answer(request, id):
             f.user_id =user
             f.save()
 
-            return HttpResponse(json.dumps({
-              'id':f.id,
-              'description':f.description,
-              'created_at' :f.created_at,
-              'updated_at' :f.updated_at,
-              'user_id':user.username,
-              'Success':'Success'
-            }))
+            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            return render(request, 'forum/div_answers.html',args)
         else :
             return HttpResponse("we failed to insert in db")
     else:
@@ -369,6 +368,9 @@ def update_answer(request, id):
                 user = request.user
                 user_profile = Profile.objects.get(user=user)
                 user_permission = user_profile.role
+                comments_answers=Comments_Answers.objects.all()
+                profile=Profile.objects.all()  # all user profile
+                answers=Answers.objects.all()
                 if request.user == answer.user_id or user_permission == '2' or user_permission == '1':
                     f=form.save()
                     profiles = Profile.objects.filter(role=2)
@@ -398,14 +400,9 @@ def update_answer(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    return HttpResponse(json.dumps({
-                        'id':f.id,
-                        'description':f.description,
-                        'created_at' :f.created_at,
-                        'updated_at' :f.updated_at,
-                        'user_id':request.user.username,
-                        'Success':'Success'
-                            }))
+                    args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+                    return render(request, 'forum/div_answers.html',args)
+
         import html2text
         h = html2text.HTML2Text()
         answer.description = h.handle(answer.description)
@@ -425,10 +422,21 @@ def edit_following(request, id):
        if Follows.objects.filter(question=question, user=user).exists():
            follow = Follows.objects.get(question=question, user=user)
            follow.delete()
+           count=Follows.objects.filter(question=question).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'unfollowed'
+                            }))
        else:
            follow = Follows.objects.create(question=question, user=user)
            follow.save()
-    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
+           count=Follows.objects.filter(question=question).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'followed'
+                            }))
+
+    
 
 @login_required
 def add_comment(request, id):
@@ -442,8 +450,9 @@ def add_comment(request, id):
         f.question=question
         f.user = request.user
         form.save()
-        profiles = Profile.objects.filter(role=2)
+        profiles = Profile.objects.filter(role=2) #only  role 2 profile
         follows=Follows.objects.filter(question=question)
+        profile=Profile.objects.all()  #all user profile
         messages = ()
         for profile in profiles:
             user = profile.user
@@ -470,18 +479,13 @@ def add_comment(request, id):
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
         user= request.user
-        return HttpResponse(json.dumps({
-              'id':f.id,
-              'body':f.body,
-              'created_at' :f.created_at,
-              'updated_at' :f.updated_at,
-              'user_id':user.username,
-              'Success':'Success'
-            }))
+        comments=Comments.objects.filter(question = question)
+        args = {'profile':profile,'question': question,  'comments':comments, }
+        return render(request, 'forum/div_comments.html',args)
     else:
         return  HttpResponse("Invalid")
 
-    return render(request, 'forum/comment.html', {'form': form})
+    return render(request, 'forum/comment.html', {'form':form})
 
 @login_required
 def update_comment(request, id):
@@ -527,14 +531,10 @@ def update_comment(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    return HttpResponse(json.dumps({
-                    'id':f.id,
-                    'body':f.body,
-                    'created_at' :f.created_at,
-                    'updated_at' :f.updated_at,
-                    'user_id':request.user.username,
-                    'Success':'Success'
-                    }))
+                    comments=Comments.objects.filter(question = question)
+                    profile=Profile.objects.all()  #all user profile
+                    args = {'profile':profile,'question': question,  'comments':comments, }
+                    return render(request, 'forum/div_comments.html',args)
 
         import html2text
         h = html2text.HTML2Text()
@@ -550,14 +550,27 @@ def voting(request, id):
     except:
         return HttpResponse("id does not exist")
     user = request.user
+    count=0
     if user != answer.user_id:
        if Upvotes.objects.filter(answer=answer, user=user).exists():
            upvote= Upvotes.objects.get(answer=answer, user=user)
            upvote.delete()
+           if Upvotes.objects.filter(answer=answer).exists():
+               count=Upvotes.objects.filter(answer=answer).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'downvoted'
+                            }))
        else:
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
-    return HttpResponseRedirect(reverse('forum:detail_questions', args=(question.id,)))
+           if Upvotes.objects.filter(answer=answer).exists():
+               count=Upvotes.objects.filter(answer=answer).count()
+           return HttpResponse(json.dumps({
+                        'count':count,
+                        'Success':'upvoted'
+                            }))
+    
 
 
 
@@ -590,6 +603,7 @@ def filter_question(request ,id):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
+    # import pdb;pdb.set_trace();
     while len(tags_recent_record) < len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
@@ -746,3 +760,5 @@ def delete_answer_comment(request, id):
     if user_permission == '2' or user_permission == '1':
            answer_comment.delete()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
+
+  
