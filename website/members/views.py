@@ -4,6 +4,9 @@ from members.models import Members
 from django.contrib.auth.models import User
 from . import forms
 # Create your views here.
+
+
+
 def member_list(request):
 
 	members = Members.objects.all().order_by('year_of_graduation')
