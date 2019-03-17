@@ -178,6 +178,10 @@ ul, ol {
     transition: .22s ease;
 }
 
-
+@media(max-width:450px){
+  #logoREC{
+    display:none;
+  }
+}
 
 

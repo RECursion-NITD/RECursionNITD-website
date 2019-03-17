@@ -19,7 +19,7 @@ class Questions(models.Model):
     # AUTOGENERATE DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     anonymous_ask = models.BooleanField(default=False)
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Answers(models.Model):
     # DATE TIME auto-generated
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     question_id = models.ForeignKey(Questions, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -90,7 +90,7 @@ class Answers(models.Model):
 
 class Comments(models.Model):
     body = models.TextField()
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     # TO DO
     # AUTOGEN DATETIME
@@ -112,7 +112,7 @@ class Comments(models.Model):
        
 class Comments_Answers(models.Model):
     body = models.TextField()
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answers, on_delete=models.CASCADE)
     # TO DO
     # AUTOGEN DATETIME
@@ -210,7 +210,7 @@ class Taggings(models.Model):
 
 # DONE
 class Upvotes(models.Model):
-    user = models.ForeignKey(User, models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     answer = models.ForeignKey(Answers, on_delete=models.CASCADE)
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
