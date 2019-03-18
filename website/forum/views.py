@@ -154,6 +154,7 @@ def list_questions(request):
     taggings_recent = Taggings.objects.all().order_by('-updated_at')
     tags_recent=Tags.objects.all().order_by('-updated_at')
     tags_popular=[]
+    check=[]
     if tags_recent.count()>10:
         limit=10
     else:
@@ -162,13 +163,15 @@ def list_questions(request):
         tagging = Taggings.objects.filter(tag=tag)
         count=tagging.count()
         tags_popular.append([count,tag])
+        if count>0:
+            check.append(tag)
     tags_popular.sort(key=lambda x: x[0],reverse=True)
     tags_recent_record=[]
     tags_popular_record=[]
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)< len(taggings_recent):
+    while len(tags_recent_record)< len(taggings_recent) and len(tags_recent_record)< len(check):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
@@ -579,6 +582,7 @@ def filter_question(request ,id):
     tags_recent=Tags.objects.all().order_by('-updated_at')
     taggings_recent=Taggings.objects.all().order_by('-updated_at')
     tags_popular = []
+    check=[]
     if tags_recent.count() > 10:
         limit = 10
     else:
@@ -587,13 +591,15 @@ def filter_question(request ,id):
         tagging = Taggings.objects.filter(tag=tag)
         count = tagging.count()
         tags_popular.append([count, tag])
+        if count>0:
+            check.append(tag)
     tags_popular.sort(key=lambda x: x[0], reverse=True)
     tags_recent_record = []
     tags_popular_record = []
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record) < len(taggings_recent):
+    while len(tags_recent_record) < len(taggings_recent) and len(tags_recent_record) < len(check):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
