@@ -41,7 +41,7 @@ class Profile(models.Model):
     def __self__(self):
         return self.name
 
-    def save(self):
+    def save(self,  *args, **kwargs):
         if self.image:
           img= Image.open(self.image)
           output = BytesIO()
