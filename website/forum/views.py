@@ -41,14 +41,6 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
-def error_404(request):
-    args = {}
-    return render(request, '404.html', args)
-
-def error_500(request):
-    args = {}
-    return render(request, '404.html', args)
-
 def home(request):
     n=3
     events=Events.objects.all().order_by('-start_time')[:n:1]
