@@ -18,6 +18,8 @@ urlpatterns = [
     path('viewprofile/<int:id>/', view_profile, name='view_profile'),
     path('viewprofile/', view_profile, name='view_profile'),
     path('register/', user_register, name="user_register"),
+    path('register/username_check', username_check, name="username_check"),
+    path('register/email_check', email_check,name="email_check"),
     path('editprofile/', edit_profile, name='edit_profile'),
     url(r'^markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
