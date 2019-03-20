@@ -12,9 +12,12 @@
              <span>
              <h3>{{ profile.name }}</h3>
              {% if profile.image %}
-                 <img src="{{ profile.image.url }}" alt="Profile Picture">
+                 <img src="{{ profile.image.url }}" alt="Profile Picture" height="50px" width="50px">
              {% endif %}
-             </span>
+             </span><br>
+             {% if request.user.id == profile.id %}
+             <a href="{% url 'profile:edit_profile'%}">Edit Profile</a>
+             {% endif %}
              <ul>
                  <li>Username: {{ profile.user }}</li>
                  <li>Email: {{ profile.user.email }}</li>
@@ -30,12 +33,12 @@
                     {% if act.get_cname == "Question" %}
                       <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
                     {% elif act.get_cname == "Answer" %}
-                      <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a>
+                      <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
                     {% elif act.get_cname == "Comment" %}
-                      <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a>
+                      <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
                     {% else %}
                       <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Question: {{ act.answer.question_id.title }}</a>
-                    {% endif %}
+                    {% endif %}<br>
                  {% endfor %}
              </ul>
 

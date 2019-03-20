@@ -135,7 +135,7 @@ def edit_profile(request):
     form = Profileform(request.POST or None, request.FILES or None,  instance=profile)
     if form.is_valid():
         form.save()
-        if form.cleaned_data['image'] is None:
+        if form.cleaned_data['image'] is None or form.cleaned_data['image'] == False:
           image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
           type = valid_url_extension(image_url)
           full_path = 'media/images/' + profile.user.username + '.png'

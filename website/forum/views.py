@@ -42,7 +42,7 @@ from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
 def home(request):
-    n=3
+    n=1
     events=Events.objects.all().order_by('-start_time')[:n:1]
     args={'events':events,}
     return render(request, 'home.html', args)
@@ -107,6 +107,8 @@ def add_question(request):
             bulk_tagging_add(f, tagging_list)  # use a bulk create function which accepts a list
             profiles=Profile.objects.filter(role = 2)
             messages=()
+            follow = Follows.objects.create(question=Questions.objects.get(pk=f.id), user=request.user)
+            follow.save()
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
@@ -158,7 +160,8 @@ def list_questions(request):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    # import pdb;pdb.set_trace();
+    while len(tags_recent_record)< len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
@@ -216,7 +219,7 @@ def update_questions(request, id):
         question = get_object_or_404(Questions, pk=id)
     except:
         return HttpResponse("id does not exist")
-
+    # import pdb;pdb.set_trace();
     form = Questionform(request.POST or None, instance=question)
     Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
     if request.method == 'POST':
@@ -271,7 +274,9 @@ def update_questions(request, id):
             result = send_mass_mail(messages, fail_silently=False)
             return redirect('forum:list_questions')
     else:
-        question.description = html2markdown.convert(question.description)
+        import html2text
+        h = html2text.HTML2Text()
+        question.description = h.handle(question.description)
         form = Questionform(instance=question)
         question = Questions.objects.get(pk=id)
         id_list = Taggings.objects.filter(question=question).values('tag_id')  # get all tag ids from taggings
@@ -398,7 +403,9 @@ def update_answer(request, id):
                     args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
-        answer.description=html2markdown.convert(answer.description)
+        import html2text
+        h = html2text.HTML2Text()
+        answer.description = h.handle(answer.description)
         form=Answerform(instance=answer)
 
 
@@ -529,7 +536,9 @@ def update_comment(request, id):
                     args = {'profile':profile,'question': question,  'comments':comments, }
                     return render(request, 'forum/div_comments.html',args)
 
-        comment.body=html2markdown.convert(comment.body)
+        import html2text
+        h = html2text.HTML2Text()
+        comment.body = h.handle(comment.body)
         form=Commentform(instance=comment)
     return render(request, 'forum/comment.html', {'upform': form, 'comment': comment})
 
@@ -594,7 +603,8 @@ def filter_question(request ,id):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
-    while len(tags_recent_record)!= limit:
+    # import pdb;pdb.set_trace();
+    while len(tags_recent_record) < len(taggings_recent):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1

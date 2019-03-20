@@ -55,7 +55,7 @@
                       <span style="display:inline-block;">answers</span> 
                     </div>
                       <br>
-                      <h4>Most Recent Tags {{ limit }}</h4>
+                      <h6>Most Recent Tags {{ limit }}</h6>
                       <ul>
                           {% for tag in tags_recent %}
                           <li style="display:inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
@@ -65,7 +65,7 @@
                           <hr>
                           <br>
                       </ul>
-                      <h4>Most Popular Tags</h4>
+                      <h6>Most Popular Tags</h6>
                       <ul>
                           {% for tag in tags_popular %}
                           <li style="display: inline-block;"><a class="tagName" styele="font-size:100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
