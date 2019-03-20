@@ -22,7 +22,7 @@
                 </div>
                 <div id="addedBy" class="text-muted">
                     {% if question.anonymous_ask == False %}
-                    <li>Added by {{question.user_id}} on</li>
+                    <li>Added by <a href="{% url 'user_profile:view_profile' question.user_id.id  %}">{{question.user_id}}</a> on</li>
                     {% else %}
                     <li>Added by Anonymous on</li>
                     {% endif %}
