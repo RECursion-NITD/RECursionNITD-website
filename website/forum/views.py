@@ -624,7 +624,8 @@ def filter_question(request ,id):
         if request.is_ajax():
             return HttpResponse('')
         questions_list = paginator.page(paginator.num_pages)
-    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    profiles = Profile.objects.all()
+    args = {'profile': profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
