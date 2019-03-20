@@ -1,8 +1,7 @@
 {% extends 'base.html' %} {% block content %} {% load staticfiles %}{% load widget_tweaks %}
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 <link rel="stylesheet" href="{% static 'css/tag.css' %}">
-<link rel="stylesheet" href="{% static 'css/gh-buttons.css' %}"> {% load static %}
-<script src="{% static 'app.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/gh-buttons.css' %}">
 
 <div class="container-fluid card" style="">
     {% csrf_token %}
@@ -11,7 +10,8 @@
         <div class="col-lg-9 col-md-9 col-sm-12">
             <div class="card">
                 <div id="edit_follow" f-id="{{questions.id}}" class="card-header">
-                    {% if request.user != questions.user_id %} {% if flag == 0 %}
+                    {% if request.user != questions.user_id %}
+                    {% if flag == 0 %}
                     <a href="{% url 'forum:edit_following' questions.id %}">
                         <button id="follow_btn" style="float: right;" type="button" class="button_gh big">Follow | <i class="far fa-heart"></i> {{ questions.follows_set.count }}</button>
                     </a>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="card-body">
                     <blockquote class="mb-0">
-                        <h2 class="card-title mb-0" id="qTitle">{{ questions.title }}</h2>
+                      <h2 class="card-title mb-0" id="qTitle">{{ questions.title }}</h2> 
                         <p>{{questions.description|safe}}</p>
                         <!--Tags Start-->
                         <div class="mt-5">
@@ -31,8 +31,7 @@
                             <a href="#" class="tag" style="font-size:82%;">{{ tagging.tag }}</a> {%endif%} {% endfor %}
                         </div>
                         <!--Tags End-->
-                        <p class="small card-text"><i>
-                {% if questions.anonymous_ask == False %}
+                        <p class="small card-text"><i>{% if questions.visibility == True %}
               Asked by: <a href="{% url 'user_profile:view_profile' questions.user_id.id  %}">{{ questions.user_id }}</a>
               {% else %}
               Asked by: Anonymous
@@ -41,174 +40,157 @@
                 </div>
                 <!-- QUESTION COMMENT SECTION -->
                 <div id="div_comments">
-                    {% for comment in comments %} {% if comment.question == questions %}
-                    <div class="container offset-1 mr-0" style="width: 90%;">
-                        <hr id="qDivide">
-                        <div class="row">
-                            <div class="comments col-lg-12 col-md-9" id="comments">
-                                <!-- Show Comment -->
-                                <div class="comment row">
-                                    {% for p in profile %} {% if p.user == comment.user %} {% if p.image %}
-                                    <div class="comment-avatar col-md-1 col-sm-1">
-                                        <a href="">
-                                            <img class="small mx-auto rounded-circle img-fluid" <img src="{{ p.image.url }}" style="height: 40px; width:40px;" alt="avatar"></a>
-                                    </div>
+                {% for comment in comments %}
+                 {% if comment.question == questions %}
+                <div class="container offset-1 mr-0" style="width: 90%;">
+                    <hr id="qDivide">
+                    <div class="row">
+                        <div class="comments col-lg-12 col-md-9" id="comments">
+                            <!-- Show Comment -->
+                            <div class="comment row">
+                                {% for p in profile %} {% if p.user == comment.user %} {% if p.image %}
+                                <div class="comment-avatar col-md-1 col-sm-1">
+                                    <a href="">
+                                        <img class="small mx-auto rounded-circle img-fluid" <img src="{{ p.image.url }}" style="height: 40px; width:40px;" alt="avatar"></a>
+                                </div>
 
-                                    {% endif %} {% endif %} {% endfor %}
+                                {% endif %} {% endif %} {% endfor %}
 
-                                    <div class="comment-content col-md-11 col-sm-10">
-                                        <div class="comment-body">
-                                            <p class="m-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user %}
-                                                <div>
-                                                    <div id='com_id_{{comment.id}}' class="u_com" com-id="{{comment.id}}"> <a href="{% url 'forum:update_comment' comment.id %}" class="" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
-                                                    <div id='u_com_form{{comment.id}}' com-id="{{comment.id}}"> </div>
-                                                </div>
+                                <div class="comment-content col-md-11 col-sm-10">
+                                    <div class="comment-body">
+                                        <p class="m-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user %}
+                                          <div  ><div id='com_id_{{comment.id}}' class = "u_com" com-id= "{{comment.id}}"> <a href="{% url 'forum:update_comment' comment.id %}" class="" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
+                                                 <div id='u_com_form{{comment.id}}' com-id= "{{comment.id}}"> </div>
+                                               </div>
                                                 {% endif %}
-                                                <h6 class="text-muted small comment-meta" style="display: inline-block;"><a href="{% url 'user_profile:view_profile' comment.user.id  %}">{{ comment.user }}</a> last updated on {{comment.updated_at}}</h6>
-                                            </p>
-
-                                        </div>
+                                            <h6 class="text-muted small comment-meta" style="display: inline-block;"><a href="{% url 'user_profile:view_profile' comment.user.id  %}">{{ comment.user }}</a> last updated on {{comment.updated_at}}</h6>
+                                        </p>
+                                       
                                     </div>
                                 </div>
-                                <!-- /Show Comment -->
                             </div>
+                            <!-- /Show Comment -->
                         </div>
                     </div>
-                    {%endif%} {% endfor %}
-                
+                </div>
+                {%endif%} {% endfor %}
+               </div>
                 <div class="comment-content col-md-11 col-sm-10 offset-sm-1">
                     <hr>
                     <div class="comment-body">
-                        <div id='com'> </div>
-                        <div id='update_com'> </div>
-                    </div>
-                </div>
-
+                        <div id='com'>  </div>
+                        <div id='update_com' > </div>
+                    </div></div>
+                
 
             </div>
             <!--Follow,Comment,Answer Start-->
 
             <div class="container" style="margin: 10px">
-                <button type="button" id='add_com_but' class="btn btn-outline-primary"> <i class="far fa-comment-dots">Add Comment</i></button> <i class="far fa-comments"></i>
+                {% if not ans.id %}
+               
+                    <button type="button" id='add_ans_but' class="button_gh big">Add Answer <i class="far fa-comment-dots"></i></button>
+                
+                {% else %}
+               <!--  <a href="#">
+                    <button type="button" class="button_gh big">Update Your Answer  <i class="far fa-comment-dots"></i></button>
+                </a> -->
+                <div  ><div id='ans_id_{{ans.id}}' class = "u_ans" ans-id= "{{ans.id}}"> <a   href="{% url 'forum:update_answer' ans.id %}"> <button type="button" class="button_gh big">Update Your Answer <i class="far fa-comment-dots"></i></button> </a></div>
+                                                   
+                {% endif %}
+               <button type="button" id='add_com_but' class="button_gh big"> <i class="far fa-comment-dots">Add Comment</i></button> <i class="far fa-comments"></i>
 
-
-                <!----------- this is added -->
+               
+               <!-- this is added -->
 
 
                 <!--Answer Input Box Start-->
+              
+                                <div class="post-description"> 
+                                   
+                                        Answers: 
+                        {% if not ans.id %}
+                        
+                        <form class='my-ans-form' method="POST"  data-url="{% url 'forum:add_answer' questions.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
+                          <h5 class="text-muted" style="text-align:center;">Enter your answer details below:</h5><br>
+                          <table>
+                           <!--    {{ ansform }} -->
+                              <input type="hidden" name="ajax_call" value="True">
+                          </table>
+                              <br>
+                              
+                                      {{ ansform.description.label_tag }}
+                                      {{ ansform.media }}
+                                        {% render_field ansform.description class="form-control" placeholder="Enter Answer Details" %}
+                          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ANSWER</button>
+                        </form>
+                        <div id='ans'></div>
+                        <div id='update_ans' >
+                        </div>
+                        {% else %}
+                        {{ans.description|safe}}</br>
+                        
+                         {% endif %}
+                                        
+                                     
+                                     </form>
+                                 </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+<!--Answer Input Box End-->
+<!--Comment Input Box Start-->
+                                    
+                                                    <div class="post-description"> 
+                                                      
+                                                        
+                                                        <form class='my-com-form' method="POST"  data-url="{% url 'forum:add_comment' questions.id  %}"> {% csrf_token %}
+                                                            <h5 class="text-muted" style="text-align:center;">Enter your comment details below:</h5><br>
+                                                          <table>
+                                                              {{ comform.body.lagel_tag }}
+                                                              {{ comform.media }}
+                                                              {% render_field comform.body class="form-control" placeholder="Enter Comment Details" %}
+                                                            <br>
+                                                            <input type="hidden" name="ajax_call" value="True">
+                                                          </table>
+                                                              <br>
+                                                          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">ADD COMMENT</button>
+                                                        </form>
+                                                              
+                                                     </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>  
+                 <!--Comment Input Box End-->  
 
-                <div class="post-description">
+              <!--  end of add -->
 
-                    Answers: {% if not ans.id %}
-
-                    <form class='my-ans-form' method="POST" data-url="{% url 'forum:add_answer' questions.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
-                        <h5 class="text-muted" style="text-align:center;">Enter your answer details below:</h5>
-                        <br>
-                        <table>
-                            <!--    {{ ansform }} -->
-                            <input type="hidden" name="ajax_call" value="True">
-                        </table>
-                        <br> {{ ansform.description.label_tag }} {% render_field ansform.description class="form-control" placeholder="Enter Answer Details" %}
-                        <button type="submit" class="save btn btn-outline-primary" style="margin-left:150px;">ANSWER</button>
-                    </form>
-                    <div id='ans'></div>
-                    <div id='update_ans'>
-                    </div>
-                    {% else %} {{ans.description|safe}}
-                    </br>
-
-                    {% endif %}
-
-
-                    </form>
-                </div>
             </div>
-        </div>
-    </div>
-    <!--Answer Input Box End-->
-    <!-- ANSWER FORM START -->
-    <form class='my-ans-form' method="POST" data-url="{% url 'forum:add_answer' questions.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
-        <h5 class="text-muted" style="text-align:center;">Enter your answer details below:</h5>
-        <br>
-        <table>
-            <!--    {{ ansform }} -->
-            <input type="hidden" name="ajax_call" value="True">
-        </table>
-        <br> {{ ansform.description.label_tag }} {{ ansform.media }} {% render_field ansform.description class="form-control" placeholder="Enter Answer Details" %}
-        <button type="submit" class="save btn btn-outline-success ml-3">Answer</button>
-    </form>
-    <!-- <div id='ans'></div>
-                        <div id='update_ans'>
-                        </div> -->
-    <!-- {{ans.description|safe}}</br> -->
-    <!-- ANSWER FORM END -->
-    <!--Comment Input Box Start-->
-    <div class="container" id="commentDIV">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="post-description">
+            <!--Follow,Comment,Answer End-->
 
-
-                    <form class='my-com-form' method="POST" data-url="{% url 'forum:add_comment' questions.id  %}"> {% csrf_token %}
-                        <h5 class="text-muted" style="text-align:center;">Enter your comment details below:</h5>
-                        <br>
-                        <table>
-                            {{ comform.body.lagel_tag }} {{ comform.media }} {% render_field comform.body class="form-control" placeholder="Enter Comment Details" %}
-                            <br>
-                            <input type="hidden" name="ajax_call" value="True">
-                        </table>
-                        <br>
-                        <button type="submit" class="save btn btn-outline-primary" style="margin-left:150px;">Add Comment</button>
-                    </form>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--Comment Input Box End-->
-
-    <!--  end of add -->
-
-</div>
-<!--Follow,Comment,Answer End-->
-
-<br>
-<!-- --------------------------------------------------------AKM---------------------------------------------->
-<div id="div_answers">
-    <h3>Answer(s)</h3> {% if not ans.id %}
-
-    <button type="button" id='add_ans_but' class="btn btn-outline-primary">Add Answer <i class="far fa-comment-dots"></i></button>
-
-    {% else %}
-    <div>
-        <div id='ans_id_{{ans.id}}' class="u_ans" ans-id="{{ans.id}}">
-            <a href="{% url 'forum:update_answer' ans.id %}">
-                <button type="button" class="btn btn-outline-primary" style="display: inline-block;">Update Your Answer <i class="far fa-comment-dots"></i></button>
-            </a>
-        </div>
-        <div id='u_ans_form{{ans.id}}' com-id="{{ans.id}}">
-        </div>
-    </div>
-    {% endif %}
-    <hr> {% for answer in answers %} {% if answer.question_id == questions %}
-    <div class="container answerBorder">
-        <div class="row">
-            <div class="comments col-lg-12 col-md-9" id="comments">
-                <!-- Show Answer -->
-                <div class="comment row">
-                    {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
-                    <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
-                        <a href=""><img class="mx-auto rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
-                    </div>
-                    {% endif %} {% endif %} {% endfor %}
-                    <div class="comment-content col-md-11 col-sm-10 mb-2 p-2" style="background: #fafafa;">
-                        <div class="comment-body">
-                            {{answer.description|safe}}
-                            <div id='ans'></div>
-                            <div id='update_ans'></div>
-                            <br>
-                            <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
-                            <span style="float:right;margin-bottom: 0px;">
+            <br>
+ <!-- --------------------------------------------------------AKM---------------------------------------------->
+ <div id="div_answers">
+            <h3>Answer(s)</h3>
+            <hr> {% for answer in answers %} {% if answer.question_id == questions %}
+            <div class="container answerBorder">
+                <div class="row">
+                    <div class="comments col-lg-12 col-md-9" id="comments">
+                        <!-- Show Answer -->
+                        <div class="comment row">
+                            {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
+                            <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                                <a href=""><img class="mx-auto rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
+                            </div>
+                            {% endif %} {% endif %} {% endfor %}
+                            <div class="comment-content col-md-11 col-sm-10 mb-2 p-2" style="background: #fafafa;">
+                                <div class="comment-body">
+                                    {{answer.description|safe}}
+                                    <br>
+                                    <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
+                                    <span style="float:right;margin-bottom: 0px;">
                             <a href="{% url 'forum:add_comment_answer' answer.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                             <span >
                               {% if request.user != answer.user_id %}
@@ -219,87 +201,84 @@
                               {% endif %}
                               {% endif %}
                               <a  id="vote_count_{{answer.id}}" class="text-right small"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a>
-                            </span> {% if request.user == answer.user_id %}
-                            <div>
-                                <div id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}"> <a href="{% url 'forum:update_answer' answer.id %}" class="" style="float:right;"><i class="far fa-edit"></i> Update this answer</a></div>
-                                <div id='u_ans_form{{answer.id}}' com-id="{{answer.id}}"> </div>
-                                {% endif %}
-                                </span>
-                            </div>
-                        </div>
-                        {% for comment_a in comments_answers %} {% if comment_a.answer == answer %}
-                        <!-- reply is indented -->
-                        <div class="comment-reply col-md-11 offset-md-1 col-sm-10 offset-sm-2 pt-2" style="font-size:90%;">
-                            <hr class="mt-0 mb-1 ml-0" width="100%">
-                            <div class="row commentBorder">
-                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
-                                    <a href="#"><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="avatar" style="height:40px; width:40px;"></a>
+                            </span>
+                            {% if request.user == answer.user_id %}
+                            <div  ><div id='ans_id_{{answer.id}}' class = "u_ans" ans-id= "{{answer.id}}"> <a href="{% url 'forum:update_answer' answer.id %}" class="" style="float:right;"><i class="far fa-edit"></i> Update this answer</a></div>
+                            <div id='u_ans_form{{answer.id}}' com-id= "{{answer.id}}"> </div>
+                            {% endif %}
+                            </span>
                                 </div>
-                                <div class="comment-content col-md-11 col-sm-10 col-12">
-                                    <div class="comment-body">
-                                        <p>{{ comment_a.body|safe }}
-                                            <br>
-                                            <span class="small comment-meta"></span><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a> {% if request.user == comment_a.user %} {% endif %}
-
-
-                                        </p>
+                            </div>
+                            {% for comment_a in comments_answers %} {% if comment_a.answer == answer %}
+                            <!-- reply is indented -->
+                            <div class="comment-reply col-md-11 offset-md-1 col-sm-10 offset-sm-2 pt-2" style="font-size:90%;">
+                                <hr class="mt-0 mb-1 ml-0" width="100%">
+                                <div class="row commentBorder">
+                                    <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                                        <a href="#"><img class="mx-auto rounded-circle img-fluid" src="http://demos.themes.guide/bodeo/assets/images/users/m101.jpg" alt="avatar" style="height:40px; width:40px;"></a>
+                                    </div>
+                                    <div class="comment-content col-md-11 col-sm-10 col-12">
+                                        <div class="comment-body">
+                                            <p>{{ comment_a.body|safe }}
+                                                <br>
+                                                <span class="small comment-meta"></span><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a>
+                                                {% if request.user == comment_a.user %}
+                                                
+                                                 {% endif %}
+                                                 
+                                    
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% endif %} {% endfor %}
-                        <!-- /reply is indented -->
-                        <br>
-                    </div>
-                    <!-- /Show Answer -->
-                </div>
+                             {% endif %}
+                             {% endfor %}
+               <!-- /reply is indented --><br>
             </div>
-        </div>
-
-        {%endif%} {% endfor %}
-
-    </div>
-
-    <div class="col-lg-3 col-md-3 col-sm-12 mb-2 mt-2">
-        <div class="card">
-            <div class="card-header">
-                {% if request.user == questions.user_id %}
-                <a href="{% url 'forum:update_question' questions.id  %}">
-                    <button type="button" class="btn btn-success">Update this Question</button>
-                </a>
-                {% else %}
-                <a href="{% url 'forum:add_question'  %}">
-                    <button type="button" class="btn btn-success">Ask New Question</button>
-                </a>
-                {% endif %}
-            </div>
-            <div class="card-body">
-
-                <p>Instruction</p>
-
-            </div>
+            <!-- /Show Answer -->
         </div>
     </div>
 </div>
+
+                                    {%endif%}
+                                    {% endfor %}
+
 </div>
+
+  <div class="col-lg-3 col-md-3 col-sm-12 mb-2 mt-2">
+    <div class="card">
+      <div class="card-header">
+      {% if request.user == questions.user_id %}
+        <a href="{% url 'forum:update_question' questions.id  %}"><button type="button" class="btn btn-success">Update this Question</button></a>
+      {% else %}
+        <a href="{% url 'forum:add_question'  %}"><button type="button" class="btn btn-success">Ask New Question</button></a>
+      {% endif %}
+      </div>
+      <div class="card-body">
+
+              <p>Instruction</p>
+
+      </div>
+    </div>
+   </div>
+
+</div>
+</div>
+
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
-      $(document).ready(function(){
-
+    $(document).ready(function(){
       $('.my-com-form').hide()
       $('.my-ans-form').hide()
-
-
        $('#add_com_but').click(()=>{
        $('.my-com-form').toggle()
        })
-
        $('#add_ans_but').click(()=>{
        $('.my-ans-form').toggle()
        })
-
-
   /*   edit follow*/
   $('#edit_follow').click(function(event)
   {
@@ -317,7 +296,6 @@
                    {
                        $('#follow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
                        $('#unfollow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
-
                    }
                    else if( Data.Success == "unfollowed" )
                    {
@@ -327,9 +305,7 @@
                 },
         error: handleFormError,
     })
-
   })
-
   /*   edit ans voting*/
   $('.voting_box').click(function(event)
   {
@@ -358,18 +334,12 @@
                 },
         error: handleFormError,
     })
-
   })
        
-
-
-
-
       var $comForm = $('.my-com-form')
       $comForm.submit(function(event){
       event.preventDefault()
       var $formData = $(this).serialize()
-
       var $thisURL = $comForm.attr('data-url')
     console.log($thisURL);
     $.ajax({
@@ -385,9 +355,6 @@
             $('#div_comments').html(data)
         
         }
-
-
-
 /*         var $update = $('#com')
             $("#com").click(function(e){
             e.preventDefault()
@@ -395,7 +362,6 @@
             $form_data =
             {},
             console.log($form_data)
-
         $.ajax({
         method: "GET",
         url: "/forum/editcomment/"+Update_com.id,
@@ -411,22 +377,16 @@
      })
        
         })    //end of update click */
-
-
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)
             console.log(errorThrown)
         }
 })
-
-
-
       var $ansForm = $('.my-ans-form')
       $ansForm.submit(function(event){
       event.preventDefault()
       var $formData = $(this).serialize()
-
       var $thisURL = $ansForm.attr('data-url')
     console.log($thisURL);
     $.ajax({
@@ -437,7 +397,6 @@
         error: handleFormError,
     })
     console.log($formData)
-
    
     function handleansFormSuccess(data, textStatus, jqXHR){
         console.log(data)
@@ -445,9 +404,6 @@
             $('#div_answers').html(data)
             
         }
-
-
-
       /*   var $update = $('#ans')
             $("#ans").click(function(e){
             e.preventDefault()
@@ -455,7 +411,6 @@
             $form_data =
             {},
             console.log($form_data)
-
         $.ajax({
         method: "GET",
         url: "/forum/answer/"+Update_ans.id,
@@ -469,7 +424,6 @@
      })
         $("#update_ans").show()
         })    //end of update click */
-
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)
@@ -498,11 +452,8 @@
         error:handleFormError,
      })
     })
-
-
   
         //ajax call update answer
-
         $('.u_ans').click(function(e){
             e.preventDefault()
             var id= $(this).attr('ans-id')
@@ -528,9 +479,6 @@
             console.log(textStatus)
             console.log(errorThrown)
         }
-
-
       })
-</script>
+ </script>
 {% endblock %}
-
