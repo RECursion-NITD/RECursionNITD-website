@@ -9,3 +9,28 @@
 .container{
     justify-content: center;
 }
+.title{
+    color: #F95C39;
+    font-size: 7vw; 
+    font-family: 'Montserrat', sans-serif;
+}
+@media(max-width:768px){
+    .mobileLine{
+        display:block;
+    }
+}
+@media(max-width:450px){
+    .title{
+      font-size:14vw;
+      margin-bottom: 2px;
+    }
+    .subtitle{
+      font-size: 5vw;
+    }
+    .haq{
+      border-right:none;
+    }
+    .ntp{
+      margin-left: 0px;
+    }
+}
