@@ -285,21 +285,15 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
-      $(document).ready(function(){
-
+    $(document).ready(function(){
       $('.my-com-form').hide()
       $('.my-ans-form').hide()
-
-
        $('#add_com_but').click(()=>{
        $('.my-com-form').toggle()
        })
-
        $('#add_ans_but').click(()=>{
        $('.my-ans-form').toggle()
        })
-
-
   /*   edit follow*/
   $('#edit_follow').click(function(event)
   {
@@ -317,7 +311,6 @@
                    {
                        $('#follow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
                        $('#unfollow_btn').html("UnFollow | <i class=\"fas fa-heart\"></i> "+Data.count)
-
                    }
                    else if( Data.Success == "unfollowed" )
                    {
@@ -327,9 +320,7 @@
                 },
         error: handleFormError,
     })
-
   })
-
   /*   edit ans voting*/
   $('.voting_box').click(function(event)
   {
@@ -358,18 +349,12 @@
                 },
         error: handleFormError,
     })
-
   })
        
-
-
-
-
       var $comForm = $('.my-com-form')
       $comForm.submit(function(event){
       event.preventDefault()
       var $formData = $(this).serialize()
-
       var $thisURL = $comForm.attr('data-url')
     console.log($thisURL);
     $.ajax({
@@ -385,9 +370,6 @@
             $('#div_comments').html(data)
         
         }
-
-
-
 /*         var $update = $('#com')
             $("#com").click(function(e){
             e.preventDefault()
@@ -395,7 +377,6 @@
             $form_data =
             {},
             console.log($form_data)
-
         $.ajax({
         method: "GET",
         url: "/forum/editcomment/"+Update_com.id,
@@ -411,22 +392,16 @@
      })
        
         })    //end of update click */
-
-
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)
             console.log(errorThrown)
         }
 })
-
-
-
       var $ansForm = $('.my-ans-form')
       $ansForm.submit(function(event){
       event.preventDefault()
       var $formData = $(this).serialize()
-
       var $thisURL = $ansForm.attr('data-url')
     console.log($thisURL);
     $.ajax({
@@ -437,7 +412,6 @@
         error: handleFormError,
     })
     console.log($formData)
-
    
     function handleansFormSuccess(data, textStatus, jqXHR){
         console.log(data)
@@ -445,9 +419,6 @@
             $('#div_answers').html(data)
             
         }
-
-
-
       /*   var $update = $('#ans')
             $("#ans").click(function(e){
             e.preventDefault()
@@ -455,7 +426,6 @@
             $form_data =
             {},
             console.log($form_data)
-
         $.ajax({
         method: "GET",
         url: "/forum/answer/"+Update_ans.id,
@@ -469,7 +439,6 @@
      })
         $("#update_ans").show()
         })    //end of update click */
-
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)
@@ -498,11 +467,8 @@
         error:handleFormError,
      })
     })
-
-
   
         //ajax call update answer
-
         $('.u_ans').click(function(e){
             e.preventDefault()
             var id= $(this).attr('ans-id')
@@ -528,9 +494,6 @@
             console.log(textStatus)
             console.log(errorThrown)
         }
-
-
       })
 </script>
 {% endblock %}
-
