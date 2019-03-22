@@ -1,45 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title>Document</title>
-</head>
+{% extends 'base.html' %}
+
+{% block content %}
 <body>
-             <h2>User Profile</h2>
-             <span>
-             <h3>{{ profile.name }}</h3>
+        <center><h4>{{ profile.nickname }}'s Profile</h4></center>
+        <div class="container-fluid" style="padding: 30px">     
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-12">
+            <div class="jumbotron container shadow-sm p-3 mb-5 bg-white rounded" style="background: white;">
              {% if profile.image %}
-                 <img src="{{ profile.image.url }}" alt="Profile Picture" height="50px" width="50px">
+                 <center><img src="{{ profile.image.url }}" alt="Profile Picture" height="100px" width="100px" style="border-radius: 100px;"></center>
              {% endif %}
-             </span><br>
+             <div style="text-align: center;">
+             <h3>{{ profile.name }}</h3>
+             <h5><small class="text-muted">@{{ profile.user }}</small></h5>
+             </div>
+             <hr>
+             <ul>
+                 <li><i class="fas fa-envelope"></i>  {{ profile.user.email }}</li>
+                 <li><i class="fas fa-university"></i>  {{ profile.college }}</li>
+                 <li><i class="fab fa-leanpub"></i> {{ profile.dept }}</li>
+                 <li><i class="fas fa-clock"></i> {{ profile.created_at }}</li>
+                 <li><i class="fas fa-user-circle"></i>  Role {{ profile.role }}</li>
+             </ul>
              {% if request.user.id == profile.id %}
              <a href="{% url 'profile:edit_profile'%}">Edit Profile</a>
              {% endif %}
-             <ul>
-                 <li>Username: {{ profile.user }}</li>
-                 <li>Email: {{ profile.user.email }}</li>
-                 <li>College: {{ profile.college }}</li>
-                 <li>Role: {{ profile.role }}</li>
-                 <li>Department: {{ profile.dept }}</li>
-                 <li>Joined RECursion: {{ profile.created_at }}</li>
-             </ul>
-             <li>Recent Activity</li>
+            </div>
+            </div>
+            <div class="col-lg-9 col-md-8 col-sm-12">
+            <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded"  style="background: white">
+                <div class="card-header" style="background: white">
+                  Recent Activity
+                </div>
+             <div class="card-body">
              <ul>
                  {% for act in activity %}
                     {% if act.get_cname == "Question" %}
-                      <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
+                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                            <h5>Questions Asked</h5>
+                            <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
+                    </div>
                     {% elif act.get_cname == "Answer" %}
-                      <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
+                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                            <h5>Questions Answered</h5>
+                            <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
+                    </div>
                     {% elif act.get_cname == "Comment" %}
-                      <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
+                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                            <h5>Comments On Questions</h5>
+                            <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
+                    </div>
                     {% else %}
-                      <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Question: {{ act.answer.question_id.title }}</a>
+                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                            <h5>Comments On Answers</h5>
+                            <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Answer: {{ act.answer.question_id.title }}</a>
+                    </div>
                     {% endif %}<br>
                  {% endfor %}
              </ul>
+            </div>
+            </div>
+            </div>
+         </div>
+         </div>
 
 </body>
-</html>
+{% endblock %}
