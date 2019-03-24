@@ -47,7 +47,7 @@
     </center>
       <!-- LOGIN  -->
       <button type="submit" class="btn btn-outline-success ml-2"style="float:right;">Login</button>
-      <a href="{% url 'profile:password_reset'%}" style="position:relative;float:left;bottom:-5px;margin-left:5px;text-decoration: underline;">forget password</a>
+      <a href="{% url 'profile:password_reset'%}" style="position:relative;float:left;bottom:-5px;margin-left:10px;text-decoration: underline;">Forgot password</a>
         {% if form.errors %}
          <p class="text-warning">Username or Password is Incorrect!</p>
         {% endif %}
