@@ -46,7 +46,7 @@ hr{
 	display: inline;
 	color:#6A73B4;
 	padding: 3px;
-	font-size: 70%;
+	font-size: 79%;
 	border-radius: 1px;
 }
 #postedOn{
@@ -81,12 +81,6 @@ hr{
 	border-radius:25px 0 0 25px; 
 	display: inline-block;
 }
-#postQ{
-	background-color: #247BA0;
-	color: white;
-	box-shadow:3px 3px grey;
-	margin-bottom:5px; 
-}
 #searchButton{
 	height:40px;
 	position: relative;
@@ -107,11 +101,19 @@ hr{
   display: block;
   text-align: left;
 }
-
+#postQ{
+	float:right;
+}
 
 .inline{
 	display: inline-block;
 }
 .number{
 	font-family:'Rajdhani',sans-serif;
+}
+@media(max-width:475px){
+	#postQ{
+		float:left;
+		margin:auto;
+	}
 }

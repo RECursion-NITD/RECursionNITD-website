@@ -11,6 +11,10 @@ from django.contrib.auth import get_user_model
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import os
+from PIL import Image
+from io import BytesIO
+from django.core.files.uploadedfile import InMemoryUploadedFile
+import sys
 
 def content_file_name(instance,filename):
 	ext="png"
@@ -30,13 +34,23 @@ class Profile(models.Model):
     dept = models.CharField(max_length=20, blank=True, null=True)
     image_url = models.URLField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to=content_file_name)
-    nickname = models.CharField(max_length=100, blank=True, null=True)
     email_confirmed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     def __str__(self):
         return self.user.username
+
+    def save(self,  *args, **kwargs):
+        if self.image:
+          img= Image.open(self.image)
+          output = BytesIO()
+          img = img.resize((100, 100))
+          img.save(output, format='PNG', quality=100)
+          output.seek(0)
+          self.image = InMemoryUploadedFile(output, 'ImageField', ".png" , 'image/png',
+                                        sys.getsizeof(output), None)
+        super(Profile, self).save()
 
     class Meta:
         managed = True

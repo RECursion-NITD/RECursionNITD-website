@@ -60,22 +60,38 @@
         data:$formData ,
         success: function (data)
         {
-           console.log("updatweeeeeeeeeee" +data)
-           Data=JSON.parse(data)
-           Update=Data
-           result="";
-           result+="COMMENT  =:"+Data.body+"<a href=/forum/editcomment/"+Data.id+">"+"  Update"  +"<a>"+"      COMMENT is added <br/>";
-           console.log(result);
-            $('#com').html(result);
-            $("#com").show()
-            $("#u_com_form"+Data.id).hide()//hiding update form when update form was clicked
-            update_com_res=''
-            update_com_res+="COMMENTss=:"+Data.body+  "<a class = \"u_com\" com-id= \"{{comment.id}}\"  href=/forum/editcomment/"+Data.id+">Update this Comment</a>"
-            $(".u_com#com_id_"+Data.id).html( update_com_res).show()
+            console.log(data)
+            $('form.my-update-form').hide()
+            $('#div_comments').html(data)
+            $(".u_com").show()
         },
         error:handleFormError,
         
      })
+
+     
+       //ajax call update comment
+       $('.u_com').click(function(e){
+            e.preventDefault()
+            var id= $(this).attr('com-id')
+            console.log(id)
+            $(this).hide()//hiding update link
+            $('#com_body_'+id).hide()
+           
+            
+        $.ajax({
+        method: "GET",
+        url: "/forum/editcomment/"+id,
+        success: function (data)
+        {
+           var form = "#u_com_form"+id
+           console.log(form)
+           $(form).html(data).show()
+           
+        },
+        error:handleFormError,
+     })
+    })
             })
             function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)

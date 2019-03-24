@@ -19,7 +19,11 @@
                                 {% render_field form.title class="form-control" placeholder="Enter Question Title" %}
                             </div>
                         <!-- {{ form.description.label_tag }} -->
-                            <div class="col-sm-12 col-lg-12 mb-2" style="width: 79%;">
+                            <div class="col-sm-12 col-lg-12 mb-2" style="width: 79%;">  
+                                    <br>
+                                    
+
+
                         {% render_field form.description class="form-control mb-2" placeholder="Write Details, MarkDown is supported" %} 
                             <!-- </div> -->
                             <!-- <div class="col-sm-12 col-lg-6"> -->
@@ -34,28 +38,74 @@
                                 <center><input type="checkbox" class="form-check form-check-input form-check-inline" name="{{ form.visibility }}">{% render_field form.visibility class="form-control" %} </center>
                             </div>
                             <div class="col-sm-9">
-                                <!-- todo render each error per field -->
-                                <div class="helperBox mb-2 mr-0" style="background: #f3f3f3; border:1px solid #dddddd; ">
-                          <center>Markdown Help</center><br>
-                              <h1 style="display: inline-block;">#H1</h1>&nbsp;
-                              <h2 style="display: inline-block;">##H2</h2>&nbsp;
-                              <h3 style="display: inline-block;">###H3</h3>&nbsp;
-                              <h4 style="display: inline-block;">####H4</h4>&nbsp;
-                              <h5 style="display: inline-block;">#####H5</h5>&nbsp;
-                              <h6 style="display: inline-block;">######H6</h6><br>&nbsp;
-                               **<strong>Bold</strong>**&nbsp;
-                               __<strong>Bold</strong>__&nbsp;
-                               *<i>Italic</i>*&nbsp;
-                               ___Horizontal line 
-                               <blockquote><'code>asdsad</'code></blockquote>
-                          </div>
+
+
+
+                                <!-- Button trigger modal -->
+<button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter" 
+style="float:right;">
+        Markdown Help
+      </button>
+      
+      <!-- Modal -->
+      <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalCenterTitle" >Markdown Help</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <pre class="small">
+For Code Formatting 
+
+~~~~
+This is a 
+piece of code 
+in a block
+~~~~
+
+This too
+Italicise - *Emphasize* _emphasize_
+Bold - Strong Strong
+
+List -
+
+* Item
+* Item
+- Item
+- Item
+
+Heading - 
+# Header 1
+## Header 2
+### Header 3 
+#### Header 4
+</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
                             </div>
                         </div>
                         {{form.errors}}
                         <hr>
-                        <h2>Tags</h2> 
-                        {{form2}}
-                        <button type="submit" class="save btn btn-success ml-auto mr-auto mt-3"> Save </button>
+                        {{ form2.management_form }}
+                        {% for f in form2 %}
+                        <div class="row">
+                            <div class="col-sm-7 mb-2">
+                                {%for field in f.hidden_fields%}
+                                {% render_field field %}
+                                {%endfor%}
+                                <!-- {{ f.name.label_tag }} -->
+                                {% render_field f.name class="form-control" placeholder="Enter Question Tag"%}
+                            </div>
+                        </div>
+                        {% endfor %}
+                        <button type="submit" class="save btn btn-outline-success ml-auto mr-auto mt-3"> Save </button>
                         <br>
                     </form>
 
