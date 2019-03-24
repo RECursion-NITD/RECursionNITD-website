@@ -15,10 +15,12 @@ with open('import_scripts/user.csv', 'r') as csvfile:
     for row in reader:
         print(row['Name'])
         username = row['Name'].replace(' ','_')
-        c=0
-        while User.objects.filter(username=username).exists():
-            username = username[:-1]+str(c)
-            c+=1
+        c=1
+        if User.objects.filter(username__iexact=username).exists():
+            username=username+str(c)
+            while User.objects.filter(username__iexact=username).exists():
+                username = username[:-1]+str(c)
+                c+=1
         u = User(username=username,password=randhash,email = row['Email'])
         u.save()
         p = Profile.objects.get(user=u)
