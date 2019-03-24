@@ -35,8 +35,8 @@ class Profile(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=False, auto_now_add=True)
 
-    def __self__(self):
-        return self.name
+    def __str__(self):
+        return self.user.username
 
     class Meta:
         managed = True
