@@ -17,7 +17,7 @@ def associate_by_email(**kwargs):
     return kwargs
 
 def set_image_for_new_users(backend, user, response, *args, **kwargs):
-    import pdb;pdb.set_trace();
+    #import pdb;pdb.set_trace();
     try:
         if not user.profile.email_confirmed:
             user.profile.email_confirmed=True
