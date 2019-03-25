@@ -146,7 +146,7 @@ def list_questions(request):
     taggings_recent = Taggings.objects.all().order_by('-updated_at')
     tags_recent=Tags.objects.all().order_by('-updated_at')
     tags_popular=[]
-    check=[]
+    check = []
     if tags_recent.count()>10:
         limit=10
     else:
@@ -163,6 +163,7 @@ def list_questions(request):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
+    # import pdb;pdb.set_trace();
     while len(tags_recent_record)< len(taggings_recent) and len(tags_recent_record)< len(check):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
@@ -372,7 +373,7 @@ def update_answer(request, id):
                 user_permission = user_profile.role
                 comments_answers=Comments_Answers.objects.all()
                 profile=Profile.objects.all()  # all user profile
-                answers=Answers.objects.all()
+                answers=Answers.objects.filter(question_id=question)
                 if request.user == answer.user_id or user_permission == '2' or user_permission == '1':
                     f=form.save()
                     profiles = Profile.objects.filter(role=2)
@@ -591,7 +592,7 @@ def filter_question(request ,id):
     tags_recent=Tags.objects.all().order_by('-updated_at')
     taggings_recent=Taggings.objects.all().order_by('-updated_at')
     tags_popular = []
-    check=[]
+    check = []
     if tags_recent.count() > 10:
         limit = 10
     else:
@@ -608,6 +609,7 @@ def filter_question(request ,id):
     for i in range(limit):
         tags_popular_record.append(tags_popular[i][1])
     count=0
+    # import pdb;pdb.set_trace();
     while len(tags_recent_record) < len(taggings_recent) and len(tags_recent_record) < len(check):
         if taggings_recent[count].tag not in tags_recent_record:
            tags_recent_record.append(taggings_recent[count].tag)
@@ -624,8 +626,7 @@ def filter_question(request ,id):
         if request.is_ajax():
             return HttpResponse('')
         questions_list = paginator.page(paginator.num_pages)
-    profiles = Profile.objects.all()
-    args = {'profile': profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    args = {'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
@@ -671,9 +672,14 @@ def add_comment_answer(request, id):
             if msg not in messages:
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
-        return HttpResponseRedirect(reverse('forum:detail_questions', args=(question_id.id,)))
+        profile=Profile.objects.all()
+        answers=Answers.objects.filter(question_id=answer.question_id)
+        comments_answers=Comments_Answers.objects.all()
+        question=answer.question_id
+        args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+        return render(request, 'forum/div_answers.html',args)
 
-    return render(request, 'forum/comment.html', {'form': form})
+    return render(request, 'forum/comment_a.html', {'upform': form})
 
 @login_required
 def update_comment_answer(request, id):
@@ -718,9 +724,18 @@ def update_comment_answer(request, id):
                   if msg not in messages:
                      messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
-            return HttpResponseRedirect(reverse('forum:detail_questions', args=(question_id.id,)))
+            profile=Profile.objects.all()
+            answers=Answers.objects.filter(question_id=answer.question_id)
+            comments_answers=Comments_Answers.objects.all()
+            question=answer.question_id
+            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            return render(request, 'forum/div_answers.html',args)
+    import html2text
+    h = html2text.HTML2Text()
+    comment.body = h.handle(comment.body)
+    form=Commentform(instance=comment)       
 
-    return render(request, 'forum/comment.html', {'form': form, 'comment': comment})
+    return render(request, 'forum/comment_a.html', {'upform': form, 'comment': comment})
 
 
 @login_required
@@ -765,5 +780,3 @@ def delete_answer_comment(request, id):
     if user_permission == '2' or user_permission == '1':
            answer_comment.delete()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
-
-  

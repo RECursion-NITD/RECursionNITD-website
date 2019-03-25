@@ -17,9 +17,18 @@
   border: 1px solid #f3f3f3;
 }
 .commentBorder{
-  border-left: 1px solid #f9c359; 
+  border-left: 5px solid #f9c359; 
   margin-left:0.5px;
 }
 .answerBorder{
-  border-left:1px solid #267CA1;
+  border-left:5px solid #267CA1;
+}
+@media(max-width:475px){  
+  .commentBorder{
+    border-left: 1px solid #f9c359; 
+    margin-left:0.5px;
+  }
+  .answerBorder{
+    border-left:1px solid #267CA1;
+  }
 }
