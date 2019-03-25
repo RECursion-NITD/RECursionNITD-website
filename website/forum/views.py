@@ -38,6 +38,7 @@ import json
 import datetime
 import html2markdown
 from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
+from difflib import SequenceMatcher
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
@@ -129,6 +130,12 @@ def add_question(request):
     return render(request, 'forum/questions-form.html', {'form': form,'form2':form2,})
 
 def list_questions(request):
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+          key_req = search.cleaned_data
+          key = key_req.get('key')
+          return HttpResponseRedirect(reverse('forum:search_question', args=(key,)))
     questions = Questions.objects.all()
     paginator = Paginator(questions, 5)
     page = request.GET.get('page')
@@ -168,7 +175,7 @@ def list_questions(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     profiles=Profile.objects.all()
-    args = {'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    args = {'form_search':search, 'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
@@ -567,7 +574,7 @@ def voting(request, id):
            upvote = Upvotes.objects.create(answer=answer, user=user)
            upvote.save()
            if Upvotes.objects.filter(answer=answer).exists():
-               count=Upvotes.objects.filter(answer=answer).count()
+               count=Upvotes.objects.filter(aqnswer=answer).count()
            return HttpResponse(json.dumps({
                         'count':count,
                         'Success':'upvoted'
@@ -578,6 +585,12 @@ def voting(request, id):
 
 
 def filter_question(request ,id):
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+            key_req = search.cleaned_data
+            key = key_req.get('key')
+            return HttpResponseRedirect(reverse('forum:search_question', args=(key,)))
     try:
         required_tag=get_object_or_404(Tags, pk=id)
     except:
@@ -625,7 +638,7 @@ def filter_question(request ,id):
             return HttpResponse('')
         questions_list = paginator.page(paginator.num_pages)
     profiles = Profile.objects.all()
-    args = {'profile': profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
+    args = {'form_search':search, 'profile': profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
     if request.is_ajax():
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
@@ -766,4 +779,72 @@ def delete_answer_comment(request, id):
            answer_comment.delete()
     return HttpResponseRedirect(reverse('detail_questions', args=(question.id,)))
 
-  
+def search_question(request, key):
+     search = SearchForm(request.POST or None)
+     if request.method == 'POST':
+        if search.is_valid():
+            key_req = search.cleaned_data
+            key = key_req.get('key')
+            return HttpResponseRedirect(reverse('forum:search_question', args=(key,)))
+     questions_found=[]
+     questions_list=Questions.objects.all()
+     tags_found=[]
+     tags_recent = Tags.objects.all().order_by('-updated_at')
+     taggings_recent = Taggings.objects.all().order_by('-updated_at')
+     for tag in tags_recent:
+         if SequenceMatcher(None, tag.name.lower(), key.lower()).ratio()>0.4:
+             tags_found.append(tag)
+     for tag in tags_found:
+         for tagging in taggings_recent:
+             if tagging.tag==tag:
+                 questions_found.append([SequenceMatcher(None, tag.name.lower(), key.lower()).ratio(), tagging.question])
+     for question in questions_list:
+         if SequenceMatcher(None, question.title.lower(), key.lower()).ratio()>0.3:
+             questions_found.append([SequenceMatcher(None, question.title.lower(), key.lower()).ratio(), question])
+     questions_found.sort(key=lambda x: x[0], reverse=True)
+     questions=[]
+     for question in questions_found:
+         if question[1] not in questions:
+            questions.append(question[1])
+     answers = Answers.objects.all()
+     follows = Follows.objects.all()
+     tags_popular = []
+     check = []
+     if tags_recent.count() > 10:
+         limit = 10
+     else:
+         limit = tags_recent.count()
+     for tag in tags_recent:
+         tagging = Taggings.objects.filter(tag=tag)
+         count = tagging.count()
+         tags_popular.append([count, tag])
+         if count > 0:
+             check.append(tag)
+     tags_popular.sort(key=lambda x: x[0], reverse=True)
+     tags_recent_record = []
+     tags_popular_record = []
+     for i in range(limit):
+         tags_popular_record.append(tags_popular[i][1])
+     count = 0
+     while len(tags_recent_record) < len(taggings_recent) and len(tags_recent_record) < len(check):
+         if taggings_recent[count].tag not in tags_recent_record:
+             tags_recent_record.append(taggings_recent[count].tag)
+         count += 1
+     q_count = Questions.objects.all().count()  # For displaying total number of questions
+     paginator = Paginator(questions, 5)
+     page = request.GET.get('page')
+     try:
+         questions_list = paginator.page(page)
+     except PageNotAnInteger:
+         questions_list = paginator.page(1)
+     except EmptyPage:
+         if request.is_ajax():
+             return HttpResponse('')
+         questions_list = paginator.page(paginator.num_pages)
+     profiles = Profile.objects.all()
+     args = {'form_search':search, 'profile': profiles, 'questions': questions_list, 'answers': answers, 'follows': follows,
+             'tags': tags_recent, 'taggings': taggings_recent, 'tags_recent': tags_recent_record,
+             'tags_popular': tags_popular_record, 'q_count': q_count}
+     if request.is_ajax():
+         return render(request, 'list.html', args)
+     return render(request, 'questions.html', args)

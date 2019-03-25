@@ -24,5 +24,6 @@ urlpatterns = [
     path('deletecomment/<int:id>/', delete_comment, name='delete_comment'),
     path('deletecomment_answer/<int:id>/', delete_answer_comment, name='delete_answer_comment'),
     path('filter/<int:id>/', filter_question, name='filter_question'),
+    path('search/<str:key>', search_question, name='search_question'),
     url(r'^markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

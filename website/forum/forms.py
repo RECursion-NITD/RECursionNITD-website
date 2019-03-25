@@ -75,3 +75,6 @@ class Comment_Answerform(forms.ModelForm):
     class Meta:
         model = Comments_Answers
         fields = ('body',)
+
+class SearchForm(forms.Form):
+    key = forms.CharField (max_length=100)
