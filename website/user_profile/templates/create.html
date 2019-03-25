@@ -1,30 +1,52 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-     <meta charset="UTF-8">
-    <meta charset="UTF-8">
-    <title>Create Profile</title>
-</head>
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
 <body>
-<div >
- <h3>Create Profile</h3>
-    <div >
-
-        <p>Enter the details below:</p><br>
-        <form method="POST" enctype="multipart/form-data">
-          <table>
-              {{ form }}
+  <center><h3>Edit Profile</h3></center>
+  <div class="container">
+    <center>
+    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="margin: 2%; max-width: 600px;">
+    <center>
+        <form method="POST">
+          <table style="margin: 6%">
+              <div class="row">
+                <div class="col-3 mt-4">
+                 Name:
+               </div>
+                <div class="col-9">{% render_field form.name class="form-control mt-4" style="background:white;" placeholder="Enter Name" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 College:
+               </div>
+                <div class="col-9">{% render_field form.college class="form-control mt-4" style="background:white;" placeholder="Name Of College" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 Branch:
+               </div>
+                <div class="col-9">{% render_field form.dept class="form-control mt-4" style="background:white;" placeholder="Department/Branch" %}
+                </div>
+              </div>
+              <hr>
+              <div>
+                {% render_field form.image class="form-control mt-4" style="background:white;" placeholder="Select An Image To Upload" %}
+              </div>
+            <hr>
           </table>
-              <br>
-          <button type="submit" class="save btn btn-primary" style="margin-left:150px;">SAVE</button>
+              
+          <button type="submit" class="save btn btn-success">Submit</button>
         </form>
         <p><a href="{% url 'user_profile:change_password'  %}">Change Your Password</a></p>
-      </div>
-    <div id='msg'>
+    </center>
+  </div>
+  </center>
+   <div id='msg'>
 
-    </div>
-</div>
+  </div>
+  </div>
+
 </body>
-</html>
+{% endblock %}

@@ -2,6 +2,13 @@
 {% load widget_tweaks %}
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'css/login_css.css' %}">
+{% block css %}
+<style>
+  .btn-outline-warning:hover{
+    color:white;
+  }
+</style>
+{% endblock %}
 
     {% block title %}Register{% endblock %}
 <body>
@@ -39,7 +46,8 @@
                           {% endfor %}
                       <input type="hidden" name="ajax_check" value="True">
                      <br>
-                  <center><button type="submit" class="save btn btn-outline-success">SAVE</button></center>
+                  <center><button type="submit" class="save btn btn-outline-success">Signup</button>
+                  <a href="{% url 'login'%}"class="btn btn-outline-warning ml-2">Login</a></center>
                 </form>
                 <div >
                   <span id="msg1"></span><span id="msg2"></span><span id="msg3"></span>

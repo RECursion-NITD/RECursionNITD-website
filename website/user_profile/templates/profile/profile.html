@@ -6,7 +6,7 @@
         <div class="container-fluid" style="padding: 30px">     
         <div class="row">
             <div class="col-lg-3 col-md-4 col-sm-12">
-            <div class="jumbotron container shadow-sm p-3 mb-5 bg-white rounded" style="background: white;">
+            <div class="jumbotron container shadow-sm p-3 mb-1 bg-white rounded" style="background: white;">
              {% if profile.image %}
                  <center><img src="{{ profile.image.url }}" alt="Profile Picture" height="100px" width="100px" style="border-radius: 100px;"></center>
              {% endif %}
@@ -28,7 +28,7 @@
             </div>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-12">
-            <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded"  style="background: white">
+            <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded"  style="background: white">
                 <div class="card-header" style="background: white">
                   Recent Activity
                 </div>
@@ -36,22 +36,22 @@
              <ul>
                  {% for act in activity %}
                     {% if act.get_cname == "Question" %}
-                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
                             <h5>Questions Asked</h5>
                             <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
                     </div>
                     {% elif act.get_cname == "Answer" %}
-                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
                             <h5>Questions Answered</h5>
                             <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
                     </div>
                     {% elif act.get_cname == "Comment" %}
-                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
                             <h5>Comments On Questions</h5>
                             <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
                     </div>
                     {% else %}
-                    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="background: white ;padding: 10px">
+                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
                             <h5>Comments On Answers</h5>
                             <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Answer: {{ act.answer.question_id.title }}</a>
                     </div>
