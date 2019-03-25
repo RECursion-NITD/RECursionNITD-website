@@ -39,7 +39,7 @@ with open('import_scripts/user.csv', 'r') as csvfile:
             print("Downloadable Image Not Found!")
         p.image = '../' + full_path
         p.save()
-        u = User.objects.get(username=username)
+        
         
 
         
