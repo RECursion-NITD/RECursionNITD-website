@@ -1,4 +1,4 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %} {% load widget_tweaks %}
 {% block title %}Dashboard{% endblock %} 
 {% block css %} 
 {% load static %}
@@ -25,11 +25,21 @@
             <div class="card ml-0">
               <div class="block row card-header m-0">
                 <div class="col-sm-12 col-lg-6">
-                  <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left;width:75%;">
-                  <a href="#" class="ml-2 p-2" style="position:relative;background:#E0EAF5;color:white;top:15px;
-                  ">
-                    <i class="fas fa-search"></i>
-                  </a>
+                  <form method="POST">
+                    <div class="row">
+                      <div class="col-sm-11">
+                      <!-- <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left;width:75%;"> -->
+                      {% render_field form_search.key class="form-control mb-2" placeholder="Search Tag" style="display:inline-block;"%} 
+                    <!-- <button type="submit" class="save btn btn-outline-primary" style="">Search</button> -->
+                      </div>
+                      <div class="col-sm-1">
+                      <button type="submit" href="#" class="save btn btn-sm btn-outline-primary mt-1" style="display:inline-block;float:right;">    <i class="fas fa-search"></i>
+                      </button>
+                      </div>
+                    </div>
+                  </form>
+                  
+                
                 </div>
                 <div class="col-sm-12 col-lg-6">
                 <a class="btn" href="{% url 'forum:add_question' %}" id="postQ">

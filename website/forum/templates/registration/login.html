@@ -63,17 +63,17 @@
       style="color:white;">Login with Google&nbsp;
      <i class="fab fa-google"></i>
       </a></div><br><br>
-    <div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
+    <!--<div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
     <a  href="{% url 'social:begin' 'facebook' %}" 
-    style="color:white;">Login with Facebook&nbsp;
+    style="color:white;" disabled="true">Login with Facebook&nbsp;
   <i class="fab fa-facebook-f"></i></a>
-  </div>
+  </div>-->
 </div>
 </div><hr style="color:#b1b1b1;">
 <div style="font-size: 90%;">
   <span><a href="{% url 'home' %}">About</a> </span>&emsp;
-  <span><a href="{% url 'home' %}">Team</a> </span>&emsp;
-  <span><a href="{% url 'home'%}">Contact</a> </span>&emsp;
+  <span><a href="{% url 'forum:team_page' %}">Team</a> </span>&emsp;
+  <!-- <span><a href="{% url 'home'%}">Contact</a> </span>&emsp; -->
 </div>
 </center>
 

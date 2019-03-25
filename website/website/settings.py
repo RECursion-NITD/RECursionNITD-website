@@ -59,7 +59,6 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
     'social_core.backends.google.GoogleOpenId',  # for Google authentication
     'social_core.backends.google.GoogleOAuth2',  # for Google authentication
-    'social_core.backends.github.GithubOAuth2',  # for Github authentication
     'social_core.backends.facebook.FacebookOAuth2',  # for Facebook authentication
 
     'django.contrib.auth.backends.ModelBackend',
@@ -141,8 +140,6 @@ LOGOUT_URL = 'logout'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'home'
 
-SOCIAL_AUTH_GITHUB_KEY = config('SOCIAL_AUTH_GITHUB_KEY')
-SOCIAL_AUTH_GITHUB_SECRET = config('SOCIAL_AUTH_GITHUB_SECRET')
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
