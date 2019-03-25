@@ -4,9 +4,12 @@ from user_profile.models import Profile
 import urllib.request
 import random
 import csv
+from random import choice
+from string import ascii_uppercase
 
 
-randhash = "abcdef"
+randhash = ''.join(choice(ascii_uppercase) for i in range(32))
+
 # open the file in read mode
 with open('import_scripts/user.csv', 'r') as csvfile:
 
