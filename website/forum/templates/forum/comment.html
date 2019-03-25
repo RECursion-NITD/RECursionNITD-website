@@ -22,19 +22,18 @@
     </div>
 </div>
 <div > -->
- <h3>Add/Update Comment</h3>
     <div >
 
-        <p>Enter the details below:</p><br>
+        <p>Enter the details below:</p>
 
         <form class='my-update1-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
                 <table>
-                    {{ upform }}
+                    {{ upform.body}}
                     {{upform.media}}
                     <input type="hidden" name="ajax_update" value="True">
                 </table>
                     <br>
-                <button type="submit" class="save btn btn-primary" style="margin-left:150px;">UPDATE</button>
+                <center><button type="submit" class="save btn btn-sm btn-outline-primary">Update</button></center>
               </form>
       </div>
 </div>

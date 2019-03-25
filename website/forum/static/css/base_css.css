@@ -7,6 +7,9 @@
     /*font-family: 'Ubuntu', sans-serif;*/
     font-family: 'Montserrat', sans-serif;
   }
+  .btn-outline-warning:hover{
+    color:white;
+  }
   .list-group-item{
     background:inherit;
     border:none;

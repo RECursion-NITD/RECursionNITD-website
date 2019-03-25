@@ -158,7 +158,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('edit_profile')
+            return redirect('profile:edit_profile')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -219,3 +219,16 @@ def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.
 
 def password_reset_complete(request):
     return render(request, 'registration/password_reset_complete.html')
+
+def username_check(request):
+    username_typed=request.POST.get('username')
+    if User.objects.filter(username = username_typed).exists():
+        return HttpResponse("exists")
+    return HttpResponse("success")
+
+    
+def email_check(request):
+    email_typed=request.POST.get('email')
+    if User.objects.filter(email = email_typed).exists():
+        return HttpResponse("exists")
+    return HttpResponse("success")

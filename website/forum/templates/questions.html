@@ -23,7 +23,7 @@
       <div class="row">
           <div class="col-lg-9 col-sm-12 mt-2">
             <div class="card ml-0">
-              <div class="block row">
+              <div class="block row card-header m-0">
                 <div class="col-sm-12 col-lg-6">
                   <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left;width:75%;">
                   <a href="#" class="ml-2 p-2" style="position:relative;background:#E0EAF5;color:white;top:15px;
@@ -39,7 +39,7 @@
                 </div>
               </div><hr>
               <ul>
-                  <div class="ml-0 mr-0 mt-2">
+                  <div class="ml-0 mr-0">
                       <div id="questions-list">
                           {% include 'list.html' %}
                       </div>
@@ -52,7 +52,7 @@
               <div class="ml-0">
                   <div class=" mr-auto" style="">
                     <div class="card p-2">
-                      <h2 style="display:inline-block;justify-content: center;">
+                      <h3 style="display:inline-block;justify-content: center;">
                         <span class="number">{{ q_count }}</span>
                       <small>questions</small></h2>
                       <h3  style="display:inline-block;">
@@ -63,7 +63,7 @@
                       <h4>Most Recent Tags {{ limit }}</h4>
                       <ul>
                           {% for tag in tags_recent %}
-                          <li style="display:inline-block;"><a class="tagName" style="font-size: 100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display:inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                           <br>
                           <br>
@@ -73,7 +73,7 @@
                       <h4>Most Popular Tags</h4>
                       <ul>
                           {% for tag in tags_popular %}
-                          <li style="display: inline-block;"><a class="tagName" style="font-size:100%;" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display: inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                       </ul>
                       <br>
