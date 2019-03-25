@@ -23,22 +23,23 @@ with open('import_scripts/user.csv', 'r') as csvfile:
                 c+=1
         u = User(username=username,password=randhash,email = row['Email'])
         u.save()
-        p = Profile.objects.get(user=u)
+        #import pdb;pdb.set_trace()
         if row['Nickname'] == '-':
-            p.name = row['Name']
+            u.profile.name = row['Name']
         else:
-            p.name = row['Nickname']
-        p.college = row['College']
-        p.dept = row['Dept']
-        p.email_confirmed=True
+            u.profile.name = row['Nickname']
+        
+        u.profile.college = row['College']
+        u.profile.dept = row['Dept']
+        u.profile.email_confirmed=True
         image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
         full_path = 'media/images/' + username + '.png'
         try:
             urllib.request.urlretrieve(image_url, full_path)
         except:
             print("Downloadable Image Not Found!")
-        p.image = '../' + full_path
-        p.save()
+        u.profile.image = '../' + full_path
+        u.save()
         
         
 
