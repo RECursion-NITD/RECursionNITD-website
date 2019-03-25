@@ -83,7 +83,7 @@
                 <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
             </li>
             <li class="nav-item {% block getStart_active %}{% endblock %}">
-                <a href="#" class="nav-link m-2 menu-item">Get Started</a>
+                <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
             </li>
             {% if not user.is_authenticated %}
              <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
@@ -156,8 +156,8 @@
               <ul class="nav-list ml-1">
                 <li><a href="{% url 'forum:list_questions' %}">AskREC</a></li>
                 <li><a href="{% url 'events:calender' %}">Events</a></li>
-                <li><a href="#">Get Started</a></li>
-                <li><a href="#">Team</a></li>
+                <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
+                <li><a href="{% url  'forum:team_page'%}">Team</a></li>
               </ul>
             </div>
           </div>

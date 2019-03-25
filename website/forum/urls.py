@@ -8,6 +8,8 @@ from user_profile import urls
 app_name="forum"
 urlpatterns = [
     path('profile/', include('user_profile.urls')),
+    path('start/', getting_started, name='getting_started'),
+    path('team/', team_page, name='team_page'),
     path('add', add_question, name='add_question'),
     path('', list_questions ,name='list_questions'),
     path('detail/<int:id>/', detail_questions, name='detail_questions'),

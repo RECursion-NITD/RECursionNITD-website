@@ -42,6 +42,14 @@ from difflib import SequenceMatcher
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+def getting_started(request):
+    args={}
+    return render(request, 'getting_started.html', args)
+
+def team_page(request):
+    args={}
+    return render(request, 'team.html', args)  
+
 def home(request):
     n=1
     events=Events.objects.all().order_by('-start_time')[:n:1]
