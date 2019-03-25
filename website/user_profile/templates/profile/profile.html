@@ -20,10 +20,10 @@
                  <li><i class="fas fa-university"></i>  {{ profile.college }}</li>
                  <li><i class="fab fa-leanpub"></i> {{ profile.dept }}</li>
                  <li><i class="fas fa-clock"></i> {{ profile.created_at }}</li>
-                 <li><i class="fas fa-user-circle"></i>  Role {{ profile.role }}</li>
+                 <!-- <li><i class="fas fa-user-circle"></i>  Role {{ profile.role }}</li> -->
              </ul>
              {% if request.user.id == profile.id %}
-             <a href="{% url 'profile:edit_profile'%}">Edit Profile</a>
+             <a href="{% url 'profile:edit_profile'%}" style="float:right;">Edit Profile</a>
              {% endif %}
             </div>
             </div>

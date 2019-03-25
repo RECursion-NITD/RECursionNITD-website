@@ -17,7 +17,7 @@ class Questionform(forms.ModelForm):
         data = self.cleaned_data['description']
         print(len(data)<20)
         if len(data)<20:
-            raise forms.ValidationError("description too short")
+            raise forms.ValidationError("Description too Short! Less than 20 words!")
         data = markdownify(data)
         return data
 
@@ -75,3 +75,6 @@ class Comment_Answerform(forms.ModelForm):
     class Meta:
         model = Comments_Answers
         fields = ('body',)
+
+class SearchForm(forms.Form):
+    key = forms.CharField(max_length=25)
