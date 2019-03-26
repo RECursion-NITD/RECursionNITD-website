@@ -362,7 +362,7 @@ def add_answer(request, id):
             f.user_id =user
             f.save()
 
-            args = {'profil':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
             return render(request, 'forum/div_answers.html',args)
         else :
             return HttpResponse("we failed to insert in db")
@@ -418,7 +418,7 @@ def update_answer(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    args = {'profil':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+                    args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
         import html2text
