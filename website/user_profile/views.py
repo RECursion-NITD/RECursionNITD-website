@@ -95,7 +95,6 @@ def user_register(request):
                   'token': account_activation_token.make_token(user),
               })
               user.email_user(subject, message)
-              print("sddsdsdsd")
               return HttpResponse("Please confirm your email address to complete the Registration. ")
           if form.errors:
               for field in form:
@@ -122,6 +121,17 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.profile.email_confirmed = True
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+        profile = Profile.objects.get(user = user)
+        image_url = "https://api.adorable.io/avatars/" + str(random.randint(0000, 9999))
+        type = valid_url_extension(image_url)
+        full_path = 'media/images/' + profile.user.username + '.png'
+        try:
+            urllib.request.urlretrieve(image_url, full_path)
+        except:
+            return HttpResponse("Downloadable Image Not Found!")
+        if profile.user == request.user:
+            profile.image = '../' + full_path
+            profile.save()
         return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
