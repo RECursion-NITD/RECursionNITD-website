@@ -144,7 +144,7 @@
     console.log($(this).val())
     if($(this).val() != $('#id_password1').val())
     {
-      $("#msg3").html("<h2>*passwords do not match*</h2>")
+      $("#msg3").html("Passwords do not match!\n")
     }
     else
     {
@@ -158,6 +158,7 @@
             console.log(jqXHR)
             console.log(textStatus)
             console.log(errorThrown)
+            alert(errorThrown)
         }
     })
     </script>
