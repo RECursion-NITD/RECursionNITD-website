@@ -48,11 +48,14 @@
       <!-- LOGIN  -->
       <button type="submit" class="btn btn-outline-success ml-2"style="float:right;">Login</button>
       <a href="{% url 'profile:password_reset'%}" style="position:relative;float:left;bottom:-5px;margin-left:10px;text-decoration: underline;">Forgot password</a>
-        {% if form.errors %}
-         <p class="text-warning">Username or Password is Incorrect!</p>
-        {% endif %}
+
     </form>
     <div class="col-sm-10 col-md-5 col-lg-5">
+        {% if form.errors %}
+         <div class="alert alert-warning" role="alert">
+          Username or Password is Incorrect!
+         </div>
+        {% endif %}
         <hr class="mobileLine">
       <span style="position: relative;bottom:10px;">Don't have an account, make one !</span>
       <!-- SIGN UP -->
