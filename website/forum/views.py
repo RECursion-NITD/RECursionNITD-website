@@ -52,7 +52,7 @@ def team_page(request):
 
 def home(request):
     n=1
-    events=Events.objects.all().order_by('-start_time')[:n:1]
+    events=Events.objects.all().order_by('start_time')[:n:1]
     args={'events':events,}
     return render(request, 'home.html', args)
 
