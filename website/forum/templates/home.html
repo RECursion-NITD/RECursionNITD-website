@@ -86,18 +86,18 @@
   <div class="pl-1 pr-1" style="max-width:250px;top:-5px;margin-left:auto;margin-right: 15px;">
     <button  class="btn btn-outline-dark" id="payAttn">
       <center class="" draggable="true">
-        Pay Attention ! <span class="arrow"><i class="fas fa-chevron-circle-down"></i></span>
+        Upcoming Event ! <span class="arrow"><i class="fas fa-chevron-circle-down"></i></span>
       </center>
     </button>
   </div>
-  <div class="jombotron notifydrop p-2" style="max-width:250px;position:absolute;right:15px;top:109px;
-  Z-INDEX:12;background: inherit;">
-      <a href="{% url 'events:calender' %}">Check out upcoming events!</a>
+  <div class="jombotron notifydrop p-2 pb-0" style="max-width:250px;position:absolute;right:15px;top:109px;
+  Z-INDEX:12;background:white;border:1px solid grey;border-radius:8px;">
+      <a class="small text-center"href="{% url 'events:calender' %}">Check out upcoming events!</a>
       <hr class="mt-0">
       {% for event in events %}
-      <h5 class="text-muted" style="text-transform:uppercase;">{{event.title}}</h5>
-      {{event.description}}<br>
-      <p class="small" style="color:#666666; float:right;">on {{event.start_time}}</p>
+      <h5 class="text-muted text-center" style="text-transform:uppercase;">{{event.title}}</h5>
+      <span style="font-size:90%;">{{event.description}}</span><br>
+      <p class="small mb-0" style="color:#666666; float:right;">on {{event.start_time}}</p>
       {%endfor%}
   </div>
   <div class="row">
@@ -157,7 +157,6 @@
           <a href="https://www.cloudsploit.com/"> <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}"></a>
           <a href="https://www.codechef.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/codechef.png' %}"></a>
           <a href="https://www.facebook.com/hiredive/">  <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hiredive.jpg' %}"></a>
-          <a href="https://www.grabon.in/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/grabon.png' %}"></a>
           <a href="https://www.facebook.com/nutrichef.ie/?ref=search&__tn__=%2Cd%2CP-R&eid=ARDTDJ4hXrAW-2WMWQ8pJF8H6bGOJwbca2ee0kDmWC8cbSwVJ7RA1F-upYN4dNK66eWp-9HvxWlsJcKY"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/nutrichef.png' %}"></a>
         </center>
       </div>
