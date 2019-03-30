@@ -85,18 +85,21 @@
             <li class="nav-item {% block getStart_active %}{% endblock %}">
                 <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
             </li>
+            <li class="nav-item {% block team_page %}{% endblock %}">
+              <a href="{% url 'forum:team_page' %}" class="nav-link m-2 menu-item">Team</a>
+            </li>
             {% if not user.is_authenticated %}
              <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
            {% else %}
               <ul class="nav navbar-nav">
               <li class="dropdown nav-link m-2 menu-item nav-item">
-              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome, {{user.username}} <span class="caret"></span></a>
-                <ul class="dropdown-menu ml-2" style="padding: 2px;color:black;">
+              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome User <span class="caret"></span></a>
+                <ul class="dropdown-menu ml-2" style="padding: 2px;">
                   <!-- <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li> -->
                   <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
-                  <li><a href="{% url 'profile:view_profile' %}">My Profile</a></li>
-                  <li><a href="{% url 'user_profile:edit_profile' %}">Edit Profile</a></li>
-                  <li><a href="{% url 'logout' %}">Logout</a></li>
+                  <li><a href="{% url 'profile:view_profile' %}">&nbsp;&nbsp; My Profile</a></li>
+                  <li><a href="{% url 'user_profile:edit_profile' %}">&nbsp;&nbsp; Edit Profile</a></li>
+                  <li><a href="{% url 'logout' %}">&nbsp;&nbsp; Logout</a></li>
                 </ul>
               </li>
               </ul>

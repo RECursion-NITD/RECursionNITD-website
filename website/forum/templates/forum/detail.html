@@ -66,7 +66,7 @@
                         <div class="row">
                             <div class="comments col-lg-12 col-md-9 m-0" id="comments">
                                 <!-- Show Comment -->
-                                <div class="comment row">
+                                <div class="comment row m-0">
                                     {% for p in profile %} {% if p.user == comment.user %} {% if p.image %}
                                     <div class="comment-avatar col-md-0 col-sm-0">
                                         <a href="">
@@ -76,16 +76,16 @@
 
                                     {% endif %} {% endif %} {% endfor %}
 
-                                    <div class="comment-content col-md-12 col-sm-12 ">
+                                    <div class="comment-content col-md-12 col-sm-12">
                                         <div class="comment-body">
-                                            <p class="m-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user or user_permission == '1' or user_permission == '2' %}
+                                            <span class="mb-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user or user_permission == '1' or user_permission == '2' %}
                                                 <div>
                                                     <div id='com_id_{{comment.id}}' class="u_com" com-id="{{comment.id}}"> <a href="{% url 'forum:update_comment' comment.id %}" class="small" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
                                                     <div id='u_com_form{{comment.id}}' com-id="{{comment.id}}"> </div>
                                                 </div>
                                                 {% endif %}
                                                 <h6 class="text-muted small comment-meta mb-0" style="display: inline-block;"><a href="{% url 'user_profile:view_profile' comment.user.id  %}">{{ comment.user }}</a> last updated on {{comment.updated_at}}</h6>
-                                            </p>
+                                            </span>
 
                                         </div>
                                     </div>
@@ -97,7 +97,7 @@
                     {%endif%} {% endfor %}
                 <!-- UPDATED COMMENT START-->
                 <div class="comment-content col-md-11 col-sm-11 offset-sm-1">
-                    <hr>
+                    <hr class="m-0">
                     <div class="comment-body">
                         <div id='com'> </div>
                         <div id='update_com'> </div>
@@ -108,7 +108,7 @@
             </div>
             <!--Follow,Comment,Answer Start-->
 
-            <div class="container" style="margin: 10px">
+            <div class="container" style="margin-top: 10px">
                 <!-- ADD COMMENT BUTTON -->
                 {% if request.user.is_authenticated %}
                 <button type="button" id='add_com_but' class="btn btn-outline-primary btn-sm"> Add Comment</i></button>&nbsp;
@@ -194,71 +194,73 @@
 <!-- --------------------------------------------------------AKM---------------------------------------------->
 <div id="div_answers">
      <!-- ANSWERS PORTION STARTS -->
-    <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ answers|length }} Answer(s)</h3></div>
+    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ answers|length }} Answer(s)</h3></div>
     {% for answer in answers %} {% if answer.question_id == questions %}
     <div class="container answerBorder card">
         <div class="row">
-            <div class="comments col-lg-12 col-md-9" id="comments">
+            <div class="comments col-lg-12 col-md-12" id="comments">
                 <!-- Show Answer -->
-                <div class="comment row">
+                <div class="comment row">       
                     {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
                     <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
-                        <a href=""><img class="mt-3 mb-1 img-fluid" src="{{ p.image.url }}" style="max-width: 60px; border-radius: 15px;" alt="avatar"></a>
+                        <a href=""><img class="mt-2 mb-1 rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
                     </div>
                     {% endif %} {% endif %} {% endfor %}
-                    <div class="comment-content col-md-11 col-sm-10 mb-2 p-2">
-                        <div class="comment-body mb-5">
+                    <div class="comment-content col-md-10 col-sm-10 ml-2 p-2">
+                        <div class="comment-body answerBoxMargin">
                             {{answer.description|safe}}
                             <div id='reply_form{{answer.user_id.id}}'  > </div>
                             <div id='u_ans_form{{answer.id}}' com-id="{{answer.id}}"> </div>
-                            <br>
                             <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
                             <span style="float:right;margin-bottom: 0px;">
-                                    <div class="reply_btn" ans-id="{{answer.id}}" user-id={{answer.user_id.id}}>
+                                    <span class="reply_btn" ans-id="{{answer.id}}" user-id={{answer.user_id.id}}>
+                                            <a  id="vote_count_{{answer.id}}" class="voteReply text-right small p-1"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
                                             <a href="{% url 'forum:add_comment_answer' answer.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
-                                    </div>
+                                    </span>
                                     <span>
                                             {% if request.user != answer.user_id %}
                                             {% if  answer.id in voted %}
-                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;&nbsp;
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
                                             {% else %}
                                             <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                             {% endif %}
                                             {% endif %}
-                                            <a  id="vote_count_{{answer.id}}" class="text-right small"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a>
                                     </span>
                             {% if request.user == answer.user_id or user_permission == '2' or user_permission == '1'%}
-                                <div id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}"> 
-                                    <a href="{% url 'forum:update_answer' answer.id %}" class="" style="float:right;font-size:85%;">
-                                        <i class="far fa-edit"></i> Update this answer
+                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}"> 
+                                    <a href="{% url 'forum:update_answer' answer.id %}" class="voteReply" style="float:right;font-size:90%;">
+                                         Update this answer <i class="far fa-edit"></i>
                                     </a>
-                                </div>
+                                </span>
                                 {% endif %}
                                 </span>
                         </div>
                         {% for comment_a in comments_answers %} {% if comment_a.answer == answer %}
                         <!-- reply is indented -->
-                        <div class="comment-reply col-md-11 col-sm-10 offset-sm-1 offset-md-1 pt-2 m-0" style="font-size:90%;">
-                            <hr class="mt-0 mb-1 ml-0" width="100%">
+                        <div class="comment-reply col-md-12 col-sm-12 offset-sm-1 offset-md-1 pt-2 m-0" style="font-size:90%;">
+                            <hr class="mt-0 mb-0 ml-0" width="100%">
                             <div class="row commentBorder">
                                     <span>
-                                            <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                                            
                                                 {% for p in profile %} {% if p.user == comment_a.user %} {% if p.image %}
-                                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
-                                                    <a href=""><img class="mx-auto rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
+                                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1 mt-2">
+                                                    <a href=""><img class="rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
                                                 </div>
                                                 {% endif %} {% endif %} {% endfor %}
-                                            </div>
+                                            
                                     </span>
-                                <div class="comment-content col-md-12 col-sm-12 col-12">
+                                <div class="comment-content col-md-10 col-sm-5">
                                     <div class="comment-body">
-                                        <span><p>{{ comment_a.body|safe }}</p><span></span>
-                                            <br>
-                                            <span class="small comment-meta"></span><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a>  last updated on {{comment_a.updated_at}}
+                                        <p style="font-size:90%;"class="mt-0 mb-1">{{ comment_a.body|safe }}</p>
+                                            <span class="small comment-meta"></span>
+                                                <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a> 
+                                                last updated on {{comment_a.updated_at}}</small>
                                                         {% if request.user == comment_a.user %}
-                                                        <div  ><div id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'forum:update_comment_answer' comment_a.id %}" class="small" style="float:right;"><i class="far fa-edit"></i> Update this comment</a></div>
-                                                        <div id='u_a_com_form{{comment_a.id}}' com-id= "{{comment_a.id}}"> </div>
-                                                        </div>
+                                                        <span>
+                                                            <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'forum:update_comment_answer' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
+                                                            </span>
+                                                            <span id='u_a_com_form{{comment_a.id}}' com-id= "{{comment_a.id}}"> </span>
+                                                        </span>
                                                         {% endif %}
 
 
