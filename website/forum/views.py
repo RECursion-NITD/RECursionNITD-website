@@ -418,7 +418,7 @@ def update_answer(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    args = { 'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
+                    args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
         import html2text

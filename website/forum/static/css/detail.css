@@ -14,7 +14,7 @@
 }
 .voteReply{
   background: #ffffff;
-  border: 1px solid #f3f3f3;
+  border: 1px solid #f1f1f1;
 }
 .commentBorder{
   border-left: 5px solid #f9c359; 
@@ -30,5 +30,11 @@
   }
   .answerBorder{
     border-left:1px solid #267CA1;
+  }
+  .answerBox{
+    border-left:0px solid #cccccc;
+  }
+  .answerBoxMargin{
+    margin-bottom: 70px; 
   }
 }
