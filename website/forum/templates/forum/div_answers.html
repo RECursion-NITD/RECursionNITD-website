@@ -6,11 +6,11 @@
             <div class="comments col-lg-12 col-md-9" id="comments">
                 <!-- Show Answer -->
                 <div class="comment row">
-                  <!--   {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
+                    {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
                     <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
                         <a href=""><img class="mt-3 mb-1 img-fluid" src="{{ p.image.url }}" style="max-width: 60px; border-radius: 15px;" alt="avatar"></a>
                     </div>
-                    {% endif %} {% endif %} {% endfor %} -->
+                    {% endif %} {% endif %} {% endfor %}
                     <div class="comment-content col-md-11 col-sm-10 mb-2 p-2">
                         <div class="comment-body mb-5">
                             {{answer.description|safe}}
