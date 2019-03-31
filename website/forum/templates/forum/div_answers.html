@@ -1,8 +1,8 @@
      <!-- ANSWERS PORTION STARTS -->
      <style>
-         @media(max-width:475px){  
+         @media(max-width:475px){
   .commentBorder{
-    border-left: 1px solid #f9c359; 
+    border-left: 1px solid #f9c359;
     margin-left:0.5px;
   }
   .answerBorder{
@@ -12,7 +12,7 @@
     border-left:0px solid #cccccc;
   }
   .answerBoxMargin{
-    margin-bottom: 70px; 
+    margin-bottom: 70px;
   }
 }
      </style>
@@ -49,7 +49,7 @@
                                             {% endif %}
                                     </span>
                             {% if request.user == answer.user_id or user_permission == '2' or user_permission == '1'%}
-                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}"> 
+                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}">
                                     <a href="{% url 'forum:update_answer' answer.id %}" class="voteReply" style="float:right;font-size:90%;">
                                          Update this answer <i class="far fa-edit"></i>
                                     </a>
@@ -75,7 +75,7 @@
                                     <div class="comment-body answerBoxMargin">
                                         <p style="font-size:90%;">{{ comment_a.body|safe }}</p>
                                             <span class="small comment-meta"></span>
-                                            <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a> 
+                                            <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a>
                                                 last updated on {{comment_a.updated_at}}</small>
                                                         {% if request.user == comment_a.user %}
                                                         <span>
@@ -86,7 +86,7 @@
                                                         {% endif %}
 
 
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -108,9 +108,9 @@
             $(document).ready(function(){
                 $("form.my-update-form").submit(function(task){
                     task.preventDefault()
-                    
-        
-        
+
+
+
                 var $formData = $(this).serialize()
                 console.log("form  "+$formData)
                     $.ajax({
@@ -128,14 +128,14 @@
                 error:handleFormError,
              })
                     })
-        
+
                     $('.u_ans').click(function(e){
                     e.preventDefault()
                     var id= $(this).attr('ans-id')
                    console.log(id)
                    $(this).toggle()//hiding update link
                     $('#ans_body_'+id).hide()
-                    
+
                 $.ajax({
                 method: "GET",
                 url: "/forum/answer/"+id,
@@ -147,9 +147,9 @@
                 },
                 error:handleFormError,
              })
-          
+
             })
-        
+
             $('.reply_btn').click(function(e)
             {
                 e.preventDefault()
@@ -169,13 +169,13 @@
                 error:handleFormError,
              })
             })
-        
+
             $('.u_a_com').click(function(e){
                     e.preventDefault()
                     var id= $(this).attr('com-id')
                    console.log(id)
                    $(this).toggle()//hiding update link
-                    
+
                 $.ajax({
                 method: "GET",
                 url: "/forum/editcomment_answer/"+id,
@@ -188,15 +188,15 @@
                 error:handleFormError,
              })
             })
-        
+
             $('.u_com').click(function(e){
                     e.preventDefault()
                     var id= $(this).attr('com-id')
                     console.log(id)
                     $(this).hide()//hiding update link
                     $('#com_body_'+id).hide()
-                   
-                    
+
+
                 $.ajax({
                 method: "GET",
                 url: "/forum/editcomment/"+id,
@@ -205,10 +205,39 @@
                    var form = "#u_com_form"+id
                    console.log(form)
                    $(form).html(data).show()
-                   
+
                 },
                 error:handleFormError,
              })
+            })
+           /*   edit ans voting*/
+            $('.voting_box').click(function(event)
+            {
+              event.preventDefault()
+              var id=$(this).attr("ans-id")
+              $.ajax({
+                method: "GET",
+                url:"/forum/answer/"+id+"/vote",
+                success: function(data)
+                        {
+                            console.log(id)
+                            console.log(data)
+                            var Data = JSON.parse(data)
+                           if( Data.Success == "upvoted")
+                           {
+                               $('#downvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                               $('#upvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                               $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                           }
+                           else if( Data.Success == "downvoted" )
+                           {
+                            $('#downvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                            $('#upvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                            $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                           }
+                        },
+                error: handleFormError,
+            })
             })
                     function handleFormError(jqXHR, textStatus, errorThrown){
                     console.log(jqXHR)

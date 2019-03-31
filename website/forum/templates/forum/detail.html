@@ -31,7 +31,7 @@
                     <a href="{% url 'forum:edit_following' questions.id %}">
                         <button id="unfollow_btn" style="float: right;" type="button" class="btn btn-sm btn-outline-danger">Unfollow | <i class="fas fa-heart"></i> {{ questions.follows_set.count }}</button>
                     </a>
-                    {% endif %} 
+                    {% endif %}
                     <!-- FOLLOW BUTTON ENDS -->
                 </div>
                 <!-- QUESTION DETAILS -->
@@ -47,11 +47,11 @@
                         <p class="small card-text">
                             <i>
                                 {% if questions.anonymous_ask == False %}
-                                Asked by: 
+                                Asked by:
                                 <a href="{% url 'user_profile:view_profile' questions.user_id.id  %}">{{ questions.user_id }}</a>
                                 {% else %}
                                 Asked by: Anonymous
-                                {% endif %} on {{questions.created_at}} 
+                                {% endif %} on {{questions.created_at}}
                                 <a style="float: right;">Last updated on {{questions.updated_at}}</a>
                             </i>
                         </p>
@@ -120,7 +120,7 @@
                                     <button type="button" class="btn btn-sm btn-outline-primary" style="display: inline-block;">Update Your Answer</button>
                                 </a>
                             </span>
-                    {% endif %}     
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'login' %}"><button type="button" class="btn btn-sm btn-outline-warning">Login to Answer/Comment </button></a>
                       <!-- Add Answer button block ends -->
@@ -148,7 +148,7 @@
                     <div id='ans'></div>
                     <div id='update_ans'>
                     </div>
-                    {% else %} 
+                    {% else %}
                     </br>
 
                     {% endif %}
@@ -158,7 +158,7 @@
         </div>
     <!--Answer Input Box End-->
     <!-- ANSWER FORM START -->
-    
+
     <!-- ANSWER FORM END -->
 
     <!--Comment Input Box Start-->
@@ -200,7 +200,7 @@
         <div class="row">
             <div class="comments col-lg-12 col-md-12" id="comments">
                 <!-- Show Answer -->
-                <div class="comment row">       
+                <div class="comment row">
                     {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
                     <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
                         <a href=""><img class="mt-2 mb-1 rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
@@ -227,7 +227,7 @@
                                             {% endif %}
                                     </span>
                             {% if request.user == answer.user_id or user_permission == '2' or user_permission == '1'%}
-                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}"> 
+                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}">
                                     <a href="{% url 'forum:update_answer' answer.id %}" class="voteReply" style="float:right;font-size:90%;">
                                          Update this answer <i class="far fa-edit"></i>
                                     </a>
@@ -241,19 +241,19 @@
                             <hr class="mt-0 mb-0 ml-0" width="100%">
                             <div class="row commentBorder">
                                     <span>
-                                            
+
                                                 {% for p in profile %} {% if p.user == comment_a.user %} {% if p.image %}
                                                 <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1 mt-2">
                                                     <a href=""><img class="rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
                                                 </div>
                                                 {% endif %} {% endif %} {% endfor %}
-                                            
+
                                     </span>
                                 <div class="comment-content col-md-10 col-sm-5">
                                     <div class="comment-body">
                                         <p style="font-size:90%;"class="mt-0 mb-1">{{ comment_a.body|safe }}</p>
                                             <span class="small comment-meta"></span>
-                                                <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a> 
+                                                <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a>
                                                 last updated on {{comment_a.updated_at}}</small>
                                                         {% if request.user == comment_a.user %}
                                                         <span>
@@ -264,7 +264,7 @@
                                                         {% endif %}
 
 
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -303,7 +303,7 @@
                     <h5>Instruction to write good question</h5>
                     <ol>
 <li>1. Write a title that summarizes the specific problem</li>
-<li>2. Pretend you're talking to a busy colleague</li> 
+<li>2. Pretend you're talking to a busy colleague</li>
 <li>3. Spelling, grammar and punctuation are important!</li>
 </ol>
 <br>
@@ -320,7 +320,7 @@ Refer to <a href = "https://stackoverflow.com/help/how-to-ask">Stack Overflow gu
             </div>
         </div>
         <!-- Button trigger modal -->
-<button type="button" class="btn btn-sm btn-outline-primary mt-2" data-toggle="modal" data-target="#exampleModalCenter" 
+<button type="button" class="btn btn-sm btn-outline-primary mt-2" data-toggle="modal" data-target="#exampleModalCenter"
 style="float:right;">
         Markdown Help
       </button>
@@ -336,11 +336,11 @@ style="float:right;">
             </div>
             <div class="modal-body">
                 <pre class="small">
-For Code Formatting 
+For Code Formatting
 
 ~~~~
-This is a 
-piece of code 
+This is a
+piece of code
 in a block
 ~~~~
 
@@ -355,10 +355,10 @@ List -
 - Item
 - Item
 
-Heading - 
+Heading -
 # Header 1
 ## Header 2
-### Header 3 
+### Header 3
 #### Header 4
 </pre>
             </div>
@@ -383,6 +383,7 @@ Heading -
        $('.my-com-form').toggle()
        })
        $('#add_ans_but').click(()=>{
+        $('#add_ans_but').hide()
        $('.my-ans-form').toggle()
        })
   /*   edit follow*/
@@ -441,7 +442,7 @@ Heading -
         error: handleFormError,
     })
   })
-       
+
       var $comForm = $('.my-com-form')
       $comForm.submit(function(event){
       event.preventDefault()
@@ -459,12 +460,12 @@ Heading -
             console.log(data)
             $('form.my-com-form').hide()
             $('#div_comments').html(data)
-        
+
         }
 /*         var $update = $('#com')
             $("#com").click(function(e){
             e.preventDefault()
-           
+
             $form_data =
             {},
             console.log($form_data)
@@ -481,7 +482,7 @@ Heading -
         },
         error:handleFormError,
      })
-       
+
         })    //end of update click */
         function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
@@ -503,12 +504,12 @@ Heading -
         error: handleFormError,
     })
     console.log($formData)
-   
+
     function handleansFormSuccess(data, textStatus, jqXHR){
         console.log(data)
             $('form.my-ans-form').hide()
             $('#div_answers').html(data)
-            
+
         }
       /*   var $update = $('#ans')
             $("#ans").click(function(e){
@@ -535,7 +536,7 @@ Heading -
             console.log(textStatus)
             console.log(errorThrown)
         }
-})        
+})
           //ajax call update comment
          $('.u_com').click(function(e){
             e.preventDefault()
@@ -543,8 +544,8 @@ Heading -
             console.log(id)
             $(this).hide()//hiding update link
             $('#com_body_'+id).hide()
-           
-            
+
+
         $.ajax({
         method: "GET",
         url: "/forum/editcomment/"+id,
@@ -553,12 +554,12 @@ Heading -
            var form = "#u_com_form"+id
            console.log(form)
            $(form).html(data).show()
-           
+
         },
         error:handleFormError,
      })
     })
-  
+
         //ajax call update answer
         $('.u_ans').click(function(e){
             e.preventDefault()
@@ -566,7 +567,7 @@ Heading -
            console.log(id)
            $(this).toggle()//hiding update link
             $('#ans_body_'+id).hide()
-            
+
         $.ajax({
         method: "GET",
         url: "/forum/answer/"+id,
@@ -578,7 +579,7 @@ Heading -
         },
         error:handleFormError,
      })
-  
+
     })
 
     $('.reply_btn').click(function(e)
@@ -606,7 +607,7 @@ Heading -
             var id= $(this).attr('com-id')
            console.log(id)
            $(this).toggle()//hiding update link
-            
+
         $.ajax({
         method: "GET",
         url: "/forum/editcomment_answer/"+id,
@@ -618,8 +619,8 @@ Heading -
         },
         error:handleFormError,
      })
-  
-    })  
+
+    })
     function handleFormError(jqXHR, textStatus, errorThrown){
             console.log(jqXHR)
             console.log(textStatus)
