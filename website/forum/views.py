@@ -333,7 +333,7 @@ def add_answer(request, id):
             profiles = Profile.objects.filter(role=2) # only role 2 profile
             follows=Follows.objects.filter(question=question)
             comments_answers=Comments_Answers.objects.all()
-            profile=Profile.objects.all()  # all user profile
+            prof=Profile.objects.all()  # all user profile
             answers=Answers.objects.filter(question_id=question)
             messages = ()
             for profile in profiles:
@@ -366,7 +366,7 @@ def add_answer(request, id):
             f.user_id =user
             f.save()
 
-            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
             return render(request, 'forum/div_answers.html',args)
         else :
             return HttpResponse("we failed to insert in db")
@@ -391,7 +391,7 @@ def update_answer(request, id):
                 user_profile = Profile.objects.get(user=user)
                 user_permission = user_profile.role
                 comments_answers=Comments_Answers.objects.all()
-                profile=Profile.objects.all()  # all user profile
+                prof=Profile.objects.all()  # all user profile
                 answers=Answers.objects.filter(question_id=question)
                 if request.user == answer.user_id or user_permission == '2' or user_permission == '1':
                     f=form.save()
@@ -422,7 +422,7 @@ def update_answer(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+                    args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
         import html2text

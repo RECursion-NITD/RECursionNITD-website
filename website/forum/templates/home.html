@@ -29,6 +29,12 @@
   .haq{
     border-right:1px solid red;
   }
+  .box{
+    background: #455A64;
+    color:#f3f3f3;
+    padding : 2vw;
+    margin: 0vw;
+  }
   @media(max-width:450px){
   .title{
     font-size:14vw;
@@ -83,19 +89,19 @@
   <div class="pl-1 pr-1" style="max-width:250px;top:-5px;margin-left:auto;margin-right: 15px;">
     <button  class="btn btn-outline-dark" id="payAttn">
       <center class="" draggable="true">
-        Pay Attention ! <span class="arrow"><i class="fas fa-chevron-circle-down"></i></span>
+        Upcoming Event ! <span class="arrow"><i class="fas fa-chevron-circle-down"></i></span>
       </center>
     </button>
   </div>
-  <div class="card notifydrop" style="max-width:250px;position:absolute;right:15px;top:109px;
-  Z-INDEX:12;">
-      <a href="{% url 'events:calender' %}">Check out upcoming events!</a>
+  <div class="jombotron notifydrop p-2 pb-0" style="max-width:250px;position:absolute;right:15px;top:109px;
+  Z-INDEX:12;background:white;border:1px solid grey;border-radius:8px;">
+      <a class="small text-center"href="{% url 'events:calender' %}">Check out upcoming events!</a>
+      <hr class="mt-0">
       {% for event in events %}
-      {{event.title}}<br>
-      Description : {{event.description}}<br>
-      Date : {{event.start_time}}<br>
+      <h5 class="text-muted text-center" style="text-transform:uppercase;">{{event.title}}</h5>
+      <span style="font-size:90%;">{{event.description}}</span><br>
+      <p class="small mb-0" style="color:#666666; float:right;">on {{event.start_time}}</p>
       {%endfor%}
-      <hr class="mt-0 mb-0">
   </div>
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12">
@@ -111,11 +117,11 @@
              ACM-ICPC and get better ranks.</p><br>
             <div class="row">
               <div class="col-sm-4 col-lg-3 ml-2 haq">
-                <strong>Have a question?</strong><br>
+                <strong>Have a question ?</strong><br>
                 <a class="btn btn-outline-success btn-sm mt-2 mb-2" href="{% url 'forum:list_questions' %}">AskREC</a>
               </div>
               <div class="col-sm-4 col-lg-4 ml-2 ntp">
-                <strong>New to programming?</strong><br>
+                <strong>New to programming ?</strong><br>
                 <a href="{% url 'forum:getting_started' %}"><button class="btn btn-sm btn-outline-success mt-2">Get Started</button></a>
               </div>
             </div>
@@ -125,17 +131,17 @@
             RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.
             <br><br>
             <center class="text-muted">So far we witnessed<br>
-              <div class="m-5" style="display:inline-block;">
-                Teaching<h3>100+</h3><h6>hours</h6>
+              <div class="box m-3" style="display:inline-block;">
+                <h3>300+</h3>hours of Teaching
               </div>
-              <div class="m-5" style="display:inline-block;">
-                Experience<h3>6 years</h3><h6> and increasing</h6>
+              <div class="box m-3" style="display:inline-block;">
+                <h3>6+ </h3>years of Experience
               </div>
-              <div class="m-5" style="display:inline-block;">
-                Contests<h3>50+</h3><h6> on platform like codechef</h6>
+              <div class="box m-3" style="display:inline-block;">
+                <h3>50+</h3>Online / Offline Contests
               </div>
-              <div class="m-5" style="display:inline-block;">
-                  Users<h3>200+</h3><h6>active users</h6>
+              <div class="box m-3" style="display:inline-block;">
+                <h3>2000+</h3>Users
                 </div>
             </center>
           </div>
@@ -148,13 +154,13 @@
     <div class=" row mt-4">
       <div class="col-sm-12 col-md-12 col-lg-12">
 
-        <center class="text-muted">Our Sponsors<br>
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/jetbrain.svg.png' %}">
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hackerrank.png' %}">
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}">
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/codechef.png' %}">
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hiredive.jpg' %}">
-          <img class="sponsorImg ml-4"src="{% static 'image/sponsor/grabon.png' %}">
+        <center class="text-muted">Past Sponsors<br>
+          <a href="https://www.jetbrains.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/jetbrain.svg.png' %}"></a>
+          <a href="https://www.hackerrank.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/hackerrank.png' %}"></a>
+          <a href="https://www.cloudsploit.com/"> <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}"></a>
+          <a href="https://www.codechef.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/codechef.png' %}"></a>
+          <a href="https://www.facebook.com/hiredive/">  <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hiredive.jpg' %}"></a>
+          <a href="https://www.facebook.com/nutrichef.ie/?ref=search&__tn__=%2Cd%2CP-R&eid=ARDTDJ4hXrAW-2WMWQ8pJF8H6bGOJwbca2ee0kDmWC8cbSwVJ7RA1F-upYN4dNK66eWp-9HvxWlsJcKY"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/nutrichef.png' %}"></a>
         </center>
       </div>
     </div>

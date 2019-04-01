@@ -127,4 +127,6 @@ def upcoming_events(request):
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
 
 def calender(request):
-    return render(request,"calender.html")
+    events=Events.objects.all().order_by('-start_time')
+    args={'events':events,}
+    return render(request, 'calender.html', args)
