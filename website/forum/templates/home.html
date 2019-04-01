@@ -6,7 +6,10 @@
 
 {% block css%}
 {% load staticfiles %}
-<link href="{% static 'css/home.css'%}">
+<link rel="stylesheet" href="{% static 'css/home.css'%}">
+<link rel="stylesheet" href="{% static 'css/carousel.css'%}">
+<link src="{% static 'js/carousel.js'%}">
+
 <style>
   .side-card{
   }
@@ -116,7 +119,7 @@
                 <a href="{% url 'forum:getting_started' %}"><button class="btn btn-sm btn-outline-success mt-2">Get Started</button></a>
               </div>
             </div>
-        
+
           <div class="mt-5">
             <h3>Who we are</h3>
             RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.

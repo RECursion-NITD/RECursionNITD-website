@@ -1,314 +1,691 @@
 {% extends 'base.html' %}
-{% block content %}
+{% block css%}
 {% load staticfiles %}
-<link href="{% static 'css/team.css'%}">
+<link rel="stylesheet" href="{% static 'css/team.css'%}">
+{% endblock%}
+{% block content %}
 
-  <body style="background:#f3f3f3;"> 
-    <center><h1 style="color:#F95c39;">Meet the Team</h1></center>
+
+
+ 
+    <center><h1 style="color:#F95c39; margin-top: 1%; margin-bottom: 3%;">Meet the Team</h1></center>
     <!-- TEAM HEADER -->
     <div class="container"> 
       <div class="row">
         <div class="col-sm-12 col-md-4 col-lg-4">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
-          <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Chetan.jpg" height="150px;" width="150px;"
-            style="box-shadow: 0.5px 0.5px 0.5px grey">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Chetan Garg<br>
-            <i class="text-muted">President</i><br>
-            <a href="#"><i class="far fa-envelope"></i></a>&nbsp;
-            <a href="#"><i class="fas fa-phone"></i></a>
-          </center>
-          </div>
+          <div class="our-team" style="padding: 15%">
+            <div class="pic">
+                <img src="../media/images/team/4 Chetan.jpg" style="border: solid 10px #343A3F; border-radius: 100%;">
+                <ul class="social-links">
+                    <li><a href="https://www.facebook.com/chetan.garg.927" class="fab fa-facebook" style="color:white"></a></li>
+                    <li><a href="https://www.linkedin.com/in/chetannitd/" class="fab fa-linkedin" style="color:white"></a></li>
+                </ul>
+            </div>
+            <h3 class="team-title">Chetan Garg</h3>
+            <span class="post">President</span>
+        </div>
         </div>
         <div class="col-sm-12 col-md-4 col-lg-4">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
-          <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Vishwanath.jpg" height="150px;" width="150px;"
-            style="box-shadow: 0.5px 0.5px 0.5px grey">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Vishvanath Dutt Sharma<br>
-            <i class="text-muted">Convenor</i><br>
-            <a href="#"><i class="far fa-envelope"></i></a>&nbsp;
-            <a href="#"><i class="fas fa-phone"></i></a>
-          </center>
-          </div>
+          <div class="our-team" style="padding: 15%">
+            <div class="pic">
+                <img src="../media/images/team/4 Vishvanath.jpg" style="border: solid 10px #343A3F; border-radius: 100%;">
+                <ul class="social-links">
+                  <li><a href="https://www.facebook.com/vishvanath.duttsharma" class="fab fa-facebook" style="color:white"></a></li>
+                  <li><a href="https://www.linkedin.com/in/vishvanathdutt/" class="fab fa-linkedin" style="color:white"></a></li>
+                </ul>
+            </div>
+            <h3 class="team-title">Vishvanath Dutt Sharma</h3>
+            <span class="post">Convenor</span>
+        </div>
         </div>
         <div class="col-sm-12 col-md-4 col-lg-4">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
-          <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Saurav Agarwal.jpg" height="150px;" width="150px;"
-            style="box-shadow: 0.5px 0.5px 0.5px grey">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Sourav Agarwal<br>
-            <i class="text-muted">Treasurer</i><br>
-            <a href="#"><i class="far fa-envelope"></i></a>&nbsp;
-            <a href="#"><i class="fas fa-phone"></i></a>
-          </center>
-          </div>
+          <div class="our-team"style="padding: 15%">
+            <div class="pic">
+                <img src="../media/images/team/x.jpg" style="border: solid 10px #343A3F; border-radius: 100%;">
+                <ul class="social-links">
+                  <li><a href="https://www.facebook.com/sourav.agarwal.56829" class="fab fa-facebook" style="color:white"></a></li>
+                  <li><a href="https://www.linkedin.com/in/sourav-agarwal-00455010a/" class="fab fa-linkedin" style="color:white"></a></li>
+                </ul>
+            </div>
+            <h3 class="team-title">Sourav Agarwal</h3>
+            <span class="post">Treasurer</span>
+        </div>
         </div>
       </div>
     </div><br>
 
 
     <!-- TEAM MEMBER -->
-    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded container"> 
+    <div class="container mt-5"> 
       <div class="row">
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Vikash.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/4 Abhishek.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Abhishek Karan</strong><br>
+            <small class="text-muted">Events And Sponsorship Head</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Anand.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/4 Anand.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Anand Jhunjhunwala</strong><br>
+            <small class="text-muted">Tech Head, Publicity Head</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/4 Abhishek.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Narendra Yadav</strong><br>
+            <small class="text-muted">Vice President</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Saptarshi Dey</strong><br>
+            <small class="text-muted">Vice President</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Shreya Saha</strong><br>
+            <small class="text-muted">General Secretary, Social Media Head, Creative Head</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="head mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/4 Vikash.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Vikash Kumar Patel</strong><br>
+            <small class="text-muted">Classes and Contests Head</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Ashutosh Agarwal</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Gyanesh.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Gyanesha Prajjwal</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Jaysurya.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Jeya Surya</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Piyush Mantri</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Raghab.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Raghav Grover</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Rishabh.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Rishabh Sethi</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Ritesh Gupta</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="third mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Romit.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Romit Kumar</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="second mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Ruchi.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Ruchi Singh</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="second mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Shivansh.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Shivansh Agarwal</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="second mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Saurabh Kumar</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="second mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 ShubhamG.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Shubham Gupta</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
           </center>
         </div>
 
-        <div class="col-sm-3 col-md-2 col-lg-2">
+        <div class="col-sm-4 col-md-2 col-lg-3">
           <center>
-            <img class="second mt-3 rounded-circle" src="../media/images/x.jpg" height="75px" width="75px">
-            <hr class="mb-0"style="background-color:#cccccc;">
-            Name<br>
-            <i class="text-muted">Designation</i>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 ShubhamKG.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Shubham Kumar Gupta</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/3 Shaymali.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Shyamali Murmu</strong><br>
+            <small class="text-muted">Senior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Abhishekh.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Abhishek Kumar (abhi_nitd)</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 AbhishekhMithila.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Abhishek Kumar</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Anupam Kr. Singh</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 AyushK.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Ayush Krishna Murthi</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
+          </center>
+        </div>
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 AyushS.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Ayush Kumar Shukla</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
+          </center>
+        </div>
+
+        
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Nikhil.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Nikhil Vashishtha</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Pankaj.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Pankaj Kumar</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Protik.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Protik Chanda</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Rajan.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Rajan Kumar Raj</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Rohit.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Rohit Kumar</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+          <div class="col-sm-4 col-md-2 col-lg-3">
+            <center>
+              <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/2 Sakchi.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+              <strong>Sakchi Agarwal</strong><br>
+              <small class="text-muted">Junior Coordinator</small>
+            </center>
+          </div>
+
+
+        <div class="col-sm-4 col-md-2 col-lg-3">
+          <center>
+            <img class="head mt-3 mb-2 rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+            <strong>Sparsh Kedia</strong><br>
+            <small class="text-muted">Junior Coordinator</small>
           </center>
         </div>
       </div>
     </div><hr class="mt-0" style="background-color:#cccccc;">
 
     <!-- ALUMNI SECTION -->
-    <center><h1 style="color:#F95c39;">Meet our Alumni</h1></center>
+    <center><h1 style="margin-top:5%; margin-bottom: 2%; color:#F95c39;">Meet our Alumni</h1></center>
     <div class="container mt-4">
       <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-6">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="col-sm-6 col-md-6 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
             <div class="row">
-              <div class="col-3 ml-3 mt-3">
-                <img class="alumni rounded-circle" src="../media/images/x.jpg" width="130px">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
               </div>
-              <div class="col-8" style="font-size: 85%;">
+              <div class="col-9 pt-2" style="font-size: 85%;">
                 <span class="text-success">Siddharth Garg</span><br>
-                <i>B.Tech. in Information Technology</i> <br>
-                Experience: <br>
-                <small class="text-muted">SDE, Amazon(Jul 2018 -Present) <br>
-                SDE Intern at Amazon (May 2017-July 2017)<br>
-                Applications Developer Intern at Roofpik (May 2016-July 2016)<br>
-                SDE Intern at BigStartups (December 2015-January 2016)<br>
-                Web Design Intern at eDominer (December 2015-January 2016)<br></small>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-6 mb-2">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="col-sm-12 col-md-12 col-lg-4 mb-2">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
             <div class="row">
-              <div class="col-3 ml-3 mt-3">
-                <img class="alumni rounded-circle" src="../media/images/x.jpg" width="130px">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
               </div>
-              <div class="col-8" style="font-size: 85%;">
+              <div class="col-9 pt-2" style="font-size: 85%;">
                 <span class="text-success">Siddharth Garg</span><br>
-                <i>B.Tech. in Information Technology</i><br>
-                Experience: <br>
-                <small class="text-muted">SDE, Amazon(Jul 2018 -Present) <br>
-                SDE Intern at Amazon (May 2017-July 2017)<br>
-                Applications Developer Intern at Roofpik (May 2016-July 2016)<br>
-                SDE Intern at BigStartups (December 2015-January 2016)<br>
-                Web Design Intern at eDominer (December 2015-January 2016)<br></small>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-6">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
             <div class="row">
-              <div class="col-3 ml-3 mt-3">
-                <img class="alumni rounded-circle" src="../media/images/x.jpg" width="130px">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
               </div>
-              <div class="col-8" style="font-size: 85%;">
+              <div class="col-9 pt-2" style="font-size: 85%;">
                 <span class="text-success">Siddharth Garg</span><br>
-                <i>B.Tech. in Information Technology</i><br>
-                Experience: <br>
-                <small class="text-muted">SDE, Amazon(Jul 2018 -Present) <br>
-                SDE Intern at Amazon (May 2017-July 2017)<br>
-                Applications Developer Intern at Roofpik (May 2016-July 2016)<br>
-                SDE Intern at BigStartups (December 2015-January 2016)<br>
-                Web Design Intern at eDominer (December 2015-January 2016)<br></small>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-6">
-          <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
             <div class="row">
-              <div class="col-3 ml-3 mt-3">
-                <img class="alumni rounded-circle" src="../media/images/x.jpg" width="130px">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
               </div>
-              <div class="col-8" style="font-size: 85%;">
+              <div class="col-9 pt-2" style="font-size: 85%;">
                 <span class="text-success">Siddharth Garg</span><br>
-                <i>B.Tech. in Information Technology</i><br>
-                Experience: <br>
-                <small class="text-muted">SDE, Amazon(Jul 2018 -Present) <br>
-                SDE Intern at Amazon (May 2017-July 2017)<br>
-                Applications Developer Intern at Roofpik (May 2016-July 2016)<br>
-                SDE Intern at BigStartups (December 2015-January 2016)<br>
-                Web Design Intern at eDominer (December 2015-January 2016)<br></small>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-4">
+          <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+            <div class="row">
+              <div class="col-3">
+                <img class="alumni rounded-circle" src="../media/images/team/x.jpg" style="border: solid 5px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+              </div>
+              <div class="col-9 pt-2" style="font-size: 85%;">
+                <span class="text-success">Siddharth Garg</span><br>
+                <text>B.Tech. in Information Technology</text><br>
+                <i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </body>
-</html>
 {% endblock %}
