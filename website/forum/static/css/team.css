@@ -1,30 +1,103 @@
-.card{
-  box-shadow:1px 1px 1px grey;
-  background-color: white;
+.our-team {
+	text-align: center;
 }
-.greyFilter{
-	filter:none;
+
+.our-team .pic {
+	position: relative;
+	border-radius: 50%;
+	overflow: hidden;
 }
-img:hover{
-	filter:grayscale(100%);
-}
-.line{
-  width:100%;
-  height: 1px;
-}
-.head{
-	border:5px solid #FF3333;
-}
-.shadow{
-	background:#ff5e57;
+
+.our-team .pic:before {
+	content: "";
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 0 0 0 0 #f45b38 inset;
 	opacity: 0.5;
+	transition: all 1s ease-in-out 0s;
 }
-.third{
-	border:5px solid #FFBBFF;
+
+.our-team:hover .pic:before {
+	box-shadow: 0 0 0 400px #f45b38 inset;
 }
-.second{
-	border:5px solid #77FF77;
+
+.pic img {
+	width: 100%;
+	height: auto;
 }
-.alumni{
-	border:5px solid #B53471;
+
+.our-team .social-links {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	position: absolute;
+	top: 50%;
+	left: 0;
+}
+
+.our-team .social-links li {
+	display: inline-block;
+	margin-right: 10px;
+	transform: scale(0, 0);
+	transition: all 0.7s ease-in-out 0s;
+}
+
+.our-team:hover .social-links li:nth-child(1) {
+	transition-delay: 0.1s;
+	transform: scale(1, 1);
+}
+
+.our-team:hover .social-links li:nth-child(2) {
+	transition-delay: 0.2s;
+	transform: scale(1, 1);
+}
+
+.our-team:hover .social-links li:nth-child(3) {
+	transform: scale(1, 1);
+	transition-delay: 0.3s;
+}
+
+.our-team:hover .social-links li:nth-child(4) {
+	transition-delay: 0.4s;
+	transform: scale(1, 1);
+}
+
+.our-team:hover .social-links li:nth-child(5) {
+	transition-delay: 0.5s;
+	transform: scale(1, 1);
+}
+
+.our-team .social-links li a {
+	font-size: 30px;
+	color:red;
+}
+
+.our-team .social-links li a:hover {
+	text-decoration: none;
+}
+
+.our-team .team-title {
+	font-size: 22px;
+	font-weight: bold;
+	color: #283a44;
+	text-transform: capitalize;
+	margin-top: 10px;
+}
+
+.our-team .post {
+	display: block;
+	font-size: 14px;
+	color: #687177;
+	text-transform: capitalize;
+}
+
+@media screen and (max-width: 990px) {
+	.our-team {
+		margin-bottom: 20px;
+	}
 }

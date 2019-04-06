@@ -62,7 +62,7 @@
         <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
         <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
-          <img id="logoREC" src="{% static 'image/logoInvert.png'%}" style="max-width:65px;" alt="logo">
+          <img id="logoREC" src="{% static 'image/logoInverted.png'%}" style="max-width:50px; padding-bottom: 4px" alt="logo">
           <strong>REC</strong>ursion
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
@@ -131,6 +131,8 @@
                 <strong>Contribute to this community</strong><br>
                 <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
                 <a href="https://github.com/RECursion-NITD"><i class="fab fa-github"></i></a><br>
+                <!-- Credits -->
+                <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">WebD Team</a></strong>
                 <!-- Rights-->
                 <p class="rights"><span>©  </span>
                 <span class="copyright-year">
@@ -142,15 +144,15 @@
               <h3>Contacts</h3>
               <dl class="contact-list">
                 <dt>Address:</dt>
-                <dd>NIT Durgapur, Durgapur, W.B.</dd>
+                <dd class="fas fa-map-marked-alt">   NIT Durgapur, Durgapur, W.B.</dd>
               </dl>
               <dl class="contact-list">
                 <dt>Email:</dt>
-                <dd><a href="mailto:recursion.nit@gmail.com">recursion[dot]nit[AT]gmail[dot]com</a></dd>
+                <dd><a href="mailto:recursion.nit@gmail.com" class="fas fa-envelope"></i>  recursion.nit@gmail.com</a></dd>
               </dl>
               <dl class="contact-list">
                 <dt>Phones:</dt>
-                <dd><a>Chetan Garg - +91 9475616155 </a>
+                <dd><a href="tel:+919475616155" class="fas fa-phone-square">  Chetan Garg: +919475616155 </a>
                 </dd>
               </dl>
             </div>
@@ -161,6 +163,7 @@
                 <li><a href="{% url 'events:calender' %}">Events</a></li>
                 <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
                 <li><a href="{% url  'forum:team_page'%}">Team</a></li>
+                <li><a href="{% url  'forum:webd_team'%}">WebD Team</a></li>
               </ul>
             </div>
           </div>
