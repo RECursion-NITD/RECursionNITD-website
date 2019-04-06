@@ -29,9 +29,12 @@
   .haq{
     border-right:1px solid red;
   }
+  .boxImage{
+    width:100px;
+  }
   .box{
-    background: #455A64;
-    color:#f3f3f3;
+    background:inherit;
+    color:#bdc3c7;
     padding : 2vw;
     margin: 0vw;
   }
@@ -126,21 +129,358 @@
               </div>
             </div>
 
+
+
+
+
+
+
+
+
+<!-- About Us Section-->
+<div class="jumbotron pt-5 mt-5" id="sec">
+  <div class="row" style="margin-bottom: 15vh; margin-top: 15vh">
+    <div class="col-lg-4">
+      <hr>
+    </div>
+    <div class="col-lg-4">
+      <center><h3>Who are we ?</h3></center>
+    </div>
+    <div class="col-lg-4">
+      <hr>
+    </div>
+  </div>
+  <ul class="container">
+    <li>
+      <span class="fa fa-code"></span>
+
+      <h3>Mission</h3>
+      <p>Working towards the improvement of campus's coding culture by organizing regular coding classes,coding contests and geeky sessions.</p>
+    </li>
+    <li><span class="fas fa-heart"></span>
+      <h3>Value</h3>
+      <p>We believe that helping each other is the only way. We take care and always look to get the best out of everyone. </p>
+      
+    </li>
+    <li><span class="fa fa-users"></span>
+      <h3>Vision</h3>
+      <p>Growing as a strong community in world of coding, making impacts in various fields and uphold the name of NIT Durgapur. </p>
+     </li>
+
+  </ul>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <div class="container">         
+  <div class="row jumbotron pt-5" style="padding: 2%;margin-top:15%;background-color:white;">
+    <div class="col-lg-5"style="padding-bottom: 0;">
+      <h3>Our Activities</h3>
+      <hr>
+        <ul>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  Regular open to all coding classes</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  RECode : Monthly online coding contest</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  Alohomora : Onsite coding contest</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  CodeKnight: Coding contest</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  Participating in ICPC</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  REChase : Annual treasure hunting competition</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  Organizing AMA Sessions with succesful alumnus</li>
+          <li class="mb-4"><i class="fas fa-angle-right"></i>  Tech Townhall : Annual session with succesful sudents or alumni</li>
+        </ul>  
+      <br><br>
+    </div>
+    
+  <div class="col-lg-7" style="padding-bottom: 0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
+    <script>!function(e){"undefined"==typeof module?this.charming=e:module.exports=e}(function(e,n){"use strict";n=n||{};var t=n.tagName||"span",o=null!=n.classPrefix?n.classPrefix:"char",r=1,a=function(e){for(var n=e.parentNode,a=e.nodeValue,c=a.length,l=-1;++l<c;){var d=document.createElement(t);o&&(d.className=o+r,r++),d.appendChild(document.createTextNode(a[l])),n.insertBefore(d,e)}n.removeChild(e)};return function c(e){for(var n=[].slice.call(e.childNodes),t=n.length,o=-1;++o<t;)c(n[o]);e.nodeType===Node.TEXT_NODE&&a(e)}(e),e});
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+    <section>
+
+      <div class="swiper-container slideshow">
+    
+        <div class="swiper-wrapper">
+    
+          <div class="swiper-slide slide">
+            {% load static %}
+            <div class="slide-image" style="background-image: url('../media/images/carousel/pic1.jpg')"></div>
+            <span class="slide-title">REChase</span>
+          </div>
+    
+          <div class="swiper-slide slide">
+            <div class="slide-image" style="background-image: url('../media/images/carousel/pic2.jpg')"></div>
+            <span class="slide-title">ALOHOMORA</span>
+          </div>
+    
+          <div class="swiper-slide slide">
+            <div class="slide-image" style="background-image: url('../media/images/carousel/pic3.jpg')"></div>
+            <span class="slide-title">SESSION WITH FACULTY ADVISORS</span>
+          </div>
+
+          <div class="swiper-slide slide">
+              <div class="slide-image" style="background-image: url('../media/images/carousel/pic4.jpg')"></div>
+              <span class="slide-title">GEEKY SESSION</span>
+          </div>
+
+          <div class="swiper-slide slide">
+                <div class="slide-image" style="background-image: url('../media/images/carousel/pic5.jpg')"></div>
+                <span class="slide-title">REChase</span>
+          </div>
+
+    
+        </div>
+    
+        <div class="slideshow-pagination"></div>
+    
+        <div class="slideshow-navigation">
+          <div class="slideshow-navigation-button prev"><span class="fas fa-chevron-left"></span></div>
+          <div class="slideshow-navigation-button next"><span class="fas fa-chevron-right"></span></div>
+        </div>
+    
+      </div>
+    
+    </section>
+    <script>
+        // The Slideshow class.
+    class Slideshow {
+        constructor(el) {
+            
+            this.DOM = {el: el};
+          
+            this.config = {
+              slideshow: {
+                delay: 3000,
+                pagination: {
+                  duration: 3,
+                }
+              }
+            };
+            
+            // Set the slideshow
+            this.init();
+          
+        }
+        init() {
+          
+          var self = this;
+          
+          // Charmed title
+          this.DOM.slideTitle = this.DOM.el.querySelectorAll('.slide-title');
+          this.DOM.slideTitle.forEach((slideTitle) => {
+            charming(slideTitle);
+          });
+          
+          // Set the slider
+          this.slideshow = new Swiper (this.DOM.el, {
+              
+              loop: true,
+              autoplay: {
+                delay: this.config.slideshow.delay,
+                disableOnInteraction: false,
+              },
+              speed: 500,
+              preloadImages: true,
+              updateOnImagesReady: true,
+              
+              // lazy: true,
+              // preloadImages: false,
+    
+              pagination: {
+                el: '.slideshow-pagination',
+                clickable: true,
+                bulletClass: 'slideshow-pagination-item',
+                bulletActiveClass: 'active',
+                clickableClass: 'slideshow-pagination-clickable',
+                modifierClass: 'slideshow-pagination-',
+                renderBullet: function (index, className) {
+                  
+                  var slideIndex = index,
+                      number = (index <= 8) ? '0' + (slideIndex + 1) : (slideIndex + 1);
+                  
+                  var paginationItem = '<span class="slideshow-pagination-item">';
+                  paginationItem += '<span class="pagination-number">' + number + '</span>';
+                  paginationItem = (index <= 8) ? paginationItem + '<span class="pagination-separator"><span class="pagination-separator-loader"></span></span>' : paginationItem;
+                  paginationItem += '</span>';
+                
+                  return paginationItem;
+                  
+                },
+              },
+    
+              // Navigation arrows
+              navigation: {
+                nextEl: '.slideshow-navigation-button.next',
+                prevEl: '.slideshow-navigation-button.prev',
+              },
+    
+              // And if we need scrollbar
+              scrollbar: {
+                el: '.swiper-scrollbar',
+              },
+            
+              on: {
+                init: function() {
+                  self.animate('next');
+                },
+              }
+            
+            });
+          
+            // Init/Bind events.
+            this.initEvents();
+            
+        }
+        initEvents() {
+            
+            this.slideshow.on('paginationUpdate', (swiper, paginationEl) => this.animatePagination(swiper, paginationEl));
+            //this.slideshow.on('paginationRender', (swiper, paginationEl) => this.animatePagination());
+    
+            this.slideshow.on('slideNextTransitionStart', () => this.animate('next'));
+            
+            this.slideshow.on('slidePrevTransitionStart', () => this.animate('prev'));
+                
+        }
+        animate(direction = 'next') {
+          
+            // Get the active slide
+            this.DOM.activeSlide = this.DOM.el.querySelector('.swiper-slide-active'),
+            this.DOM.activeSlideImg = this.DOM.activeSlide.querySelector('.slide-image'),
+            this.DOM.activeSlideTitle = this.DOM.activeSlide.querySelector('.slide-title'),
+            this.DOM.activeSlideTitleLetters = this.DOM.activeSlideTitle.querySelectorAll('span');
+          
+            // Reverse if prev  
+            this.DOM.activeSlideTitleLetters = direction === "next" ? this.DOM.activeSlideTitleLetters : [].slice.call(this.DOM.activeSlideTitleLetters).reverse();
+          
+            // Get old slide
+            this.DOM.oldSlide = direction === "next" ? this.DOM.el.querySelector('.swiper-slide-prev') : this.DOM.el.querySelector('.swiper-slide-next');
+            if (this.DOM.oldSlide) {
+              // Get parts
+              this.DOM.oldSlideTitle = this.DOM.oldSlide.querySelector('.slide-title'),
+              this.DOM.oldSlideTitleLetters = this.DOM.oldSlideTitle.querySelectorAll('span'); 
+              // Animate
+              this.DOM.oldSlideTitleLetters.forEach((letter,pos) => {
+                TweenMax.to(letter, .3, {
+                  ease: Quart.easeIn,
+                  delay: (this.DOM.oldSlideTitleLetters.length-pos-1)*.04,
+                  y: '50%',
+                  opacity: 0
+                });
+              });
+            }
+          
+            // Animate title
+            this.DOM.activeSlideTitleLetters.forEach((letter,pos) => {
+              TweenMax.to(letter, .6, {
+                ease: Back.easeOut,
+                delay: pos*.05,
+                startAt: {y: '50%', opacity: 0},
+                y: '0%',
+                opacity: 1
+              });
+            });
+          
+            // Animate background
+            TweenMax.to(this.DOM.activeSlideImg, 1.5, {
+                ease: Expo.easeOut,
+                startAt: {x: direction === 'next' ? 200 : -200},
+                x: 0,
+            });
+          
+            //this.animatePagination()
+        
+        }
+        animatePagination(swiper, paginationEl) {
+                
+          // Animate pagination
+          this.DOM.paginationItemsLoader = paginationEl.querySelectorAll('.pagination-separator-loader');
+          this.DOM.activePaginationItem = paginationEl.querySelector('.slideshow-pagination-item.active');
+          this.DOM.activePaginationItemLoader = this.DOM.activePaginationItem.querySelector('.pagination-separator-loader');
+          
+          console.log(swiper.pagination);
+          // console.log(swiper.activeIndex);
+          
+          // Reset and animate
+            TweenMax.set(this.DOM.paginationItemsLoader, {scaleX: 0});
+            TweenMax.to(this.DOM.activePaginationItemLoader, this.config.slideshow.pagination.duration, {
+              startAt: {scaleX: 0},
+              scaleX: 1,
+            });
+          
+          
+        }
+        
+    }
+    
+    const slideshow = new Slideshow(document.querySelector('.slideshow'));
+    
+    </script>
+
+</div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div class="mt-5">
-            <h3>Who we are</h3>
-            RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.
-            <br><br>
             <center class="text-muted">So far we witnessed<br>
               <div class="box m-3" style="display:inline-block;">
+                  <i class="fas fa-chalkboard-teacher fa-3x"></i><br><br>
                 <h3>300+</h3>hours of Teaching
               </div>
               <div class="box m-3" style="display:inline-block;">
+                  <i class="fas fa-lightbulb fa-3x"></i><br><br>
                 <h3>6+ </h3>years of Experience
               </div>
               <div class="box m-3" style="display:inline-block;">
+                  <i class="fas fa-code fa-3x"></i><br><br>
                 <h3>50+</h3>Online / Offline Contests
               </div>
               <div class="box m-3" style="display:inline-block;">
+                  <i class="fas fa-users fa-3x"></i><br><br>
                 <h3>2000+</h3>Users
                 </div>
             </center>
