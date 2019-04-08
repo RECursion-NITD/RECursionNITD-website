@@ -15,27 +15,27 @@ section {
     align-items: center;
     position: relative;
     text-align: center;
-    font-size: 18px;
+    font-size: 10vh;
     background: #fff;
     overflow: hidden;
 }
 
 .slide-image {
     position: absolute;
-    top: -200px;
-    left: -200px;
-    width: calc(100% + 400px);
-    height: calc(100% + 400px);
+    background-repeat: no-repeat;
+    object-fit:cover;
+    width:100vh;
+    height:100vh;
     background-position: 50% 50%;
-    background-size: contain;
+    background-size: cover;
 }
 
 .slide-title {
-    font-size: 3rem;
+    font-size: calc(14px + (26 - 14) * ((100vw - 300px) / (1600 - 300)));
     line-height: 1;
-    max-width: 50%;
-    white-space: normal;
-    word-break: break-word;
+    max-width: 90%;
+    white-space: pre-wrap;
+    word-break: keep-all;
     color: #FFF;
     z-index: 100;
     font-family: 'Oswald', sans-serif;
@@ -45,7 +45,7 @@ section {
 
 @media (min-width: 45em) {
     .slide-title {
-        font-size: 4vw;
+        font-size: 3vw;
         max-width: none;
     }
 }
