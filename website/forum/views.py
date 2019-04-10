@@ -48,7 +48,11 @@ def getting_started(request):
 
 def team_page(request):
     args={}
-    return render(request, 'team.html', args)  
+    return render(request, 'team.html', args)
+
+def webd_team(request):
+    args={}
+    return render(request, 'webd_team.html', args)
 
 def home(request):
     n=1
