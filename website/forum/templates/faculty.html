@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block css%}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/webd_team.css'%}">
+{% endblock%}
+{% block content %}
+
+<center><h1 style="color:#F95c39; margin-top: 1%; margin-bottom: 3%;">Our Faculty Advisors</h1></center>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 col-lg-6" style="padding: 10%">
+            <div class="our-team">
+                <div class="pic">
+                    <img src="../media/images/faculty/dm.jpg">
+                    <ul class="social">
+                        <li><a href="https://www.nitdgp.ac.in/faculty/c8a7fd24-de21-4537-8e67-acab7d45b9d2" class="fas fa-external-link-alt"></a></li>
+                    </ul>
+                </div>
+                <div class="team-content">
+                    <div class="team-info" >
+                        <h3 class="title">Dr. Debasis Mitra</h3>
+                        <span class="post">Associate Professor</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+ 
+        <div class="col-md-6 col-sm-12 col-lg-6" style="padding: 10%">
+            <div class="our-team">
+                <div class="pic">
+                    <img src="../media/images/faculty/bs.jpg">
+                    <ul class="social">
+                        <li><a href="https://www.nitdgp.ac.in/faculty/694f6909-0de4-46de-8284-9b88988ff1d1" class="fas fa-external-link-alt"></a></li>
+                    </ul>
+                </div>
+                <div class="team-content">
+                    <div class="team-info">
+                        <h3 class="title">Dr. Bibhash Sen</h3>
+                        <span class="post">Associate Professor</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+{% endblock %}

@@ -11,6 +11,7 @@ urlpatterns = [
     path('start/', getting_started, name='getting_started'),
     path('team/', team_page, name='team_page'),
     path('webdteam/', webd_team, name='webd_team'),
+    path('faculty/', faculty, name='faculty'),
     path('add', add_question, name='add_question'),
     path('', list_questions ,name='list_questions'),
     path('detail/<int:id>/', detail_questions, name='detail_questions'),

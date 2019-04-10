@@ -54,6 +54,10 @@ def webd_team(request):
     args={}
     return render(request, 'webd_team.html', args)
 
+def faculty(request):
+    args={}
+    return render(request, 'faculty.html', args)
+
 def home(request):
     n=1
     events=Events.objects.all().order_by('-start_time')[:n:1]
