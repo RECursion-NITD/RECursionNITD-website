@@ -39,6 +39,8 @@ import datetime
 import html2markdown
 from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 from difflib import SequenceMatcher
+from django.utils import timezone
+from datetime import timedelta
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
@@ -60,7 +62,9 @@ def faculty(request):
 
 def home(request):
     n=1
-    events=Events.objects.all().order_by('-start_time')[:n:1]
+    today = timezone.now()
+    upto = today + timedelta(days=365)
+    events = Events.objects.filter(start_time__range=[today, upto]).order_by('start_time')[:n:1]
     args={'events':events,}
     return render(request, 'home.html', args)
 
