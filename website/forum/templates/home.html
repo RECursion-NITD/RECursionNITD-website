@@ -8,7 +8,6 @@
 {% load staticfiles %}
 <link rel="stylesheet" href="{% static 'css/home.css'%}">
 <link rel="stylesheet" href="{% static 'css/carousel.css'%}">
-<link src="{% static 'js/carousel.js'%}">
 
 <style>
   .side-card{
@@ -115,9 +114,9 @@
           <h1 class="title" style="margin-left:-7px;">RECursion</h1>
           <h5 class="subtitle" style="color:#528CDD;">Programming Community of NIT Durgapur</h5>
           <p class="col-sm-12 col-lg-8 pl-0">We are programming community of NIT Durgapur, 
-            with focus on Improving Coding culture institute wide by conducting regular lectures from beginner to advance topics of programming, Our goal is to increse
+            with focus on improving coding culture institute wide by conducting regular lectures from beginner to advance topics of programming. Our goal is to increase
              student's participation in inter-colligiate contest like 
-             ACM-ICPC and get better ranks.</p><br>
+             ACM-ICPC and get better.</p><br>
             <div class="row">
               <div class="col-sm-4 col-lg-3 ml-2 haq">
                 <strong>Have a question ?</strong><br>
@@ -128,15 +127,6 @@
                 <a href="{% url 'forum:getting_started' %}"><button class="btn btn-sm btn-outline-success mt-2">Get Started</button></a>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
 <!-- About Us Section-->
 <div class="jumbotron pt-5 mt-5" id="sec">
   <div class="row" style="margin-bottom: 15vh; margin-top: 15vh">
@@ -150,7 +140,7 @@
       <hr>
     </div>
   </div>
-  <ul class="container">
+  <ul class="container mt-0 pt-0">
     <li>
       <span class="fa fa-code"></span>
 
@@ -169,304 +159,91 @@
 
   </ul>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<!-- Carousel-->
  <div class="container">         
-  <div class="row jumbotron pt-5" style="padding: 2%;margin-top:15%;background-color:white;">
-    <div class="col-lg-5"style="padding-bottom: 0;">
-      <h3>Our Activities</h3>
+  <div class="row" style="padding: 2%;margin-top:15%;background-color:#FAFAFA;">
+    <div class="col-lg-6" style="padding-bottom: 0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+      <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
+      <script>!function(e){"undefined"==typeof module?this.charming=e:module.exports=e}(function(e,n){"use strict";n=n||{};var t=n.tagName||"span",o=null!=n.classPrefix?n.classPrefix:"char",r=1,a=function(e){for(var n=e.parentNode,a=e.nodeValue,c=a.length,l=-1;++l<c;){var d=document.createElement(t);o&&(d.className=o+r,r++),d.appendChild(document.createTextNode(a[l])),n.insertBefore(d,e)}n.removeChild(e)};return function c(e){for(var n=[].slice.call(e.childNodes),t=n.length,o=-1;++o<t;)c(n[o]);e.nodeType===Node.TEXT_NODE&&a(e)}(e),e});
+      </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
+      <section>
+  
+        <div class="swiper-container slideshow shadow-sm">
+      
+          <div class="swiper-wrapper">
+      
+            <div class="swiper-slide slide">
+              {% load static %}
+              <div class="slide-image" style="background-image: url('../media/images/carousel/pic1.jpg')"></div>
+              <span class="slide-title">REChase</span>
+            </div>
+      
+            <div class="swiper-slide slide">
+              <div class="slide-image" style="background-image: url('../media/images/carousel/pic2.jpg')"></div>
+              <span class="slide-title">ALOHOMORA</span>
+            </div>
+      
+            <div class="swiper-slide slide">
+              <div class="slide-image" style="background-image: url('../media/images/carousel/pic3.jpg')"></div>
+              <span class="slide-title" style="font-size: 2vw">SESSION WITH FACULTY ADVISORS</span>
+            </div>
+  
+            <div class="swiper-slide slide">
+                <div class="slide-image" style="background-image: url('../media/images/carousel/pic4.jpg')"></div>
+                <span class="slide-title">GEEKY SESSION</span>
+            </div>
+  
+            <div class="swiper-slide slide">
+                  <div class="slide-image" style="background-image: url('../media/images/carousel/pic5.jpg')"></div>
+                  <span class="slide-title">REChase</span>
+            </div>
+  
+      
+          </div>
+      
+          <div class="slideshow-pagination"></div>
+      
+          <div class="slideshow-navigation">
+            <div class="slideshow-navigation-button prev"><span class="fas fa-chevron-left"></span></div>
+            <div class="slideshow-navigation-button next"><span class="fas fa-chevron-right"></span></div>
+          </div>
+      
+        </div>
+      
+      </section>
+      <script src="{% static 'js/carousel.js'%}"></script>
+  
+  </div> 
+ <!--List of Activities--> 
+  <div class="col-lg-6"style="padding-bottom: 0;">
+    <div>
+      <h3><center>Our Activities</center></h3>
+    </div>
       <hr>
-        <ul>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  Regular open to all coding classes</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  RECode : Monthly online coding contest</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  Alohomora : Onsite coding contest</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  CodeKnight: Coding contest</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  Participating in ICPC</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  REChase : Annual treasure hunting competition</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  Organizing AMA Sessions with succesful alumnus</li>
-          <li class="mb-4"><i class="fas fa-angle-right"></i>  Tech Townhall : Annual session with succesful sudents or alumni</li>
-        </ul>  
+        <ol class="list list--ordered">
+          <li class="list__item mb-4">  Regular open to all coding classes</li>
+          <li class="list__item mb-4">  RECode : Monthly online coding contest</li>
+          <li class="list__item mb-4">  Alohomora : Onsite coding contest</li>
+          <li class="list__item mb-4">  CodeKnight: Coding contest</li>
+          <li class="list__item mb-4">  Improving student's participation in ICPC</li>
+          <li class="list__item mb-4">  REChase : Annual treasure hunting competition</li>
+          <li class="list__item mb-4">  Organizing AMA Sessions with succesful alumnus</li>
+          <li class="list__item mb-4">  Tech Townhall : Annual session with succesful sudents or alumni</li>
+          <li class="list__item mb-4">  Mind Sweepers : Contest</li>
+        </ol>  
       <br><br>
     </div>
     
-  <div class="col-lg-7" style="padding-bottom: 0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Oswald:500" rel="stylesheet">
-    <script>!function(e){"undefined"==typeof module?this.charming=e:module.exports=e}(function(e,n){"use strict";n=n||{};var t=n.tagName||"span",o=null!=n.classPrefix?n.classPrefix:"char",r=1,a=function(e){for(var n=e.parentNode,a=e.nodeValue,c=a.length,l=-1;++l<c;){var d=document.createElement(t);o&&(d.className=o+r,r++),d.appendChild(document.createTextNode(a[l])),n.insertBefore(d,e)}n.removeChild(e)};return function c(e){for(var n=[].slice.call(e.childNodes),t=n.length,o=-1;++o<t;)c(n[o]);e.nodeType===Node.TEXT_NODE&&a(e)}(e),e});
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.0.2/TweenMax.min.js"></script>
-    <section>
-
-      <div class="swiper-container slideshow">
-    
-        <div class="swiper-wrapper">
-    
-          <div class="swiper-slide slide">
-            {% load static %}
-            <div class="slide-image" style="background-image: url('../media/images/carousel/pic1.jpg')"></div>
-            <span class="slide-title">REChase</span>
-          </div>
-    
-          <div class="swiper-slide slide">
-            <div class="slide-image" style="background-image: url('../media/images/carousel/pic2.jpg')"></div>
-            <span class="slide-title">ALOHOMORA</span>
-          </div>
-    
-          <div class="swiper-slide slide">
-            <div class="slide-image" style="background-image: url('../media/images/carousel/pic3.jpg')"></div>
-            <span class="slide-title">SESSION WITH FACULTY ADVISORS</span>
-          </div>
-
-          <div class="swiper-slide slide">
-              <div class="slide-image" style="background-image: url('../media/images/carousel/pic4.jpg')"></div>
-              <span class="slide-title">GEEKY SESSION</span>
-          </div>
-
-          <div class="swiper-slide slide">
-                <div class="slide-image" style="background-image: url('../media/images/carousel/pic5.jpg')"></div>
-                <span class="slide-title">REChase</span>
-          </div>
-
-    
-        </div>
-    
-        <div class="slideshow-pagination"></div>
-    
-        <div class="slideshow-navigation">
-          <div class="slideshow-navigation-button prev"><span class="fas fa-chevron-left"></span></div>
-          <div class="slideshow-navigation-button next"><span class="fas fa-chevron-right"></span></div>
-        </div>
-    
-      </div>
-    
-    </section>
-    <script>
-        // The Slideshow class.
-    class Slideshow {
-        constructor(el) {
-            
-            this.DOM = {el: el};
-          
-            this.config = {
-              slideshow: {
-                delay: 3000,
-                pagination: {
-                  duration: 3,
-                }
-              }
-            };
-            
-            // Set the slideshow
-            this.init();
-          
-        }
-        init() {
-          
-          var self = this;
-          
-          // Charmed title
-          this.DOM.slideTitle = this.DOM.el.querySelectorAll('.slide-title');
-          this.DOM.slideTitle.forEach((slideTitle) => {
-            charming(slideTitle);
-          });
-          
-          // Set the slider
-          this.slideshow = new Swiper (this.DOM.el, {
-              
-              loop: true,
-              autoplay: {
-                delay: this.config.slideshow.delay,
-                disableOnInteraction: false,
-              },
-              speed: 500,
-              preloadImages: true,
-              updateOnImagesReady: true,
-              
-              // lazy: true,
-              // preloadImages: false,
-    
-              pagination: {
-                el: '.slideshow-pagination',
-                clickable: true,
-                bulletClass: 'slideshow-pagination-item',
-                bulletActiveClass: 'active',
-                clickableClass: 'slideshow-pagination-clickable',
-                modifierClass: 'slideshow-pagination-',
-                renderBullet: function (index, className) {
-                  
-                  var slideIndex = index,
-                      number = (index <= 8) ? '0' + (slideIndex + 1) : (slideIndex + 1);
-                  
-                  var paginationItem = '<span class="slideshow-pagination-item">';
-                  paginationItem += '<span class="pagination-number">' + number + '</span>';
-                  paginationItem = (index <= 8) ? paginationItem + '<span class="pagination-separator"><span class="pagination-separator-loader"></span></span>' : paginationItem;
-                  paginationItem += '</span>';
-                
-                  return paginationItem;
-                  
-                },
-              },
-    
-              // Navigation arrows
-              navigation: {
-                nextEl: '.slideshow-navigation-button.next',
-                prevEl: '.slideshow-navigation-button.prev',
-              },
-    
-              // And if we need scrollbar
-              scrollbar: {
-                el: '.swiper-scrollbar',
-              },
-            
-              on: {
-                init: function() {
-                  self.animate('next');
-                },
-              }
-            
-            });
-          
-            // Init/Bind events.
-            this.initEvents();
-            
-        }
-        initEvents() {
-            
-            this.slideshow.on('paginationUpdate', (swiper, paginationEl) => this.animatePagination(swiper, paginationEl));
-            //this.slideshow.on('paginationRender', (swiper, paginationEl) => this.animatePagination());
-    
-            this.slideshow.on('slideNextTransitionStart', () => this.animate('next'));
-            
-            this.slideshow.on('slidePrevTransitionStart', () => this.animate('prev'));
-                
-        }
-        animate(direction = 'next') {
-          
-            // Get the active slide
-            this.DOM.activeSlide = this.DOM.el.querySelector('.swiper-slide-active'),
-            this.DOM.activeSlideImg = this.DOM.activeSlide.querySelector('.slide-image'),
-            this.DOM.activeSlideTitle = this.DOM.activeSlide.querySelector('.slide-title'),
-            this.DOM.activeSlideTitleLetters = this.DOM.activeSlideTitle.querySelectorAll('span');
-          
-            // Reverse if prev  
-            this.DOM.activeSlideTitleLetters = direction === "next" ? this.DOM.activeSlideTitleLetters : [].slice.call(this.DOM.activeSlideTitleLetters).reverse();
-          
-            // Get old slide
-            this.DOM.oldSlide = direction === "next" ? this.DOM.el.querySelector('.swiper-slide-prev') : this.DOM.el.querySelector('.swiper-slide-next');
-            if (this.DOM.oldSlide) {
-              // Get parts
-              this.DOM.oldSlideTitle = this.DOM.oldSlide.querySelector('.slide-title'),
-              this.DOM.oldSlideTitleLetters = this.DOM.oldSlideTitle.querySelectorAll('span'); 
-              // Animate
-              this.DOM.oldSlideTitleLetters.forEach((letter,pos) => {
-                TweenMax.to(letter, .3, {
-                  ease: Quart.easeIn,
-                  delay: (this.DOM.oldSlideTitleLetters.length-pos-1)*.04,
-                  y: '50%',
-                  opacity: 0
-                });
-              });
-            }
-          
-            // Animate title
-            this.DOM.activeSlideTitleLetters.forEach((letter,pos) => {
-              TweenMax.to(letter, .6, {
-                ease: Back.easeOut,
-                delay: pos*.05,
-                startAt: {y: '50%', opacity: 0},
-                y: '0%',
-                opacity: 1
-              });
-            });
-          
-            // Animate background
-            TweenMax.to(this.DOM.activeSlideImg, 1.5, {
-                ease: Expo.easeOut,
-                startAt: {x: direction === 'next' ? 200 : -200},
-                x: 0,
-            });
-          
-            //this.animatePagination()
-        
-        }
-        animatePagination(swiper, paginationEl) {
-                
-          // Animate pagination
-          this.DOM.paginationItemsLoader = paginationEl.querySelectorAll('.pagination-separator-loader');
-          this.DOM.activePaginationItem = paginationEl.querySelector('.slideshow-pagination-item.active');
-          this.DOM.activePaginationItemLoader = this.DOM.activePaginationItem.querySelector('.pagination-separator-loader');
-          
-          console.log(swiper.pagination);
-          // console.log(swiper.activeIndex);
-          
-          // Reset and animate
-            TweenMax.set(this.DOM.paginationItemsLoader, {scaleX: 0});
-            TweenMax.to(this.DOM.activePaginationItemLoader, this.config.slideshow.pagination.duration, {
-              startAt: {scaleX: 0},
-              scaleX: 1,
-            });
-          
-          
-        }
-        
-    }
-    
-    const slideshow = new Slideshow(document.querySelector('.slideshow'));
-    
-    </script>
-
-</div>
+  
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <div class="mt-5">
-            <center class="text-muted">So far we witnessed<br>
+<!--Experiance-->
+ <div class="mt-5">
+            <center class="text-muted">So far we have witnessed<br>
               <div class="box m-3" style="display:inline-block;">
                   <i class="fas fa-chalkboard-teacher fa-3x"></i><br><br>
                 <h3>300+</h3>hours of Teaching
@@ -497,7 +274,7 @@
         <center class="text-muted">Past Sponsors<br>
           <a href="https://www.jetbrains.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/jetbrain.svg.png' %}"></a>
           <a href="https://www.hackerrank.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/hackerrank.png' %}"></a>
-          <a href="https://www.cloudsploit.com/"> <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}"></a>
+          <a href="https://cloudsploit.com/"> <img class="sponsorImg ml-4"src="{% static 'image/sponsor/cloudsploit.png' %}"></a>
           <a href="https://www.codechef.com/"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/codechef.png' %}"></a>
           <a href="https://www.facebook.com/hiredive/">  <img class="sponsorImg ml-4"src="{% static 'image/sponsor/hiredive.jpg' %}"></a>
           <a href="https://www.facebook.com/nutrichef.ie/?ref=search&__tn__=%2Cd%2CP-R&eid=ARDTDJ4hXrAW-2WMWQ8pJF8H6bGOJwbca2ee0kDmWC8cbSwVJ7RA1F-upYN4dNK66eWp-9HvxWlsJcKY"><img class="sponsorImg ml-4"src="{% static 'image/sponsor/nutrichef.png' %}"></a>

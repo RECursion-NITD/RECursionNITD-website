@@ -32,7 +32,7 @@
               </div>
               <hr>
               <div>
-                {% render_field form.image class="form-control mt-4" style="background:white;" placeholder="Select An Image To Upload" %}
+                {% render_field form.image class="form-control mt-4" style="background:white;" placeholder="Select An Image To Upload" onchange="ValidateSize(this)" type="file"%}
               </div>
             <hr>
           </table>
@@ -49,4 +49,18 @@
   </div>
 
 </body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+  function ValidateSize(file) {
+        var FileSize = file.files[0].size / 1024 / 1024; // in MB
+        if (FileSize > 2) {
+            alert('File size exceeds 2 MB');
+            $(file).val('');
+        } else {
+
+        }
+    }
+</script>
+
 {% endblock %}

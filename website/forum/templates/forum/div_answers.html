@@ -42,9 +42,9 @@
                                     <span>
                                             {% if request.user != answer.user_id %}
                                             {% if  answer.id in voted %}
-                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
                                             {% else %}
-                                            <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                             {% endif %}
                                             {% endif %}
                                     </span>
@@ -210,35 +210,36 @@
                 error:handleFormError,
              })
             })
-           /*   edit ans voting*/
-            $('.voting_box').click(function(event)
-            {
-              event.preventDefault()
-              var id=$(this).attr("ans-id")
-              $.ajax({
-                method: "GET",
-                url:"/forum/answer/"+id+"/vote",
-                success: function(data)
-                        {
-                            console.log(id)
-                            console.log(data)
-                            var Data = JSON.parse(data)
-                           if( Data.Success == "upvoted")
-                           {
-                               $('#downvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
-                               $('#upvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
-                               $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
-                           }
-                           else if( Data.Success == "downvoted" )
-                           {
-                            $('#downvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
-                            $('#upvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
-                            $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
-                           }
-                        },
-                error: handleFormError,
-            })
-            })
+
+            /*   edit ans voting*/
+  $('.voting_box').click(function(event)
+  {
+      event.preventDefault()
+      var id=$(this).attr("ans-id")
+      $.ajax({
+        method: "GET",
+        url:"/forum/answer/"+id+"/vote",
+        success: function(data)
+                {
+                    console.log(id)
+                    console.log(data)
+                    var Data = JSON.parse(data)
+                   if( Data.Success == "upvoted")
+                   {
+                       $('#downvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#upvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                   else if( Data.Success == "downvoted" )
+                   {
+                    $('#downvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#upvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                },
+        error: handleFormError,
+    })
+  })
                     function handleFormError(jqXHR, textStatus, errorThrown){
                     console.log(jqXHR)
                     console.log(textStatus)

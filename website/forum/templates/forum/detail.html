@@ -70,7 +70,7 @@
                                     {% for p in profile %} {% if p.user == comment.user %} {% if p.image %}
                                     <div class="comment-avatar col-md-0 col-sm-0">
                                         <a href="">
-                                            <!-- <img class="mt-3 rounded-circle" src="{{ p.image.url }}" style="width: 39px;" alt="avatar">-->
+                                           <img class="mt-3 rounded-circle" src="{{ p.image.url }}" style="width: 39px;" alt="avatar">
                                         </a>
                                     </div>
 
@@ -220,9 +220,9 @@
                                     <span>
                                             {% if request.user != answer.user_id %}
                                             {% if  answer.id in voted %}
-                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
                                             {% else %}
-                                            <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                             {% endif %}
                                             {% endif %}
                                     </span>
@@ -383,7 +383,7 @@ Heading -
        $('.my-com-form').toggle()
        })
        $('#add_ans_but').click(()=>{
-        $('#add_ans_but').hide()
+        $('#add_ans_but').hide()  
        $('.my-ans-form').toggle()
        })
   /*   edit follow*/
@@ -428,14 +428,14 @@ Heading -
                     var Data = JSON.parse(data)
                    if( Data.Success == "upvoted")
                    {
-                       $('#downvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
-                       $('#upvote_link').html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#downvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#upvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
                        $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
                    }
                    else if( Data.Success == "downvoted" )
                    {
-                    $('#downvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
-                    $('#upvote_link').html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#downvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#upvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
                     $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
                    }
                 },
