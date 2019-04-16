@@ -1,0 +1,40 @@
+.container-fluid{
+  padding-top: 3vw;
+}
+#qTitle{
+  display: inline-block;
+}
+#qDivide{
+  color:#f3f3f3;
+  margin-bottom: 8px;
+  margin-top: 0px;
+}
+.tag{
+  font-size: 80%;
+}
+.voteReply{
+  background: #ffffff;
+  border: 1px solid #f1f1f1;
+}
+.commentBorder{
+  border-left: 5px solid #f9c359; 
+  margin-left:0.5px;
+}
+.answerBorder{
+  border-left:5px solid #267CA1;
+}
+@media(max-width:475px){  
+  .commentBorder{
+    border-left: 1px solid #f9c359; 
+    margin-left:0.5px;
+  }
+  .answerBorder{
+    border-left:1px solid #267CA1;
+  }
+  .answerBox{
+    border-left:0px solid #cccccc;
+  }
+  .answerBoxMargin{
+    margin-bottom: 70px; 
+  }
+}

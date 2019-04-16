@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+<body>
+  <center><h3>Edit Profile</h3></center>
+  <div class="container">
+    <center>
+    <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded" style="margin: 2%; max-width: 600px;">
+    <center>
+        <form method="POST" enctype="multipart/form-data">
+          <table style="margin: 6%">
+              <div class="row">
+                <div class="col-3 mt-4">
+                 Name:
+               </div>
+                <div class="col-9">{% render_field form.name class="form-control mt-4" style="background:white;" placeholder="Enter Name" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 College:
+               </div>
+                <div class="col-9">{% render_field form.college class="form-control mt-4" style="background:white;" placeholder="Name Of College" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 Branch:
+               </div>
+                <div class="col-9">{% render_field form.dept class="form-control mt-4" style="background:white;" placeholder="Department/Branch" %}
+                </div>
+              </div>
+              <hr>
+              <div>
+                {% render_field form.image class="form-control mt-4" style="background:white;" placeholder="Select An Image To Upload" onchange="ValidateSize(this)" type="file"%}
+              </div>
+            <hr>
+          </table>
+              
+          <button type="submit" class="save btn btn-success">Submit</button>
+        </form>
+        <p><a href="{% url 'user_profile:change_password'  %}">Change Your Password</a></p>
+    </center>
+  </div>
+  </center>
+   <div id='msg'>
+
+  </div>
+  </div>
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+  function ValidateSize(file) {
+        var FileSize = file.files[0].size / 1024 / 1024; // in MB
+        if (FileSize > 2) {
+            alert('File size exceeds 2 MB');
+            $(file).val('');
+        } else {
+
+        }
+    }
+</script>
+
+{% endblock %}

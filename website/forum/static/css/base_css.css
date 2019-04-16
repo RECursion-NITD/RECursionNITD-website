@@ -1,0 +1,190 @@
+  body
+  {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background-color: #fafafa;
+    /*font-family: 'Ubuntu', sans-serif;*/
+    font-family: 'Montserrat', sans-serif;
+  }
+  .btn-outline-warning:hover{
+    color:white;
+  }
+  .list-group-item{
+    background:inherit;
+    border:none;
+  }
+  
+  li{
+    list-style-type: none;
+    margin: 0px;
+  }
+  nav{
+    background-size: cover;
+    width:100%;
+    margin-bottom:10px;
+    vertical-align: middle;
+  }
+  .navbar-brand{
+    margin: 0px;
+  }
+  .tab{
+    color:#8E9689;
+  }
+  .tab:hover{
+    color:#dddddd;
+    text-decoration:none;
+  }
+  .dropdown-menu{
+    font-size: 80%;
+    background:#f4f4f4;
+    background:#343A40;
+    text-decoration:none; 
+  }
+  .dropdown-menu li a{
+    color:white;
+  }
+  .navMobile li a{
+    color:white;
+  }
+  .navMobile li a:hover{
+    color:white;
+  }
+  header{
+    /*background-image:url("/static/image/footer_design.svg");*/
+    box-shadow:0px 0px 10px grey;
+  }
+  main {
+    flex: 1 0 auto;
+  }
+  #logo{
+    max-height:70px;
+  }
+  .circle {
+  background-color: white;
+  height: 85px;
+  width: 85px;
+  border-radius: 50%;
+  padding: 2px;
+  margin: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  top:-60px;
+  border:3px solid #F95C39;
+  box-shadow:0px 0px 6px black;
+}
+  #goTop{
+    position: relative;
+    top:-60px; 
+    height:85px;
+    width:85px;
+    align-content: center;
+    background:white;
+  }
+  #copyright{
+    background-color: transparent;
+  }
+  footer{
+    margin-top:60px;
+    background-size:100% 100%;
+    background-size:cover;
+    box-shadow:0px 0px 10px grey;
+    display: inline-block;
+  background-repeat: no-repeat;
+  position: relative;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  }
+  .footerTitle{
+    color:#ffffff;
+    justify-content: center;
+    text-indent: 40px;
+  }
+  #footerContainer{
+    align-content: center;
+    justify-content: center;
+  }
+  .columnContentText{
+    color:white;
+  }
+  .mapouter{
+    margin: auto;
+    text-align:right;
+    left:30%;
+    height:300px;
+    width:300px;
+  }
+  .gmap_canvas{
+    overflow:hidden;
+    background:none!important;
+    height:300px;
+    width:300px;
+  }
+  @media screen and (max-width: 480px) {
+    img {
+         max-width: 400px;
+    }
+}
+
+
+
+
+.context-dark, .bg-gray-dark, .bg-primary {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-classic a, .footer-classic a:focus, .footer-classic a:active {
+    color: white;
+}
+.nav-list li {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.nav-list li a:hover:before {
+    margin-left: 0;
+    opacity: 1;
+    visibility: visible;
+}
+
+ul, ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.social-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 23px;
+    font: 900 13px/1 "Lato", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+.social-container .col {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.nav-list li a:before {
+/* .nav-list li a:before {fontfont */
+    content: "\f14f";
+    font: 400 21px/1 "Material Design Icons";
+    color: #4d6de6;
+    display: inline-block;
+    vertical-align: baseline;
+    margin-left: -28px;
+    margin-right: 7px;
+    opacity: 0;
+    visibility: hidden;
+    transition: .22s ease;
+}
+
+@media(max-width:450px){
+  #logoREC{
+    display:none;
+  }
+}
+
+

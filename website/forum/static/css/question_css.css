@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css?family=Rajdhani');
+
+#answerBox{
+	text-align: center;
+	display: inline-block;
+}
+#followBox{
+	text-align: center;
+	display: inline-block;
+}
+#followValue{
+	color:#247BA0;
+}
+#answerValue{
+	color:#F95C39;
+}
+.card{
+	box-shadow: 1px 1px 1px #dddddd;
+	margin-left:0px;
+	text-align:left;
+	background-color: white;
+}
+.forumQ{
+}
+#questionDetail{
+	color:#5277CF;
+	font-size:110%;
+	overflow:hidden;
+	text-overflow: ellipsis;
+}
+#content{
+	margin-left: 10px;
+}
+#content li{
+	/*border:1px red solid;*/
+}
+#tagList{
+	color:#F95C39;
+	display: inline-block;
+}
+hr{
+	margin: 0px;
+}
+.tagName{
+	background-color: #E1ECF4;
+	display: inline;
+	color:#6A73B4;
+	padding: 3px;
+	font-size: 79%;
+	border-radius: 1px;
+}
+#postedOn{
+	display: inline-block;
+}
+#addedBy{
+	display: inline-block;
+}
+#addedNav{
+	background-color: rgba(0,0,0,0.4);
+}
+
+#haveAQ{
+}
+/*input[type=text] {
+	width:2%;
+  -webkit-transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out;
+}*/
+.text-muted{
+	font-size: 70%;
+}
+/* When the input field gets focus, change its width to 100% */
+/*input[type=text]:focus {
+  width: 150px;
+}*/
+#search{
+	margin-top:3px; 
+	max-width: 250px;
+	height:40px;
+	box-shadow:3px 3px 3px grey;
+	border-radius:25px 0 0 25px; 
+	display: inline-block;
+}
+#searchButton{
+	height:40px;
+	position: relative;
+	left:-10px;
+	background-color:#F95C39;
+	color:white;
+	box-shadow:1px 1px grey;
+	border-radius:0 25px 25px 0;
+}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+.dropdown-content a {
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+#postQ{
+	float:right;
+}
+
+.inline{
+	display: inline-block;
+}
+.number{
+	font-family:'Rajdhani',sans-serif;
+}
+@media(max-width:475px){
+	#postQ{
+		float:left;
+		margin:auto;
+	}
+}

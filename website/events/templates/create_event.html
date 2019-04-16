@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+     <title>Events</title>
+</head>
+
+<body>
+
+
+    <h1>EVENTS:</h1>
+    <li>
+        {% if perms %}
+        <h1>Hello superuser:Add New Event</h1>
+        <div >
+
+                <p>Enter the details below:</p><br>
+                <form action = "{% url 'events:event_create' %}" method="POST" >
+                  {% csrf_token %}
+                  <table>
+                      {{ form }}
+
+                  </table>
+                      <br>
+                  <input type="submit" value="Submit">
+                </form>
+              </div>
+              {% else %}
+              <p><a href="/login/">LOGIN</a></p>
+        {% endif %}
+    </li>
+    <div id='msg'>
+    </div>
+    <div id='update' hidden>
+
+    </div>
+
+
+</body>

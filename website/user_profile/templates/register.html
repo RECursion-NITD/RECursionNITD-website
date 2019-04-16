@@ -1,0 +1,167 @@
+{% extends 'base_loginpage.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/login_css.css' %}">
+{% block css %}
+<style>
+  .btn-outline-warning:hover{
+    color:white;
+  }
+</style>
+{% endblock %}
+
+    {% block title %}Register{% endblock %}
+<body>
+{% block content %}
+    <div>
+        <center class="container" style="margin-top:7.5%;">
+            <center><h1 class="mb-0 mt-2" style="color: #F95C39;font-size: 7vw; font-family: 'Montserrat', sans-serif;">RECursion</h1><br>
+            
+                <h5 class="mb-4" style="font-size: 2.2vw;color:#528CDD;">Programming community of NIT Durgapur
+                </h5>
+            </center>
+            <div class="row">
+                <!-- REGISTER FORM -->
+                <form class="my-ajax-form col-sm-12 col-md-5 col-lg-12 mb-3" style="margin:auto;"class="form-group" method="POST"  data-url='{{ request.build_absolute_uri|safe }}'>
+                <!-- <p>Enter the details below:</p><br> -->
+                      <!-- {{ form }} -->
+                          {% csrf_token %}
+                          {% for field in form.visible_fields %}
+                            <div class="row form-group ml-auto mr-auto">
+                              <div class=" offset-lg-2 col-lg-3" style="text-align:left;">
+                                {{ field.label_tag}}
+                              </div>
+                              <div class="col-lg-5">  
+                              {% if form.is_bound %}
+                                {% if field.errors %}
+                                  {% render_field field class="form-control is-invalid" %}
+                                {% else %}
+                                  {% render_field field class="form-control is-valid" %}
+                                {% endif %}
+                              {% else %}
+                                {% render_field field class="form-control" %}
+                              {% endif %}
+                              </div>
+                            </div>
+                          {% endfor %}
+                      <input type="hidden" name="ajax_check" value="True">
+                     <br>
+                  <center><button type="submit" class="save btn btn-outline-success">Signup</button>
+                  <a href="{% url 'login'%}"class="btn btn-outline-warning ml-2">Login</a></center>
+                </form>
+                <div >
+                  <span id="msg1"></span><span id="msg2"></span><span id="msg3"></span>
+                </div>
+            </div>
+            <hr style="color:#b1b1b1;">
+            <div style="font-size: 90%;"><span><a href="{% url 'home' %}">About</a> </span>&emsp;
+                             <span><a href="{% url 'forum:team_page' %}">Team</a> </span>&emsp;<!-- <span class="text-muted" style="float: right;position: absolute;bottom: 10px;right:10px;">Copyright©
+                <script>document.write(new Date().getFullYear())</script> </span> -->
+            </div>
+        </center>
+    </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        var $myForm = $('.my-ajax-form')
+        $myForm.submit(function(event){
+            event.preventDefault()
+            var $formData = $(this).serialize()
+            console.log($formData)
+            var $thisURL = $myForm.attr('data-url')
+
+            $.ajax({
+                method: "POST",
+                url: $thisURL,
+                data: $formData,
+                success: handleFormSuccess,
+                error: handleFormError,
+            })
+        })
+
+        function handleFormSuccess(data, textStatus, jqXHR){
+            console.log(data)
+            alert(data)
+            console.log(textStatus)
+            console.log(jqXHR)
+            $("#msg").html(data)
+            $myForm[0].reset();
+        }
+
+   $("#id_username").keyup(function(event)
+   {
+     var res=$(this).serialize()
+    $.ajax({
+                method: "POST",
+                url: "/profile/register/username_check",
+                data: res,
+                success: function(data)
+                {
+                  console.log(res)
+                  console.log(data)
+                  if(data == "exists")
+                  {
+                    console.log("try")
+                    $("#msg1").html("Username exists,Try other alternative\n")
+                  }
+                  else
+                  {
+                    $("#msg1").html("")
+                  }
+                },
+                error: handleFormError,
+            })
+   })
+
+   $("#id_email").keyup(function(event)
+   {
+     var res=$(this).serialize()
+    $.ajax({
+                method: "POST",
+                url: "/profile/register/email_check",
+                data: res,
+                success: function(data)
+                {
+                  console.log(res)
+                  console.log(data)
+                  if(data == "exists")
+                  {
+                    console.log("try")
+                    $("#msg2").html("Email exists,Try other alternative\n")
+                  }
+                  else
+                  {
+                    $("#msg2").html("")
+                  }
+                },
+                error: handleFormError,
+            })
+   })
+
+  $('#id_password2').keyup(function()
+  {
+    console.log($(this).val())
+    if($(this).val() != $('#id_password1').val())
+    {
+      $("#msg3").html("Passwords do not match!\n")
+    }
+    else
+    {
+      $("#msg3").html("")
+    }
+    
+  }) 
+
+
+        function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+            alert(errorThrown)
+        }
+    })
+    </script>
+
+{% endblock %}

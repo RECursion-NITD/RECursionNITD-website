@@ -1,0 +1,249 @@
+     <!-- ANSWERS PORTION STARTS -->
+     <style>
+         @media(max-width:475px){
+  .commentBorder{
+    border-left: 1px solid #f9c359;
+    margin-left:0.5px;
+  }
+  .answerBorder{
+    border-left:1px solid #267CA1;
+  }
+  .answerBox{
+    border-left:0px solid #cccccc;
+  }
+  .answerBoxMargin{
+    margin-bottom: 70px;
+  }
+}
+     </style>
+    <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ answers|length }} Answer(s)</h3></div>
+    {% for answer in answers %} {% if answer.question_id == question %}
+    <div class="container answerBorder card">
+        <div class="row">
+            <div class="comments col-lg-12 col-md-12" id="comments">
+                <!-- Show Answer -->
+                <div class="comment row">
+                    {% for p in profile %} {% if p.user == answer.user_id %} {% if p.image %}
+                    <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1">
+                        <a href=""><img class="mt-2 mb-1 rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
+                    </div>
+                    {% endif %} {% endif %} {% endfor %}
+                    <div class="comment-content col-md-10 col-sm-10 ml-2 p-2">
+                        <div class="comment-body answerBoxMargin">
+                            {{answer.description|safe}}
+                            <div id='reply_form{{answer.user_id.id}}'  > </div>
+                            <div id='u_ans_form{{answer.id}}' com-id="{{answer.id}}"> </div>
+                            <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' answer.user_id.id  %}">{{ answer.user_id }}</a> last updated on {{answer.updated_at}}</span>
+                            <span style="float:right;margin-bottom: 0px;">
+                                    <span class="reply_btn" ans-id="{{answer.id}}" user-id={{answer.user_id.id}}>
+                                            <a  id="vote_count_{{answer.id}}" class="voteReply text-right small p-1"> {{ answer.upvotes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
+                                            <a href="{% url 'forum:add_comment_answer' answer.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                                    </span>
+                                    <span>
+                                            {% if request.user != answer.user_id %}
+                                            {% if  answer.id in voted %}
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="downvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                            {% else %}
+                                            <a  class="voting_box" ans-id="{{answer.id}}" id="upvote_link{{answer.id}}" href="{% url 'forum:voting' answer.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                            {% endif %}
+                                            {% endif %}
+                                    </span>
+                            {% if request.user == answer.user_id or user_permission == '2' or user_permission == '1'%}
+                                <span id='ans_id_{{answer.id}}' class="u_ans" ans-id="{{answer.id}}">
+                                    <a href="{% url 'forum:update_answer' answer.id %}" class="voteReply" style="float:right;font-size:90%;">
+                                         Update this answer <i class="far fa-edit"></i>
+                                    </a>
+                                </span>
+                                {% endif %}
+                                </span>
+                        </div>
+                        {% for comment_a in comments_answers %} {% if comment_a.answer == answer %}
+                        <!-- reply is indented -->
+                        <div class="comment-reply col-md-12 col-sm-12 offset-sm-1 offset-md-1 pt-2 m-0" style="font-size:90%;">
+                            <hr class="mt-0 mb-0 ml-0" width="100%">
+                            <div class="row commentBorder">
+                                    <span>
+
+                                                {% for p in profile %} {% if p.user == comment_a.user %} {% if p.image %}
+                                                <div class="comment-avatar col-md-1 col-sm-2 text-center pr-1 mt-2">
+                                                    <a href=""><img class="rounded-circle img-fluid" src="{{ p.image.url }}" style="max-width: 60px;" alt="avatar"></a>
+                                                </div>
+                                                {% endif %} {% endif %} {% endfor %}
+
+                                    </span>
+                                <div class="comment-content col-md-10 col-sm-10">
+                                    <div class="comment-body answerBoxMargin">
+                                        <p style="font-size:90%;">{{ comment_a.body|safe }}</p>
+                                            <span class="small comment-meta"></span>
+                                            <small><a href="{% url 'user_profile:view_profile' comment_a.user.id  %}">{{ comment_a.user }}</a>
+                                                last updated on {{comment_a.updated_at}}</small>
+                                                        {% if request.user == comment_a.user %}
+                                                        <span>
+                                                            <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'forum:update_comment_answer' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
+                                                            </span>
+                                                        <span id='u_a_com_form{{comment_a.id}}' com-id= "{{comment_a.id}}"> </span>
+                                                        </span>
+                                                        {% endif %}
+
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %} {% endfor %}
+                        <!-- /reply is indented -->
+                        <br>
+                    </div>
+                    <!-- /Show Answer -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+        {%endif%} {% endfor %}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script>
+            $(document).ready(function(){
+                $("form.my-update-form").submit(function(task){
+                    task.preventDefault()
+
+
+
+                var $formData = $(this).serialize()
+                console.log("form  "+$formData)
+                    $.ajax({
+                method: "POST",
+                url:$(this).attr('data-url') ,
+                data:$formData ,
+                success: function (data)
+                {
+                    console.log(data)
+                    $('form.my-update-form').hide()
+                    $('#div_answers').html(data)
+                    $(".u_ans").toggle()
+                    $('#reply_form').hide()
+                },
+                error:handleFormError,
+             })
+                    })
+
+                    $('.u_ans').click(function(e){
+                    e.preventDefault()
+                    var id= $(this).attr('ans-id')
+                   console.log(id)
+                   $(this).toggle()//hiding update link
+                    $('#ans_body_'+id).hide()
+
+                $.ajax({
+                method: "GET",
+                url: "/forum/answer/"+id,
+                success: function (data)
+                {
+                   var id_name = "#u_ans_form"+id
+                   console.log(id_name)
+                   $(id_name).html(data).show()
+                },
+                error:handleFormError,
+             })
+
+            })
+
+            $('.reply_btn').click(function(e)
+            {
+                e.preventDefault()
+                $(this).toggle()
+                var id= $(this).attr('ans-id')
+                var user_id=$(this).attr('user-id')
+                console.log(user_id)
+                $.ajax({
+                method: "GET",
+                url: "/forum/comment_answer/"+id,
+                success: function (data)
+                {
+                   var id_name = "#reply_form"+user_id
+                   console.log(id_name)
+                   $(id_name).html(data).show()
+                },
+                error:handleFormError,
+             })
+            })
+
+            $('.u_a_com').click(function(e){
+                    e.preventDefault()
+                    var id= $(this).attr('com-id')
+                   console.log(id)
+                   $(this).toggle()//hiding update link
+
+                $.ajax({
+                method: "GET",
+                url: "/forum/editcomment_answer/"+id,
+                success: function (data)
+                {
+                   var id_name = "#u_a_com_form"+id
+                   console.log(id_name)
+                   $(id_name).html(data).show()
+                },
+                error:handleFormError,
+             })
+            })
+
+            $('.u_com').click(function(e){
+                    e.preventDefault()
+                    var id= $(this).attr('com-id')
+                    console.log(id)
+                    $(this).hide()//hiding update link
+                    $('#com_body_'+id).hide()
+
+
+                $.ajax({
+                method: "GET",
+                url: "/forum/editcomment/"+id,
+                success: function (data)
+                {
+                   var form = "#u_com_form"+id
+                   console.log(form)
+                   $(form).html(data).show()
+
+                },
+                error:handleFormError,
+             })
+            })
+
+            /*   edit ans voting*/
+  $('.voting_box').click(function(event)
+  {
+      event.preventDefault()
+      var id=$(this).attr("ans-id")
+      $.ajax({
+        method: "GET",
+        url:"/forum/answer/"+id+"/vote",
+        success: function(data)
+                {
+                    console.log(id)
+                    console.log(data)
+                    var Data = JSON.parse(data)
+                   if( Data.Success == "upvoted")
+                   {
+                       $('#downvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#upvote_link'+id).html("Downvote | <i class=\"far fa-thumbs-down\"></i> ")
+                       $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                   else if( Data.Success == "downvoted" )
+                   {
+                    $('#downvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#upvote_link'+id).html("Upvote | <i class=\"far fa-thumbs-up\"></i> ")
+                    $('#vote_count_'+id).html(Data.count+"<i class=\"fas fa-arrow-up\"></i>")
+                   }
+                },
+        error: handleFormError,
+    })
+  })
+                    function handleFormError(jqXHR, textStatus, errorThrown){
+                    console.log(jqXHR)
+                    console.log(textStatus)
+                    console.log(errorThrown)
+                }
+            })
+        </script>

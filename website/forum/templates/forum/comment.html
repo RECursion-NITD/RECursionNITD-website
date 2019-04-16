@@ -1,0 +1,105 @@
+
+<html lang="en">
+<head>
+
+     <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <title>Add Questions</title>
+</head>
+<body>
+<div class="container">
+<!-- <div class="card" style="margin: 25px; border-radius: 10px;">
+ <h3 style="text-align:center;">Add/Update Comment</h3>
+    <div>
+        <h5 style="text-align:center;">Enter the details below:</h5><br>
+        <form method="POST" style="padding: 25px;">
+          <table>
+             FORM
+          </table>
+              <br>
+          <center><button type="submit" class="save btn btn-primary">SAVE</button></center>
+        </form>
+    </div>
+</div>
+<div > -->
+    <div >
+
+        <p>Enter the details below:</p>
+
+        <form class='my-update1-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+                <table>
+                    {{ upform.body}}
+                    {{upform.media}}
+                    <input type="hidden" name="ajax_update" value="True">
+                </table>
+                    <br>
+                <center><button type="submit" class="save btn btn-sm btn-outline-primary">Update</button></center>
+              </form>
+      </div>
+</div>
+
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("form.my-update1-form").submit(function(task){
+            task.preventDefault()
+            $("#update_com").hide()//hiding update form when new form was added
+            
+            
+
+        var $formData = $(this).serialize()
+        console.log("form  "+$formData)
+            $.ajax({
+        method: "POST",
+        url:$(this).attr('data-url') ,
+        
+        data:$formData ,
+        success: function (data)
+        {
+            console.log(data)
+            $('form.my-update-form').hide()
+            $('#div_comments').html(data)
+            $(".u_com").show()
+        },
+        error:handleFormError,
+        
+     })
+
+     
+       //ajax call update comment
+       $('.u_com').click(function(e){
+            e.preventDefault()
+            var id= $(this).attr('com-id')
+            console.log(id)
+            $(this).hide()//hiding update link
+            $('#com_body_'+id).hide()
+           
+            
+        $.ajax({
+        method: "GET",
+        url: "/forum/editcomment/"+id,
+        success: function (data)
+        {
+           var form = "#u_com_form"+id
+           console.log(form)
+           $(form).html(data).show()
+           
+        },
+        error:handleFormError,
+     })
+    })
+            })
+            function handleFormError(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR)
+            console.log(textStatus)
+            console.log(errorThrown)
+        }
+
+        
+    })
+</script>
+</html>
+
