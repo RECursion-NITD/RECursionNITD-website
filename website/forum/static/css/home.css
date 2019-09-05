@@ -1,0 +1,168 @@
+/* About Us Design CSS*/
+#sec {
+    font-family: 'Raleway', sans-serif;
+    background: #FAFAFA;
+    text-align: center;
+    word-wrap: break-word;
+}
+
+#sec h2 {
+    font-weight: 200;
+    font-size: 30px;
+    color: #34393B;
+}
+
+#sec ul {
+    margin: 0;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    list-style: none;
+}
+
+#sec ul li {
+    padding: 40px;
+    max-width: 300px;
+    transition: box-shadow 0.3s;
+}
+
+#sec ul li:hover {
+    box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+}
+
+#sec ul li:hover span {
+    color: #F45B38;
+}
+
+#sec ul li:hover p {
+    color: #555;
+}
+
+#sec ul li:hover h3 {
+    color: #34393B;
+}
+
+#sec ul li:hover h3:after {
+    width: 25px;
+}
+
+#sec ul li span {
+    font-size: 2.6em;
+    display: block;
+    transition: color 0.3s;
+    color: #a2a2a2;
+}
+
+#sec ul li span:before,
+#sec ul li span:after {
+    position: static;
+}
+
+#sec ul li h3 {
+    color: #6f6f6f;
+    display: inline-block;
+    font-size: 24px;
+    font-weight: 100;
+    transition: color 0.3s;
+}
+
+#sec ul li h3:after {
+    content: '';
+    position: relative;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%);
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: #6f6f6f;
+    transition: width 0.3s;
+}
+
+#sec ul li p {
+    margin-top: 15%;
+    color: #a2a2a2;
+    text-align: justify;
+    font-size: 16px;
+    line-height: 26px;
+    transition: color 0.3s;
+}
+
+
+
+
+/* List Design CSS*/
+.list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.list--ordered {
+    counter-reset: list-counter;
+    display: block;
+}
+@media (min-width: 40em) {
+    .list--ordered {
+        columns: 2 auto;
+        column-gap: 2rem;
+   }
+}
+.list--ordered .list__item {
+    background-image: linear-gradient(180deg, #ddd 0%, #ddd 100%);
+    background-repeat: no-repeat;
+    background-size: 2px 100%;
+    background-position: 1rem center;
+    display: block;
+    min-height: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 3rem;
+    position: relative;
+}
+.list--ordered .list__item:nth-child(1)::before {
+    background-position: center 10%;
+}
+.list--ordered .list__item:nth-child(2)::before {
+    background-position: center 20%;
+}
+.list--ordered .list__item:nth-child(3)::before {
+    background-position: center 30%;
+}
+.list--ordered .list__item:nth-child(4)::before {
+    background-position: center 40%;
+}
+.list--ordered .list__item:nth-child(5)::before {
+    background-position: center 50%;
+}
+.list--ordered .list__item:nth-child(6)::before {
+    background-position: center 60%;
+}
+.list--ordered .list__item:nth-child(7)::before {
+    background-position: center 70%;
+}
+.list--ordered .list__item:nth-child(8)::before {
+    background-position: center 80%;
+}
+.list--ordered .list__item:nth-child(9)::before {
+    background-position: center 90%;
+}
+.list--ordered .list__item:nth-child(10)::before {
+    background-position: center 100%;
+}
+.list--ordered .list__item::before {
+    background: #0082d5;
+    background: linear-gradient(180deg, #0082d5 0%, #a234d5 50%, #d74059 100%);
+    background-repeat: no-repeat;
+    background-size: 2rem 20rem;
+    border-radius: 50%;
+    color: white;
+    content: counter(list-counter);
+    counter-increment: list-counter;
+    display: block;
+    height: 2rem;
+    left: 0;
+    line-height: 2;
+    position: absolute;
+    text-align: center;
+    width: 2rem;
+}

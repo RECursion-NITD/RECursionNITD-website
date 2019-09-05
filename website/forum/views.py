@@ -50,7 +50,15 @@ def getting_started(request):
 
 def team_page(request):
     args={}
-    return render(request, 'team.html', args)  
+    return render(request, 'team.html', args)
+
+def webd_team(request):
+    args={}
+    return render(request, 'webd_team.html', args)
+
+def faculty(request):
+    args={}
+    return render(request, 'faculty.html', args)
 
 def home(request):
     n=1
@@ -333,7 +341,7 @@ def add_answer(request, id):
             profiles = Profile.objects.filter(role=2) # only role 2 profile
             follows=Follows.objects.filter(question=question)
             comments_answers=Comments_Answers.objects.all()
-            profile=Profile.objects.all()  # all user profile
+            prof=Profile.objects.all()  # all user profile
             answers=Answers.objects.filter(question_id=question)
             messages = ()
             for profile in profiles:
@@ -366,7 +374,7 @@ def add_answer(request, id):
             f.user_id =user
             f.save()
 
-            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
             return render(request, 'forum/div_answers.html',args)
         else :
             return HttpResponse("we failed to insert in db")
@@ -391,7 +399,7 @@ def update_answer(request, id):
                 user_profile = Profile.objects.get(user=user)
                 user_permission = user_profile.role
                 comments_answers=Comments_Answers.objects.all()
-                profile=Profile.objects.all()  # all user profile
+                prof=Profile.objects.all()  # all user profile
                 answers=Answers.objects.filter(question_id=question)
                 if request.user == answer.user_id or user_permission == '2' or user_permission == '1':
                     f=form.save()
@@ -422,7 +430,7 @@ def update_answer(request, id):
                         if msg not in messages:
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
-                    args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+                    args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
         import html2text
@@ -474,7 +482,7 @@ def add_comment(request, id):
         form.save()
         profiles = Profile.objects.filter(role=2) #only  role 2 profile
         follows=Follows.objects.filter(question=question)
-        profile=Profile.objects.all()  #all user profile
+        prof=Profile.objects.all()  #all user profile
         messages = ()
         for profile in profiles:
             user = profile.user
@@ -502,7 +510,7 @@ def add_comment(request, id):
         result = send_mass_mail(messages, fail_silently=False)
         user= request.user
         comments=Comments.objects.filter(question = question)
-        args = {'profile':profile,'question': question,  'comments':comments, }
+        args = {'profile':prof,'question': question,  'comments':comments, }
         return render(request, 'forum/div_comments.html',args)
     else:
         return  HttpResponse("Invalid")
@@ -554,8 +562,8 @@ def update_comment(request, id):
                             messages += (msg,)
                     result = send_mass_mail(messages, fail_silently=False)
                     comments=Comments.objects.filter(question = question)
-                    profile=Profile.objects.all()  #all user profile
-                    args = {'profile':profile,'question': question,  'comments':comments, }
+                    prof=Profile.objects.all()  #all user profile
+                    args = {'profile':prof,'question': question,  'comments':comments, }
                     return render(request, 'forum/div_comments.html',args)
 
         import html2text
@@ -697,11 +705,11 @@ def add_comment_answer(request, id):
             if msg not in messages:
                 messages += (msg,)
         result = send_mass_mail(messages, fail_silently=False)
-        profile=Profile.objects.all()
+        prof=Profile.objects.all()
         answers=Answers.objects.filter(question_id=answer.question_id)
         comments_answers=Comments_Answers.objects.all()
         question=answer.question_id
-        args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+        args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
         return render(request, 'forum/div_answers.html',args)
 
     return render(request, 'forum/comment_a.html', {'upform': form})
@@ -749,11 +757,11 @@ def update_comment_answer(request, id):
                   if msg not in messages:
                      messages += (msg,)
               result = send_mass_mail(messages, fail_silently=False)
-            profile=Profile.objects.all()
+            prof=Profile.objects.all()
             answers=Answers.objects.filter(question_id=answer.question_id)
             comments_answers=Comments_Answers.objects.all()
             question=answer.question_id
-            args = {'profile':profile,'answers': answers,  'comments_answers':comments_answers,'question':question }
+            args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
             return render(request, 'forum/div_answers.html',args)
     import html2text
     h = html2text.HTML2Text()

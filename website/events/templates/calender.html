@@ -17,8 +17,27 @@
 {% endblock%}
 
 {% block content %}
-	<div id="calenderDiv" class="ml-auto mr-auto">
-		<iframe id="calender" src="https://calendar.google.com/calendar/embed?src=recursion.nit%40gmail.com&ctz=Asia%2FKolkata" 
-		style="border: 0;" width="800" height="600" frameborder="0" scrolling="yes"></iframe>
+<div class="container">
+	<a href="{% url 'home' %}" class="small text-muted" style="font-size:70%;">< Back to Home</a>
+	<h2 class="mt-3 mb-2">Events</h2>
+	<div class="row">
+		<div class="col-lg-8 col-sm-12">
+			<div id="calenderDiv">
+				<iframe id="calender" src="https://calendar.google.com/calendar/embed?src=recursion.nit%40gmail.com&ctz=Asia%2FKolkata" 
+				style="border: 0;" width="750" height="600" frameborder="0" scrolling="yes"></iframe>
+			</div>
+		</div>
+		<div class="col-lg-3 col-sm-12 ml-3">
+				<div id="calenderList" style="max-height:600px; overflow-y:auto;">
+						{% for event in events %}
+						<div class="card p-2 m-3">
+							<h5 class="card-header text-muted text-center" style="text-transform:uppercase;">{{event.title}}</h5>
+							<span style="font-size:90%;">{{event.description}}</span><br>
+							<p class="small mb-0" style="color:#666666; float:right;">on {{event.start_time}}</p>
+						</div>
+						{%endfor%}
+				</div>
+			</div>
 	</div>
+</div>
 {% endblock %}

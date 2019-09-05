@@ -62,7 +62,7 @@
         <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
         <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
-          <img id="logoREC" src="{% static 'image/logoInvert.png'%}" style="max-width:65px;" alt="logo">
+          <img id="logoREC" src="{% static 'image/logoInverted.png'%}" style="max-width:50px; padding-bottom: 4px" alt="logo">
           <strong>REC</strong>ursion
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
@@ -85,18 +85,21 @@
             <li class="nav-item {% block getStart_active %}{% endblock %}">
                 <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
             </li>
+            <li class="nav-item {% block team_page %}{% endblock %}">
+              <a href="{% url 'forum:team_page' %}" class="nav-link m-2 menu-item">Team</a>
+            </li>
             {% if not user.is_authenticated %}
              <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
            {% else %}
               <ul class="nav navbar-nav">
               <li class="dropdown nav-link m-2 menu-item nav-item">
-              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome, {{user.username}} <span class="caret"></span></a>
-                <ul class="dropdown-menu ml-2" style="padding: 2px;color:black;">
+              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome User <span class="caret"></span></a>
+                <ul class="dropdown-menu ml-2" style="padding: 2px;">
                   <!-- <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li> -->
                   <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
-                  <li><a href="{% url 'profile:view_profile' %}">My Profile</a></li>
-                  <li><a href="{% url 'user_profile:edit_profile' %}">Edit Profile</a></li>
-                  <li><a href="{% url 'logout' %}">Logout</a></li>
+                  <li><a href="{% url 'profile:view_profile' %}">&nbsp;&nbsp; My Profile</a></li>
+                  <li><a href="{% url 'user_profile:edit_profile' %}">&nbsp;&nbsp; Edit Profile</a></li>
+                  <li><a href="{% url 'logout' %}">&nbsp;&nbsp; Logout</a></li>
                 </ul>
               </li>
               </ul>
@@ -124,10 +127,11 @@
           <div class="row row-30">
             <div class="col-md-4 col-xl-5">
               <div class="pr-xl-4">
-                <p>RECursion NIT Durgapur is an initiative to embolden the budding coding minds through regular Code Classes, robust coding competitions and geeky sessions.</p>
                 <strong>Contribute to this community</strong><br>
                 <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
                 <a href="https://github.com/RECursion-NITD"><i class="fab fa-github"></i></a><br>
+                <!-- Credits -->
+                <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">WebD Team</a></strong>
                 <!-- Rights-->
                 <p class="rights"><span>©  </span>
                 <span class="copyright-year">
@@ -139,15 +143,15 @@
               <h3>Contacts</h3>
               <dl class="contact-list">
                 <dt>Address:</dt>
-                <dd>NIT Durgapur, Durgapur, W.B.</dd>
+                <dd><i class="fas fa-map-marked-alt"></i>  NIT Durgapur, Durgapur, W.B.</dd>
               </dl>
               <dl class="contact-list">
                 <dt>Email:</dt>
-                <dd><a href="mailto:recursion.nit@gmail.com">recursion[dot]nit[AT]gmail[dot]com</a></dd>
+                <dd><i class="fas fa-envelope"></i><a href="mailto:recursion.nit@gmail.com">  recursion.nit@gmail.com</a></dd>
               </dl>
               <dl class="contact-list">
                 <dt>Phones:</dt>
-                <dd><a>Chetan Garg - +91 9475616155 </a>
+                <dd><i class="fas fa-phone-square"></i><a href="tel:+918436053080">  Raghav Grover: +918436053080 </a>
                 </dd>
               </dl>
             </div>
@@ -157,7 +161,9 @@
                 <li><a href="{% url 'forum:list_questions' %}">AskREC</a></li>
                 <li><a href="{% url 'events:calender' %}">Events</a></li>
                 <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
-                <li><a href="{% url  'forum:team_page'%}">Team</a></li>
+                <li><a href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
+                <li><a href="{% url 'forum:team_page'%}">Team</a></li>
+                <li><a href="{% url 'forum:webd_team'%}">WebD Team</a></li>
               </ul>
             </div>
           </div>
