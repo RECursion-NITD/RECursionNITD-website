@@ -15,7 +15,7 @@ class Experiences(models.Model):
     company = models.CharField(max_length=100)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
-    job_profile = models.CharField(max_length=100)
+    job_Profile = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     no_of_Rounds = models.PositiveIntegerField(
         default=1, validators=[MinValueValidator(1)])
