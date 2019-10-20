@@ -10,7 +10,7 @@
 
     <h1>Interview Experience {{ experience.id }}</h1>
     <img src="{{ profile.image.url }}" width="55px" height="55px" alt="img">
-    <p>{{ experience.user }} edited this page on {{ experience.updated_at }}</p>
+    <p><a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a> edited this page on {{ experience.updated_at }}</p>
 
     <ul>
         <li>Company: {{ experience.company }}</li>
