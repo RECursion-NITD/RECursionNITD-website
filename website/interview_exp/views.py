@@ -63,4 +63,10 @@ def search_experience(request, key):
     print("I am yet to be done")
 
 def detail_experiences(request, id):
-    print("I am yet to be done")
+    try:
+        experience =get_object_or_404(Experiences, pk=id)
+    except:
+        return HttpResponse("Content Does Not Exist!")
+    profile = Profile.objects.get(user=experience.user)
+    args = {'experience': experience, 'profile': profile,}
+    return render(request, 'exp_detail.html', args)
