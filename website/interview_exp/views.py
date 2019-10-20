@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from user_profile.models import *
+from difflib import SequenceMatcher
 
 @login_required
 def add_experience(request):
@@ -51,7 +52,7 @@ def list_experiences(request):
         if request.is_ajax():
             return HttpResponse('')
             experiences_list = paginator.page(paginator.num_pages)
-    ie_count = experiences.count()
+    ie_count = len(experiences)
     profiles = Profile.objects.all()
     args = {'form_search':search, 'profile':profiles, 'experiences': experiences_list, 'ie_count':ie_count}
     if request.is_ajax():
@@ -60,7 +61,43 @@ def list_experiences(request):
 
 
 def search_experience(request, key):
-    print("I am yet to be done")
+    experiences_list = Experiences.objects.all()
+    experiences_found = []
+    for experience in experiences_list:
+        if SequenceMatcher(None, experience.company.lower(), key.lower()).ratio() > 0.5:
+            experiences_found.append([SequenceMatcher(None, experience.company.lower(), key.lower()).ratio(), experience])
+        if SequenceMatcher(None, str(experience.year), key.lower()).ratio() > 0.5:
+            experiences_found.append([SequenceMatcher(None, str(experience.year), key.lower()).ratio(), experience])
+    experiences_found.sort(key=lambda x: x[0], reverse=True)
+    experiences = []
+    for experience in experiences_found:
+        if experience[1] not in experiences:
+            experiences.append(experience[1])
+
+
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+            key_req = search.cleaned_data
+            key = key_req.get('key')
+            return HttpResponseRedirect(reverse('interview_exp:search_experience', args=(key,)))
+    paginator = Paginator(experiences, 5)
+    page = request.GET.get('page')
+    try:
+        experiences_list = paginator.page(page)
+    except PageNotAnInteger:
+        experiences_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+            experiences_list = paginator.page(paginator.num_pages)
+    ie_count = len(experiences)
+    profiles = Profile.objects.all()
+    args = {'form_search': search, 'profile': profiles, 'experiences': experiences_list, 'ie_count': ie_count}
+    if request.is_ajax():
+        return render(request, 'exp_list.html', args)
+    return render(request, 'experiences.html', args)
+
 
 def detail_experiences(request, id):
     try:
