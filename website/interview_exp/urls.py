@@ -8,4 +8,7 @@ app_name="experience"
 urlpatterns = [
       path('add', add_experience, name='add_experience'),
       path('update/<int:id>/', update_experience, name='update_experience'),
+      path('', list_experiences, name='list_experiences'),
+      path('search/<str:key>', search_experience, name='search_experience'),
+      path('detail/<int:id>/', detail_experiences, name='detail_experiences'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
