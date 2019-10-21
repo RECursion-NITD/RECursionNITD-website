@@ -8,6 +8,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from user_profile.models import *
 from difflib import SequenceMatcher
 
+
 @login_required
 def add_experience(request):
     form = ExperienceForm(request.POST or None)
@@ -18,6 +19,7 @@ def add_experience(request):
             return redirect('interview_exp:list_experiences')
 
     return render(request, 'experience-form.html', {'form': form})
+
 
 @login_required
 def update_experience(request, id):
@@ -34,6 +36,8 @@ def update_experience(request, id):
 
     return render(request, 'experience-form.html', {'form': form, 'experience': experience})
 
+
+@login_required
 def list_experiences(request):
     search = SearchForm(request.POST or None)
     if request.method == 'POST':
@@ -60,6 +64,7 @@ def list_experiences(request):
     return render(request, 'experiences.html', args)
 
 
+@login_required
 def search_experience(request, key):
     experiences_list = Experiences.objects.all()
     experiences_found = []
@@ -99,6 +104,7 @@ def search_experience(request, key):
     return render(request, 'experiences.html', args)
 
 
+@login_required
 def detail_experiences(request, id):
     try:
         experience =get_object_or_404(Experiences, pk=id)
