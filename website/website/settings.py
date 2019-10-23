@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'forum.apps.ForumConfig',
     'user_profile.apps.UserProfileConfig',
+    'interview_exp.apps.InterviewExpConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
