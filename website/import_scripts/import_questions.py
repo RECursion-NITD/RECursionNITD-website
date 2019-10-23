@@ -1,4 +1,4 @@
-#import python's built-in csv library
+
 from django.contrib.auth.models import User
 from forum.models import *
 from forum.views import bulk_tagging_add
@@ -23,8 +23,12 @@ with open('import_scripts/question.csv', 'r') as csvfile:
         q = Questions(title = row['Title'],description = row['Description'],user_id = user,created_at = created ,updated_at = updated)
         q.save()
         tags = row['Name [Tags]'].split(',')
-        tag_objects = [Tags(name = t ) for t in tags]
-        for tag in tag_objects:
-            tag.save()
+        tag_objects = []
+        for tag in tags:
+            result = Tags.objects.filter(name = tag)
+            if result.exists():
+                tag_objects.append(result[0])
+            else:
+                tag_objects.append(Tags.objects.create(name=tag))
         bulk_tagging_add(q,tag_objects)
     
