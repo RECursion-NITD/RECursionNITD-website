@@ -69,7 +69,7 @@ def search_experience(request, key):
     experiences_list = Experiences.objects.all()
     experiences_found = []
     for experience in experiences_list:
-        if SequenceMatcher(None, experience.company.lower(), key.lower()).ratio() > 0.5:
+        if SequenceMatcher(None, experience.company.lower(), key.lower()).ratio() > 0.4:
             experiences_found.append([SequenceMatcher(None, experience.company.lower(), key.lower()).ratio(), experience])
         if SequenceMatcher(None, str(experience.year), key.lower()).ratio() > 0.5:
             experiences_found.append([SequenceMatcher(None, str(experience.year), key.lower()).ratio(), experience])
