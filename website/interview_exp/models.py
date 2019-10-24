@@ -23,6 +23,7 @@ class Experiences(models.Model):
     total_Compensation = models.PositiveIntegerField(
         blank=True, null=True
     )
+    verified = models.BooleanField(default=False)
     # TODO
     # AUTOGENERATE DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
