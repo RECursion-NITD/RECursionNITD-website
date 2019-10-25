@@ -26,7 +26,7 @@ def add_experience(request):
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in ExpRED'
+                subject = 'New Activity in RECords'
                 message = render_to_string('new_experience_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -57,7 +57,21 @@ def update_experience(request, id):
             form.save()
 
             if experience.verification_Status == 'Changes Requested':
-                print("I am yet to be done")
+                revision = Revisions.objects.get(experience = experience)
+                profile = Profile.objects.get(user = revision.reviewer)
+                messages = ()
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in RECords'
+                message = render_to_string('update_experience_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'experience': Experiences.objects.get(pk=experience.id),
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+                result = send_mass_mail(messages, fail_silently=False)
 
             return redirect('interview_exp:list_experiences')
 
