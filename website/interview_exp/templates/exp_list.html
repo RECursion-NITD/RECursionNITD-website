@@ -5,6 +5,11 @@
                     {% endif %}
                 {% endfor %}
                 <a href="{% url 'interview_exp:detail_experiences' experience.id  %}">Company: {{ experience.company }}</a>
+                {% if request.user == experience.user %}
+                    <div>
+                    <a href="{% url 'interview_exp:update_experience' experience.id  %}">Update</a>
+                    </div>
+                {% endif %}
                 <ul>
                 <li>Job Profile: {{ experience.job_Profile }}</li>
                 <li>Year: {{ experience.year }}</li>
