@@ -8,6 +8,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from user_profile.models import *
 from difflib import SequenceMatcher
 from django.db.models import Q
+from django.contrib.sites.shortcuts import get_current_site
+from django.template.loader import render_to_string
+from django.core.mail import send_mass_mail
 
 
 @login_required
@@ -17,6 +20,23 @@ def add_experience(request):
             f = form.save(commit=False)
             f.user = request.user
             f.save()
+
+            profiles = Profile.objects.filter(~Q(role = 3))
+            messages = ()
+            for profile in profiles:
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in ExpRED'
+                message = render_to_string('new_experience_entry_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'experience': Experiences.objects.get(pk=f.id),
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+            result = send_mass_mail(messages, fail_silently=False)
+
             return redirect('interview_exp:list_experiences')
 
     return render(request, 'experience-form.html', {'form': form})
