@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from user_profile.models import *
 from difflib import SequenceMatcher
+from django.db.models import Q
 
 
 @login_required
@@ -47,7 +48,11 @@ def list_experiences(request):
           key_req = search.cleaned_data
           key = key_req.get('key')
           return HttpResponseRedirect(reverse('interview_exp:search_experience', args=(key,)))
-    experiences = Experiences.objects.all()
+    current_user_profile = Profile.objects.get(user = request.user)
+    if current_user_profile.role == '1' or current_user_profile.role == '2':
+       experiences = Experiences.objects.all()
+    else:
+       experiences = Experiences.objects.filter(Q(user = request.user) | Q(verification_Status = 'Approved'))
     paginator = Paginator(experiences, 5)
     page = request.GET.get('page')
     try:
@@ -68,7 +73,11 @@ def list_experiences(request):
 
 @login_required
 def search_experience(request, key):
-    experiences_list = Experiences.objects.all()
+    current_user_profile = Profile.objects.get(user=request.user)
+    if current_user_profile.role == '1' or current_user_profile.role == '2':
+       experiences_list = Experiences.objects.all()
+    else:
+       experiences_list = Experiences.objects.filter(Q(user = request.user) | Q(verification_Status = 'Approved'))
     experiences_found = []
     for experience in experiences_list:
         if SequenceMatcher(None, experience.company.lower(), key.lower()).ratio() > 0.4:
@@ -113,7 +122,13 @@ def filter_experience(request, role):
           key_req = search.cleaned_data
           key = key_req.get('key')
           return HttpResponseRedirect(reverse('interview_exp:search_experience', args=(key,)))
-    experiences = Experiences.objects.filter(role_Type = role)
+
+    current_user_profile = Profile.objects.get(user=request.user)
+    if current_user_profile.role == '1' or current_user_profile.role == '2':
+        experiences_list = Experiences.objects.all()
+    else:
+        experiences_list = Experiences.objects.filter(Q(user=request.user) | Q(verification_Status='Approved'))
+    experiences = experiences_list.filter(role_Type = role)
     paginator = Paginator(experiences, 5)
     page = request.GET.get('page')
     try:
