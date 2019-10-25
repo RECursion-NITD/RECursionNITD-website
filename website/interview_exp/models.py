@@ -54,7 +54,7 @@ class Experiences(models.Model):
 
 
 class Revisions(models.Model):
-    experience = models.ForeignKey(Experiences, on_delete=models.CASCADE)
+    experience = models.OneToOneField(Experiences, on_delete=models.CASCADE)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
     # TODO

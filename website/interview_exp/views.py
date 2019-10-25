@@ -186,8 +186,11 @@ def detail_experiences(request, id):
         return redirect('interview_exp:list_experiences')
     profile = Profile.objects.get(user=experience.user)
     user_permission = current_user_profile.role == '1' or current_user_profile.role == '2'
-    print(user_permission)
-    args = {'experience': experience, 'profile': profile, 'user_permission': user_permission,}
+    if experience.verification_Status == 'Changes Requested':
+      revision = Revisions.objects.get(experience = experience)
+      args = {'experience': experience, 'profile': profile, 'user_permission': user_permission, 'revision': revision,}
+    else:
+        args = {'experience': experience, 'profile': profile, 'user_permission': user_permission,}
     return render(request, 'exp_detail.html', args)
 
 

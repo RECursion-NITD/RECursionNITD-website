@@ -27,6 +27,14 @@
     <p>{{ experience.interview_Questions }}</p>
 
     {% if user_permission == True %}
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+          <li>Changes were requested in this Interview Experience by <a href="{% url 'user_profile:view_profile' revision.reviewer.id  %}">{{revision.reviewer}}</a>: {{ revision.message }}</li>
+         </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if user_permission == True %}
     <ul>
        <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
        <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
