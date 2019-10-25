@@ -132,10 +132,13 @@ def filter_experience(request, role):
 
 @login_required
 def detail_experiences(request, id):
+    current_user_profile = Profile.objects.get(user = request.user)
     try:
         experience =get_object_or_404(Experiences, pk=id)
     except:
         return HttpResponse("Content Does Not Exist!")
+    if experience.verification_Status != 'Approved' and experience.user != request.user and current_user_profile.role == '3':
+        return redirect('interview_exp:list_experiences')
     profile = Profile.objects.get(user=experience.user)
     args = {'experience': experience, 'profile': profile,}
     return render(request, 'exp_detail.html', args)
