@@ -28,6 +28,8 @@ def update_experience(request, id):
     except:
         return HttpResponse("Content Does Not Exist :(")
     else:
+        if experience.user != request.user:
+            return redirect('interview_exp:list_experiences')
         form = ExperienceForm(request.POST or None, instance = experience)
 
         if form.is_valid():
