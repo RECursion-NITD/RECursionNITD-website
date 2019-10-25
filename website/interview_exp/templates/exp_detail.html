@@ -26,5 +26,12 @@
 
     <p>{{ experience.interview_Questions }}</p>
 
+    {% if user_permission == True %}
+    <ul>
+       <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
+       <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
+    </ul>
+    {% endif %}
+
 </body>
 </html>

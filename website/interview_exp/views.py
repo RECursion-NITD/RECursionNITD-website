@@ -21,7 +21,7 @@ def add_experience(request):
             f.user = request.user
             f.save()
 
-            profiles = Profile.objects.filter(~Q(role = 3))
+            profiles = Profile.objects.filter(~Q(role = '3'))
             messages = ()
             for profile in profiles:
                 user = profile.user
@@ -185,5 +185,13 @@ def detail_experiences(request, id):
     if experience.verification_Status != 'Approved' and experience.user != request.user and current_user_profile.role == '3':
         return redirect('interview_exp:list_experiences')
     profile = Profile.objects.get(user=experience.user)
-    args = {'experience': experience, 'profile': profile,}
+    user_permission = current_user_profile.role == '1' or current_user_profile.role == '2'
+    print(user_permission)
+    args = {'experience': experience, 'profile': profile, 'user_permission': user_permission,}
     return render(request, 'exp_detail.html', args)
+
+
+@login_required
+def revise_experience(request, id, action):
+    print(action)
+    print("I am yet to be done")
