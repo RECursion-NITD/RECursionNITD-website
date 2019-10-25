@@ -128,7 +128,11 @@ def filter_experience(request, role):
         experiences_list = Experiences.objects.all()
     else:
         experiences_list = Experiences.objects.filter(Q(user=request.user) | Q(verification_Status='Approved'))
-    experiences = experiences_list.filter(role_Type = role)
+
+    if role == 'All':
+       experiences = experiences_list
+    else:
+        experiences = experiences_list.filter(role_Type=role)
     paginator = Paginator(experiences, 5)
     page = request.GET.get('page')
     try:
