@@ -16,6 +16,12 @@ class Experiences(models.Model):
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
     job_Profile = models.CharField(max_length=100)
+    role_Type_choices = (
+        ('All', 'All'),
+        ('Internship', 'Internship'),
+        ('Full Time', 'Full Time'),
+    )
+    role_Type = models.CharField(max_length=50, choices=role_Type_choices, default='All')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     no_of_Rounds = models.PositiveIntegerField(
         default=1, validators=[MinValueValidator(1)])

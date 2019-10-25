@@ -103,6 +103,32 @@ def search_experience(request, key):
         return render(request, 'exp_list.html', args)
     return render(request, 'experiences.html', args)
 
+@login_required
+def filter_experience(request, role):
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+          key_req = search.cleaned_data
+          key = key_req.get('key')
+          return HttpResponseRedirect(reverse('interview_exp:search_experience', args=(key,)))
+    experiences = Experiences.objects.filter(role_Type = role)
+    paginator = Paginator(experiences, 5)
+    page = request.GET.get('page')
+    try:
+        experiences_list = paginator.page(page)
+    except PageNotAnInteger:
+        experiences_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+            experiences_list = paginator.page(paginator.num_pages)
+    ie_count = len(experiences)
+    profiles = Profile.objects.all()
+    args = {'form_search':search, 'profile':profiles, 'experiences': experiences_list, 'ie_count':ie_count}
+    if request.is_ajax():
+        return render(request, 'exp_list.html', args)
+    return render(request, 'experiences.html', args)
+
 
 @login_required
 def detail_experiences(request, id):
