@@ -60,6 +60,17 @@
         <button type="submit">Search</button>
  </form>
 
+ <div>
+     <ul>
+         <li>Filter by Role Type</li>
+         <ul>
+           <li><a href="{% url 'experience:filter_experience' 'All'  %}">All</a></li>
+           <li><a href="{% url 'experience:filter_experience' 'Internship'  %}">Internship</a></li>
+           <li><a href="{% url 'experience:filter_experience' 'Full Time'  %}">Full Time</a></li>
+         </ul>
+     </ul>
+ </div>
+
  <div id="experiences-list">
      {% include 'exp_list.html' %}
  </div>
