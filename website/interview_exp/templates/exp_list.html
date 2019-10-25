@@ -10,5 +10,6 @@
                 <li>Year: {{ experience.year }}</li>
                 <li>Added By: <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a></li>
                 <li>Last Modified: {{ experience.updated_at }}</li>
+                <li>Status: {{ experience.verification_Status }}</li>
                 </ul>
 {% endfor %}
