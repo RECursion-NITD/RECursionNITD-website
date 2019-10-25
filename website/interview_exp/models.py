@@ -51,3 +51,26 @@ class Experiences(models.Model):
         ordering = ['-created_at']
         db_table = 'experiences'
         verbose_name_plural = 'Experiences'
+
+
+class Revisions(models.Model):
+    experience = models.ForeignKey(Experiences, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    # TODO
+    # AUTOGENERATE DATETIME
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+    def __str__(self):
+        return self.experience.company
+
+    def get_cname(self):
+        class_name = "Revisions"
+        return class_name
+
+    class Meta:
+        managed = True
+        ordering = ['-created_at']
+        db_table = 'revisions'
+        verbose_name_plural = 'Revisions'
