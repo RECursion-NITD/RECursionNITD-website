@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- BACKEND Import -->
+
+    <!-- FRONTEND Import-->
+      <!--Package Imports-->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <!-- Import Font Awesome Icons -->
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <!-- Import Google Fonts-->
+    <!--     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+
+    <!-- Import Google Font Montserrat -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+    var page = 1;
+    var empty_page = false;
+    var block_request = false;
+
+    $(window).scroll(function() {
+        var margin = $(document).height() - $(window).height();
+        if ($(window).scrollTop() > margin && empty_page == false && block_request == false)
+            block_request = true;
+        page += 1;
+        $.get('?page=' + page, function(data) {
+            if (data == '') {
+                empty_page = true;
+            } else {
+                $('#experiences-list').append(data);
+            }
+        });
+    });
+    </script>
+
+    <title>
+        RECursion
+    </title>
+
+</head>
+<body>
+
+ <h1>Interview Questions</h1>
+
+ <form method="POST">
+        {% csrf_token %}
+        {{ form_search.as_table }}
+        <button type="submit">Search</button>
+ </form>
+
+ <div>
+     <ul>
+         <li>Filter by Role Type</li>
+         <ul>
+           <li><a href="{% url 'experience:filter_experience' 'All'  %}">All</a></li>
+           <li><a href="{% url 'experience:filter_experience' 'Internship'  %}">Internship</a></li>
+           <li><a href="{% url 'experience:filter_experience' 'Full Time'  %}">Full Time</a></li>
+         </ul>
+     </ul>
+ </div>
+
+ <div id="experiences-list">
+     {% include 'exp_list.html' %}
+ </div>
+
+</div>
+</body>
+</html>
