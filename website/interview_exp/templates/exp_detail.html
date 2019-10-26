@@ -32,6 +32,12 @@
           <li>Changes were requested in this Interview Experience by <a href="{% url 'user_profile:view_profile' revision.reviewer.id  %}">{{revision.reviewer}}</a>: {{ revision.message }}</li>
          </ul>
       {% endif %}
+    {% elif experience.user == request.user %}
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+          <li>Changes were requested in this Interview Experience by <a href="{% url 'user_profile:view_profile' revision.reviewer.id  %}">{{revision.reviewer}}</a>: {{ revision.message }}</li>
+         </ul>
+      {% endif %}
     {% endif %}
 
     {% if user_permission == True %}
