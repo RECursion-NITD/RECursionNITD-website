@@ -41,10 +41,17 @@
     {% endif %}
 
     {% if user_permission == True %}
-    <ul>
-       <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
-       <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
-    </ul>
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
+         </ul>
+      {% elif experience.verification_Status == 'Review Pending' %}
+         <ul>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
+         </ul>
+      {% endif %}
     {% endif %}
 
 </body>

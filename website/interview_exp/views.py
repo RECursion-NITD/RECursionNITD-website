@@ -210,5 +210,86 @@ def detail_experiences(request, id):
 
 @login_required
 def revise_experience(request, id, action):
-    print(action)
-    print("I am yet to be done")
+    try:
+        experience = get_object_or_404(Experiences, pk=id)
+    except:
+        return HttpResponse("Content Does Not Exist :(")
+
+    if experience.verification_Status == 'Approved':
+        return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
+
+    current_user_profile = Profile.objects.get(user = request.user)
+    if current_user_profile.role == '3':
+        return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
+
+    if action == 'Accept':
+        experience.verification_Status = 'Approved'
+        experience.save()
+
+        if Revisions.objects.filter(experience = experience).exists():
+            revision = Revisions.objects.get(experience = experience)
+            revision.delete()
+
+        return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
+
+    elif action == 'Reject':
+
+        if experience.verification_Status == 'Review Pending':
+            form = RevisionForm(request.POST or None)
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.experience = experience
+                f.reviewer = request.user
+                f.save()
+
+                experience.verification_Status = 'Changes Requested'
+                experience.save()
+
+                profile = Profile.objects.get(user=experience.user)
+                messages = ()
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in RECords'
+                message = render_to_string('changes_requested_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'experience': Experiences.objects.get(pk=experience.id),
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+                result = send_mass_mail(messages, fail_silently=False)
+
+                return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
+            return render(request, 'revision-form.html', {'form': form})
+
+        elif experience.verification_Status == 'Changes Requested':
+            revision = Revisions.objects.get(experience = experience)
+            form = RevisionForm(request.POST or None, instance=revision)
+
+            if form.is_valid():
+                f = form.save(commit=False)
+                f.reviewer = request.user
+                f.save()
+
+                profile = Profile.objects.get(user=experience.user)
+                messages = ()
+                user = profile.user
+                current_site = get_current_site(request)
+                subject = 'New Activity in RECords'
+                message = render_to_string('changes_requested_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'experience': Experiences.objects.get(pk=experience.id),
+                })
+                msg = (subject, message, 'webmaster@localhost', [user.email])
+                if msg not in messages:
+                    messages += (msg,)
+                result = send_mass_mail(messages, fail_silently=False)
+
+                return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
+
+            return render(request, 'revision-form.html', {'form': form})
+
+
+

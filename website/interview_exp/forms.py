@@ -9,3 +9,8 @@ class ExperienceForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     key = forms.CharField(max_length=25)
+
+class RevisionForm(forms.ModelForm):
+    class Meta:
+        model = Revisions
+        fields = ['message',]
