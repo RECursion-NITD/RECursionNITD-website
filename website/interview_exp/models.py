@@ -34,6 +34,7 @@ class Experiences(models.Model):
         ('Changes Requested', 'Changes Requested'),
     )
     verification_Status = models.CharField(max_length=50, choices=verification_Status_choices, default='Review Pending')
+    verifier = models.ForeignKey(User, related_name='verifier', on_delete=models.SET_NULL, null=True)
     # TODO
     # AUTOGENERATE DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)

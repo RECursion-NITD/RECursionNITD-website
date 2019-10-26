@@ -226,6 +226,7 @@ def revise_experience(request, id, action):
 
     if action == 'Accept':
         experience.verification_Status = 'Approved'
+        experience.verifier = request.user
         experience.save()
 
         if Revisions.objects.filter(experience = experience).exists():
