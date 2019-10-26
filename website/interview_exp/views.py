@@ -26,7 +26,7 @@ def add_experience(request):
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in RECords'
+                subject = 'New Activity in RECruitments'
                 message = render_to_string('new_experience_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -62,7 +62,7 @@ def update_experience(request, id):
                 messages = ()
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in RECords'
+                subject = 'New Activity in RECruitments'
                 message = render_to_string('update_experience_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -249,7 +249,7 @@ def revise_experience(request, id, action):
                 messages = ()
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in RECords'
+                subject = 'New Activity in RECruitments'
                 message = render_to_string('changes_requested_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -276,7 +276,7 @@ def revise_experience(request, id, action):
                 messages = ()
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in RECords'
+                subject = 'New Activity in RECruitments'
                 message = render_to_string('changes_requested_email.html', {
                     'user': user,
                     'domain': current_site.domain,
