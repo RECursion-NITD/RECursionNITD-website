@@ -40,7 +40,7 @@ class Experiences(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.company
+        return str(self.company) + " " + str(self.user)
 
     def get_cname(self):
         class_name = "Experiences"
@@ -63,7 +63,7 @@ class Revisions(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.experience.company
+        return str(self.experience.company) + " " + str(self.reviewer)
 
     def get_cname(self):
         class_name = "Revisions"

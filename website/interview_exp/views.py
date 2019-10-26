@@ -44,12 +44,13 @@ def add_experience(request):
 
 @login_required
 def update_experience(request, id):
+    current_user_profile = Profile.objects.get(user = request.user)
     try:
         experience = get_object_or_404(Experiences, pk=id)
     except:
         return HttpResponse("Content Does Not Exist :(")
     else:
-        if experience.user != request.user:
+        if experience.user != request.user and current_user_profile.role != '1':
             return redirect('interview_exp:list_experiences')
         form = ExperienceForm(request.POST or None, instance = experience)
 
@@ -200,11 +201,12 @@ def detail_experiences(request, id):
         return redirect('interview_exp:list_experiences')
     profile = Profile.objects.get(user=experience.user)
     user_permission = current_user_profile.role == '1' or current_user_profile.role == '2'
+    exp_update_perms = current_user_profile.role == '1' or experience.user == request.user
     if experience.verification_Status == 'Changes Requested':
       revision = Revisions.objects.get(experience = experience)
-      args = {'experience': experience, 'profile': profile, 'user_permission': user_permission, 'revision': revision,}
+      args = {'experience': experience, 'profile': profile, 'user_permission': user_permission, 'revision': revision, 'exp_update_perms': exp_update_perms,}
     else:
-        args = {'experience': experience, 'profile': profile, 'user_permission': user_permission,}
+        args = {'experience': experience, 'profile': profile, 'user_permission': user_permission, 'exp_update_perms': exp_update_perms,}
     return render(request, 'exp_detail.html', args)
 
 
