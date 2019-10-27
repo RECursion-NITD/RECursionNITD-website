@@ -12,4 +12,5 @@ urlpatterns = [
       path('search/<str:key>', search_experience, name='search_experience'),
       path('filter/<str:role>', filter_experience, name='filter_experience'),
       path('detail/<int:id>/', detail_experiences, name='detail_experiences'),
+      path('revise/<int:id>/<str:action>', revise_experience, name='revise_experience'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

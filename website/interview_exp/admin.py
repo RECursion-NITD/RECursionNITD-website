@@ -5,3 +5,7 @@ from .models import *
 @admin.register(Experiences)
 class ExperiencesAdmin(admin.ModelAdmin):
     pass
+
+@admin.register(Revisions)
+class RevisionsAdmin(admin.ModelAdmin):
+    pass

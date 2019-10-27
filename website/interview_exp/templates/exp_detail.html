@@ -11,18 +11,48 @@
     <h1>Interview Experience {{ experience.id }}</h1>
     <img src="{{ profile.image.url }}" width="55px" height="55px" alt="img">
     <p><a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a> edited this page on {{ experience.updated_at }}</p>
-
+    {% if exp_update_perms == True %}
+                    <div>
+                    <a href="{% url 'interview_exp:update_experience' experience.id  %}">Update</a>
+                    </div>
+    {% endif %}
     <ul>
         <li>Company: {{ experience.company }}</li>
         <li>Job Profile: {{ experience.job_Profile }}</li>
         <li>Year: {{ experience.year }}</li>
         <li>Rounds: {{ experience.no_of_Rounds }}</li>
-        {% if  experience.verified  %}
-                   <li>Verified by RECursion</li>
-        {% endif %}
+        <li>Status: {{ experience.verification_Status }}</li>
     </ul>
 
     <p>{{ experience.interview_Questions }}</p>
+
+    {% if user_permission == True %}
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+          <li>Changes were requested in this Interview Experience by <a href="{% url 'user_profile:view_profile' revision.reviewer.id  %}">{{revision.reviewer}}</a>: {{ revision.message }}</li>
+         </ul>
+      {% endif %}
+    {% elif experience.user == request.user %}
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+          <li>Changes were requested in this Interview Experience by <a href="{% url 'user_profile:view_profile' revision.reviewer.id  %}">{{revision.reviewer}}</a>: {{ revision.message }}</li>
+         </ul>
+      {% endif %}
+    {% endif %}
+
+    {% if user_permission == True %}
+      {% if experience.verification_Status == 'Changes Requested' %}
+         <ul>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
+         </ul>
+      {% elif experience.verification_Status == 'Review Pending' %}
+         <ul>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}">Accept</a></li>
+           <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Reject' %}">Reject</a></li>
+         </ul>
+      {% endif %}
+    {% endif %}
 
 </body>
 </html>
