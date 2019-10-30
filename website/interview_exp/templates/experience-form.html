@@ -1,20 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>RECursion</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-</head>
-<body>
-
-    <h1>Interview Questions</h1>
-
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <button type="submit">Save</button>
-    </form>
-
-</body>
-</html>
+{% extends 'base.html'%}
+{% block title%}Interview form{% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container">
+    <a href="{% url 'home' %}" class="text-muted small">< Back to Home</a>
+    <h2 class="mb-3"style="margin-top:2%;">Interview Questions Form</h2>    
+    <div class="card">
+        <form method="POST" class="mr-lg-4 ml-lg-4 p-lg-5 p-1">
+            <div class="container">
+                <div class="form-group row mt-md-2 mt-sm-1">
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span>Company</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.company class="form-control" placeholder="Enter Company Name" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span >Year</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.company class="form-control" placeholder="Enter Year" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span >Job Profile</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.job_Profile class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span >Role</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.role_Type class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span >Rounds</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.no_of_Rounds class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+                        {% csrf_token %}
+                        <span >Details</span>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 mb-2">
+                        {% render_field form.interview_Questions class="form-control" placeholder="Enter Job Profile" style="display:inline-block;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                        {% csrf_token %}
+                        <span>Total Compensation</span>
+                    </div>
+                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                        {% render_field form.total_Compensation class="form-control" style="display:inline-block;max-width:135px;" %}
+                        
+                    </div>
+                    <button type="submit" class="btn btn-outline-success ml-auto mr-auto mt-2">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
