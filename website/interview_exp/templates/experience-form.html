@@ -3,45 +3,45 @@
 {% block content %}
 {% load widget_tweaks %}
 <div class="container">
-    <a href="{% url 'home' %}" class="text-muted small">< Back to Home</a>
+    <a href="{% url 'experience:list_experiences' %}" class="text-muted small">< Back to Home</a>
     <h2 class="mb-3"style="margin-top:2%;">Interview Questions Form</h2>    
     <div class="card">
         <form method="POST" class="mr-lg-4 ml-lg-4 p-lg-5 p-1">
             <div class="container">
                 <div class="form-group row mt-md-2 mt-sm-1">
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span>Company</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.company class="form-control" placeholder="Enter Company Name" style="display:inline-block;max-width: 95%;" %}  
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span >Year</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.company class="form-control" placeholder="Enter Year" style="display:inline-block;max-width: 95%;" %}  
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span >Job Profile</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.job_Profile class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width: 95%;" %}  
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span >Role</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.role_Type class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span >Rounds</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.no_of_Rounds class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
@@ -49,13 +49,14 @@
                         <span >Details</span>
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mb-2">
-                        {% render_field form.interview_Questions class="form-control" placeholder="Enter Job Profile" style="display:inline-block;" %}  
+                        {% render_field form.interview_Questions class="form-control" placeholder="Enter Details" style="display:inline-block;" %}  
+                        {{ form.media }}
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-3 mt-2 mb-2" style="">
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-2 mb-2" style="">
                         {% csrf_token %}
                         <span>Total Compensation</span>
                     </div>
-                    <div class="col-sm-6 col-md-6 col-lg-9 mb-2">
+                    <div class="col-sm-6 col-md-8 col-lg-9 mb-2">
                         {% render_field form.total_Compensation class="form-control" style="display:inline-block;max-width:135px;" %}
                         
                     </div>

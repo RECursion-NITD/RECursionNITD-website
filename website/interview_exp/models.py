@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
+from markdownx.models import MarkdownxField
 
 # Create your models here.
 
@@ -25,6 +26,7 @@ class Experiences(models.Model):
     no_of_Rounds = models.PositiveIntegerField(
         default=1, validators=[MinValueValidator(1)])
     interview_Questions = models.TextField()
+    interview_Questions = MarkdownxField()
     total_Compensation = models.PositiveIntegerField(
         blank=True, null=True
     )
