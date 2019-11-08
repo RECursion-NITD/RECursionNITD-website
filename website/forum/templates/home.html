@@ -60,6 +60,7 @@
 {% endblock%}  
 
 {% block content %}
+{% load widget_tweaks %}
   <!-- <h2>Homepage</h2> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript" src="https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js"></script>
@@ -100,9 +101,9 @@
       <a class="small text-center"href="{% url 'events:calender' %}">Check out upcoming events!</a>
       <hr class="mt-0">
       {% for event in events %}
-      <h5 class="text-muted text-center" style="text-transform:uppercase;">{{event.title}}</h5>
-      <span style="font-size:90%;">{{event.description}}</span><br>
-      <p class="small mb-0" style="color:#666666; float:right;">on {{event.start_time}}</p>
+      <h5 class="text-muted text-center" style="text-transform:uppercase;">{{ event.title }}</h5>
+      <span style="font-size:90%;">{{ event.formatted_markdown | safe }}</span><br>
+      <p class="small mb-0" style="color:#666666; float:right;">on {{ event.start_time }}</p>
       {%endfor%}
   </div>
   <div class="row">

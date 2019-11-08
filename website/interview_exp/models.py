@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 # Create your models here.
 
@@ -48,6 +49,9 @@ class Experiences(models.Model):
     def get_cname(self):
         class_name = "Experiences"
         return class_name
+
+    def formatted_markdown(self):
+        return markdownify(self.interview_Questions)
 
     class Meta:
         managed = True
