@@ -8,7 +8,7 @@
         {% endfor %}
     </div>
     <div class="col-lg-11 col-sm-9">
-        <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:#5277CF;"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong></a>
+        <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:#5277CF;"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong> # {{ experience.id }}</a>
         {% if request.user == experience.user %}
         <div>
             <!-- <a href="{% url 'interview_exp:update_experience' experience.id  %}">Update</a> -->
