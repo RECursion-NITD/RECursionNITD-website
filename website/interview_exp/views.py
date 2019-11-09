@@ -123,10 +123,9 @@ def search_experience(request, key):
             experiences_found.append([SequenceMatcher(None, experience.company.lower(), key.lower()).ratio(), experience])
         if SequenceMatcher(None, str(experience.year), key.lower()).ratio() > 0.5:
             experiences_found.append([SequenceMatcher(None, str(experience.year), key.lower()).ratio(), experience])
+        if SequenceMatcher(None, experience.user.username.lower(), key.lower()).ratio() > 0.5:
+            experiences_found.append([SequenceMatcher(None, experience.user.username.lower(), key.lower()).ratio(), experience])
     profiles = Profile.objects.all()
-    for profile in profiles:
-        if SequenceMatcher(None, profile.user.username.lower(), key.lower()).ratio() > 0.5:
-            experiences_found.append([SequenceMatcher(None, profile.user.username.lower(), key.lower()).ratio(), experience])
     experiences_found.sort(key=lambda x: x[0], reverse=True)
     experiences = []
     for experience in experiences_found:
