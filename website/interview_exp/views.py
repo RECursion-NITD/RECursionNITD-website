@@ -123,6 +123,9 @@ def search_experience(request, key):
             experiences_found.append([SequenceMatcher(None, experience.company.lower(), key.lower()).ratio(), experience])
         if SequenceMatcher(None, str(experience.year), key.lower()).ratio() > 0.5:
             experiences_found.append([SequenceMatcher(None, str(experience.year), key.lower()).ratio(), experience])
+        if SequenceMatcher(None, experience.user.username.lower(), key.lower()).ratio() > 0.5:
+            experiences_found.append([SequenceMatcher(None, experience.user.username.lower(), key.lower()).ratio(), experience])
+    profiles = Profile.objects.all()
     experiences_found.sort(key=lambda x: x[0], reverse=True)
     experiences = []
     for experience in experiences_found:
@@ -147,7 +150,6 @@ def search_experience(request, key):
             return HttpResponse('')
             experiences_list = paginator.page(paginator.num_pages)
     ie_count = len(experiences)
-    profiles = Profile.objects.all()
     args = {'form_search': search, 'profile': profiles, 'experiences': experiences_list, 'ie_count': ie_count}
     if request.is_ajax():
         return render(request, 'exp_list.html', args)
