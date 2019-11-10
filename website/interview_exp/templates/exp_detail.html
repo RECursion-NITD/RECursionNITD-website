@@ -1,4 +1,7 @@
-{% extends 'base.html' %} {% block content %} {% load staticfiles %}
+{% extends 'base.html' %} 
+{% block content %} 
+{% load widget_tweaks %}
+{% load staticfiles %}
  <!-- CSS/JS IMPORTS  -->
  <link rel="stylesheet" href="{% static 'css/detail.css' %}">
  <link rel="stylesheet" href="{% static 'css/tag.css' %}"> {% load static %}
@@ -7,7 +10,7 @@
  <!-- PAGE CONTENT START -->
  <div class="container">
     {% csrf_token %}
-
+      
     {% if user_permission == True %}
     {% if experience.verification_Status == 'Changes Requested' %}
        <ul class="mb-5">
@@ -34,21 +37,28 @@
                 <div class="card">
                         <div class="card-header">
                                 <!-- QUESTION HEADER -->
-                                <h4 class="card-title mb-0">Interview Experience {{ experience.id }}</h4>
+                                <span><h4 class="card-title mb-0">Interview Experience {{ experience.id }}
                                 {% if exp_update_perms == True %}
-                                <a href="{% url 'interview_exp:update_experience' experience.id  %}"><button style="float: right;" type="button" class="btn btn-sm btn-outline-danger">Update</button></a>
+                                <a href="{% url 'interview_exp:update_experience' experience.id  %}"><button style="float: right;" type="button" class="btn btn-sm btn-outline-primary">Update</button></a></h4>
                                 {% endif %}
+                                </span>
                         </div>
 
 
 
                         <!-- TEXT DETAILS -->
-                        <div class="card-body">
+                        <div class="card-body pb-2">
                             <blockquote class="mb-0">
-                                <p>{{ experience.formatted_markdown }}</p>
-                                <p class="small card-text">
+                                <p>{{ experience.formatted_markdown | safe }}</p>
+                                <p class="card-text">
                                     <i>
-                                        <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img"><small><p>&nbsp<a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a> edited this page on {{ experience.updated_at }}<a style="float: right"><i class="fas fa-question-circle"></i>&nbspStatus: {{ experience.verification_Status }}</a></p></small>
+                                        <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img">
+                                        <small class="mb-0" style="position:relative; top:15px;">
+                                          &nbsp
+                                            <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a>
+                                             edited this page on {{ experience.updated_at }}
+                                        </small>
+                                        <span class="badge badge-secondary" style="float:right;position:relative; top:15px;" title="Status">{{ experience.verification_Status }}</span>
                                     </i>
                                     
                                 </p>
@@ -64,10 +74,10 @@
                         </div>
                         <div class="card-body">
                                 <ul style="font-size:100%">
-                                    <li><i class="fas fa-building btn btn-light mb-1"></i>&nbspCompany: {{ experience.company }}</li>
-                                    <li><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbspJob Profile: {{ experience.job_Profile }}</li>
-                                    <li><i class="fas fa-calendar-alt btn btn-light mb-1"></i>&nbspYear: {{ experience.year }}</li>
-                                    <li><i class="fas fa-user-edit btn btn-light mb-1"></i>&nbspRounds: {{ experience.no_of_Rounds }}</li>
+                                    <li title="Company"><i class="fas fa-building btn btn-light mb-1"></i>&nbsp {{ experience.company }}</li>
+                                    <li title="Job Profile"><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbsp {{ experience.job_Profile }}</li>
+                                    <li title="Year"><i class="fas fa-calendar-alt btn btn-light mb-1"></i>&nbsp {{ experience.year }}</li>
+                                    <li title="Rounds"><i class="fas fa-user-edit btn btn-light mb-1"></i>&nbsp {{ experience.no_of_Rounds }}</li>
                                     
                                 </ul>
                         </div>

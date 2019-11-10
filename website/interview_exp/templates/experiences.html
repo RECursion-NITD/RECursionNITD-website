@@ -33,7 +33,9 @@
   {% block content %}
   <div class="container">
     <a href="{% url 'home' %}" class="text-muted small">< Back to Home</a> 
-    <h2 style="margin-top: 2%">Interview Questions</h2>
+    <h2 style="margin-top: 2%">Interview Experiences</h2>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <p class="small" style="font-family: 'Pacifico', cursive;">Nothing ever becomes real'til it is experienced - John Keats</p>
     <div class="row">
       <div class="col-lg-9 col-sm-12 mt-2">
         <div class="card ml-0">
@@ -55,7 +57,7 @@
             </div>
             <a class="btn" href="{% url 'experience:add_experience' %}" style="float:right">
               <button type="button" class="btn btn-outline-primary btn-sm">
-                Post Question&nbsp;&nbsp;<i class="far fa-edit"></i>
+                Post Experience&nbsp;&nbsp;<i class="far fa-edit"></i>
               </button>
             </a>
             <!-- <strong>Filter</strong> -->
@@ -72,19 +74,18 @@
      </div>
      <div class="col-sm-12 col-lg-3 mt-2">
       <div class="ml-0">
-        <div class=" mr-auto" style="">
-          <div class="card p-2">
-            <h4 style="display:inline-block;justify-content: center;">
-              <span class="number">{{ q_count }}</span>
-              <small>experiences shared</small></h4>
-              <h4  style="display:inline-block;">
-                <span class="number">{{ answers.count }}</span>
-                <small>companies</small></h4>
-              </div><br>
-              <h4>Companies</h4>
+        <div class=" mr-auto">
+          <div class="card">
+              <div class="number card-header  p-0"><h2 style="text-align:center;">
+                <p class="ml-auto mr-auto mb-0 mt-2" style="font-family:'Rajdhani',sans-serif;">{{ ie_count }}</p></h2>
+              </div>
+              <div class="mt-2">
+                <p style="text-align: center;">Experiences shared</p></div>
+            </h3>
             </div>
           </div>
         </div>
       </div>
     </div>
+  </div>
     {% endblock %}

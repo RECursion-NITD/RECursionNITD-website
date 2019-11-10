@@ -43,15 +43,16 @@ class Experiences(models.Model):
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
+    @property
+    def formatted_markdown(self):
+        return markdownify(self.interview_Questions)
+            
     def __str__(self):
         return str(self.company) + " " + str(self.user)
 
     def get_cname(self):
         class_name = "Experiences"
         return class_name
-
-    def formatted_markdown(self):
-        return markdownify(self.interview_Questions)
 
     class Meta:
         managed = True
