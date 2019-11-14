@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+An Interview Experience has been updated in RECruitments.
+
+Please, verify it by clicking on the link below:
+http://{{ domain }}{% url 'interview_exp:detail_experiences' experience.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}
