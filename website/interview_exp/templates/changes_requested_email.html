@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+Changes were requested in your Interview Experience by some Member/Admin.
+
+Kindly, make them by clicking on the link below:
+http://{{ domain }}{% url 'interview_exp:detail_experiences' experience.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}

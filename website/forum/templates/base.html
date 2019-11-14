@@ -79,6 +79,9 @@
             <li class="nav-item {% block AskREC_active %}{% endblock %}">
                 <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
+            <li class="nav-item {% block interview_active %}{% endblock %}">
+              <a href="{% url 'experience:list_experiences' %}" class="nav-link m-2 menu-item">Interview Experiences</a>
+            </li>
             <li class="nav-item {% block Events_active %}{% endblock %}">
                 <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
             </li>

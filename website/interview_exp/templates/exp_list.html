@@ -1,14 +1,32 @@
 {% for experience in experiences %}
-                {% for p in profile %}
-                    {% if p.user == experience.user %}
-                          <img src="{{ p.image.url }}" width="55px" height="55px" alt="img">
-                    {% endif %}
-                {% endfor %}
-                <a href="{% url 'interview_exp:detail_experiences' experience.id  %}">Company: {{ experience.company }}</a>
-                <ul>
-                <li>Job Profile: {{ experience.job_Profile }}</li>
-                <li>Year: {{ experience.year }}</li>
-                <li>Added By: <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a></li>
-                <li>Last Modified: {{ experience.updated_at }}</li>
-                </ul>
-{% endfor %}
+<div class="row mt-2 mb-2  ml-2 mr-2">
+    <div class="col-sm-2 col-lg-1">
+        {% for p in profile %}
+        {% if p.user == experience.user %}
+        <img src="{{ p.image.url }}" class="rounded-circle mt-2 mb-1"width="55px" height="55px" alt="img">
+        {% endif %}
+        {% endfor %}
+    </div>
+    <div class="col-lg-11 col-sm-9">
+    {% if experience.verification_Status == "Approved" %}
+        <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:#5277CF;"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong> # {{ experience.id }}</a>
+    {% else %}
+        <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:rgb(207, 82, 99);"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong> # {{ experience.id }}</a>
+    {% endif %}    
+        {% if request.user == experience.user %}
+        <div>
+            <!-- <a href="{% url 'interview_exp:update_experience' experience.id  %}">Update</a> -->
+        </div>
+        {% endif %}
+        <ul>
+            <li><span style="color:#111111;">{{ experience.job_Profile }}</span> / <span style="color:#F95c39;">{{experience.role_Type}}</span></li>
+            <div class="row small">
+                <li class="col-sm-5 col-md-3 col-lg-4">Added by <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a></li>
+                {% load staticfiles %}
+                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ experience.updated_at }}</li>
+            </div>
+        </ul>
+    </div>
+</div>
+    <hr class="mt-0 mb-0">
+    {% endfor %}

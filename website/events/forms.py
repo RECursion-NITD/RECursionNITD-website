@@ -4,11 +4,13 @@ from django.contrib.auth.models import User
 from .validators import valid_url_extension
 from .validators import valid_url_mimetype
 from django.utils.translation import ugettext as _
+from markdownx.fields import MarkdownxFormField
 import mimetypes
 
 class Eventsform(forms.ModelForm):
     title = models.CharField(max_length=30)
     description = models.TextField()
+    description = MarkdownxFormField()
     image_url = models.URLField()
     start_time = models.DateTimeField()
     end_time = models.DateTimeField() 
