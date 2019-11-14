@@ -90,6 +90,7 @@
     </div>
 
     {% if user_permission == True %}
+    <h4>Members Option</h4>
     {% if experience.verification_Status == 'Changes Requested' %}
        <ul class="mt-5">
          <li><a href="{% url 'interview_exp:revise_experience' experience.id 'Accept' %}"><button type="button" class="btn btn-outline-success">Accept</button></a></li>
