@@ -56,8 +56,10 @@ def update_experience(request, id):
 
         if form.is_valid():
             form.save()
+            flag = 0
             if experience.verification_Status == 'Approved':
                 experience.verification_Status = 'Review Pending'
+                flag = 1
             experience.save()
 
             if experience.verification_Status == 'Changes Requested':
@@ -77,7 +79,7 @@ def update_experience(request, id):
                     messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
 
-            elif experience.verification_Status == 'Review Pending':
+            elif experience.verification_Status == 'Review Pending' and flag == 1:
                 profiles = Profile.objects.filter(~Q(role='3'))
                 messages = ()
                 for profile in profiles:
