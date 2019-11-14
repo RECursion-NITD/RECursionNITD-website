@@ -33,7 +33,7 @@
     <div class="row mt-4">
 
         <!-- PAGE DETAIL COLUMNS -->
-        <div class="col-sm-12 col-md-9 col-lg-9">
+        <div class="col-sm-12 col-md-9 col-lg-9 mb-3">
                 <div class="card">
                         <div class="card-header">
                                 <!-- QUESTION HEADER -->
@@ -47,7 +47,7 @@
 
 
                         <!-- TEXT DETAILS -->
-                        <div class="card-body pb-2">
+                        <div class="card-body pb-2 mb-3">
                             <blockquote class="mb-0">
                                 <p>{{ experience.formatted_markdown | safe }}</p>
                                 <p class="card-text">
@@ -58,7 +58,11 @@
                                             <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a>
                                              edited this page on {{ experience.updated_at }}
                                         </small>
+                                        {% if experience.verification_Status == "Approved" %}
+                                        <span class="badge badge-success" style="float:right;position:relative; top:15px;" title="Status">{{ experience.verification_Status }}</span>
+                                        {% else %}
                                         <span class="badge badge-secondary" style="float:right;position:relative; top:15px;" title="Status">{{ experience.verification_Status }}</span>
+                                        {% endif %}
                                     </i>
                                     
                                 </p>
