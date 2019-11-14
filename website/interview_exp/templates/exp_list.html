@@ -8,7 +8,11 @@
         {% endfor %}
     </div>
     <div class="col-lg-11 col-sm-9">
+    {% if experience.verification_Status == "Approved" %}
         <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:#5277CF;"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong> # {{ experience.id }}</a>
+    {% else %}
+        <a href="{% url 'interview_exp:detail_experiences' experience.id  %}" style="color:rgb(207, 82, 99);"><strong>{{ experience.company }} Interview Experience {{ experience.year }}</strong> # {{ experience.id }}</a>
+    {% endif %}    
         {% if request.user == experience.user %}
         <div>
             <!-- <a href="{% url 'interview_exp:update_experience' experience.id  %}">Update</a> -->
