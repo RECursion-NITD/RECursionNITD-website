@@ -13,14 +13,19 @@
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         <span>Company</span>
                     </div>
-                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
-                        {% render_field form.company class="form-control" placeholder="Enter Company Name" style="display:inline-block;max-width: 95%;" %}  
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.company class="form-control" placeholder="Enter Company Name" style="display:inline-block;max-width: 95%;" %}  
                     </div>
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         <span >Year</span>
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.year class="form-control" placeholder="Enter Year" style="display:inline-block;max-width: 95%;" %}  
+                        {% if form.year.errors %}
+                            <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
+                                {{ form.year.errors.0 }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
                         <span >Job Profile</span>
@@ -39,6 +44,11 @@
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.no_of_Rounds class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
+                        {% if form.no_of_Rounds.errors %}
+                            <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
+                                {{ form.no_of_Rounds.errors.0 }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
                         <span >Details</span>

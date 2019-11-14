@@ -39,6 +39,9 @@ def add_experience(request):
 
             return redirect('interview_exp:list_experiences')
 
+    if form.errors:
+        return render(request, 'experience-form.html', {'form': form})      
+
     return render(request, 'experience-form.html', {'form': form})
 
 
@@ -75,6 +78,9 @@ def update_experience(request, id):
                 result = send_mass_mail(messages, fail_silently=False)
 
             return redirect('interview_exp:list_experiences')
+
+        if form.errors:
+            return render(request, 'experience-form.html', {'form': form})       
 
     return render(request, 'experience-form.html', {'form': form, 'experience': experience})
 
