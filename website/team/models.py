@@ -1,8 +1,14 @@
 # This is an auto-generated Django model module.
-
+import datetime
 import os
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+
+def current_year():
+    return datetime.date.today().year
+
+def max_value_current_year(value):
+    return MaxValueValidator(current_year())(value)
 
 def content_file_name(instance,filename):
 	ext="png"
@@ -12,8 +18,8 @@ def content_file_name(instance,filename):
 class Members(models.Model):
     name = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
-    batch_no = models.PositiveIntegerField(
-        default= 1, validators=[MinValueValidator(1)])
+    batch_year = models.PositiveIntegerField(
+        default=current_year(), validators=[MinValueValidator(2016), max_value_current_year])
     url_Facebook = models.URLField()
     url_LinkedIn = models.URLField()
     mobile = models.CharField(max_length=13)

@@ -4,6 +4,7 @@ from .models import *
 # Create your views here.
 
 def team_page(request):
-    members = Members.objects.all()
-    args={members: members}
-    return render(request, 'team.html', args)
+    curr_batch_year = 2020
+    members = Members.objects.all().order_by('name')
+    args={members: members, curr_batch_year: curr_batch_year}
+    return render(request, 'team/team.html', args)
