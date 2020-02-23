@@ -17,9 +17,10 @@ def content_file_name(instance,filename):
 
 class Members(models.Model):
     name = models.CharField(max_length=100)
+    branch = models.CharField(max_length=50)
     designation = models.CharField(max_length=100)
     batch_year = models.PositiveIntegerField(
-        default=current_year(), validators=[MinValueValidator(2016), max_value_current_year])
+        default=current_year(), validators=[MinValueValidator(2016), MaxValueValidator(2050)])
     url_Facebook = models.URLField()
     url_LinkedIn = models.URLField()
     mobile = models.CharField(max_length=13)
