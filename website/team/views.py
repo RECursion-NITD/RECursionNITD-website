@@ -8,6 +8,7 @@ def team_page(request):
     latest_batch_year = 2022
 
     members = Members.objects.all().filter(batch_year__range=[curr_batch_year, latest_batch_year]).order_by('batch_year', 'name')
+    print(members)
     alumni = Members.objects.all().filter(batch_year__range=[2016, curr_batch_year - 1]).order_by('-batch_year', 'name')
 
     year_set = []

@@ -86,7 +86,7 @@
                 <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
             </li>
             <li class="nav-item {% block team_page %}{% endblock %}">
-              <a href="{% url 'forum:team_page' %}" class="nav-link m-2 menu-item">Team</a>
+              <a href="{% url 'team:team_page'%}" class="nav-link m-2 menu-item">Team</a>
             </li>
             {% if not user.is_authenticated %}
              <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
@@ -162,7 +162,7 @@
                 <li><a href="{% url 'events:calender' %}">Events</a></li>
                 <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
                 <li><a href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
-                <li><a href="{% url 'forum:team_page'%}">Team</a></li>
+                <li><a href="{% url 'team:team_page'%}">Team</a></li>
                 <li><a href="{% url 'forum:webd_team'%}">WebD Team</a></li>
               </ul>
             </div>
