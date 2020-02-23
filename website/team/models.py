@@ -16,6 +16,7 @@ class Members(models.Model):
         default= 1, validators=[MinValueValidator(1)])
     url_Facebook = models.URLField()
     url_LinkedIn = models.URLField()
+    mobile = models.CharField(max_length=13)
     image = models.ImageField(upload_to=content_file_name)
     # TODO
     # AUTOGENERATE DATETIME
