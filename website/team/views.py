@@ -4,11 +4,16 @@ from .models import *
 # Create your views here.
 
 def team_page(request):
-    curr_batch_year = 2020
-    latest_batch_year = 2022
+    today = datetime.datetime.now()
+    month = today.month
+    year = today.year
 
-    members = Members.objects.all().filter(batch_year__range=[curr_batch_year, latest_batch_year]).order_by('batch_year', 'name')
-    print(members)
+    if month == 7 or month == 8 or month == 9 or month == 10 or month == 11 or month == 12:
+        curr_batch_year = year + 1
+    else:
+        curr_batch_year = year
+
+    members = Members.objects.all().filter(batch_year__range=[curr_batch_year, 2050]).order_by('batch_year', 'name')
     alumni = Members.objects.all().filter(batch_year__range=[2016, curr_batch_year - 1]).order_by('-batch_year', 'name')
 
     year_set = []
