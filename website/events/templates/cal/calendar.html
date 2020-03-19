@@ -1,0 +1,26 @@
+{% extends 'cal/base.html' %}
+
+{% block title %}
+Events Calendar
+{% endblock %}
+
+{% block content %}
+<div class="clearfix">
+	<a class="btn btn-info left" href="{% url 'events:calendar' %}?{{ prev_month }}"> < Prev </a>
+	<a class="btn btn-info right" href="{% url 'events:calendar' %}?{{ next_month }}"> Next > </a>
+</div>
+{{ calendar }}
+
+<table align="center">
+	<h3 align="center">Upcoming Events</h3>
+	{% for event in events_display %}
+	<tr>
+		<td> {{ event.date }} </td>
+		<td><a href="{% url 'events:event_detail' event.id  %}"> {{ event.title }} </a></td>
+	</tr>
+	{% endfor %}
+</table>
+<br>
+<br>
+
+{% endblock %}
