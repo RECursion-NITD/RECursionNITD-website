@@ -64,7 +64,7 @@ def home(request):
     n=1
     today = timezone.now()
     upto = today + timedelta(days=365)
-    events = Events.objects.filter(date__range=[today, upto]).order_by('date')[:n:1]
+    events = Events.objects.filter(start_time__range=[today, upto]).order_by('start_time')[:n:1]
     args={'events':events,}
     return render(request, 'home.html', args)
 

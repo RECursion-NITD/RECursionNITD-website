@@ -10,7 +10,8 @@ class Eventsform(forms.ModelForm):
     title = models.CharField(max_length=30)
     description = models.TextField()
     image_url = models.URLField()
-    date = models.DateTimeField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField() 
 
     def clean_image_url(self):
         url = self.cleaned_data['image_url'].lower()
@@ -20,4 +21,4 @@ class Eventsform(forms.ModelForm):
 
     class Meta:
         model=Events
-        fields=('title','description','image_url','date')
+        fields=('title','description','image_url','start_time','end_time')

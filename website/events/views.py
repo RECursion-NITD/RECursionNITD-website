@@ -1,99 +1,29 @@
-import urllib.request
-import datetime
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import render, redirect
-from datetime import datetime, timedelta, date
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
-from django.views import generic
-from datetime import datetime
-from django.utils.safestring import mark_safe
-from .forms import *
+from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
 from .models import *
-from .utils import Calendar
-from django.utils import timezone
-import json
-from datetime import date
-import calendar
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
-
-
-def convert24(str1):
-
-    if str1[-2:] == "AM" and str1[:2] == "12":
-        return "00" + str1[2:-2]
-
-    # remove the AM
-    elif str1[-2:] == "AM":
-        return str1[:-2]
-
-    elif str1[-2:] == "PM" and str1[:2] == "12":
-        return str1[:-2]
-
-    else:
-
-        return str(int(str1[:2]) + 12) + str1[2:8]
-
-
-def time_difference(time_start, time_end):
-
-    start = datetime.strptime(time_start, "%H%M")
-    end = datetime.strptime(time_end, "%H%M")
-    difference = end - start
-    minutes = difference.total_seconds() / 60
-    return int(minutes)
-
-
-def add_time(time_start, minutes):
-
-    start = datetime.strptime(time_start, "%H%M")
-    end = start + timedelta(minutes=minutes)
-    return end
-
-
-class CalendarView(generic.ListView):
-    model = Events
-    template_name = 'cal/calendar.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        d = get_date(self.request.GET.get('month', None))
-        cal = Calendar(d.year, d.month)
-        html_cal = cal.formatmonth(withyear=True)
-        context['calendar'] = mark_safe(html_cal)
-        context['prev_month'] = prev_month(d)
-        context['next_month'] = next_month(d)
-        start_date = timezone.now()
-        end_date = start_date + timedelta(days=30) #Using this to display events with dates within next 30 days
-        context['events_display'] = Events.objects.filter(date__range=[start_date, end_date]).order_by('date') #Collecting the most recent upcoming events to display below the calendar
-        return context
-
-def get_date(req_month):
-    if req_month:
-        year, month = (int(x) for x in req_month.split('-'))
-        return date(year, month, day=1)
-    return datetime.today()
-
-def prev_month(d):
-    first = d.replace(day=1)
-    prev_month = first - timedelta(days=1)
-    month = 'month=' + str(prev_month.year) + '-' + str(prev_month.month)
-    return month
-
-def next_month(d):
-    days_in_month = calendar.monthrange(d.year, d.month)[1]
-    last = d.replace(day=days_in_month)
-    next_month = last + timedelta(days=1)
-    month = 'month=' + str(next_month.year) + '-' + str(next_month.month)
-    return month
-
-def event_detail(request, event_id=None):
-    try:
-        instance = get_object_or_404(Events, pk=event_id)
-    except:
-        return HttpResponse("Id Does Not Exist!")
-    return render(request, 'cal/event.html', {'event': instance})
-
+from django.template import loader, RequestContext
+from .forms import Eventsform
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+from django.forms import modelformset_factory
+from django.contrib.auth.forms import UserCreationForm
+from itertools import chain
+from django.utils import timezone
+from datetime import timedelta
+from django.core.files.base import ContentFile
+from io import BytesIO
+import urllib.request
+from PIL import Image
+import json
+import datetime
+from .validators import valid_url_extension
+from .validators import valid_url_mimetype
+from django.core.exceptions import PermissionDenied
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
@@ -139,6 +69,15 @@ def event_create(request):
         return redirect('events')
 
     return render(request, 'create_event.html',{'form':form,"perms":perms})
+
+@superuser_only
+def event_detail(request,id):
+    try:
+        event =get_object_or_404( Events,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    else:
+        return render(request,'event_detail.html',{'event':event})
 
 @superuser_only
 def event_update(request,id):
