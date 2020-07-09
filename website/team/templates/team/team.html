@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% block css%}
+{% load staticfiles %}
+<link rel="stylesheet" href="{% static 'css/team.css'%}">
+{% endblock%}
+{% block team_page %}active{% endblock %}
+{% block content %}
+
+
+
+
+    <center><h1 style="color:#F95c39; margin-top: 1%; margin-bottom: 3%;">Meet The Team</h1></center>
+    <!-- TEAM HEADER -->
+    <div class="container">
+        <div class="row">
+          {% for p in presi %}
+               <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="our-team" style="padding: 20%">
+                  <div class="pic">
+                      <img src="{{ p.image.url }}" style="border: solid 10px #343A3F; border-radius: 100%;">
+                      <ul class="social-links">
+                          <li><a href="{{ p.url_Facebook }}" class="fab fa-facebook" style="color:white"></a></li>
+                          <li><a href="{{ p.url_LinkedIn }}" class="fab fa-linkedin" style="color:white"></a></li>
+                          <li><a href="tel:{{ p.mobile }}" class="fas fa-phone-square" style="color:white"></a></li>
+                      </ul>
+                  </div>
+                  <h3 class="team-title">{{ p.name }}</h3>
+                  <span class="post">{{ p.designation }}</span>
+                </div>
+               </div>
+          {% endfor %}
+
+          {% for c in convener %}
+               <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="our-team" style="padding: 20%">
+                  <div class="pic">
+                      <img src="{{ c.image.url }}" style="border: solid 10px #343A3F; border-radius: 100%;">
+                      <ul class="social-links">
+                          <li><a href="{{ c.url_Facebook }}" class="fab fa-facebook" style="color:white"></a></li>
+                          <li><a href="{{ c.url_LinkedIn }}" class="fab fa-linkedin" style="color:white"></a></li>
+                          <li><a href="tel:{{ c.mobile }}" class="fas fa-phone-square" style="color:white"></a></li>
+                      </ul>
+                  </div>
+                  <h3 class="team-title">{{ c.name }}</h3>
+                  <span class="post">{{ c.designation }}</span>
+                </div>
+               </div>
+          {% endfor %}
+
+          {% for t in treasurer %}
+               <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="our-team" style="padding: 20%">
+                  <div class="pic">
+                      <img src="{{ t.image.url }}" style="border: solid 10px #343A3F; border-radius: 100%;">
+                      <ul class="social-links">
+                          <li><a href="{{ t.url_Facebook }}" class="fab fa-facebook" style="color:white"></a></li>
+                          <li><a href="{{ t.url_LinkedIn }}" class="fab fa-linkedin" style="color:white"></a></li>
+                          <li><a href="tel:{{ t.mobile }}" class="fas fa-phone-square" style="color:white"></a></li>
+                      </ul>
+                  </div>
+                  <h3 class="team-title">{{ t.name }}</h3>
+                  <span class="post">{{ t.designation }}</span>
+                </div>
+               </div>
+          {% endfor %}
+
+          {% for v in vice_presi %}
+               <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="our-team" style="padding: 20%">
+                  <div class="pic">
+                      <img src="{{ v.image.url }}" style="border: solid 10px #343A3F; border-radius: 100%;">
+                      <ul class="social-links">
+                          <li><a href="{{ v.url_Facebook }}" class="fab fa-facebook" style="color:white"></a></li>
+                          <li><a href="{{ v.url_LinkedIn }}" class="fab fa-linkedin" style="color:white"></a></li>
+                          <li><a href="tel:{{ v.mobile }}" class="fas fa-phone-square" style="color:white"></a></li>
+                      </ul>
+                  </div>
+                  <h3 class="team-title">{{ v.name }}</h3>
+                  <span class="post">{{ v.designation }}</span>
+                </div>
+               </div>
+          {% endfor %}
+
+          {% for g in gen_sec %}
+               <div class="col-sm-12 col-md-4 col-lg-4">
+                <div class="our-team" style="padding: 20%">
+                  <div class="pic">
+                      <img src="{{ g.image.url }}" style="border: solid 10px #343A3F; border-radius: 100%;">
+                      <ul class="social-links">
+                          <li><a href="{{ g.url_Facebook }}" class="fab fa-facebook" style="color:white"></a></li>
+                          <li><a href="{{ g.url_LinkedIn }}" class="fab fa-linkedin" style="color:white"></a></li>
+                          <li><a href="tel:{{ g.mobile }}" class="fas fa-phone-square" style="color:white"></a></li>
+                      </ul>
+                  </div>
+                  <h3 class="team-title">{{ g.name }}</h3>
+                  <span class="post">{{ g.designation }}</span>
+                </div>
+               </div>
+          {% endfor %}
+
+        </div>
+    </div><br>
+
+
+    <!-- TEAM MEMBER -->
+    <div class="container mt-5">
+      <div class="row">
+
+        {% for member in members %}
+           {% if member.designation != "President" and member.designation != "Convener" and member.designation != "Treasurer" and member.designation != "Vice President" and member.designation != "General Secretary" %}
+              <div class="col-sm-4 col-md-2 col-lg-3">
+                <center>
+                  <img class="head mt-3 mb-2 rounded-circle" src="{{ member.image.url }}" style="border: solid 5px #343A3F; border-radius: 100%;"height="120px" width="120px"><br>
+                  <strong>{{ member.name }}</strong><br>
+                  <small class="text-muted">{{ member.designation }}</small>
+                </center>
+              </div>
+           {% endif %}
+        {% endfor %}
+
+      </div>
+    </div><hr class="mt-0" style="background-color:#cccccc;">
+
+    <!-- ALUMNI SECTION -->
+<center><h1 style="margin-top:5%; margin-bottom: 2%; color:#F95c39;">Meet our Alumni</h1></center>
+  <div class="container mt-4">
+    <div class="row">
+
+      {% for year in year_set %}
+
+          <center class="col-sm-12 col-md-12 col-lg-12"><h1 style="margin-top:1%; margin-bottom: 2%; color:#F95c39;"><small>Batch of {{ year }}</small></h1></center>
+
+          {% for a in alumni %}
+              {% if a.batch_year == year %}
+
+                  <div class="col-sm-12 col-md-12 col-lg-4 mb-2">
+                      <div class="jumbotron shadow-sm p-2 mb-3 bg-white rounded">
+                        <div class="row">
+                          <div class="col-3">
+                            <img class="alumni rounded-circle shadow-sm" src="{{ a.image.url }}" style="border: solid 4px #7F7F7F; border-radius: 100%;"height="80px" width="80px">
+                          </div>
+                          <div class="col-9 pt-2" style="font-size: 85%;">
+                            <span class="text-success">{{ a.name }}</span><br>
+                            <text>B.Tech. in {{ a.branch }}</text><br>
+                            <a href="{{ a.url_LinkedIn }}"><i class="fab fa-linkedin" style="color: #0077B5">  LinkedIn Profile</i></a></a>
+                          </div>
+                        </div>
+                      </div>
+                   </div>
+
+              {% endif %}
+          {% endfor %}
+      {% endfor %}
+
+      </div>
+    </div>
+{% endblock %}
