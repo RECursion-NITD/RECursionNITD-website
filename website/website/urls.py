@@ -31,6 +31,7 @@ urlpatterns = [
     path('forum/',include('forum.urls',namespace='forum')),
     path('events/',include('events.urls',namespace='events')),
     path('profile/',include('user_profile.urls',namespace='user_profile')),
+    path('team/',include('team.urls',namespace='team')),
     path('experience/',include('interview_exp.urls',namespace='interview_exp')),
     # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),

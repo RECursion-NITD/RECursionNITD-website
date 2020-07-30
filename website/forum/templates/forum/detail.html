@@ -41,7 +41,7 @@
                         <!--TAGS START-->
                         <div class="mt-2">
                             {% for tagging in taggings %} {% if tagging.question == questions %}
-                            <a href="#" class="tag" style="font-size:82%;">{{ tagging.tag }}</a> {%endif%} {% endfor %}
+                            <a href="{% url 'forum:filter_question' tag.id  %}" class="tag" style="font-size:82%;">{{ tagging.tag }}</a> {%endif%} {% endfor %}
                         </div>
                         <!--TAGS END-->
                         <p class="small card-text">

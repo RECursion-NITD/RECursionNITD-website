@@ -89,7 +89,7 @@
                 <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
             </li>
             <li class="nav-item {% block team_page %}{% endblock %}">
-              <a href="{% url 'forum:team_page' %}" class="nav-link m-2 menu-item">Team</a>
+              <a href="{% url 'team:team_page'%}" class="nav-link m-2 menu-item">Team</a>
             </li>
             {% if not user.is_authenticated %}
              <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
@@ -134,7 +134,7 @@
                 <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
                 <a href="https://github.com/RECursion-NITD"><i class="fab fa-github"></i></a><br>
                 <!-- Credits -->
-                <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">WebD Team</a></strong>
+                <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">Web Team '18-19</a></strong>
                 <!-- Rights-->
                 <p class="rights"><span>©  </span>
                 <span class="copyright-year">
@@ -165,7 +165,7 @@
                 <li><a href="{% url 'events:calender' %}">Events</a></li>
                 <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
                 <li><a href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
-                <li><a href="{% url 'forum:team_page'%}">Team</a></li>
+                <li><a href="{% url 'team:team_page'%}">Team</a></li>
                 <li><a href="{% url 'forum:webd_team'%}">WebD Team</a></li>
               </ul>
             </div>
