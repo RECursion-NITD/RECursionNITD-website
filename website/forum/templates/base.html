@@ -32,7 +32,6 @@
       <!--File Imports-->
       {% load staticfiles %}
       <link rel="stylesheet" href="{% static 'css/base_css.css' %}"> 
-      <link rel="stylesheet" href="{% static 'css/loader_css.css' %}"> 
 
       <!-- Favicon import -->
       <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
@@ -55,18 +54,8 @@
      </title>
      
 </head>
-<body onload="myfunc()">
- <div id="container"> 
- <div id="container1">
-  <div class="loadingio-spinner-double-ring-mxkhh5e7rz"><div class="ldio-bsuikmdo7q">
-    <div></div>
-    <div></div>
-    <div><div></div></div>
-    <div><div></div></div>
-    </div></div>
-  </div>
-  <strong style="color:white; margin: 58px;">Loading...</strong>
-  </div>
+<body>
+ 
 
  <nav class="navbar navbar-expand-md navbar-dark bg-dark py-0 sticky-top" style="background-color: #f19066;z-index:1;">
     <div class="d-flex flex-grow-1 py-0">
@@ -74,7 +63,7 @@
         <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
           <img id="logoREC" src="{% static 'image/logoInverted.png'%}" style="max-width:50px; padding-bottom: 4px" alt="logo">
-          <strong>REC</strong>ursion  
+          <strong>REC</strong>ursion
         </a>
         <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
             <img src="/static/image/logo.png" width="20%" alt="logo">
@@ -183,12 +172,5 @@
           </div>
         </div>
       </footer>
-      <script type="text/javascript">
-        var preloader=document.getElementById('container');
-        function myfunc()
-        {
-          preloader.style.display='none';
-        }
-      </script> 
 </body>
 </html>
