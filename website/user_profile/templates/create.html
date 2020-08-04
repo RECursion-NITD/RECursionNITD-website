@@ -30,6 +30,34 @@
                 <div class="col-9">{% render_field form.dept class="form-control mt-4" style="background:white;" placeholder="Department/Branch" %}
                 </div>
               </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 CodeChef:
+               </div>
+                <div class="col-9">{% render_field form.url_CodeChef class="form-control mt-4" style="background:white;" placeholder="Your CodeChef URL" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 Codeforces:
+               </div>
+                <div class="col-9">{% render_field form.url_Codeforces class="form-control mt-4" style="background:white;" placeholder="Your Codeforces URL" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 SPOJ:
+               </div>
+                <div class="col-9">{% render_field form.url_SPOJ class="form-control mt-4" style="background:white;" placeholder="Your SPOJ URL" %}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-3 mt-4">
+                 HackerRank:
+               </div>
+                <div class="col-9">{% render_field form.url_HackerRank class="form-control mt-4" style="background:white;" placeholder="Your HackerRank URL" %}
+                </div>
+              </div>
               <hr>
               <div>
                 {% render_field form.image class="form-control mt-4" style="background:white;" placeholder="Select An Image To Upload" onchange="ValidateSize(this)" type="file"%}
