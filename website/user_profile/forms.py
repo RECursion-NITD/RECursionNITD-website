@@ -10,6 +10,10 @@ class Profileform(forms.ModelForm):
     name = models.CharField(max_length=100)
     college = models.TextField(max_length=100)
     dept = models.IntegerField()
+    url_CodeChef = models.URLField()
+    url_Codeforces = models.URLField()
+    url_SPOJ = models.URLField()
+    url_HackerRank = models.URLField()
 
     def clean_image_url(self):
         url = self.cleaned_data['image_url'].lower()
@@ -19,7 +23,7 @@ class Profileform(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ('name', 'college', 'dept', 'image',)
+        fields = ('name', 'college', 'dept', 'image', 'url_CodeChef', 'url_Codeforces', 'url_SPOJ', 'url_HackerRank',)
 
 
 
