@@ -16,7 +16,7 @@
              </div>
              <hr>
              <ul>
-                 <li><i class="fas fa-envelope"></i>  {{ profile.user.email }}</li>
+<!--                  <li><i class="fas fa-envelope"></i>  {{ profile.user.email }}</li> -->
                  <li><i class="fas fa-university"></i>  {{ profile.college }}</li>
                  <li><i class="fab fa-leanpub"></i> {{ profile.dept }}</li>
                  <li><i class="fas fa-clock"></i> {{ profile.created_at }}</li>
@@ -26,6 +26,28 @@
              <a href="{% url 'profile:edit_profile'%}" style="float:right;">Edit Profile</a>
              {% endif %}
             </div>
+            <br>
+            {% load static %}
+            <div class="jumbotron container shadow-sm p-3 mb-1 bg-white rounded" style="background: white;">
+                <div style="text-align: center;">
+                <h5>Handles :</h5>
+                </div>
+                <hr>
+                <center>
+                  {% if profile.url_CodeChef != NULL %}
+                    <a href="{{ profile.url_CodeChef }}" target="_blank" ><img src="{% static 'image/profile/codechef.png' %}" style="max-width:30px;" hspace=15 alt="logo"></a>
+                  {% endif %}
+                  {% if profile.url_Codeforces != NULL %}
+                    <a href="{{ profile.url_Codeforces }}" target="_blank" ><img src="{% static 'image/profile/codeforces.png' %}" style="max-width:30px;" hspace=15 alt="logo"></a>
+                  {% endif %}
+                  {% if profile.url_HackerRank != NULL %}
+                    <a href="{{ profile.url_HackerRank }}" target="_blank" ><img src="{% static 'image/profile/hackerrank.png' %}" style="max-width:30px;" hspace=15 alt="logo"></a>
+                  {% endif %}
+                  {% if profile.url_SPOJ != NULL %}
+                    <a href="{{ profile.url_SPOJ }}" target="_blank" ><img src="{% static 'image/profile/spoj.png' %}" style="max-width:30px;" hspace=15 alt="logo"></a>
+                  {% endif %}
+                </center>
+               </div>
             </div>
             <div class="col-lg-9 col-md-8 col-sm-12">
             <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded"  style="background: white">
