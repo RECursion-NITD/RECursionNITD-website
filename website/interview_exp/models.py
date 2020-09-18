@@ -56,7 +56,7 @@ class Experiences(models.Model):
 
     class Meta:
         managed = True
-        ordering = ['-year']
+        ordering = ['-year', '-created_at']
         db_table = 'experiences'
         verbose_name_plural = 'Experiences'
 
