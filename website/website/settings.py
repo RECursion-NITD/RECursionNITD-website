@@ -43,13 +43,14 @@ INSTALLED_APPS = [
     'social_django',
     'widget_tweaks',
     'markdownx',
+    'get_started',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-     #'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -92,10 +93,10 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-     }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
@@ -118,21 +119,20 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
 SOCIAL_AUTH_PIPELINE = (
     'social.pipeline.social_auth.social_details',
     'social.pipeline.social_auth.social_uid',
     'social.pipeline.social_auth.auth_allowed',
     'social.pipeline.social_auth.social_user',
- 
+
     'website.utils.associate_by_email',
- 
+
     'social.pipeline.user.get_username',
     'social.pipeline.user.create_user',
     'social.pipeline.social_auth.associate_user',
     'social.pipeline.social_auth.load_extra_data',
     'social.pipeline.user.user_details',
-    
+
     'website.utils.set_image_for_new_users'
 )
 
@@ -165,14 +165,14 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL ='/media/'
+MEDIA_URL = '/media/'
 
-MEDIA_ROOT=os.path.join(BASE_DIR,'../website/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '../website/media')
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 #PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 #STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
-#MEDIA_URL='/media/'
-#MEDIA_ROOT=os.path.join(BASE_DIR,'members/media')
+# MEDIA_URL='/media/'
+# MEDIA_ROOT=os.path.join(BASE_DIR,'members/media')

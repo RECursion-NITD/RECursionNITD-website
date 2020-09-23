@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path,include
+from django.urls import path, include
 from django.conf.urls import url, include
 from forum import views
 from django.conf import settings
@@ -28,11 +28,13 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('forum.urls',namespace='forum')),
-    path('events/',include('events.urls',namespace='events')),
-    path('profile/',include('user_profile.urls',namespace='user_profile')),
-    path('experience/',include('interview_exp.urls',namespace='interview_exp')),
+    path('forum/', include('forum.urls', namespace='forum')),
+    path('events/', include('events.urls', namespace='events')),
+    path('profile/', include('user_profile.urls', namespace='user_profile')),
+    path('experience/', include('interview_exp.urls', namespace='interview_exp')),
+    path('get_started/', include('get_started.urls', namespace='get_started')),
+
     # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
