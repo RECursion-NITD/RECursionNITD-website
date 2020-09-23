@@ -66,6 +66,7 @@ env.bak/
 venv.bak/
 
 /website/db.sqlite3
+/website/env
 /website/recursion_website/migrations/0*.py	
 *.pyc
 __pycache__/

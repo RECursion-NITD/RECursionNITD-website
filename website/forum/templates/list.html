@@ -17,7 +17,8 @@
             <div class="col-lg-6 col-sm-12">
                 <div>
                     <a id="questionDetail" href="{% url 'forum:detail_questions' question.id  %}">
-                        <strong>{{ question.title }}</strong></a>
+                        <strong>{{ question.title }}</strong>
+                    </a>
                     <br>
                 </div>
                 <div id="addedBy" class="text-muted">
@@ -35,7 +36,8 @@
                           {% if tagging.question == question %} 
                             {% for tag in tags %} 
                               {% if tagging.tag == tag %}
-                              <li class="tagName" class="font-italic text-muted">{{tag.name}}</li>
+                              {% comment %} <li class="tagName" class="font-italic text-muted">{{tag.name}}</li> {% endcomment %}
+                              <li style="display:inline-block;"><a class="tagName" href="{% url 'forum:filter_question' tag.id  %}">{{ tag.name }}</a></li>
                               {% endif %} 
                             {% endfor %} 
                           {%endif%} 
