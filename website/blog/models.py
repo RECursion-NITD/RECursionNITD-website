@@ -46,15 +46,6 @@ class Comment_Reply(models.Model):
     def __str__(self):
         return self.body
 
-class Follow(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey('Posts', on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-
-    def __str__(self):
-        return str(self.id) + str(self.user)
-
 
 class Tags(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
@@ -80,17 +71,7 @@ class Taggings(models.Model):
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    like=models.BooleanField(null=True)
     
-    def __self__(self):
-        return self.user
-
-class Dislike(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reply = models.ForeignKey(Reply, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
-   
     def __self__(self):
         return self.user
