@@ -1,12 +1,12 @@
-# RECursionNITD-website
+# Recursion_NITD-website
 
-steps to install
+Steps to Install
 
-1. create python virtualenv
-2. install all packages from requirements.txt
-3. create .env file in project root with dbdetails
+1. Create python virtualenv
+2. Install all packages from requirements.txt
+3. Create .env file in project root with dbdetails
 
-sample:
+Sample:
 DB_NAME=HELLO_DJANGO
 DB_USER=U_HELLO
 DB_PASSWORD=hA8(scA@!fg3*sc&xaGh&6%-l<._&xCf
