@@ -1,4 +1,4 @@
-# Recursion_NITD-website
+# RECursionNITD-website
 
 Steps to Install
 
