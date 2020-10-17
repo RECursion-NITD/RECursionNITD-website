@@ -17,4 +17,4 @@ DB_PORT=""
 5. run python manage.py migrate
 6. run python manage.py runserver
 
-following above are complete step for using this repo.
+following above are complete step for using this repo..
