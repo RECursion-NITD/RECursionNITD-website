@@ -7,6 +7,7 @@ steps to install
 3. create .env file in project root (website/) with dbdetails
 
 sample:
+
 ```
 DB_NAME=HELLO_DJANGO
 DB_USER=U_HELLO
@@ -18,6 +19,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY='googlekey'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='googleSECRET'
 ```
 
-4. run python manage.py makemigrations
-5. run python manage.py migrate
-6. run python manage.py runserver
+4. run ```python manage.py makemigrations```
+5. run ```python manage.py migrate```
+6. run ```python manage.py runserver```
