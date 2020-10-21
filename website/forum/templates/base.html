@@ -85,6 +85,9 @@
     </div>
     <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
         <ul class="navbar-nav ml-auto flex-nowrap"> 
+          <li {%if request.resolver_match.url_name == 'list_blogs' %}class="active"{% endif %}">
+            <a href="{% url 'list_blogs' %}" class="nav-link m-2 menu-item">Blogs</a>
+          </li>
             <li class="nav-item {% block AskREC_active %}{% endblock %}">
                 <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
