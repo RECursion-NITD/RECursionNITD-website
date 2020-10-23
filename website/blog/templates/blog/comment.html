@@ -4,7 +4,7 @@
     
          <meta charset="UTF-8">
         <meta charset="UTF-8">
-        <title>Add Questions</title>
+        <title>Add Blog(s)</title>
     </head>
     <body>
     <div class="container">
@@ -80,7 +80,7 @@
                 
             $.ajax({
             method: "GET",
-            url: "/forum/editcomment/"+id,
+            url: "/blog/editcomment/"+id,
             success: function (data)
             {
                var form = "#u_com_form"+id

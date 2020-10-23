@@ -8,6 +8,7 @@
 
 <!-- navigation bar -->
 {% block nav %} {% endblock%} 
+{% block Blogs_active %}active{% endblock %}
 {% block content %}
 <div class="container">
   <a href="{% url 'home' %}" class="text-muted">< Back to Home</a>
@@ -42,7 +43,7 @@
                 
                 </div>
                 <div class="col-sm-12 col-lg-6">
-                <a class="btn" href="{% url 'add_blog' %}" id="postQ">
+                <a class="btn" href="{% url 'blog:add_blog' %}" id="postQ">
                     <button type="button" class="btn btn-outline-primary">
                     Post Blog&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
                 </a>
@@ -73,7 +74,7 @@
                       <h4>Most Recent Tags {{ limit }}</h4>
                       <ul>
                           {% for tag in tags_recent %}
-                          <li style="display:inline-block;"><a class="tagName" href="{% url 'filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display:inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                           <br>
                           <br>
@@ -83,11 +84,11 @@
                       <h4>Most Popular Tags</h4>
                       <ul>
                           {% for tag in tags_popular %}
-                          <li style="display: inline-block;"><a class="tagName" href="{% url 'filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                          <li style="display: inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
                           {% endfor %}
                       </ul>
                       <br>
-                      <a href="{% url 'list_blogs' %}" class="mr-3"style="float:right;">
+                      <a href="{% url 'blog:list_blogs' %}" class="mr-3"style="float:right;">
                       <button type="button" class="btn btn-sm btn-outline-primary">
                           Clear Filter&nbsp;&nbsp;<i class="far fa-trash-alt"></i>&nbsp;</button>
                       </a>

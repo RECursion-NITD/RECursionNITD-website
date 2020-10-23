@@ -33,25 +33,25 @@
                            {{reply.description|safe}}
                            <div id='reply_form{{reply.user_id.id}}'  > </div>
                            <div id='u_ans_form{{reply.id}}' com-id="{{reply.id}}"> </div>
-                           <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
+                           <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{ reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
                            <span style="float:right;margin-bottom: 0px;">
                                    <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
                                            <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
-                                           <a href="{% url 'add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                                           <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                    </span>
                                    <span>
                                            {% if request.user != reply.user_id %}
                                            {% if  reply.id in voted %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'votings' reply.id %}" class="voteReply text-right small p-1">Dislike <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
                                            {% else %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'votings' reply.id %}" class="voteReply text-right small p-1">Like <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                            {% endif %}
                                            {% endif %}
                                    </span>
                            {% if request.user == reply.user_id or user_permission == '2' or user_permission == '1'%}
                                <span id='ans_id_{{reply.id}}' class="u_ans" ans-id="{{reply.id}}">
-                                   <a href="{% url 'update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
-                                        Update this reply <i class="far fa-edit"></i>
+                                   <a href="{% url 'blog:update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
+                                        Update this answer <i class="far fa-edit"></i>
                                    </a>
                                </span>
                                {% endif %}
@@ -79,7 +79,7 @@
                                                last updated on {{comment_a.updated_at}}</small>
                                                        {% if request.user == comment_a.user %}
                                                        <span>
-                                                           <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'update_comment_reply' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
+                                                           <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'blog:update_comment_reply' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
                                                            </span>
                                                        <span id='u_a_com_form{{comment_a.id}}' com-id= "{{comment_a.id}}"> </span>
                                                        </span>
@@ -138,7 +138,7 @@
 
                $.ajax({
                method: "GET",
-               url: "/forum/answer/"+id,
+               url: "/blog/reply/"+id,
                success: function (data)
                {
                   var id_name = "#u_ans_form"+id

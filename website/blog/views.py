@@ -46,7 +46,7 @@ def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Posts, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
     return
 
-def bulk_tagging_add(question, tags):
+def bulk_tagging_add(post, tags):
     taggings = []
     for tag in tags:
         taggings.append(Taggings(post=post, tag=tag))
@@ -83,7 +83,7 @@ def add_blog(request):
                 user = profile.user
                 current_site = get_current_site(request)
                 subject = 'New Activity in AskREC'
-                message = render_to_string('new_question_entry_email.html', {
+                message = render_to_string('blog/new_blog_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
                     'post' : Posts.objects.get(pk=f.id),
@@ -91,7 +91,7 @@ def add_blog(request):
                 msg=(subject, message, 'webmaster@localhost', [user.email])
                 messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
-            return redirect('list_blogs')
+            return redirect('blog:list_blogs')
 
     else:
          form2 = Tagform(queryset=Tags.objects.none())
@@ -105,7 +105,7 @@ def list_blogs(request):
         if search.is_valid():
           key_req = search.cleaned_data
           key = key_req.get('key')
-          return HttpResponseRedirect(reverse('search_blog', args=(key,)))
+          return HttpResponseRedirect(reverse('blog:search_blog', args=(key,)))
     posts = Posts.objects.all()
     paginator = Paginator(posts, 5)
     page = request.GET.get('page')
@@ -118,7 +118,8 @@ def list_blogs(request):
             return HttpResponse('')
         posts_list = paginator.page(paginator.num_pages)
     p_count=posts.count()
-    reply=Reply.objects.all()
+    replys=Reply.objects.all()
+    '''follows=Follows.objects.all()'''
     taggings_recent = Taggings.objects.all().order_by('-updated_at')
     tags_recent=Tags.objects.all().order_by('-updated_at')
     tags_popular=[]
@@ -145,11 +146,10 @@ def list_blogs(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     profiles=Profile.objects.all()
-    args = {'form_search':search,'profile':profiles, 'posts':posts_list, 'reply':reply, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
+    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
     if request.is_ajax():
-        return render(request, 'blog/blog_list.html', args)
+        return render(request, 'blog/log_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
-
 
 def detail_blogs(request, id):
     comform = Commentform(request.POST or None)
@@ -228,7 +228,7 @@ def update_blogs(request, id):
                 user = profile.user
                 current_site = get_current_site(request)
                 subject = 'New Activity in AskREC'
-                message = render_to_string('update_question_email.html', {
+                message = render_to_string('blog/update_blog_email.html', {
                     'user': user,
                     'domain': current_site.domain,
                     'post': post,
@@ -248,7 +248,7 @@ def update_blogs(request, id):
                 if msg not in messages:
                     messages += (msg,)'''
             result = send_mass_mail(messages, fail_silently=False)
-            return redirect('list_blogs')
+            return redirect('blog:list_blogs')
     else:
         import html2text
         h = html2text.HTML2Text()
@@ -277,7 +277,6 @@ def add_reply(request, id):
     if request.POST.get('ajax_call') == "True" :
         if form.is_valid():
             description = form.cleaned_data.get('description')
-            print(description)
             if len(description) < 10:
                 return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
@@ -293,7 +292,7 @@ def add_reply(request, id):
                 user = profile.user
                 current_site = get_current_site(request)
                 subject = 'New Activity in AskREC'
-                message = render_to_string('new_answer_entry_email.html', {
+                message = render_to_string('blog/new_reply_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
                     'post': post,
@@ -314,8 +313,8 @@ def add_reply(request, id):
                     messages += (msg,)'''
             result = send_mass_mail(messages, fail_silently=False)
             user= request.user
-            f_p_id=Posts.objects.get(pk=id)
-            f.post_id=f_p_id
+            f_q_id=Posts.objects.get(pk=id)
+            f.post_id=f_q_id
             f.user_id =user
             f.save()
 
@@ -349,15 +348,16 @@ def update_reply(request, id):
                 if request.user == reply.user_id or user_permission == '2' or user_permission == '1':
                     f=form.save()
                     profiles = Profile.objects.filter(role=2)
+                    '''follows=Follows.objects.filter(question=question)'''
                     messages = ()
                     for profile in profiles:
                         user = profile.user
                         current_site = get_current_site(request)
                         subject = 'New Activity in AskREC'
-                        message = render_to_string('answer_update_email.html', {
+                        message = render_to_string('blog/reply_update_email.html', {
                             'user': user,
                             'domain': current_site.domain,
-                            'question': question,
+                            'post': post,
                         })
                         msg = (subject, message, 'webmaster@localhost', [user.email])
                         messages += (msg,)
@@ -404,7 +404,7 @@ def add_comment(request, id):
             user = profile.user
             current_site = get_current_site(request)
             subject = 'New Activity in AskREC'
-            message = render_to_string('new_comment_entry_email.html', {
+            message = render_to_string('blog/new_commententry_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'post': post,
@@ -456,7 +456,7 @@ def update_comment(request, id):
                         user = profile.user
                         current_site = get_current_site(request)
                         subject = 'New Activity in AskREC'
-                        message = render_to_string('update_comment_email.html', {
+                        message = render_to_string('blog/updatecomment_email.html', {
                             'user': user,
                             'domain': current_site.domain,
                             'post': post,
@@ -491,14 +491,14 @@ def update_comment(request, id):
 def votings(request, id):
     try:
         reply =get_object_or_404( Reply,pk=id)
-        reply=reply.question_id
+        post=reply.post_id
     except:
         return HttpResponse("id does not exist")
     user = request.user
     count=0
     if user != reply.user_id:
        if Likes.objects.filter(reply=reply, user=user).exists():
-           like= Likes.objects.get(reply=reply,user=user)
+           like= Likes.objects.get(reply=reply, user=user)
            like.delete()
            if Likes.objects.filter(reply=reply).exists():
                count=Likes.objects.filter(reply=reply).count()
@@ -507,7 +507,7 @@ def votings(request, id):
                         'Success':'downvoted'
                             }))
        else:
-           like = Likes.objects.create(reply=Reply, user=user)
+           like = Likes.objects.create(reply=reply, user=user)
            like.save()
            if Likes.objects.filter(reply=reply).exists():
                count=Likes.objects.filter(reply=reply).count()
@@ -526,13 +526,14 @@ def filter_blog(request ,id):
         if search.is_valid():
             key_req = search.cleaned_data
             key = key_req.get('key')
-            return HttpResponseRedirect(reverse('search_post', args=(key,)))
+            return HttpResponseRedirect(reverse('blog:search_blog', args=(key,)))
     try:
         required_tag=get_object_or_404(Tags, pk=id)
     except:
         return HttpResponse("Tag does not exist!")
     posts=[]
-    reply=Reply.objects.all()
+    replys=Reply.objects.all()
+    '''follows=Follows.objects.all()'''
     taggings=Taggings.objects.filter(tag=required_tag)
     for tagging in taggings:
         posts.append(tagging.post)
@@ -563,7 +564,7 @@ def filter_blog(request ,id):
         count+=1
     p_count = Posts.objects.all().count() #For displaying total number of questions
     posts.reverse()
-    paginator = Paginator(questions, 5)
+    paginator = Paginator(posts, 5)
     page = request.GET.get('page')
     try:
         posts_list = paginator.page(page)
@@ -574,10 +575,11 @@ def filter_blog(request ,id):
             return HttpResponse('')
         posts_list = paginator.page(paginator.num_pages)
     profiles = Profile.objects.all()
-    args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'reply':reply, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
+    args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys':answers, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
     if request.is_ajax():
-        return render(request, 'blog_list.html', args)
-    return render(request, 'blog_homepage.html', args)
+        return render(request, 'blog/blog_list.html', args)
+    return render(request, 'blog/blog_homepage.html', args)
+
 
 @login_required
 def add_comment_reply(request, id):
@@ -598,10 +600,10 @@ def add_comment_reply(request, id):
             user = profile.user
             current_site = get_current_site(request)
             subject = 'New Activity in AskREC'
-            message = render_to_string('new_answer_comment_entry_email.html', {
+            message = render_to_string('blog/new_reply_comment_entry_email.html', {
                 'user': user,
                 'domain': current_site.domain,
-                'question': answer.question_id,
+                'post': reply.post_id,
             })
             msg = (subject, message, 'webmaster@localhost', [user.email])
             messages += (msg,)
@@ -623,7 +625,7 @@ def add_comment_reply(request, id):
         comment_reply=Comment_Reply.objects.all()
         post=reply.post_id
         args = {'profile':prof,'replys': replys,  'comment_reply':comment_reply,'post':post}
-        return render(request, 'fblog/div_reply.html',args)
+        return render(request, 'blog/div_reply.html',args)
 
     return render(request, 'blog/comment_a.html', {'upform': form})
 
@@ -649,10 +651,10 @@ def update_comment_reply(request, id):
                   user = profile.user
                   current_site = get_current_site(request)
                   subject = 'New Activity in AskREC'
-                  message = render_to_string('update_answer_comment_email.html', {
+                  message = render_to_string('blog/update_reply_comment_email.html', {
                       'user': user,
                       'domain': current_site.domain,
-                      'question': answer.question_id,
+                      'post': reply.post_id,
                   })
                   msg = (subject, message, 'webmaster@localhost', [user.email])
                   messages += (msg,)
@@ -687,7 +689,6 @@ def update_comment_reply(request, id):
 def delete_reply(request, id):
     try:
         reply =get_object_or_404( Reply,pk=id)
-        print(reply)
     except:
         return HttpResponse("id does not exist")
     user = request.user
@@ -696,7 +697,7 @@ def delete_reply(request, id):
     post=reply.post_id
     if user_permission == '2' or user_permission == '1':
            reply.delete()
-    return HttpResponseRedirect(reverse('detail_posts', args=(post.id,)))
+    return HttpResponseRedirect(reverse('blog:detail_blogs', args=(post.id,)))
 
 @login_required
 def delete_comment(request, id):
@@ -710,7 +711,7 @@ def delete_comment(request, id):
     post = comment.post
     if user_permission == '2' or user_permission == '1':
            comment.delete()
-    return HttpResponseRedirect(reverse('detail_posts', args=(post.id,)))
+    return HttpResponseRedirect(reverse('blog:detail_blogs', args=(post.id,)))
 
 @login_required
 def delete_reply_comment(request, id):
@@ -724,7 +725,7 @@ def delete_reply_comment(request, id):
     post = reply_comment.reply.post_id
     if user_permission == '2' or user_permission == '1':
            reply_comment.delete()
-    return HttpResponseRedirect(reverse('detail_posts', args=(post.id,)))
+    return HttpResponseRedirect(reverse('blog:detail_blogs', args=(post.id,)))
 
 
 def search_blog(request, key):
@@ -733,7 +734,7 @@ def search_blog(request, key):
         if search.is_valid():
             key_req = search.cleaned_data
             key = key_req.get('key')
-            return HttpResponseRedirect(reverse('search_blog', args=(key,)))
+            return HttpResponseRedirect(reverse('blog:search_blog', args=(key,)))
      posts_found=[]
      posts_list=Posts.objects.all()
      tags_found=[]
@@ -747,14 +748,15 @@ def search_blog(request, key):
              if tagging.tag==tag:
                  posts_found.append([SequenceMatcher(None, tag.name.lower(), key.lower()).ratio(), tagging.post])
      for post in posts_list:
-         if SequenceMatcher(None, question.title.lower(), key.lower()).ratio()>0.3:
+         if SequenceMatcher(None, post.title.lower(), key.lower()).ratio()>0.3:
              posts_found.append([SequenceMatcher(None, post.title.lower(), key.lower()).ratio(), post])
      posts_found.sort(key=lambda x: x[0], reverse=True)
      posts=[]
      for post in posts_found:
          if post[1] not in posts:
             posts.append(post[1])
-     reply = Reply.objects.all()
+     replys = Reply.objects.all()
+     '''follows = Follows.objects.all()'''
      tags_popular = []
      check = []
      if tags_recent.count() > 10:
@@ -789,10 +791,9 @@ def search_blog(request, key):
              return HttpResponse('')
          posts_list = paginator.page(paginator.num_pages)
      profiles = Profile.objects.all() 
-     args = {'form_search':search, 'profile': profiles, 'posts': posts_list, 'posts': posts,
+     args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys': replys,
              'tags': tags_recent, 'taggings': taggings_recent, 'tags_recent': tags_recent_record,
              'tags_popular': tags_popular_record, 'p_count': p_count}
      if request.is_ajax():
          return render(request, 'blog/blog_list.html', args)
      return render(request, 'blog/blog_homepage.html', args) 
-

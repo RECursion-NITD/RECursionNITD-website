@@ -12,7 +12,7 @@
             </div>    
             <div class="col-lg-6 col-sm-12">
                 <div>
-                    <a id="questionDetail" href="{% url 'detail_blogs' post.id  %}">
+                    <a id="questionDetail" href="{% url 'blog:detail_blogs' post.id  %}">
                         <strong>{{ post.title }}</strong>
                     </a>
                     <br>
@@ -29,7 +29,7 @@
                             {% for tag in tags %} 
                               {% if tagging.tag == tag %}
                               {% comment %} <li class="tagName" class="font-italic text-muted">{{tag.name}}</li> {% endcomment %}
-                              <li style="display:inline-block;"><a class="tagName" href="{% url 'filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                              <li style="display:inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
                               {% endif %} 
                             {% endfor %} 
                           {%endif%} 

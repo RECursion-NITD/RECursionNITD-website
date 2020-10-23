@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+An existing Question has been Answered in AskREC:
+
+{{ post.title }}
+http://{{ domain }}{% url 'blog:detail_posts' post.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}

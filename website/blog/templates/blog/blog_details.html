@@ -10,7 +10,7 @@
 <div class="container">
     {% csrf_token %}
     <!-- BACK BUTTON -->
-    <small><a href="{% url 'list_blogs' %}" class="text-muted"><strong>< Back to Blogs</strong></a></small>
+    <small><a href="{% url 'blog:list_blogs' %}" class="text-muted"><strong>< Back to Blogs</strong></a></small>
     <br>
 
     <!-- ROW STARTS -->
@@ -34,7 +34,7 @@
                                 {% if tagging.post == posts %}
                                     {% for tag in tags %} 
                                         {% if tagging.tag == tag %}
-                                         <a href="{% url 'filter_blog' tag.id  %}" class="tag" style="font-size:82%;">{{ tag.name }}</a>
+                                         <a href="{% url 'blog:filter_blog' tag.id  %}" class="tag" style="font-size:82%;">{{ tag.name }}</a>
                                         {% endif %} 
                                     {% endfor %} 
                                 {% endif %}
@@ -75,7 +75,7 @@
                                         <div class="comment-body">
                                             <span class="mb-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user or user_permission == '1' or user_permission == '2' %}
                                                 <div>
-                                                    <div id='com_id_{{comment.id}}' class="u_com" com-id="{{comment.id}}"> <a href="{% url 'update_comment' comment.id %}" class="small" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
+                                                    <div id='com_id_{{comment.id}}' class="u_com" com-id="{{comment.id}}"> <a href="{% url 'blog:update_comment' comment.id %}" class="small" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
                                                     <div id='u_com_form{{comment.id}}' com-id="{{comment.id}}"> </div>
                                                 </div>
                                                 {% endif %}
@@ -106,12 +106,11 @@
             <div class="container" style="margin-top: 10px">
                 <!-- ADD COMMENT BUTTON -->
                 {% if request.user.is_authenticated %}
-                <button type="button" id='add_com_but' class="btn btn-outline-primary btn-sm"> Add Comment</i></button>&nbsp;
                     {% if not rep.id %}
                         <button type="button" id='add_ans_but' class="btn btn-sm btn-outline-primary">Add Reply </button>
                     {% else %}
                         <span id='ans_id_{{rep.id}}' class="u_ans" ans-id="{{rep.id}}">
-                                <a href="{% url 'update_reply' rep.id %}">
+                                <a href="{% url 'blog:update_reply' rep.id %}">
                                     <button type="button" class="btn btn-sm btn-outline-primary" style="display: inline-block;">Update Your Reply</button>
                                 </a>
                             </span>
@@ -130,7 +129,7 @@
 
                     {% if not rep.id %}
 
-                    <form class='my-ans-form' method="POST" data-url="{% url 'add_reply' posts.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
+                    <form class='my-ans-form' method="POST" data-url="{% url 'blog:add_reply' posts.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
                         <h5 class="text-muted" style="text-align:center;">Enter your reply details below:</h5>
                         <br>
                         <table>
@@ -189,7 +188,7 @@
 <!-- --------------------------------------------------------AKM---------------------------------------------->
 <div id="div_answers">
      <!-- ANSWERS PORTION STARTS -->
-    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Answer(s)</h3></div>
+    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Replies</h3></div>
     {% for reply in reply %} {% if reply.post_id == posts %}
     <div class="container answerBorder card">
         <div class="row">
@@ -210,20 +209,20 @@
                             <span style="float:right;margin-bottom: 0px;">
                                     <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
                                             <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
-                                            <a href="{% url 'add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                                            <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                     </span>
                                     <span>
                                             {% if request.user != reply.user_id %}
                                             {% if  reply.id in voted %}
-                                            <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'votings' reply.id %}" class="voteReply text-right small p-1">Dislike <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                            <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Dislike <i class="far fa-thumbs-down"></i></a>&nbsp;
                                             {% else %}
-                                            <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'votings' reply.id %}" class="voteReply text-right small p-1">Like <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                            <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Like <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                             {% endif %}
                                             {% endif %}
                                     </span>
                             {% if request.user == reply.user_id or user_permission == '2' or user_permission == '1'%}
                                 <span id='ans_id_{{reply.id}}' class="u_ans" ans-id="{{reply.id}}">
-                                    <a href="{% url 'update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
+                                    <a href="{% url 'blog:update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
                                          Update this reply <i class="far fa-edit"></i>
                                     </a>
                                 </span>
@@ -252,7 +251,7 @@
                                                 last updated on {{comment_a.updated_at}}</small>
                                                         {% if request.user == comment_a.user %}
                                                         <span>
-                                                            <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'update_comment_reply' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
+                                                            <span id='com_a_id_{{comment_a.id}}' class = "u_a_com" com-id= "{{comment_a.id}}"> <a href="{% url 'blog:update_comment_reply' comment_a.id %}" class="voteReply small" style="float:right;">Update this comment <i class="far fa-edit"></i></a>
                                                             </span>
                                                             <span id='u_a_com_form{{comment_a.id}}' com-id= "{{comment_a.id}}"> </span>
                                                         </span>
@@ -283,11 +282,11 @@
         <div class="card">
             <div class="card-header">
                 {% if request.user == posts.user_id  or user_permission == '1' or user_permission == '2'%}
-                <a href="{% url 'update_blogs' posts.id  %}">
+                <a href="{% url 'blog:update_blogs' posts.id  %}">
                     <button type="button" class="btn btn-sm btn-outline-success">Update this Blog</button>
                 </a>
                 {% else %}
-                <a href="{% url 'add_blog'  %}">
+                <a href="{% url 'blog:add_blog'  %}">
                     <button type="button" class="btn btn-sm btn-outline-success">New Blog</button>
                 </a>
                 {% endif %}
@@ -425,7 +424,7 @@ Making URL to link :
       var id=$(this).attr("ans-id")
       $.ajax({
         method: "GET",
-        url:"/forum/answer/"+id+"/vote",
+        url:"/blog/reply/"+id+"/vote",
         success: function(data)
                 {
                     console.log(id)
@@ -553,7 +552,7 @@ Making URL to link :
 
         $.ajax({
         method: "GET",
-        url: "/forum/editcomment/"+id,
+        url: "/blog/editcomment/"+id,
         success: function (data)
         {
            var form = "#u_com_form"+id
@@ -575,7 +574,7 @@ Making URL to link :
 
         $.ajax({
         method: "GET",
-        url: "/forum/answer/"+id,
+        url: "/blog/reply/"+id,
         success: function (data)
         {
            var id_name = "#u_ans_form"+id
@@ -596,7 +595,7 @@ Making URL to link :
         console.log(user_id)
         $.ajax({
         method: "GET",
-        url: "/forum/comment_answer/"+id,
+        url: "/blog/comment_reply/"+id,
         success: function (data)
         {
            var id_name = "#reply_form"+user_id
@@ -615,7 +614,7 @@ Making URL to link :
 
         $.ajax({
         method: "GET",
-        url: "/forum/editcomment_answer/"+id,
+        url: "/blog/editcomment_reply/"+id,
         success: function (data)
         {
            var id_name = "#u_a_com_form"+id

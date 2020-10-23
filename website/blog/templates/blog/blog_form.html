@@ -1,13 +1,13 @@
 {% extends 'base.html' %} {% load widget_tweaks %} 
 <meta charset="UTF-8">
-{% block title %}Add Blogs{% endblock%}
+{% block title %}Add Blog(s){% endblock%}
 </head>
 
 {% block content %}
     <div>
         {% csrf_token %}
         <div class="container">
-            <a class="text-muted" href="{% url 'list_blogs' %}" style="font-size: 70%;">
+            <a class="text-muted" href="{% url 'blog:list_blogs' %}" style="font-size: 70%;">
                 <strong>< Back to Blog Page</strong></a>
                     <h2 class="mt-3">Add Blog(s)</h2>
                     <form method="POST" class="card ml-0" style="padding: 20px;">

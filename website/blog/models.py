@@ -75,7 +75,7 @@ class Taggings(models.Model):
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     def __str__(self):
-        return self.question.title + " : " + self.tag.name
+        return self.post.title + " : " + self.tag.name
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
