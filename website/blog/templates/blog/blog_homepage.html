@@ -45,7 +45,7 @@
                 <div class="col-sm-12 col-lg-6">
                 <a class="btn" href="{% url 'blog:add_blog' %}" id="postQ">
                     <button type="button" class="btn btn-outline-primary">
-                    Post Blog&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
+                    Post Blog(s)&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
                 </a>
                 </div>
               </div><hr>
@@ -65,10 +65,18 @@
                     <div class="card p-2">
                       <h3 style="display:inline-block;justify-content: center;">
                         <span class="number">{{ p_count }}</span>
-                      <small>blogs</small></h2>
+                      {%if p_count < 2 %}
+                      <small>blog</small></h2>
+                      {% else %}
+                      <small>blog</small></h2>
+                      {% endif %}
                       <h3  style="display:inline-block;">
-                        <span class="number">{{ reply.count }}</span>
-                       <small>replies</small></h3>
+                        <span class="number">{{ replys.count }}</span>
+                        {%if replys.count < 2 %}
+                       <small>reply</small></h3>
+                        {%else%}
+                        <small>replies</small></h3>
+                        {%endif%}
                     </div>
                       <br>
                       <h4>Most Recent Tags {{ limit }}</h4>

@@ -53,6 +53,29 @@ def bulk_tagging_add(post, tags):
     Taggings.objects.bulk_create(taggings)
     return
 
+VALID_IMAGE_EXTENSIONS = [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+]
+
+def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
+    end=([url.endswith(e) for e in extension_list])
+    count=1
+    for e in end:
+        if e == True:
+          if count==1:
+              type=".jpg"
+          elif count==2:
+              type=".jpeg"
+          elif count==3:
+              type=".png"
+          elif count==4:
+              type=".gif"
+        count+=1
+    return type
+
 @login_required
 def add_blog(request):
     form = Postform(request.POST or None)
@@ -146,9 +169,9 @@ def list_blogs(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     profiles=Profile.objects.all()
-    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
+    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
     if request.is_ajax():
-        return render(request, 'blog/log_list.html', args)
+        return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
 
 def detail_blogs(request, id):
@@ -187,7 +210,7 @@ def detail_blogs(request, id):
         id_list = [id['reply_id'] for id in votes]  # voted answers id
 
 
-    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings, 'likes':likes, 'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag}
+    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings, 'likes':likes, 'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag,'voted':id_list,}
     return render(request, 'blog/blog_details.html', args) 
 
 @login_required
@@ -277,7 +300,7 @@ def add_reply(request, id):
     if request.POST.get('ajax_call') == "True" :
         if form.is_valid():
             description = form.cleaned_data.get('description')
-            if len(description) < 10:
+            if len(description) == 0:
                 return HttpResponse("Very Short Answer!")
             f = form.save(commit=False)
             f.post_id=post
@@ -337,7 +360,7 @@ def update_reply(request, id):
         if request.method == 'POST':
             if form.is_valid():
                 description = form.cleaned_data.get('description')
-                if description.__len__() < 10:
+                if description.__len__() == 0:
                     return HttpResponse("Very Short Answer!")
                 user = request.user
                 user_profile = Profile.objects.get(user=user)
@@ -451,6 +474,7 @@ def update_comment(request, id):
                 if request.user == comment.user or user_permission == '2' or user_permission == '1':
                     f=form.save()
                     profiles = Profile.objects.filter(role=2)
+                    '''follows=Follows.objects.filter(question=question)'''
                     messages = ()
                     for profile in profiles:
                         user = profile.user
@@ -478,7 +502,7 @@ def update_comment(request, id):
                     result = send_mass_mail(messages, fail_silently=False)
                     comment=Comment.objects.filter(post = post)
                     prof=Profile.objects.all()  #all user profile
-                    args = {'profile':prof,'post': post,  'comment':comment}
+                    args = {'profile':prof,'post': post,  'comment':comment, }
                     return render(request, 'blog/div_comment.html',args)
 
         import html2text
@@ -504,7 +528,7 @@ def votings(request, id):
                count=Likes.objects.filter(reply=reply).count()
            return HttpResponse(json.dumps({
                         'count':count,
-                        'Success':'downvoted'
+                        'Success':'disliked'
                             }))
        else:
            like = Likes.objects.create(reply=reply, user=user)
@@ -513,8 +537,9 @@ def votings(request, id):
                count=Likes.objects.filter(reply=reply).count()
            return HttpResponse(json.dumps({
                         'count':count,
-                        'Success':'upvoted'
+                        'Success':'liked'
                             }))
+
     
 
 
@@ -575,7 +600,7 @@ def filter_blog(request ,id):
             return HttpResponse('')
         posts_list = paginator.page(paginator.num_pages)
     profiles = Profile.objects.all()
-    args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys':answers, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
+    args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys':replys, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
     if request.is_ajax():
         return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)

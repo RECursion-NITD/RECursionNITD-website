@@ -25,7 +25,7 @@
                 <li id="tagList">
                     <ul>
                         {% for tagging in taggings %} 
-                          {% if tagging.question == question %} 
+                          {% if tagging.post == post %} 
                             {% for tag in tags %} 
                               {% if tagging.tag == tag %}
                               {% comment %} <li class="tagName" class="font-italic text-muted">{{tag.name}}</li> {% endcomment %}
@@ -41,7 +41,11 @@
                     <div class="col-sm-5 col-md-3 col-lg-3 mt-auto mb-auto" id="answerBox" style="display: inline-block;">
                       <div class="row">
                           <div class="col-sm-6">
+                            {%if post.reply_set.count == 1 %}
+                            <span id="followValue" style="font-size:70%;">{{ post.reply_set.count }} reply
+                            {%else %}
                             <span id="followValue" style="font-size:70%;">{{ post.reply_set.count }} replies
+                            {%endif%}
                             </span>
                           </div>
                       </div>

@@ -1,7 +1,7 @@
 {% autoescape off %}
 Hi {{ user.username }},
 
-An existing Reply to an existing Blog has been Commented upon in AskREC:
+An existing Reply to an existing Blog has been Commented upon in Blogs:
 
 {{ post.title }}
 http://{{ domain }}{% url 'blog:detail_posts' post.id %}

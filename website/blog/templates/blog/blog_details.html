@@ -188,7 +188,11 @@
 <!-- --------------------------------------------------------AKM---------------------------------------------->
 <div id="div_answers">
      <!-- ANSWERS PORTION STARTS -->
+     {%if reply|length < 2%}
+    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Reply</h3></div>
+    {%else%}
     <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Replies</h3></div>
+    {%endif%}
     {% for reply in reply %} {% if reply.post_id == posts %}
     <div class="container answerBorder card">
         <div class="row">
@@ -209,7 +213,7 @@
                             <span style="float:right;margin-bottom: 0px;">
                                     <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
                                             <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
-                                            <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                                            <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Comment <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                     </span>
                                     <span>
                                             {% if request.user != reply.user_id %}
@@ -294,21 +298,21 @@
             <div class="card-body small pt-1">
 
                 <p class="mt-0">
-                    <h5>Instruction to write good question</h5>
+                    <h5>Instruction to write good blog</h5>
                     <ol>
-<li>1. Write a title that summarizes the specific problem</li>
+<li>1. Write a title that summarizes the blog</li>
 <li>2. Pretend you're talking to a busy colleague</li>
 <li>3. Spelling, grammar and punctuation are important!</li>
 </ol>
 <br>
-<strong>Bad:</strong> C# Math Confusion<br>
-<strong>Good:</strong> Why does using float instead of int give me different results when all of my inputs are integers?<br>
-<strong>Bad:</strong> [php] session doubt<br>
-<strong>Good:</strong> How can I redirect users to different pages based on session data in PHP?<br>
-<strong>Bad:</strong> android if else problems<br>
-<strong>Good:</strong> Why does str == "value" evaluate to false when str is set to "value"?<br>
+<strong>Bad:</strong> Python language<br>
+<strong>Good:</strong> Why Python is one of the most used Programming Language?<br>
+<strong>Bad:</strong> Competitive Programming<br>
+<strong>Good:</strong> What are some good blogs for learning algorithms and competitive programming techniques?<br>
+<strong>Bad:</strong> Python vs R<br>
+<strong>Good:</strong> What are the major differences between Python and R for data science?<br>
 <br>
-Refer to <a href = "https://stackoverflow.com/help/how-to-ask">Stack Overflow guide</a> on asking a good question.
+Refer to <a href = "https://blogging.com/blog/how-to-write-good-blog-post/">Blogging.com guide</a> on asking a good blog.
                 </p>
 
             </div>

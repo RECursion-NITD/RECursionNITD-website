@@ -16,7 +16,11 @@
  }
 }
     </style>
-   <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Replies</h3></div>
+    {%if replys|length < 2%}
+   <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Reply</h3></div>
+    {% else %}
+    <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Replies</h3></div>  
+    {%endif%}
    {% for reply in replys %} {% if reply.post_id == post %}
    <div class="container answerBorder card">
        <div class="row">
@@ -37,21 +41,21 @@
                            <span style="float:right;margin-bottom: 0px;">
                                    <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
                                            <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
-                                           <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Reply <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
+                                           <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Comment <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                    </span>
                                    <span>
                                            {% if request.user != reply.user_id %}
                                            {% if  reply.id in voted %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Downvote <i class="far fa-thumbs-down"></i></a>&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Dislike <i class="far fa-thumbs-down"></i></a>&nbsp;
                                            {% else %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Like <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                            {% endif %}
                                            {% endif %}
                                    </span>
                            {% if request.user == reply.user_id or user_permission == '2' or user_permission == '1'%}
                                <span id='ans_id_{{reply.id}}' class="u_ans" ans-id="{{reply.id}}">
                                    <a href="{% url 'blog:update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
-                                        Update this answer <i class="far fa-edit"></i>
+                                        Update this reply <i class="far fa-edit"></i>
                                    </a>
                                </span>
                                {% endif %}
@@ -159,7 +163,7 @@
                console.log(user_id)
                $.ajax({
                method: "GET",
-               url: "/forum/comment_answer/"+id,
+               url: "/blog/comment_reply/"+id,
                success: function (data)
                {
                   var id_name = "#reply_form"+user_id
@@ -178,7 +182,7 @@
 
                $.ajax({
                method: "GET",
-               url: "/forum/editcomment_answer/"+id,
+               url: "/blog/editcomment_reply/"+id,
                success: function (data)
                {
                   var id_name = "#u_a_com_form"+id
@@ -199,7 +203,7 @@
 
                $.ajax({
                method: "GET",
-               url: "/forum/editcomment/"+id,
+               url: "/blog/editcomment/"+id,
                success: function (data)
                {
                   var form = "#u_com_form"+id
@@ -218,7 +222,7 @@
      var id=$(this).attr("ans-id")
      $.ajax({
        method: "GET",
-       url:"/forum/answer/"+id+"/vote",
+       url:"/blog/reply/"+id+"/vote",
        success: function(data)
                {
                    console.log(id)
