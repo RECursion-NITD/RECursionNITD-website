@@ -122,7 +122,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         profile = Profile.objects.get(user = user)
-        image_url = "https://api.adorable.io/avatars/" + str(random.randint(0000, 9999))
+        image_url = "https://api.adorable.io/avatars/65/" + str(random.randint(0000, 9999)) + ".png"
         type = valid_url_extension(image_url)
         full_path = 'media/images/' + profile.user.username + '.png'
         try:
@@ -146,7 +146,7 @@ def edit_profile(request):
     if form.is_valid():
         form.save()
         if form.cleaned_data['image'] is None or form.cleaned_data['image'] == False:
-          image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
+          image_url = "https://api.adorable.io/avatars/65/"+ str(random.randint(0000,9999)) + ".png"
           type = valid_url_extension(image_url)
           full_path = 'media/images/' + profile.user.username + '.png'
           try:

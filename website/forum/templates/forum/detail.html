@@ -39,10 +39,19 @@
                     <blockquote class="mb-0">
                         <p>{{questions.description|safe}}</p>
                         <!--TAGS START-->
-                        <div class="mt-2">
-                            {% for tagging in taggings %} {% if tagging.question == questions %}
-                            <a href="{% url 'forum:filter_question' tag.id  %}" class="tag" style="font-size:82%;">{{ tagging.tag }}</a> {%endif%} {% endfor %}
+
+                         <div class="mt-2">    
+                            {% for tagging in taggings %} 
+                                {% if tagging.question == questions %}
+                                    {% for tag in tags %} 
+                                        {% if tagging.tag == tag %}
+                                         <a href="{% url 'forum:filter_question' tag.id  %}" class="tag" style="font-size:82%;">{{ tag.name }}</a>
+                                        {% endif %} 
+                                    {% endfor %} 
+                                {% endif %}
+                            {% endfor %}
                         </div>
+                         
                         <!--TAGS END-->
                         <p class="small card-text">
                             <i>
@@ -350,16 +359,26 @@ Bold - Strong Strong
 
 List -
 
-* Item
-* Item
-- Item
-- Item
+* Item 1
+* Item 2
+- Item 1 
+- Item 2
 
-Heading -
+Headings -
 # Header 1
 ## Header 2
 ### Header 3
 #### Header 4
+
+Blockquotes - 
+  To create a blockquote, add a > in front of a paragraph/text .
+  Ex: > Paragraph starts..
+
+Links -
+[Link_text](URL of the Link).
+
+Making URL to link :
+  enclose it in angle brackets: < URL_Path >
 </pre>
             </div>
           </div>
