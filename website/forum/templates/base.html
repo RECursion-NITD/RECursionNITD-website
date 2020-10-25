@@ -1,186 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="viewport" content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <!-- BACKEND Import -->
 
     <!-- FRONTEND Import-->
-      <!--Package Imports-->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-      
+    <!--Package Imports-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
     <!-- Import Font Awesome Icons -->
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
     <!-- Import Google Fonts-->
-<!--     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
- --> 
-<link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">   
-      <!--File Imports-->
-      {% load staticfiles %}
-      <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
-      <link rel="stylesheet" href="{% static 'css/custom_checkbox.css' %}">
+    <!--     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet">
+ -->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+    <!--File Imports-->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+    <link rel="stylesheet" href="{% static 'css/custom_checkbox.css' %}">
 
-      <!-- Favicon import -->
-      <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
-    
-      <!--File Imports-->
-      {% load staticfiles %}
-      <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
-      <link rel="stylesheet" href="{% static 'css/loader_css.css' %}"> 
+    <!-- Favicon import -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
 
-      <!-- Favicon import -->
-      <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
+    <!--File Imports-->
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loader_css.css' %}">
 
-      <!-- Import Google Font Montserrat -->
-      <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <!-- Favicon import -->
+    <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
+
+    <!-- Import Google Font Montserrat -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet"> {% block css %} {% endblock %} {% block js %} {% endblock js %}
 
 
-    {% block css %}
-    {% endblock  %}
-    
-    {% block js %}
-        
-    {% endblock js %}
-        
-        
-     <title>
-        {% block title %}
-        {% endblock %}
-     </title>
-     
+    <title>
+        {% block title %} {% endblock %}
+    </title>
+
 </head>
+
 <body onload="loaderfunction()">
-  <div id="loader">
-    <div id="loading">
-   <div class="loading-screen">
-    <div class="loading-animation">
-      <img src="{% static 'image/Loader.jpeg' %}" alt="" class="logo">
-      <div class="loading-bar"></div>
+    <div id="loader">
+        <div id="loading">
+            <div class="loading-screen">
+                <div class="loading-animation">
+                    <img src="{% static 'image/Loader.jpeg' %}" alt="" class="logo">
+                    <div class="loading-bar"></div>
+                </div>
+            </div>
+        </div>
     </div>
-      </div></div></div>
-<body>
- <nav class="navbar navbar-expand-md navbar-dark bg-dark py-0 sticky-top" style="background-color: #f19066;z-index:1;">
-    <div class="d-flex flex-grow-1 py-0">
-        <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
-        <a class="navbar-brand" href="{% url 'home' %}">
+
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark py-0 sticky-top" style="background-color: #f19066;z-index:1;">
+            <div class="d-flex flex-grow-1 py-0">
+                <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
+                <a class="navbar-brand" href="{% url 'home' %}">
           {% load staticfiles %}
           <img id="logoREC" src="{% static 'image/logoInverted.png'%}" style="max-width:50px; padding-bottom: 4px" alt="logo">
           <strong>REC</strong>ursion
         </a>
-        <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
+                <!-- <a class="navbar-brand-two mx-auto d-lg-none d-inline-block py-0" href="#">
             <img src="/static/image/logo.png" width="20%" alt="logo">
         </a> -->
-        <div class="w-100 text-right py-0">
-            <button class="navbar-toggler mt-2" type="button" data-toggle="collapse" data-target="#myNavbar">
+                <div class="w-100 text-right py-0">
+                    <button class="navbar-toggler mt-2" type="button" data-toggle="collapse" data-target="#myNavbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-        </div>
-    </div>
-    <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
-        <ul class="navbar-nav ml-auto flex-nowrap"> 
-            <li class="nav-item {% block AskREC_active %}{% endblock %}">
-                <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
-            </li>
-            <li class="nav-item {% block interview_active %}{% endblock %}">
-              <a href="{% url 'experience:list_experiences' %}" class="nav-link m-2 menu-item">Interview Experiences</a>
-            </li>
-            <li class="nav-item {% block Events_active %}{% endblock %}">
-                <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
-            </li>
-            <li class="nav-item {% block getStart_active %}{% endblock %}">
-                <a href="{% url 'forum:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
-            </li>
-            <li class="nav-item {% block team_page %}{% endblock %}">
-              <a href="{% url 'team:team_page'%}" class="nav-link m-2 menu-item">Team</a>
-            </li>
-            {% if not user.is_authenticated %}
-             <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
-           {% else %}
-              <ul class="nav navbar-nav">
-              <li class="dropdown nav-link m-2 menu-item nav-item">
-              <a class="dropdown-toggle tab" data-toggle="dropdown" href="#"  id="tabManage">Welcome User <span class="caret"></span></a>
-                <ul class="dropdown-menu ml-2" style="padding: 2px;">
-                  <!-- <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li> -->
-                  <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
-                  <li><a href="{% url 'profile:view_profile' %}">&nbsp;&nbsp; My Profile</a></li>
-                  <li><a href="{% url 'user_profile:edit_profile' %}">&nbsp;&nbsp; Edit Profile</a></li>
-                  <li><a href="{% url 'logout' %}">&nbsp;&nbsp; Logout</a></li>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
+                <ul class="navbar-nav ml-auto flex-nowrap">
+                    <li class="nav-item {% block AskREC_active %}{% endblock %}">
+                        <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
+                    </li>
+                    <li class="nav-item {% block interview_active %}{% endblock %}">
+                        <a href="{% url 'experience:list_experiences' %}" class="nav-link m-2 menu-item">Interview Experiences</a>
+                    </li>
+                    <li class="nav-item {% block Events_active %}{% endblock %}">
+                        <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
+                    </li>
+                    <li class="nav-item {% block getStart_active %}{% endblock %}">
+                        <a href="{% url 'getting_started:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
+                    </li>
+                    <li class="nav-item {% block team_page %}{% endblock %}">
+                        <a href="{% url 'team:team_page'%}" class="nav-link m-2 menu-item">Team</a>
+                    </li>
+                    {% if not user.is_authenticated %}
+                    <li><a href="{% url 'login'%}" id="tabLogin" class="nav-link m-2 menu-item">Login</a></li>
+                    {% else %}
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown nav-link m-2 menu-item nav-item">
+                            <a class="dropdown-toggle tab" data-toggle="dropdown" href="#" id="tabManage">Welcome User <span class="caret"></span></a>
+                            <ul class="dropdown-menu ml-2" style="padding: 2px;">
+                                <!-- <li ><a  href="{% url 'forum:list_questions' %}">Forum</a></li> -->
+                                <!-- <li><a href="{% url 'user_profile:view_profile' %}">View Account</a></li> -->
+                                <li><a href="{% url 'profile:view_profile' %}">&nbsp;&nbsp; My Profile</a></li>
+                                <li><a href="{% url 'user_profile:edit_profile' %}">&nbsp;&nbsp; Edit Profile</a></li>
+                                <li><a href="{% url 'logout' %}">&nbsp;&nbsp; Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    {% endif %}
                 </ul>
-              </li>
-              </ul>
-              {% endif %}
-        </ul>
-    </div>
-</nav>
+            </div>
+        </nav>
 
-  {% block nav %}{% endblock nav%}
-  </header>
-{% block content %} 
-{% endblock %}
+        {% block nav %}{% endblock nav%}
+        </header>
+        {% block content %} {% endblock %}
 
- 
-<footer class="section footer-classic context-dark bg-image" style="background:linear-gradient(135deg, #3e4446 22%, rgba(255,0,0,0) 10%),
+
+        <footer class="section footer-classic context-dark bg-image" style="background:linear-gradient(135deg, #3e4446 22%, rgba(255,0,0,0) 10%),
             linear-gradient(135deg, #2d3436 90%, #3e4446 1%),
             linear-gradient(45deg, #353b48 95%, rgba(0,0,255,0) 30%);">
             <a id="goTop">
-      <center class="circle" onclick="window.scrollTo(0,-1000000)">
-        {% load static %}
-        <img src="{% static 'image/rocket.png'%}" alt="go Top" onclick="window.scrollTo(0,-1000000)" style="margin-top: 2px;">
-      </center>
-    </a>
-        <div class="container">
-          <div class="row row-30">
-            <div class="col-md-4 col-xl-5">
-              <div class="pr-xl-4">
-                <strong>Contribute to this community</strong><br>
-                <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
-                <a href="https://github.com/RECursion-NITD"><i class="fab fa-github"></i></a><br>
-                <!-- Credits -->
-                <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">Web Team '18-19</a></strong>
-                <!-- Rights-->
-                <p class="rights"><span>©  </span>
-                <span class="copyright-year">
+                <center class="circle" onclick="window.scrollTo(0,-1000000)">
+                    {% load static %}
+                    <img src="{% static 'image/rocket.png'%}" alt="go Top" onclick="window.scrollTo(0,-1000000)" style="margin-top: 2px;">
+                </center>
+            </a>
+            <div class="container">
+                <div class="row row-30">
+                    <div class="col-md-4 col-xl-5">
+                        <div class="pr-xl-4">
+                            <strong>Contribute to this community</strong><br>
+                            <a href="https://www.facebook.com/recursion.nit/"><i class="fab fa-facebook-f"></i></a>&nbsp;
+                            <a href="https://github.com/RECursion-NITD"><i class="fab fa-github"></i></a><br>
+                            <!-- Credits -->
+                            <strong>Developed & designed with <i class="fas fa-heart" style="color: red"></i> by <a href="{% url 'forum:webd_team' %}">Web Team '18-19</a></strong>
+                            <!-- Rights-->
+                            <p class="rights"><span>©  </span>
+                                <span class="copyright-year">
                     <script>document.write(new Date().getFullYear())</script>  
                 </span><span>RECursion</span><span>. </span><span>All Rights Reserved.</span></p>
-              </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <h3>Contacts</h3>
+                        <dl class="contact-list">
+                            <dt>Address:</dt>
+                            <dd><i class="fas fa-map-marked-alt"></i> NIT Durgapur, Durgapur, W.B.</dd>
+                        </dl>
+                        <dl class="contact-list">
+                            <dt>Email:</dt>
+                            <dd><i class="fas fa-envelope"></i><a href="mailto:recursion.nit@gmail.com">  recursion.nit@gmail.com</a></dd>
+                        </dl>
+                        <dl class="contact-list">
+                            <dt>Phones:</dt>
+                            <dd><i class="fas fa-phone-square"></i><a href="tel:+918436053080">  Raghav Grover: +918436053080 </a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4 col-xl-3">
+                        <h3 class="ml-0">Links</h3>
+                        <ul class="nav-list ml-1">
+                            <li><a href="{% url 'forum:list_questions' %}">AskREC</a></li>
+                            <li><a href="{% url 'events:calender' %}">Events</a></li>
+                            <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
+                            <li><a href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
+                            <li><a href="{% url 'team:team_page'%}">Team</a></li>
+                            <li><a href="{% url 'forum:webd_team'%}">WebD Team</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-              <h3>Contacts</h3>
-              <dl class="contact-list">
-                <dt>Address:</dt>
-                <dd><i class="fas fa-map-marked-alt"></i>  NIT Durgapur, Durgapur, W.B.</dd>
-              </dl>
-              <dl class="contact-list">
-                <dt>Email:</dt>
-                <dd><i class="fas fa-envelope"></i><a href="mailto:recursion.nit@gmail.com">  recursion.nit@gmail.com</a></dd>
-              </dl>
-              <dl class="contact-list">
-                <dt>Phones:</dt>
-                <dd><i class="fas fa-phone-square"></i><a href="tel:+918436053080">  Raghav Grover: +918436053080 </a>
-                </dd>
-              </dl>
-            </div>
-            <div class="col-md-4 col-xl-3">
-              <h3 class="ml-0">Links</h3>
-              <ul class="nav-list ml-1">
-                <li><a href="{% url 'forum:list_questions' %}">AskREC</a></li>
-                <li><a href="{% url 'events:calender' %}">Events</a></li>
-                <li><a href="{% url 'forum:getting_started' %}">Get Started</a></li>
-                <li><a href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
-                <li><a href="{% url 'team:team_page'%}">Team</a></li>
-                <li><a href="{% url 'forum:webd_team'%}">WebD Team</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
-      <script src="{% static 'js/loader.js' %}"></script>
-</body>
+        </footer>
+        <script src="{% static 'js/loader.js' %}"></script>
+    </body>
+
 </html>
