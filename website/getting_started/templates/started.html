@@ -1,0 +1,73 @@
+{% extends 'base.html' %} {% block getStart_active %}active{% endblock %} {% block content %}
+
+<body>
+
+    <div class="container" style="margin-top: 2%">
+        <a href="{% url 'home' %}" class="text-muted small">
+            < Back to Home</a>
+                <br><br>
+                <h1>How To Get Started</h1>
+                <div class="jumbotron shadow-sm p-3 mb-5 bg-white rounded">
+                    <blockquote class="blockquote text-center">"The secret of getting ahead is getting started"<br></blockquote>
+                    <p>Competitive Programming is an interesting activity which mixes problem-solving with programming. It is not only enjoyable but also very demanded in placements. Competitive programming will make you very good at writing efficient programs
+                        quickly. If you get really serious about competitive programming, it will make you an expert in data structures and algorithms.</p>
+                    <hr>
+                    <h2>So how to get started?</h2><br>
+                    <h3>Learn a programming language</h3>
+                    <p>Any programming language will do. But most problems are set with C/C++ and Java programmers in mind, so knowing any one of them will be really helpful. You don't need to know really advanced concepts, like classes or generics/templates.
+                        You should just know if/else, loops, arrays, functions and have some familiarity with the standard library, like math functions, string/array operations and input/output. If you know only C, you can easily start. But at some point
+                        in time (especially when you reach advanced stages), you'll need features which most languages have but C does not. Learning C++ is very easy if you know C. I'll suggest that you start out with C and learn C++ in parallel with
+                        competitive programming. Even if you are not confident of your skills in a programming language, you can (and should) still start. Competitive programming is also a good way to practice a new language you have learned.</p><br>
+
+                    <h2>Making the first step</h2>
+                    <p>You'll find problems on many websites. Most websites will give you a specification and ask you to write a program implementing that. You will then have to submit your code. Your program will be automatically compiled and run and you'll
+                        be told whether it ran correctly or not. Such websites are known as online judges. You will find many online judges on the internet. Here is a small list of the most popular ones:</p>
+
+                    <ul style="list-style-position: inside;">
+                        <li> <em><img src="../media/images/icons/hackerearth.png" style="width:23px;height:23px;"><a href="https://www.hackerearth.com/" target="_blank"> HackerEarth</a></em></li>
+                        <li> <em><img src="../media/images/icons/hackerrank.jpg" style="width:28px;height:28px;"><a href="https://www.hackerrank.com/" target="_blank"> HackerRank</a></em></li>
+                        <li> <em><img src="../media/images/icons/codechef.jpeg" style="width:28px;height:28px;"><a href="https://www.codechef.com/" target="_blank"> CodeChef</a></em></li>
+                        <li> <em><img src="../media/images/icons/spoj.jpeg" style="width:24px;height:24px;"><a href="http://www.spoj.com/" target="_blank" > SPOJ</a></em></li>
+                        <li> <em><img src="../media/images/icons/codeforces.png" style="width:28px;height:28px;"><a href="http://codeforces.com/" target="_blank"> Codeforces</a></em></li>
+                        <li> <em><img src="../media/images/icons/topcoder.png" style="width:28px;height:28px;"><a href="https://www.topcoder.com/" target="_blank">TopCoder</a></em></li>
+                    </ul>
+
+                    <p>You should stick to just one (or maybe two) online judges when you start. Most online judges have problems categorized by difficulty levels. For each difficulty level, easier problems generally have more submissions. So you can sort
+                        problems based on the number of submissions to find the easiest ones. For beginners, I recommend Codechef. If you have never before solved a problem on an online judge, you can begin by solving the easiest problem on Codechef -
+                        Life, the Universe, and Everything.</p><br>
+
+                    <h2>Practice</h2>
+                    <p>Remember that it is very important to practice. Try to solve at least one or two questions every day. It is helpful if you stay in touch with people who do competitive programming regularly. This will keep you motivated. Often while
+                        practising, you will not be able to solve some problems. Do not give up easily! Keep trying! But sometimes even after trying for hours, we are not able to solve it. In those cases, it is advisable to look at the editorials. Editorials
+                        are step-by-step explanations on how to solve a problem. Often you'll find new innovative ways of solving problems on reading them. So sometimes you should read editorials even if you have been able to solve a problem. Sometimes
+                        reading editorials is not enough to understand how to solve a problem. This is usually the case when you know how to solve it but you are not able to express your ideas as code easily. When that happens, you should try looking
+                        at others' code. Some online judges make other people's code public (like Codechef) while some don't (like SPOJ).</p><br>
+
+                    <h2>Contests</h2>
+                    <p>Once you solve 15 to 20 problems, you should occasionally take part in programming contests. Many websites host contests regularly.Codechef has 3 monthly contests - Long challenge, Cookoff and LunchTime. Long Challenge has 10 questions
+                        to be solved in 10 days. You should try to solve as many questions as you can (without taking hints from others). Cookoff has 5 questions to be solved in 2.5 hours. Regularly taking part in Cookoff and trying to perform better
+                        in it will increase your speed. You should not be disheartened if you are able to solve only one or two questions. This is natural when starting out. As you get better, you'll be able to solve more and more. If you are not able
+                        to solve any question, you should contact a senior and he/she will help you. When you have solved more than 50 to 75 problems, you should also start solving problems on Codeforces and taking part in Codeforces' contests. This is
+                        one of the sites where the most serious programmers of the world can be found.</p><br>
+
+                    <h2>Compilers</h2>
+                    <p>If you have Linux or Mac, I would advise you to use:gcc for C g++ for C++ javac for Java (both Oracle and OpenJDK are good). If you are on windows, you might want to use an IDE. Code:: Blocks is good for C and C++. Some online compilers
+                        are also available. The most well known is Ideone. Codechef has an online compiler called code-compile-run.</p><br>
+
+                    <h2>Standard library</h2>
+                    <p>You can often benefit a lot from the rich standard libraries offered by most programming languages. After gaining sufficient experience with a programming language, it is advisable to sift through its software libraries to see what
+                        all does it offer. For C/C++, these are good reference sites: cppreference.com, cplusplus.com's reference. For Java/Python(3.+) users, Python library reference, Java library reference. Some people realize very late that C++ offers
+                        a sort function. This is one of the most used functions in competitive programming. And of course, Google is always there. For any other query, StackOverflow may be able to help you out.</p><br>
+
+                    <h4><a href="https://github.com/RECursion-NITD/Resources/wiki/Advice" target="_blank"> Expert Advice</a></h4>
+                    <h4> <a href="https://www.hackerrank.com/domains/tutorials/30-days-of-code/page:1" target="_blank"> 30-day challenge for newcomers on HackerRank </a><br></h4>
+                    <h4><a href="https://www.codechef.com/getting-started" target="_blank"> How to get started on Codechef</a></h4>
+
+                    <h2>Topics</h2>
+                    <hr> {% include 'level.html' %}
+
+                </div>
+    </div>
+
+</body>
+{% endblock %}
