@@ -528,7 +528,7 @@ def votings(request, id):
                count=Likes.objects.filter(reply=reply).count()
            return HttpResponse(json.dumps({
                         'count':count,
-                        'Success':'disliked'
+                        'Success':'downvoted'
                             }))
        else:
            like = Likes.objects.create(reply=reply, user=user)
@@ -537,7 +537,7 @@ def votings(request, id):
                count=Likes.objects.filter(reply=reply).count()
            return HttpResponse(json.dumps({
                         'count':count,
-                        'Success':'liked'
+                        'Success':'upvoted'
                             }))
 
     
