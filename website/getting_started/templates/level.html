@@ -1,0 +1,113 @@
+{% block contents %} {% load staticfiles %}
+<!-- CSS IMPORTS  -->
+<link rel="stylesheet" href="{% static 'css/get_started.css' %}"> {% load static %}
+
+
+
+<div id="accordion">
+    <!-- LEVEL SECTION -->
+    {% for level in levels %}
+    <div class="card">
+        <div class="card-header" id="heading{{level.Number}}">
+            <h5 class="mb-0">
+                <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapse{{level.Number}}" aria-expanded="false" aria-controls="collapse{{level.Number}}" style="text-decoration: none;">
+                        <h3>LEVEL {{ level.Number }} : {{ level.Level_title }}</h3>
+                        </button>
+            </h5>
+        </div>
+
+        <div id="collapse{{level.Number}}" class="collapse" aria-labelledby="heading{{level.Number}}" data-parent="#accordion">
+
+            <div id="accordion2">
+                <!-- TOPIC SECTION -->
+                {% for topic in topics %} {% if topic.level.Number == level.Number %}
+                <div class="card" style="margin-bottom: 0px">
+                    <div class="card-header" id="headOne{{topic.id}}" style="margin-bottom: 0px">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collOne{{topic.id}}" aria-expanded="false" aria-controls="collOne{{topic.id}}" style="text-decoration: none;">
+                                            <h5>✔️ {{topic.Topic_title}}</h5>
+                                            </button>
+                        </h5>
+                    </div>
+                    <div id="collOne{{topic.id}}" class="collapse" aria-labelledby="headOne{{topic.id}}" data-parent="#accordion2">
+                        <div class="card-body">
+
+                            <ul style="list-style-position: inside;">
+                                <!-- SUB_TOPIC SECTION -->
+                                {% for subtopic in subtopics %} {% if subtopic.topic.Topic_title == topic.Topic_title %}
+                                <div class="jumbotron shadow p-3 mb-5 bg-white rounded">
+                                    <h5 style="font-family: sans-sherif"><b>{{ subtopic.sub_topic }}</b></h5>
+
+                                    <!-- NOTES SECTION -->
+                                    {% for note in notes %} {% if note.subtopic.sub_topic == subtopic.sub_topic %} {% comment %} <b><h6>{{ note.Notes_topic }}</h6></b> {% endcomment %} {% if note.Description and note.Image.url %}
+                                    <div class="row">
+                                        <div class="container col-lg-6">
+                                            <p>{{ note.Description }}</p>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <center> <img src="{{ note.Image.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                                        </div>
+                                    </div>
+
+                                    {% else %} {% if note.Description %}
+                                    <p>{{ note.Description }}</p>
+                                    {% endif %} {% if note.Image %}
+                                    <center><img src="{{ note.Image.url }}" style="height: auto; max-width: 450px; width:100%"></center>
+                                    <br> {% endif %} {% endif %} {% endif %} {% endfor %}
+                                    <!-- END OF NOTES SECTION -->
+
+                                    <!-- FILES SECTION -->
+                                    {% for file in files %} {% if file.subtopic.sub_topic == subtopic.sub_topic %}
+                                    <h5 style="font-family: sans-sherif"><b>{{ file.heading }}</b></h5>
+                                    {% if file.upload %}
+                                    <a href="{{ file.upload.url }}">
+                                        <h6>{{ file.upload }}</h6>
+                                    </a>
+                                    {% endif %}
+                                    <!-- LINK SECTION -->
+                                    {% for link in links %}
+                                    <ul>
+                                        {% if link.file.heading == file.heading %}
+                                        <a href="{{ link.url_link1 }}">
+                                            <h6>{{ link.link1 }}</h6>
+                                        </a>
+                                        {% endif %} {% if link.file.heading == file.heading %}
+                                        <a href="{{ link.url_link2 }}">
+                                            <h6>{{ link.link2 }}</h6>
+                                        </a>
+                                        {% endif %} {% if link.file.heading == file.heading %}
+                                        <a href="{{ link.url_link3 }}">
+                                            <h6>{{ link.link3 }}</h6>
+                                        </a>
+                                        {% endif %} {% if link.file.heading == file.heading %}
+                                        <a href="{{ link.url_link4 }}">
+                                            <h6>{{ link.link4 }}</h6>
+                                        </a>
+                                        {% endif %}
+                                    </ul>
+                                    {% endfor %}
+                                    <!-- END OF LINK SECTION -->
+
+
+                                    {% if file.image %}
+                                    <center><img src="{{ file.image.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                                    {% endif %} {% endif %} {% endfor %}
+                                    <!-- END OF FILES SECTION -->
+
+                                </div>
+                                {% endif %} {% endfor %}
+                                <!-- END OF SUB_TOPIC SECTION -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %} {% endfor %}
+                <!-- END OF TOPIC SECTION -->
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <!-- END OF LEVEL SECTION -->
+</div>
+
+{% endblock contents %}
