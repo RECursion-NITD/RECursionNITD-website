@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+An existing Reply to an existing Blog has been Commented upon in Blogs:
+
+{{ post.title }}
+http://{{ domain }}{% url 'blog:detail_posts' post.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}
