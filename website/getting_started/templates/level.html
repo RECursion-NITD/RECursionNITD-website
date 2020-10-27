@@ -18,7 +18,7 @@
 
         <div id="collapse{{level.Number}}" class="collapse" aria-labelledby="heading{{level.Number}}" data-parent="#accordion">
 
-            <div id="accordion2">
+            <div id="accordion{{level.Number}}">
                 <!-- TOPIC SECTION -->
                 {% for topic in topics %} {% if topic.level.Number == level.Number %}
                 <div class="card" style="margin-bottom: 0px">
@@ -29,7 +29,7 @@
                                             </button>
                         </h5>
                     </div>
-                    <div id="collOne{{topic.id}}" class="collapse" aria-labelledby="headOne{{topic.id}}" data-parent="#accordion2">
+                    <div id="collOne{{topic.id}}" class="collapse" aria-labelledby="headOne{{topic.id}}" data-parent="#accordion{{level.Number}}">
                         <div class="card-body">
 
                             <ul style="list-style-position: inside;">
