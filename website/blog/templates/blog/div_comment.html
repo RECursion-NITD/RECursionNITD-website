@@ -1,0 +1,94 @@
+{% for comment in comment %} {% if comment.post == post %}
+                    <div class="container offset-1 mr-0" style="width: 90%;">
+                        <hr id="qDivide">
+                        <div class="row">
+                            <div class="comments col-lg-12 col-md-9 m-0" id="comments">
+                                <!-- Show Comment -->
+                                <div class="comment row">
+                                    {% for p in profile %} {% if p.user == comment.user %} {% if p.image %}
+                                    <div class="comment-avatar col-md-0 col-sm-0">
+                                        <a href="">
+                                            <img class="mt-3 rounded-circle" src="{{ p.image.url }}" alt="img" style="width: 39px;" alt="avatar">
+                                        </a>
+                                    </div>
+
+                                    {% endif %} {% endif %} {% endfor %}
+
+                                    <div class="comment-content col-md-12 col-sm-12 ">
+                                        <div class="comment-body">
+                                            <p class="m-0" style="font-size: 90%;">{{comment.body|safe}} {% if request.user == comment.user or user_permission == '1' or user_permission == '2' %}
+                                                <div>
+                                                    <div id='com_id_{{comment.id}}' class="u_com" com-id="{{comment.id}}"> <a href="{% url 'blog:update_comment' comment.id %}" class="small" style="float:right;"><i class="far fa-edit"></i> Update this Comment</a></div>
+                                                    <div id='u_com_form{{comment.id}}' com-id="{{comment.id}}"> </div>
+                                                </div>
+                                                {% endif %}
+                                                <h6 class="text-muted small comment-meta mb-0" style="display: inline-block;"><a href="{% url 'user_profile:view_profile' comment.user.id  %}">{{ comment.user }}</a> last updated on {{comment.updated_at}}</h6>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Show Comment Ends-->
+                            </div>
+                        </div>
+                    </div>
+                    {%endif%} {% endfor %}
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function(){
+                    //ajax call update comment
+                             $('.u_com').click(function(e){
+                                e.preventDefault()
+                                var id= $(this).attr('com-id')
+                                console.log(id)
+                                $(this).hide()//hiding update link
+                                $('#com_body_'+id).hide()
+                               
+                                
+                            $.ajax({
+                            method: "GET",
+                            url: "/blog/editcomment/"+id,
+                            success: function (data)
+                            {
+                               var form = "#u_com_form"+id
+                               console.log(form)
+                               $(form).html(data).show()
+                               
+                            },
+                            error:handleFormError,
+                         })
+                        })
+                    
+                    
+                      
+                            //ajax call update answer
+                    
+                            $('.u_ans').click(function(e){
+                                e.preventDefault()
+                                var id= $(this).attr('ans-id')
+                               console.log(id)
+                               $(this).hide()//hiding update link
+                                $('#ans_body_'+id).hide()
+                                
+                            $.ajax({
+                            method: "GET",
+                            url: "/blog/reply/"+id,
+                            success: function (data)
+                            {
+                               var id_name = "#u_ans_form"+id
+                               console.log(id_name)
+                               $(id_name).html(data).show()
+                            },
+                            error:handleFormError,
+                         })
+                      
+                        })
+                        function handleFormError(jqXHR, textStatus, errorThrown){
+                                console.log(jqXHR)
+                                console.log(textStatus)
+                                console.log(errorThrown)
+                            }
+                    
+                    
+                          })
+                          </script>
