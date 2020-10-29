@@ -179,6 +179,7 @@ def list_blogs(request):
 def detail_blogs(request, id):
     comform = Commentform(request.POST or None)
     repform = Replyform(request.POST or None)
+
     try:
         posts =get_object_or_404( Posts,pk=id)
     except:
