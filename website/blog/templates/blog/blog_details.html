@@ -44,7 +44,9 @@
                         <!--TAGS END-->
                         <p class="small card-text">
                             <i>
+
                                 Posted by:
+                              
                                 <a href="{% url 'user_profile:view_profile' posts.user_id.id  %}">{{ posts.user_id }}</a>
                                 on {{posts.created_at}}
                                 <a style="float: right;">Last updated on {{posts.updated_at}}</a>
@@ -107,16 +109,20 @@
                 <!-- ADD COMMENT BUTTON -->
                 {% if request.user.is_authenticated %}
                     {% if not rep.id %}
+
                         <button type="button" id='add_ans_but' class="btn btn-sm btn-outline-primary">Add Comment </button>
                     {% else %}
                         <span id='ans_id_{{rep.id}}' class="u_ans" ans-id="{{rep.id}}">
                                 <a href="{% url 'blog:update_reply' rep.id %}">
                                     <button type="button" class="btn btn-sm btn-outline-primary" style="display: inline-block;">Update Your Comment</button>
+
                                 </a>
                             </span>
                     {% endif %}
                 {% else %}
+
                     <a href="{% url 'login' %}"><button type="button" class="btn btn-sm btn-outline-warning">Login to Comment </button></a>
+
                       <!-- Add Answer button block ends -->
                 {% endif %}
 
@@ -130,14 +136,17 @@
                     {% if not rep.id %}
 
                     <form class='my-ans-form' method="POST" data-url="{% url 'blog:add_reply' posts.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
+
                         <h5 class="text-muted" style="text-align:center;">Enter your comment details below:</h5>
                         <br>
                         <table>
                             <!--    {{ ansform }} -->
                             <input type="hidden" name="ajax_call" value="True">
                         </table>
+
                         <br> {{ repform.description.label_tag }} {% render_field repform.description class="form-control" placeholder="Enter Comment Details" %}
                         <center><button type="submit" class="save btn btn-outline-primary">COMMENT</button></center>
+
                     </form>
                     <div id='ans'></div>
                     <div id='update_ans'>
