@@ -171,7 +171,7 @@ def list_blogs(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     profiles=Profile.objects.all()
-    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent,'like':like ,'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
+    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent,'like':like,'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
     if request.is_ajax():
         return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
@@ -192,10 +192,6 @@ def detail_blogs(request, id):
     profile=Profile.objects.all()
     if User.objects.filter(username=request.user).exists():
         rep = Reply.objects.filter(user_id=request.user).filter(post_id=posts)
-        if rep.count() > 0:
-            rep = rep[0]
-        else:
-            rep = None
     else:
         rep=None
     if request.user.is_authenticated:
@@ -294,8 +290,6 @@ def add_reply(request, id):
         return HttpResponse("id does not exist")
 
     rep=Reply.objects.filter(user_id=request.user).filter(post_id=post)
-    if rep.count()>0:
-        return HttpResponse("you have already answered,kindly update it instead")
     form = Replyform(request.POST or None)
     if request.POST.get('ajax_call') == "True" :
         if form.is_valid():

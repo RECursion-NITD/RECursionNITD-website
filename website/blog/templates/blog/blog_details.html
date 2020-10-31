@@ -108,17 +108,7 @@
             <div class="container" style="margin-top: 10px">
                 <!-- ADD COMMENT BUTTON -->
                 {% if request.user.is_authenticated %}
-                    {% if not rep.id %}
-
                         <button type="button" id='add_ans_but' class="btn btn-sm btn-outline-primary">Add Comment </button>
-                    {% else %}
-                        <span id='ans_id_{{rep.id}}' class="u_ans" ans-id="{{rep.id}}">
-                                <a href="{% url 'blog:update_reply' rep.id %}">
-                                    <button type="button" class="btn btn-sm btn-outline-primary" style="display: inline-block;">Update Your Comment</button>
-
-                                </a>
-                            </span>
-                    {% endif %}
                 {% else %}
 
                     <a href="{% url 'login' %}"><button type="button" class="btn btn-sm btn-outline-warning">Login to Comment </button></a>
