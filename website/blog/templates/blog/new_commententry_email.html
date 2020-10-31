@@ -1,7 +1,7 @@
 {% autoescape off %}
 Hi {{ user.username }},
 
-An existing Blog has been Replied in Blogs:
+An existing Blog has been Commented in Blogs:
 
 {{ post.title }}
 http://{{ domain }}{% url 'blog:detail_posts' post.id %}

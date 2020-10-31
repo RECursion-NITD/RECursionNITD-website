@@ -44,7 +44,9 @@
                         <!--TAGS END-->
                         <p class="small card-text">
                             <i>
-                                Asked by:
+
+                                Posted by:
+                              
                                 <a href="{% url 'user_profile:view_profile' posts.user_id.id  %}">{{ posts.user_id }}</a>
                                 on {{posts.created_at}}
                                 <a style="float: right;">Last updated on {{posts.updated_at}}</a>
@@ -106,9 +108,11 @@
             <div class="container" style="margin-top: 10px">
                 <!-- ADD COMMENT BUTTON -->
                 {% if request.user.is_authenticated %}
-                        <button type="button" id='add_ans_but' class="btn btn-sm btn-outline-primary">Add Reply </button>
+                        <button type="button" id='add_ans_but' class="btn btn-sm btn-outline-primary">Add Comment </button>
                 {% else %}
-                    <a href="{% url 'login' %}"><button type="button" class="btn btn-sm btn-outline-warning">Login to Reply/Comment </button></a>
+
+                    <a href="{% url 'login' %}"><button type="button" class="btn btn-sm btn-outline-warning">Login to Comment </button></a>
+
                       <!-- Add Answer button block ends -->
                 {% endif %}
 
@@ -122,14 +126,17 @@
                     {% if not rep.id %}
 
                     <form class='my-ans-form' method="POST" data-url="{% url 'blog:add_reply' posts.id %}" style="padding: 25px; margin: 0px;"> {% csrf_token %}
-                        <h5 class="text-muted" style="text-align:center;">Enter your reply details below:</h5>
+
+                        <h5 class="text-muted" style="text-align:center;">Enter your comment details below:</h5>
                         <br>
                         <table>
                             <!--    {{ ansform }} -->
                             <input type="hidden" name="ajax_call" value="True">
                         </table>
-                        <br> {{ repform.description.label_tag }} {% render_field repform.description class="form-control" placeholder="Enter Reply Details" %}
-                        <center><button type="submit" class="save btn btn-outline-primary">REPLY</button></center>
+
+                        <br> {{ repform.description.label_tag }} {% render_field repform.description class="form-control" placeholder="Enter Comment Details" %}
+                        <center><button type="submit" class="save btn btn-outline-primary">COMMENT</button></center>
+
                     </form>
                     <div id='ans'></div>
                     <div id='update_ans'>
@@ -181,9 +188,9 @@
 <div id="div_answers">
      <!-- ANSWERS PORTION STARTS -->
      {%if reply|length < 2%}
-    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Reply</h3></div>
+    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Comment</h3></div>
     {%else%}
-    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Replies</h3></div>
+    <div class="card-header answerBox" style="border:1px solid #dddddd;border-left:5px solid #cccccc;"><h3>{{ reply|length }} Comments</h3></div>
     {%endif%}
     {% for reply in reply %} {% if reply.post_id == posts %}
     <div class="container answerBorder card">
@@ -219,7 +226,7 @@
                             {% if request.user == reply.user_id or user_permission == '2' or user_permission == '1'%}
                                 <span id='ans_id_{{reply.id}}' class="u_ans" ans-id="{{reply.id}}">
                                     <a href="{% url 'blog:update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
-                                         Update this reply <i class="far fa-edit"></i>
+                                         Update this comment <i class="far fa-edit"></i>
                                     </a>
                                 </span>
                                 {% endif %}
@@ -304,7 +311,7 @@
 <strong>Bad:</strong> Python vs R<br>
 <strong>Good:</strong> What are the major differences between Python and R for data science?<br>
 <br>
-Refer to <a href = "https://blogging.com/blog/how-to-write-good-blog-post/">Blogging.com guide</a> on asking a good blog.
+Refer to <a href = "https://blogging.com/blog/how-to-write-good-blog-post/" target="_blank">Blogging.com guide</a> on asking a good blog.
                 </p>
 
             </div>

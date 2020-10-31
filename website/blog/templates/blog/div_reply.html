@@ -17,9 +17,9 @@
 }
     </style>
     {%if replys|length < 2%}
-   <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Reply</h3></div>
+   <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Comment</h3></div>
     {% else %}
-    <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Replies</h3></div>  
+    <div class="card-header" style="border:1px solid #dddddd;"><h3>{{ replys|length }} Comments</h3></div>  
     {%endif%}
    {% for reply in replys %} {% if reply.post_id == post %}
    <div class="container answerBorder card">
@@ -46,16 +46,16 @@
                                    <span>
                                            {% if request.user != reply.user_id %}
                                            {% if  reply.id in voted %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Downvote<i class="far fa-thumbs-down"></i></a>&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="downvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Dislike <i class="far fa-thumbs-down"></i></a>&nbsp;
                                            {% else %}
-                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Upvote <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
+                                           <a  class="voting_box" ans-id="{{reply.id}}" id="upvote_link{{reply.id}}" href="{% url 'blog:votings' reply.id %}" class="voteReply text-right small p-1">Like <i class="far fa-thumbs-up"></i></a>&nbsp;&nbsp;
                                            {% endif %}
                                            {% endif %}
                                    </span>
                            {% if request.user == reply.user_id or user_permission == '2' or user_permission == '1'%}
                                <span id='ans_id_{{reply.id}}' class="u_ans" ans-id="{{reply.id}}">
                                    <a href="{% url 'blog:update_reply' reply.id %}" class="voteReply" style="float:right;font-size:90%;">
-                                        Update this reply <i class="far fa-edit"></i>
+                                        Update this comment <i class="far fa-edit"></i>
                                    </a>
                                </span>
                                {% endif %}
