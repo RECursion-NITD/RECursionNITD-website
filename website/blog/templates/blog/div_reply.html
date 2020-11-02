@@ -40,7 +40,7 @@
                            <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{ reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
                            <span style="float:right;margin-bottom: 0px;">
                                    <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
-                                           <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
+                                           <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.likes_set.count }} <i class="fas fa-thumbs-up"></i></a> &nbsp;&nbsp;
                                            <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Comment <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                    </span>
                                    <span>
