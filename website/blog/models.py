@@ -14,6 +14,10 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def get_cname(self):
+        class_name = "Post"
+        return class_name
 
 class Reply(models.Model):
     description = models.TextField(blank=True)
@@ -24,6 +28,10 @@ class Reply(models.Model):
 
     def __str__(self):
         return self.description
+    
+    def get_cname(self):
+        class_name = "Reply"
+        return class_name
 
 class Comment(models.Model):
     body = models.TextField()
@@ -36,6 +44,10 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.body
+    
+    def get_cname(self):
+        class_name = "C"
+        return class_name
 
        
 class Comment_Reply(models.Model):
@@ -47,6 +59,10 @@ class Comment_Reply(models.Model):
 
     def __str__(self):
         return self.body
+    
+    def get_cname(self):
+        class_name = "Comment_Reply"
+        return class_name
 
 class Tags(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
@@ -58,6 +74,7 @@ class Tags(models.Model):
             return "None"
         else:
             return self.name
+
 
 
 

@@ -55,31 +55,51 @@
                   Recent Activity
                 </div>
              <div class="card-body">
-             <ul>
-                 {% for act in activity %}
-                    {% if act.get_cname == "Question" %}
-                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                            <h5>Questions Asked</h5>
-                            <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
-                    </div>
-                    {% elif act.get_cname == "Answer" %}
-                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                            <h5>Questions Answered</h5>
-                            <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
-                    </div>
-                    {% elif act.get_cname == "Comment" %}
-                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                            <h5>Comments On Questions</h5>
-                            <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
-                    </div>
-                    {% else %}
-                    <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                            <h5>Comments On Answers</h5>
-                            <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Answer: {{ act.answer.question_id.title }}</a>
-                    </div>
-                    {% endif %}<br>
-                 {% endfor %}
+              <ul>
+                {% for act in activity %}
+                {% if act.get_cname == "Question" %}
+                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                        <h5>Questions Asked</h5>
+                        <a href="{% url 'forum:detail_questions' act.id  %}">Asked this Question: {{ act.title }}</a><br>
+                </div>
+                {% elif act.get_cname == "Answer" %}
+                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                        <h5>Questions Answered</h5>
+                        <a href="{% url 'forum:detail_questions' act.question_id.id  %}">Answered this Question: {{ act.question_id.title }}</a><br>
+                </div>
+                {% elif act.get_cname == "Comment" %}
+                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                        <h5>Comments On Questions</h5>
+                        <a href="{% url 'forum:detail_questions' act.question.id  %}">Commented on this Question: {{ act.question.title }}</a><br>
+                </div>
+                   {% elif act.get_cname == "Comment_A" %}
+                   <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                           <h5>Comments On Answers</h5>
+                           <a href="{% url 'forum:detail_questions' act.answer.question_id.id  %}">Commented on this Answer: {{ act.answer.question_id.title }}</a>
+                   </div>
+                   {%endif%}
+               {%endfor%}
              </ul>
+             <ul>
+               {% for act in activity %}
+               {% if act.get_cname == "Post" %}
+               <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                       <h5>Blogs Posted</h5>
+                       <a href="{% url 'blog:detail_blogs' act.id %}">Posted this Blog: {{ act.title }}</a><br>
+               </div>
+               {% elif act.get_cname == "Reply" %}
+               <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                       <h5>Blogs Commented</h5>
+                       <a href="{% url 'blog:detail_blogs' act.post_id.id  %}">Commented on this Blog: {{ act.post_id.title }}</a><br>
+               </div>
+               {% elif act.get_cname == "Comment_Reply" %}
+               <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
+                       <h5>Replies on Comments</h5>
+                       <a href="{% url 'blog:detail_blogs' act.reply.post_id.id  %}">Replied to this Comment: {{ act.reply.post_id.title }}</a>
+               </div>
+               {% endif %}<br>
+                {% endfor %}
+            </ul>
             </div>
             </div>
             </div>
