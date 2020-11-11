@@ -181,6 +181,7 @@ def detail_blogs(request, id):
     repform = Replyform(request.POST or None)
 
     try:
+        reply_id = get_object_or_404( Reply,pk=id)
         posts =get_object_or_404( Posts,pk=id)
     except:
         return HttpResponse("id does not exist")
@@ -201,13 +202,14 @@ def detail_blogs(request, id):
     else:
         user_permission = '10'
     flag=0
+    vote_count=Likes.objects.filter(reply=reply_id,value=True).count()- Likes.objects.filter(reply=reply_id,value=False).count()
     id_list = []
     if User.objects.filter(username=request.user).exists(): 
         votes = Likes.objects.filter(user=user).values("reply_id")
         id_list = [id['reply_id'] for id in votes]  # voted answers id
 
 
-    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag,'voted':id_list,}
+    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'vote_count':vote_count,'flag':flag,'voted':id_list,}
     return render(request, 'blog/blog_details.html', args) 
 
 @login_required
@@ -505,8 +507,9 @@ def update_comment(request, id):
         form=Commentform(instance=comment)
     return render(request, 'blog/comment.html', {'upform': form, 'comment': comment})
 
+
 @login_required
-def votings(request, id):
+def like_votings(request, id):
     try:
         reply =get_object_or_404( Reply,pk=id)
         post=reply.post_id
@@ -516,26 +519,75 @@ def votings(request, id):
     count=0
     if user != reply.user_id:
        if Likes.objects.filter(reply=reply, user=user).exists():
-           like= Likes.objects.get(reply=reply, user=user)
-           like.delete()
-           if Likes.objects.filter(reply=reply).exists():
-               count=Likes.objects.filter(reply=reply).count()
-           return HttpResponse(json.dumps({
-                        'count':count,
-                        'Success':'downvoted'
-                            }))
+            like= Likes.objects.get(reply=reply, user=user)
+            if like.value == True:
+                like.delete()
+                count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
+                print("upvote_deleted")
+                return HttpResponse(json.dumps({
+                            'count':count,
+                            'Success':'upvote_deleted'
+                                }))
+            else:
+                like.delete()
+                l = Likes.objects.create(reply=reply, user=user,value=True)
+                l.save()
+                count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
+                print("upvoted")
+                return HttpResponse(json.dumps({
+                            'count':count,
+                            'Success':'upvoted'
+                                }))
        else:
-           like = Likes.objects.create(reply=reply, user=user)
-           like.save()
-           if Likes.objects.filter(reply=reply).exists():
-               count=Likes.objects.filter(reply=reply).count()
-           return HttpResponse(json.dumps({
-                        'count':count,
-                        'Success':'upvoted'
-                            }))
+            like = Likes.objects.create(reply=reply, user=user, value=True)
+            like.save()
+            count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
+            print("upvote_created")
+            return HttpResponse(json.dumps({
+                    'count':count,
+                    'Success':'upvote_created'
+                         }))
 
-    
 
+@login_required
+def dislike_votings(request, id):
+    try:
+        reply =get_object_or_404( Reply,pk=id)
+        post=reply.post_id
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    count=0 
+    if user != reply.user_id:
+       if Likes.objects.filter(reply=reply, user=user).exists():
+            like= Likes.objects.get(reply=reply, user=user)
+            if like.value == False:
+                like.delete()
+                count=Likes.objects.filter(reply=reply,value=True).count()- Likes.objects.filter(reply=reply,value=False).count()
+                print("downvote_deleted")
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'downvote_deleted'
+                                    }))
+            else:
+                like.delete()
+                l=Likes.objects.create(reply=reply, user=user, value=False)
+                l.save()
+                count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
+                print("downvoted")
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'downvoted'
+                                    }))
+       else:
+            like = Likes.objects.create(reply=reply, user=user,value=False)
+            like.save()
+            count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
+            print("downvote_created")
+            return HttpResponse(json.dumps({
+                    'count':count,
+                    'Success':'downvote_created'
+                         }))
 
 
 

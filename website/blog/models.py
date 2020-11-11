@@ -93,5 +93,7 @@ class Likes(models.Model):
     # TBD
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    value = models.BooleanField(null=True,blank=True)
+
     def __self__(self):
         return self.user
