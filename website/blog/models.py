@@ -97,3 +97,19 @@ class Likes(models.Model):
 
     def __self__(self):
         return self.user
+
+
+class PostLikes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE)
+    # TBD
+    created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    value = models.BooleanField(null=True,blank=True)
+
+    def __self__(self):
+        return self.user
+    
+    def get_count(postid):
+        postcount=PostLikes.objects.filter(post=postid,Value=True).count()-PostLikes.objects.filter(post=postid,value=False).count()
+        return (postcount)

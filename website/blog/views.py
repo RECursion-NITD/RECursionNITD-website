@@ -124,7 +124,6 @@ def add_blog(request):
 
 
 def list_blogs(request):
-    like=Likes.objects.all().count()
     search = SearchForm(request.POST or None)
     if request.method == 'POST':
         if search.is_valid():
@@ -171,7 +170,8 @@ def list_blogs(request):
            tags_recent_record.append(taggings_recent[count].tag)
         count+=1
     profiles=Profile.objects.all()
-    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent,'like':like,'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
+
+    args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent,'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
     if request.is_ajax():
         return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
@@ -181,7 +181,6 @@ def detail_blogs(request, id):
     repform = Replyform(request.POST or None)
 
     try:
-        reply_id = get_object_or_404( Reply,pk=id)
         posts =get_object_or_404( Posts,pk=id)
     except:
         return HttpResponse("id does not exist")
@@ -202,14 +201,14 @@ def detail_blogs(request, id):
     else:
         user_permission = '10'
     flag=0
-    vote_count=Likes.objects.filter(reply=reply_id,value=True).count()- Likes.objects.filter(reply=reply_id,value=False).count()
+    
     id_list = []
     if User.objects.filter(username=request.user).exists(): 
         votes = Likes.objects.filter(user=user).values("reply_id")
         id_list = [id['reply_id'] for id in votes]  # voted answers id
 
 
-    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'vote_count':vote_count,'flag':flag,'voted':id_list,}
+    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag,'voted':id_list,}
     return render(request, 'blog/blog_details.html', args) 
 
 @login_required
@@ -506,6 +505,85 @@ def update_comment(request, id):
         comment.body = h.handle(comment.body)
         form=Commentform(instance=comment)
     return render(request, 'blog/comment.html', {'upform': form, 'comment': comment})
+
+
+@login_required
+def edit_postlike(request, id):
+    try:
+        post =get_object_or_404( Posts,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != post.user_id:
+       if PostLikes.objects.filter(post=post, user=user).exists():
+            postlike = PostLikes.objects.get(post=post, user=user)
+            if postlike.value == True:
+                postlike.delete()
+                print("postlike_deleted")
+                count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'postlike_deleted'
+                                    }))
+            else:
+                print("postlike")
+                postlike.delete()
+                PostLikes.objects.create(post=post,user=user,value=True)
+                postlike.save()
+                count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'postlike'
+                                    }))
+
+       else:
+            postlike=PostLikes.objects.create(post=post,user=user,value=True)
+            postlike.save()
+            print("postlike_created")
+            count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+            return HttpResponse(json.dumps({
+                            'count':count,
+                            'Success':'postlike_created'
+                                }))
+
+@login_required
+def edit_postdislike(request, id):
+    try:
+        post =get_object_or_404( Posts,pk=id)
+    except:
+        return HttpResponse("id does not exist")
+    user = request.user
+    if user != post.user_id:
+        if PostLikes.objects.filter(post=post, user=user).exists():
+            postlike = PostLikes.objects.get(post=post, user=user)
+            if postlike.value == False:
+                postlike.delete()
+                print("postdislike_deleted")
+                count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'postdislike_deleted'
+                                    }))
+            else:
+                postlike.delete()
+                PostLikes.objects.create(post=post,user=user,value=False)
+                postlike.save()
+                print("postdislike")
+                count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+                return HttpResponse(json.dumps({
+                                'count':count,
+                                'Success':'postdislike'
+                                    }))
+
+        else:
+            postlike=PostLikes.objects.create(post=post,user=user,value=False)
+            postlike.save()
+            print("postdislike_created")
+            count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
+            return HttpResponse(json.dumps({
+                            'count':count,
+                            'Success':'postdislike_created'
+                                }))
 
 
 @login_required
