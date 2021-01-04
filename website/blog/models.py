@@ -109,7 +109,3 @@ class PostLikes(models.Model):
 
     def __self__(self):
         return self.user
-    
-    def get_count(postid):
-        postcount=PostLikes.objects.filter(post=postid,Value=True).count()-PostLikes.objects.filter(post=postid,value=False).count()
-        return (postcount)

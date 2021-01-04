@@ -10,7 +10,7 @@
 <div class="container">
     {% csrf_token %}
     <!-- BACK BUTTON -->
-    <small><a href="{% url 'blog:list_blogs' %}" class="text-muted"><strong>< Back to Blogs</strong></a></small>
+    <small><a href="{% url 'blog:list_blogs' %}" class="text-muted">< Back to Blog</a></small>
     <br>
 
     <!-- ROW STARTS -->
@@ -26,13 +26,13 @@
                     {% if request.user != posts.user_id %}
                         {%if posts.id|userpostlike_count:request.user > 0 %}
                         <a post-id="{{posts.id}}" class="postdislike" id="unlikepost_btn" href="{% url 'blog:edit_postdislike' posts.id %}" class="voteReply text-right small p-1" style="float:right;color:grey">Downvote|<i class="far fa-thumbs-down"></i></a>&nbsp;
-                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="float:right;color:green">Upvoted|<i class="far fa-thumbs-up"></i></a>&nbsp;
+                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="padding-right:10px;float:right;color:green">Upvoted|<i class="far fa-thumbs-up"></i></a>&nbsp;
                         {%elif  posts.id|userpostlike_count:request.user < 0 %}
                         <a post-id="{{posts.id}}" class="postdislike" id="unlikepost_btn" href="{% url 'blog:edit_postdislike' posts.id %}" class="voteReply text-right small p-1" style="float:right;color:red">Downvoted|<i class="far fa-thumbs-down"></i></a>&nbsp;
-                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="float:right;color:grey">Upvote|<i class="far fa-thumbs-up"></i></a>&nbsp;
+                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="padding-right:10px;float:right;color:grey">Upvote|<i class="far fa-thumbs-up"></i></a>&nbsp;
                         {%else%}
                         <a post-id="{{posts.id}}" class="postdislike" id="unlikepost_btn" href="{% url 'blog:edit_postdislike' posts.id %}" class="voteReply text-right small p-1" style="float:right;color:grey">Downvote|<i class="far fa-thumbs-down"></i></a>&nbsp;
-                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="float:right;color:grey">Upvote|<i class="far fa-thumbs-up"></i></a>&nbsp;
+                        <a post-id="{{posts.id}}" class="postlike" id="likepost_btn" href="{% url 'blog:edit_postlike' posts.id %}"class="voteReply text-right small p-1" style="padding-right:10px;float:right;color:grey">Upvote|<i class="far fa-thumbs-up"></i></a>&nbsp;
                         {%endif%}
                     {%endif%}
 
@@ -309,11 +309,11 @@
             <div class="card-header">
                 {% if request.user == posts.user_id  or user_permission == '1' or user_permission == '2'%}
                 <a href="{% url 'blog:update_blogs' posts.id  %}">
-                    <button type="button" class="btn btn-sm btn-outline-success">Update this Blog</button>
+                    <button type="button" class="btn btn-sm btn-outline-success">Update this Post</button>
                 </a>
                 {% else %}
                 <a href="{% url 'blog:add_blog'  %}">
-                    <button type="button" class="btn btn-sm btn-outline-success">New Blog</button>
+                    <button type="button" class="btn btn-sm btn-outline-success">New Post</button>
                 </a>
                 {% endif %}
             </div>

@@ -208,7 +208,7 @@ def detail_blogs(request, id):
         id_list = [id['reply_id'] for id in votes]  # voted answers id
 
 
-    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag,'voted':id_list,}
+    args = {'profile':profile,'user_permission':user_permission,'comform':comform,'repform':repform,'posts': posts, 'reply':reply, 'tags':tags, 'taggings':taggings,'comment':comment,'comment_reply':comment_reply,'rep':rep,'flag':flag,'voted':id_list}
     return render(request, 'blog/blog_details.html', args) 
 
 @login_required
@@ -528,7 +528,7 @@ def edit_postlike(request, id):
             else:
                 print("postlike")
                 postlike.delete()
-                PostLikes.objects.create(post=post,user=user,value=True)
+                postlike=PostLikes.objects.create(post=post,user=user,value=True)
                 postlike.save()
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
                 return HttpResponse(json.dumps({
@@ -566,7 +566,7 @@ def edit_postdislike(request, id):
                                     }))
             else:
                 postlike.delete()
-                PostLikes.objects.create(post=post,user=user,value=False)
+                postlike=PostLikes.objects.create(post=post,user=user,value=False)
                 postlike.save()
                 print("postdislike")
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
