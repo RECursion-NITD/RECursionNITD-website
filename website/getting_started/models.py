@@ -31,6 +31,7 @@ class SubTopic(models.Model):
 class Note(models.Model):
     Notes_topic = models.CharField(max_length=200, default='', blank=True)
     Description = models.TextField(blank=True)
+    Code_snippet = models.TextField(blank=True)
     Image1 = models.ImageField(blank=True)
     Image2 = models.ImageField(blank=True)
     topic = models.ForeignKey('Topic', null=True, on_delete=models.CASCADE)
