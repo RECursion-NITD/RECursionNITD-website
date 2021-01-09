@@ -19,6 +19,9 @@ class Posts(models.Model):
         class_name = "Post"
         return class_name
 
+    class Meta:
+        verbose_name_plural="Posts"
+
 class Reply(models.Model):
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
@@ -32,6 +35,10 @@ class Reply(models.Model):
     def get_cname(self):
         class_name = "Reply"
         return class_name
+    
+    class Meta:
+        verbose_name_plural="Reply"
+
 
 class Comment(models.Model):
     body = models.TextField()
@@ -48,6 +55,10 @@ class Comment(models.Model):
     def get_cname(self):
         class_name = "C"
         return class_name
+    
+    class Meta:
+        verbose_name_plural="Comment"
+
 
        
 class Comment_Reply(models.Model):
@@ -63,6 +74,9 @@ class Comment_Reply(models.Model):
     def get_cname(self):
         class_name = "Comment_Reply"
         return class_name
+    class Meta:
+        verbose_name_plural="Comment_Reply"
+
 
 class Tags(models.Model):
     name = models.CharField(max_length=30, blank=True, null=True)
@@ -74,6 +88,9 @@ class Tags(models.Model):
             return "None"
         else:
             return self.name
+    class Meta:
+        verbose_name_plural="Tags"
+
 
 
 
@@ -86,6 +103,10 @@ class Taggings(models.Model):
 
     def __str__(self):
         return self.post.title + " : " + self.tag.name
+    
+    class Meta:
+        verbose_name_plural="Taggings"
+
 
 class Likes(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -97,6 +118,10 @@ class Likes(models.Model):
 
     def __self__(self):
         return self.user
+    
+    class Meta:
+        verbose_name_plural="Comment_Likes"
+
 
 
 class PostLikes(models.Model):
@@ -109,3 +134,6 @@ class PostLikes(models.Model):
 
     def __self__(self):
         return self.user
+    
+    class Meta:
+        verbose_name_plural="Post_Likes"

@@ -35,15 +35,15 @@
                    <div class="comment-content col-md-10 col-sm-10 ml-2 p-2">
                        <div class="comment-body answerBoxMargin">
                            {{reply.description|safe}}
-                           <div id='reply_form{{reply.user_id.id}}'  > </div>
+                           <div id='reply_form{{reply.user_id.id}}{{reply.id}}'  > </div>
                            <div id='u_ans_form{{reply.id}}' com-id="{{reply.id}}"> </div>
                            <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{ reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
                            <span style="float:right;margin-bottom: 0px;">
                                 {%if not user.is_authenticated%}
                                 <span><a class="voteReply text-right small p-1"> {{ reply.id|commentlike_count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;</span>
                                 {%else%}
+                                <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.id|commentlike_count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
                                 <span class="reply_btn" ans-id="{{reply.id}}" user-id={{reply.user_id.id}}>
-                                        <a  id="vote_count_{{reply.id}}" class="voteReply text-right small p-1"> {{ reply.id|commentlike_count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;
                                         <a href="{% url 'blog:add_comment_reply' reply.id %}" class="voteReply text-right small p-1" > Comment <i class="fas fa-reply"></i></a>&nbsp;&nbsp;
                                 </span>
                                 <span>
@@ -175,7 +175,7 @@
                url: "/blog/comment_reply/"+id,
                success: function (data)
                {
-                  var id_name = "#reply_form"+user_id
+                  var id_name = "#reply_form"+user_id+id
                   console.log(id_name)
                   $(id_name).html(data).show()
                },
