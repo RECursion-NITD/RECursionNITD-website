@@ -53,75 +53,103 @@
                                                 </div>
                                             </div>
 
-                                            {% else %} {% if note.Description %}
-                                            <div style="margin-bottom: 1vh; ">
-                                                <p>{{ note.Description | linebreaks}}</p>
-                                            </div>
-                                            {% endif %} 
-                                            
-                                            {% if note.Image1 %}
-                                            <div style="margin-bottom: 1vh; ">
-                                                <center><img src="{{ note.Image1.url }} " style="height: auto; max-width: 450px; width:100% "> </center>
-                                            </div>
-                                       
-                                            <br> 
-                                            {% endif %} 
-                                            {% endif %} 
-                                        {% endif %} 
-                                    {% endfor %}
-                                    <!-- END OF NOTES SECTION -->
+                                            {% elif note.Description and note.Code_snippet %}
+                                            <div class="row " style="margin-bottom: 4vh; ">
+                                                <div class="col-lg-6 " style="margin-bottom: 4vh; ">
+                                          
+                                                        <pre>
+                                                            <code style="margin-left: 1.5em; ">{{ note.Code_snippet | linebreaks}}</code>
+                                                        </pre>
+                                                 
+                                                </div>
+                                                <div class="col-lg-6 " style="margin-bottom: 2vh; ">
+                                                    <p">{{ note.Description | linebreaks}}</p>
+                            </div>
+                        </div>
 
-                                    <br>
-                
-                                    <!-- FILES SECTION -->
-                                    {% for file in files %} {% if file.subtopic.sub_topic == subtopic.sub_topic %}
-                                    <h5 style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ">{{ file.heading }}</h5>
-                                    {% if file.upload %}
-                                    <a href="{{ file.upload.url }} " target="_blank ">
-                                        <h6>{{ file.upload }}</h6>
-                                    </a>
-                                    {% endif %}
-                                    <!-- LINK SECTION -->
-                                    {% for link in links %}
-                                    <ul>
-                                        {% if link.file.heading == file.heading %}
-                                        <a href="{{ link.url_link1 }} " target="_blank ">
-                                            <h6>{{ link.link1 }}</h6>
-                                        </a>
-                                        {% endif %} {% if link.file.heading == file.heading %}
-                                        <a href="{{ link.url_link2 }} " target="_blank ">
-                                            <h6>{{ link.link2 }}</h6>
-                                        </a>
-                                        {% endif %} {% if link.file.heading == file.heading %}
-                                        <a href="{{ link.url_link3 }} " target="_blank ">
-                                            <h6>{{ link.link3 }}</h6>
-                                        </a>
-                                        {% endif %} {% if link.file.heading == file.heading %}
-                                        <a href="{{ link.url_link4 }} " target="_blank ">
-                                            <h6>{{ link.link4 }}</h6>
-                                        </a>
-                                        {% endif %}
-                                    </ul>
-                                    {% endfor %}
-                                    <!-- END OF LINK SECTION -->       
-                
-                                    <!-- {% if file.image %}
-                                    <center><img src="{{ file.image.url }} " style="height: auto; max-width: 450px; width:100% "> </center>
+                        {% elif note.Image1 and note.Code_snippet %}
+                        <div class="row" style="margin-bottom: 4vh;">
+                            <div class="col-lg-6" style="margin-bottom: 4vh;">
+
+                                <pre>
+                                                            <code>{{ note.Code_snippet | linebreaks}}</code>
+                                                        </pre>
+
+                            </div>
+                            <div class="col-lg-6" style="margin-bottom: 4vh;">
+                                <center><img src="{{ note.Image1.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                            </div>
+                        </div>
+
+                        {% else %} {% if note.Description %}
+                        <div style="margin-bottom: 1vh;">
+                            <p>{{ note.Description | linebreaks}}</p>
+                        </div>
+                        {% endif %} {% if note.Image1 %}
+                        <div style="margin-bottom: 3vh;">
+                            <center><img src="{{ note.Image1.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                        </div>
+                        {% endif %} {% if note.Code_snippet %}
+                        <div style="margin-bottom: 1vh;">
+
+                            <pre style="margin-left: 3vw;margin-right: 3vw;">
+                                                        <code>{{ note.Code_snippet | linebreaks}}</code>
+                                                    </pre>
+
+                        </div>
+
+                        <br> {% endif %} {% endif %} {% endif %} {% endfor %}
+                        <!-- END OF NOTES SECTION -->
+
+                        <br>
+
+                        <!-- FILES SECTION -->
+                        {% for file in files %} {% if file.subtopic.sub_topic == subtopic.sub_topic %}
+                        <h5 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">{{ file.heading }}</h5>
+                        {% if file.upload %}
+                        <a href="{{ file.upload.url }}" target="_blank">
+                            <h6>{{ file.upload }}</h6>
+                        </a>
+                        {% endif %}
+                        <!-- LINK SECTION -->
+                        {% for link in links %}
+                        <ul>
+                            {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link1 }} " target="_blank">
+                                <h6>{{ link.link1 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link2 }}" target="_blank">
+                                <h6>{{ link.link2 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link3 }}" target="_blank">
+                                <h6>{{ link.link3 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link4 }}" target="_blank">
+                                <h6>{{ link.link4 }}</h6>
+                            </a>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        <!-- END OF LINK SECTION -->
+
+                        <!-- {% if file.image %}
+                                    <center><img src="{{ file.image.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
                                     {% endif %} -->
 
-                                    {% endif %} {% endfor %}
+                        {% endif %} {% endfor %}
 
-                                    <br>
-                                    <hr>
-                                    <!-- END OF FILES SECTION -->
-                
-                                </div>
-                        </section>
-                        {% endif %}
-                        {% endfor %}    
+                        <br>
+                        <hr>
+                        <!-- END OF FILES SECTION -->
+
+                    </div>
                 </section>
-                {% endif %}
-                {% endfor %}
+                {% endif %} {% endfor %}
+            </section>
+            {% endif %} {% endfor %}
         </section>
         {% endfor %}
 
@@ -129,16 +157,18 @@
     </div>
 
     <nav class="section-nav ">
-        <center><h4 class="table " style="color: rgb(52, 113, 204); ">&nbsp;Table of Contents </h4></center>
-        <ul class="level-ul ">
+        <center>
+            <h4 class="table" style="color: rgb(52, 113, 204); ">&nbsp;Table of Contents </h4>
+        </center>
+        <ul class="level-ul">
             {% for level in levels %}
-            <li class="level-li "><a href="#level{{level.Number}} " style="color: #{{ level.Color }}; ">LEVEL {{ level.Number }} : {{ level.Level_title }}</a>
-                <ul class="topic-ul ">
+            <li class="level-li"><a href="#level{{level.Number}}" style="color: #{{ level.Color }};">LEVEL {{ level.Number }} : {{ level.Level_title }}</a>
+                <ul class="topic-ul">
                     {% for topic in topics %} {% if topic.level.Number == level.Number %}
-                    <li class="topic-li "><a href="#topic{{topic.id}} ">⦿ {{ topic.Topic_title }}</a>
-                        <ul class="subtopic-ul ">
+                    <li class="topic-li"><a href="#topic{{topic.id}}">⦿ {{ topic.Topic_title }}</a>
+                        <ul class="subtopic-ul">
                             {% for subtopic in subtopics %} {% if subtopic.topic.Topic_title == topic.Topic_title %}
-                            <li class="subtopic-li "><a href="#subtopic{{subtopic.id}} ">‣ {{ subtopic.sub_topic }}</a></li>
+                            <li class="subtopic-li"><a href="#subtopic{{subtopic.id}}">‣ {{ subtopic.sub_topic }}</a></li>
                             {% endif %} {% endfor %}
                         </ul>
                     </li>
@@ -153,32 +183,67 @@
 
 <!-------------- New Css Additions -------------------->
 <style>
+    img {
+        border-radius: 10px;
+    }
+    
+    pre {
+        background: white;
+        border: 2px solid #ddd;
+        color: #666;
+        page-break-inside: avoid;
+        font-family: monospace;
+        font-size: 1vw;
+        padding-left: 1.5em;
+        padding-top: 1.6em;
+        margin-bottom: 1.6em;
+        max-width: 100%;
+        overflow: auto;
+        display: block;
+        word-wrap: break-word;
+    }
+    
+    @media only screen and (max-width: 850px) {
+        pre {
+            background: white;
+            border: 2px solid #ddd;
+            color: #666;
+            page-break-inside: avoid;
+            font-family: monospace;
+            font-size: 10px;
+            padding-left: 1.5em;
+            padding-top: 1.6em;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            display: block;
+            word-wrap: break-word;
+        }
+    }
     /* 1. Enable smooth scrolling */
     
     html {
         scroll-behavior: smooth;
     }
-
-    .FullContent{
-        margin-left: 80px;   
+    
+    .FullContent {
+        margin-left: 80px;
     }
-
-
+    
     @media only screen and (max-width: 650px) {
-    .FullContent{
-        margin-left: 10px;
-        width: 62vw;
+        .FullContent {
+            margin-left: 10px;
+            width: 62vw;
+        }
     }
-}
-
     /* 2. Make nav sticky */
-  
+    
     main>nav {
         overflow: auto;
         position: sticky;
         top: 6.8rem;
         align-self: start;
-        height:80vh;
+        height: 80vh;
         padding-top: 15px;
         overflow-y: scroll;
         background-color: rgba(173, 177, 173, 0.122);
@@ -217,7 +282,6 @@
         box-sizing: border-box;
     }
     
-    
     .subtopic-ul {
         list-style: none;
         margin: 0;
@@ -229,25 +293,22 @@
         margin-left: 1rem;
         font-size: 1vw;
     }
-
+    
     @media only screen and (max-width: 800px) {
         .subtopic-li {
             margin-left: 1rem;
             font-size: 10px;
         }
     }
-     @media only screen and (max-width: 500px) {
-
+    
+    @media only screen and (max-width: 500px) {
         .subtopic-li {
             margin-left: 0.5rem;
             font-size: 2vw;
         }
     }
-
-
     /* Topic li and ul */
-
-
+    
     .topic-ul {
         list-style: none;
         margin: 0;
@@ -259,29 +320,22 @@
         margin-left: 1rem;
         font-size: 1vw;
     }
-
-
-
+    
     @media only screen and (max-width: 800px) {
         .topic-li {
             margin-left: 1rem;
             font-size: 10px;
         }
-
-
     }
-     @media only screen and (max-width: 500px) {
-
+    
+    @media only screen and (max-width: 500px) {
         .topic-li {
             margin-left: 0.5rem;
             font-size: 2vw;
         }
     }
-
-
     /* level li and ul */
-
-
+    
     .level-ul {
         list-style: none;
         margin: 0;
@@ -293,28 +347,21 @@
         margin-left: 1rem;
         font-size: 1vw;
     }
-
-
-
+    
     @media only screen and (max-width: 800px) {
         .level-li {
             margin-left: 1rem;
             font-size: 10px;
         }
-
-
     }
-     @media only screen and (max-width: 500px) {
-
+    
+    @media only screen and (max-width: 500px) {
         .level-li {
             margin-left: 0.5rem;
             font-size: 2vw;
         }
     }
-
-
     /* ul-li ends */
-
     
     h1 {
         font-weight: 300;
@@ -328,48 +375,44 @@
         width: 99%;
         margin: 0 0;
     }
+    
     @media only screen and (max-width: 800px) {
         main {
-        display: grid;
-        grid-template-columns: 1fr 120px;
-        max-width: 99%;
-        width: 95%;
-        margin: 0 0;
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            max-width: 99%;
+            width: 95%;
+            margin: 0 0;
+        }
     }
-
-    }
-
+    
     @media only screen and (max-width: 500px) {
-        
-        p{
+        p {
             font-size: 10px;
         }
-        .table{
+        .table {
             font-size: 3.6vw;
             margin-right: 4px;
         }
-        
     }
-
-
+    
     @media only screen and (max-width: 700px) {
-        
-        h3{
+        h3 {
             font-size: 4vw;
         }
-        a>h6{
+        a>h6 {
             font-size: 3vw;
         }
-        .h4{
+        .h4 {
             font-size: 4vw;
         }
-        h5{
+        h5 {
             font-size: 4vw;
         }
-        h5>b{
+        h5>b {
             font-size: 4vw;
-        } 
-        h1{
+        }
+        h1 {
             font-size: 30px;
         }
     }
@@ -377,7 +420,6 @@
     section {
         padding-top: 60px;
     }
-
 </style>
 <!------------------------ Css Addition endss here  ------------>
 
@@ -390,9 +432,9 @@
             entries.forEach(entry => {
                 const id = entry.target.getAttribute('id');
                 if (entry.intersectionRatio > 0) {
-                    document.querySelector(`nav li a[href="#${id} "]`).parentElement.classList.add('active');
+                    document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
                 } else {
-                    document.querySelector(`nav li a[href="#${id} "]`).parentElement.classList.remove('active');
+                    document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.remove('active');
                 }
             });
         });
