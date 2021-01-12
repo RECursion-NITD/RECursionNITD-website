@@ -130,7 +130,7 @@ def list_blogs(request):
           key_req = search.cleaned_data
           key = key_req.get('key')
           return HttpResponseRedirect(reverse('blog:search_blog', args=(key,)))
-    posts = Posts.objects.all()
+    posts = Posts.objects.all().order_by('-created_at')
     paginator = Paginator(posts, 5)
     page = request.GET.get('page')
     try:
@@ -453,7 +453,6 @@ def add_comment(request, id):
 
 @login_required
 def update_comment(request, id):
-    print(id)
     try:
         comment =get_object_or_404(Comment, pk=id)
         post=comment.post
@@ -519,14 +518,12 @@ def edit_postlike(request, id):
             postlike = PostLikes.objects.get(post=post, user=user)
             if postlike.value == True:
                 postlike.delete()
-                print("postlike_deleted")
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
                 return HttpResponse(json.dumps({
                                 'count':count,
                                 'Success':'postlike_deleted'
                                     }))
             else:
-                print("postlike")
                 postlike.delete()
                 postlike=PostLikes.objects.create(post=post,user=user,value=True)
                 postlike.save()
@@ -539,7 +536,7 @@ def edit_postlike(request, id):
        else:
             postlike=PostLikes.objects.create(post=post,user=user,value=True)
             postlike.save()
-            print("postlike_created")
+            ("postlike_created")
             count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
             return HttpResponse(json.dumps({
                             'count':count,
@@ -558,7 +555,7 @@ def edit_postdislike(request, id):
             postlike = PostLikes.objects.get(post=post, user=user)
             if postlike.value == False:
                 postlike.delete()
-                print("postdislike_deleted")
+                ("postdislike_deleted")
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
                 return HttpResponse(json.dumps({
                                 'count':count,

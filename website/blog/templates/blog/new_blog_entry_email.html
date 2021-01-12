@@ -1,10 +1,10 @@
 {% autoescape off %}
 Hi {{ user.username }},
 
-A new Blog has been Posted in Blogs:
+A new Post has been shared on RECursion Blog:
 
 {{ post.title }}
-http://{{ domain }}{% url 'blog:detail_posts' post.id %}
+http://{{ domain }}{% url 'blog:detail_blogs' post.id %}
 
 Sincerely,
 RECursion Team
