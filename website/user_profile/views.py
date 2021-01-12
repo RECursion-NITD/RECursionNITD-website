@@ -34,6 +34,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.models import *
 import random
 from forum.models import *
+from blog.models import *
 
 def view_profile(request, id=None):
     print(id)
@@ -48,11 +49,18 @@ def view_profile(request, id=None):
         profile = get_object_or_404(Profile, user=user)
     except:
         return HttpResponse("User has not created a Profile yet!")
+    posts = Posts.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    replys = Reply.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
+    comment = Comment.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    comment_rep= Comment_Reply.objects.filter(user = user).order_by('-updated_at')[:10:1]
+    
     questions = Questions.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     answers = Answers.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     comments = Comments.objects.filter(user = user).order_by('-updated_at')[:10:1]
     comments_ans= Comments_Answers.objects.filter(user = user).order_by('-updated_at')[:10:1]
+
     required = []
+
     for question in questions:
         required.append(question)
     for answer in answers:
@@ -61,6 +69,16 @@ def view_profile(request, id=None):
         required.append(comment)
     for com_a in comments_ans:
         required.append(com_a)
+    
+    for post in posts:
+        required.append(post)
+    for reply in replys:
+        required.append(reply)
+    for com in comment:
+        required.append(com)
+    for com_r in comment_rep:
+        required.append(com_r)
+
     required.sort(key=lambda x: x.updated_at, reverse=True)
     activity=[]
     k=0
@@ -69,7 +87,8 @@ def view_profile(request, id=None):
         k+=1
         if k == 10:
             break
-    args = {'profile': profile, 'activity':activity, }
+
+    args = {'profile': profile, 'activity':activity,}
     return render(request, 'profile/profile.html', args)
 
 

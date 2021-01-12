@@ -1,0 +1,60 @@
+{% load blog_tags %}
+{% for post in posts %} 
+<li class="col-sm-12 col-lg-12 ques_div mt-2 mb-1" id="content">
+    <ul id="attributeList">
+        <div class="row mb-1">
+            <!-- IMAGE BLOCK -->
+            <div class="col-sm-1 col-lg-1 mr-2">
+                {% for p in profile %}
+                    {% if p.user == post.user_id %}
+                <img src="{{ p.image.url }}" class="rounded-circle mt-2 mb-1" width="55px" height="55px" alt="img">
+                    {% endif %}
+                {% endfor %}    
+            </div>    
+            <div class="col-lg-6 col-sm-12">
+                <div>
+                    <a id="questionDetail" href="{% url 'blog:detail_blogs' post.id  %}">
+                        <strong>{{ post.title }}</strong>
+                    </a>
+                    <br>
+                </div>
+                <div id="addedBy" class="text-muted">
+                    <li>Posted by <a href="{% url 'user_profile:view_profile' post.user_id.id  %}">{{post.user_id}}</a> on</li>
+                </div>
+                <li id="postedOn" class="text-muted">{{post.created_at}}</li>
+                <br>
+                <li id="tagList">
+                    <ul>
+                        {% for tagging in taggings %} 
+                          {% if tagging.post == post %} 
+                            {% for tag in tags %} 
+                              {% if tagging.tag == tag %}
+                              {% comment %} <li class="tagName" class="font-italic text-muted">{{tag.name}}</li> {% endcomment %}
+                              <li style="display:inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                              {% endif %} 
+                            {% endfor %} 
+                          {%endif%} 
+                        {% endfor %}
+                    </ul>
+                </li>
+            </div>
+                <!-- <div id="AnswerFollow_block" style="display: inline-block;"> -->
+                    <div class="col-sm-5 col-md-3 col-lg-3 mt-auto mb-auto" id="answerBox" style="display: inline-block;">
+                      <div class="row">
+                          <div class="col-sm-6">
+                            {%if post.reply_set.count == 1 %}
+                            <span id="followValue" style="font-size:70%;">{{ post.reply_set.count }} comment
+                            {%else %}
+                            <span id="followValue" style="font-size:70%;">{{ post.reply_set.count }} comments
+                            {%endif%}
+                            </span>
+                          </div>
+                          <div><span id="followValue" style="font-size:70%;">{{post.id|postlike_count}} vote(s)</span></div>
+                      </div>
+                    </div>
+                <!-- </div> -->
+          </div>
+    </ul>
+</li>
+<hr> 
+{% endfor %}
