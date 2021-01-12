@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdownx',
     'blog',
+    'getting_started',
 ]
 
 MIDDLEWARE = [
