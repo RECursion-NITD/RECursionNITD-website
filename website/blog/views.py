@@ -106,7 +106,7 @@ def add_blog(request):
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in AskREC'
+                subject = 'New Activity on RECursion Blog'
                 message = render_to_string('blog/new_blog_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -248,7 +248,7 @@ def update_blogs(request, id):
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in AskREC'
+                subject = 'New Activity on RECursion Blog'
                 message = render_to_string('blog/update_blog_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -309,7 +309,7 @@ def add_reply(request, id):
             for profile in profiles:
                 user = profile.user
                 current_site = get_current_site(request)
-                subject = 'New Activity in AskREC'
+                subject = 'New Activity on RECursion Blog'
                 message = render_to_string('blog/new_reply_entry_email.html', {
                     'user': user,
                     'domain': current_site.domain,
@@ -371,7 +371,7 @@ def update_reply(request, id):
                     for profile in profiles:
                         user = profile.user
                         current_site = get_current_site(request)
-                        subject = 'New Activity in AskREC'
+                        subject = 'New Activity on RECursion Blog'
                         message = render_to_string('blog/reply_update_email.html', {
                             'user': user,
                             'domain': current_site.domain,
@@ -421,7 +421,7 @@ def add_comment(request, id):
         for profile in profiles:
             user = profile.user
             current_site = get_current_site(request)
-            subject = 'New Activity in AskREC'
+            subject = 'New Activity on RECursion Blog'
             message = render_to_string('blog/new_commententry_email.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -473,7 +473,7 @@ def update_comment(request, id):
                     for profile in profiles:
                         user = profile.user
                         current_site = get_current_site(request)
-                        subject = 'New Activity in AskREC'
+                        subject = 'New Activity on RECursion Blog'
                         message = render_to_string('blog/updatecomment_email.html', {
                             'user': user,
                             'domain': current_site.domain,
@@ -536,7 +536,6 @@ def edit_postlike(request, id):
        else:
             postlike=PostLikes.objects.create(post=post,user=user,value=True)
             postlike.save()
-            ("postlike_created")
             count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
             return HttpResponse(json.dumps({
                             'count':count,
@@ -555,7 +554,6 @@ def edit_postdislike(request, id):
             postlike = PostLikes.objects.get(post=post, user=user)
             if postlike.value == False:
                 postlike.delete()
-                ("postdislike_deleted")
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
                 return HttpResponse(json.dumps({
                                 'count':count,
@@ -565,7 +563,6 @@ def edit_postdislike(request, id):
                 postlike.delete()
                 postlike=PostLikes.objects.create(post=post,user=user,value=False)
                 postlike.save()
-                print("postdislike")
                 count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
                 return HttpResponse(json.dumps({
                                 'count':count,
@@ -575,7 +572,6 @@ def edit_postdislike(request, id):
         else:
             postlike=PostLikes.objects.create(post=post,user=user,value=False)
             postlike.save()
-            print("postdislike_created")
             count=PostLikes.objects.filter(post=post,value=True).count()-PostLikes.objects.filter(post=post,value=False).count()
             return HttpResponse(json.dumps({
                             'count':count,
@@ -598,7 +594,6 @@ def like_votings(request, id):
             if like.value == True:
                 like.delete()
                 count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
-                print("upvote_deleted")
                 return HttpResponse(json.dumps({
                             'count':count,
                             'Success':'upvote_deleted'
@@ -608,7 +603,6 @@ def like_votings(request, id):
                 l = Likes.objects.create(reply=reply, user=user,value=True)
                 l.save()
                 count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
-                print("upvoted")
                 return HttpResponse(json.dumps({
                             'count':count,
                             'Success':'upvoted'
@@ -617,7 +611,6 @@ def like_votings(request, id):
             like = Likes.objects.create(reply=reply, user=user, value=True)
             like.save()
             count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
-            print("upvote_created")
             return HttpResponse(json.dumps({
                     'count':count,
                     'Success':'upvote_created'
@@ -639,7 +632,6 @@ def dislike_votings(request, id):
             if like.value == False:
                 like.delete()
                 count=Likes.objects.filter(reply=reply,value=True).count()- Likes.objects.filter(reply=reply,value=False).count()
-                print("downvote_deleted")
                 return HttpResponse(json.dumps({
                                 'count':count,
                                 'Success':'downvote_deleted'
@@ -649,7 +641,6 @@ def dislike_votings(request, id):
                 l=Likes.objects.create(reply=reply, user=user, value=False)
                 l.save()
                 count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
-                print("downvoted")
                 return HttpResponse(json.dumps({
                                 'count':count,
                                 'Success':'downvoted'
@@ -658,7 +649,6 @@ def dislike_votings(request, id):
             like = Likes.objects.create(reply=reply, user=user,value=False)
             like.save()
             count=Likes.objects.filter(reply=reply,value=True).count()-Likes.objects.filter(reply=reply,value=False).count()
-            print("downvote_created")
             return HttpResponse(json.dumps({
                     'count':count,
                     'Success':'downvote_created'
@@ -745,7 +735,7 @@ def add_comment_reply(request, id):
         for profile in profiles:
             user = profile.user
             current_site = get_current_site(request)
-            subject = 'New Activity in AskREC'
+            subject = 'New Activity on RECursion Blog'
             message = render_to_string('blog/new_reply_comment_entry_email.html', {
                 'user': user,
                 'domain': current_site.domain,
@@ -796,7 +786,7 @@ def update_comment_reply(request, id):
               for profile in profiles:
                   user = profile.user
                   current_site = get_current_site(request)
-                  subject = 'New Activity in AskREC'
+                  subject = 'New Activity on RECursion Blog'
                   message = render_to_string('blog/update_reply_comment_email.html', {
                       'user': user,
                       'domain': current_site.domain,
