@@ -1,0 +1,452 @@
+{% block contents %} {% load staticfiles %}
+<!-- CSS IMPORTS  -->
+<link rel="stylesheet" href="{% static 'css/get_started.css' %}"> {% load static %}
+<!--------------- Changes startss here 20/12/2020 --------------------- -->
+
+
+<!--------------- Changes startss here 20/12/2020 --------------------- -->
+<main>
+    <div class="FullContent">
+        <!-- LEVEL SECTION -->
+        {% for level in levels %}
+        <section id="level{{level.Number}}">
+            <h3 style="color: #{{ level.Color }};">LEVEL-{{level.Number}}: {{level.Level_title}}</h3>
+            {% for topic in topics %} {% if topic.level.Number == level.Number %}
+            <section id="topic{{topic.id}}" style="margin-left: 10px;">
+                <h4 style="margin-bottom: 20px;" class="h4">{{topic.Topic_title}}</h4>
+                {% for subtopic in subtopics %} {% if subtopic.topic.Topic_title == topic.Topic_title %}
+
+                <section id="subtopic{{subtopic.id}}" style="background-color: rgba(173, 177, 173, 0.122);padding-left: 15px;margin-right: 10px;">
+                    <!-- <h5>{{subtopic.sub_topic}}</h5> -->
+                    <h5 style="font-family: sans-sherif"><b>{{ subtopic.sub_topic }}</b></h5>
+                    <div style="margin-right: 1vw;">
+                        <!-- NOTES SECTION -->
+                        {% for note in notes %} {% if note.subtopic.sub_topic == subtopic.sub_topic %}
+                        <!-- <b><h6>{{ note.Notes_topic }}</h6></b> -->
+                        {% if note.Description and note.Image1.url %}
+                        <div class="row" style="margin-bottom: 4vh;">
+                            <div class="col-lg-6">
+                                <p>{{ note.Description | linebreaks}}</p>
+                            </div>
+                            <div class="col-lg-6">
+                                <center><img src="{{ note.Image1.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                            </div>
+                        </div>
+                        {% elif note.Description and note.Image2.url %}
+                        <div class="row" style="margin-bottom: 4vh;">
+                            <div class="col-lg-6" style="margin-bottom: 4vh;">
+                                <center><img src="{{ note.Image2.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                            </div>
+                            <div class="col-lg-6" style="margin-bottom: 2vh;">
+                                <p ">{{ note.Description | linebreaks}}</p>
+                                                </div>
+                                            </div>
+
+                                            {% elif note.Image1.url and note.Image2.url %}
+                                            <div class="row " style="margin-bottom: 4vh; ">
+                                                <div class="col-lg-6 " style="margin-bottom: 4vh; ">
+                                                    <center><img src="{{ note.Image1.url }} " style="height: auto; max-width: 450px; width:100% "> </center>
+                                                </div>
+                        
+                                                <div class="col-lg-6 " style="margin-bottom: 2vh; " >
+                                                    <center><img src="{{ note.Image2.url }} " style="height: auto; max-width: 450px; width:100% "> </center>
+                                                </div>
+                                            </div>
+
+                                            {% elif note.Description and note.Code_snippet %}
+                                            <div class="row " style="margin-bottom: 4vh; ">
+                                                <div class="col-lg-6 " style="margin-bottom: 4vh; ">
+                                          
+                                                        <pre>
+                                                            <code style="margin-left: 1.5em; ">{{ note.Code_snippet | linebreaks}}</code>
+                                                        </pre>
+                                                 
+                                                </div>
+                                                <div class="col-lg-6 " style="margin-bottom: 2vh; ">
+                                                    <p">{{ note.Description | linebreaks}}</p>
+                            </div>
+                        </div>
+
+                        {% elif note.Image1 and note.Code_snippet %}
+                        <div class="row" style="margin-bottom: 4vh;">
+                            <div class="col-lg-6" style="margin-bottom: 4vh;">
+
+                                <pre>
+                                                            <code>{{ note.Code_snippet | linebreaks}}</code>
+                                                        </pre>
+
+                            </div>
+                            <div class="col-lg-6" style="margin-bottom: 4vh;">
+                                <center><img src="{{ note.Image1.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                            </div>
+                        </div>
+
+                        {% else %} {% if note.Description %}
+                        <div style="margin-bottom: 1vh;">
+                            <p>{{ note.Description | linebreaks}}</p>
+                        </div>
+                        {% endif %} {% if note.Image1 %}
+                        <div style="margin-bottom: 3vh;">
+                            <center><img src="{{ note.Image1.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                        </div>
+                        {% endif %} {% if note.Code_snippet %}
+                        <div style="margin-bottom: 1vh;">
+
+                            <pre style="margin-left: 3vw;margin-right: 3vw;">
+                                                        <code>{{ note.Code_snippet | linebreaks}}</code>
+                                                    </pre>
+
+                        </div>
+
+                        <br> {% endif %} {% endif %} {% endif %} {% endfor %}
+                        <!-- END OF NOTES SECTION -->
+
+                        <br>
+
+                        <!-- FILES SECTION -->
+                        {% for file in files %} {% if file.subtopic.sub_topic == subtopic.sub_topic %}
+                        <h5 style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">{{ file.heading }}</h5>
+                        {% if file.upload %}
+                        <a href="{{ file.upload.url }}" target="_blank">
+                            <h6>{{ file.upload }}</h6>
+                        </a>
+                        {% endif %}
+                        <!-- LINK SECTION -->
+                        {% for link in links %}
+                        <ul>
+                            {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link1 }} " target="_blank">
+                                <h6>{{ link.link1 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link2 }}" target="_blank">
+                                <h6>{{ link.link2 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link3 }}" target="_blank">
+                                <h6>{{ link.link3 }}</h6>
+                            </a>
+                            {% endif %} {% if link.file.heading == file.heading %}
+                            <a href="{{ link.url_link4 }}" target="_blank">
+                                <h6>{{ link.link4 }}</h6>
+                            </a>
+                            {% endif %}
+                        </ul>
+                        {% endfor %}
+                        <!-- END OF LINK SECTION -->
+
+                        <!-- {% if file.image %}
+                                    <center><img src="{{ file.image.url }}" style="height: auto; max-width: 450px; width:100%"> </center>
+                                    {% endif %} -->
+
+                        {% endif %} {% endfor %}
+
+                        <br>
+                        <hr>
+                        <!-- END OF FILES SECTION -->
+
+                    </div>
+                </section>
+                {% endif %} {% endfor %}
+            </section>
+            {% endif %} {% endfor %}
+        </section>
+        {% endfor %}
+
+        <!-- END OF LEVEL SECTION -->
+    </div>
+
+    <nav class="section-nav ">
+        <center>
+            <h4 class="table" style="color: rgb(52, 113, 204); ">&nbsp;Table of Contents </h4>
+        </center>
+        <ul class="level-ul">
+            {% for level in levels %}
+            <li class="level-li"><a href="#level{{level.Number}}" style="color: #{{ level.Color }};">LEVEL {{ level.Number }} : {{ level.Level_title }}</a>
+                <ul class="topic-ul">
+                    {% for topic in topics %} {% if topic.level.Number == level.Number %}
+                    <li class="topic-li"><a href="#topic{{topic.id}}">⦿ {{ topic.Topic_title }}</a>
+                        <ul class="subtopic-ul">
+                            {% for subtopic in subtopics %} {% if subtopic.topic.Topic_title == topic.Topic_title %}
+                            <li class="subtopic-li"><a href="#subtopic{{subtopic.id}}">‣ {{ subtopic.sub_topic }}</a></li>
+                            {% endif %} {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %} {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+</main>
+
+
+<!-------------- New Css Additions -------------------->
+<style>
+    img {
+        border-radius: 10px;
+    }
+    
+    pre {
+        background: white;
+        border: 2px solid #ddd;
+        color: #666;
+        page-break-inside: avoid;
+        font-family: monospace;
+        font-size: 1vw;
+        padding-left: 1.5em;
+        padding-top: 1.6em;
+        margin-bottom: 1.6em;
+        max-width: 100%;
+        overflow: auto;
+        display: block;
+        word-wrap: break-word;
+    }
+    
+    @media only screen and (max-width: 850px) {
+        pre {
+            background: white;
+            border: 2px solid #ddd;
+            color: #666;
+            page-break-inside: avoid;
+            font-family: monospace;
+            font-size: 10px;
+            padding-left: 1.5em;
+            padding-top: 1.6em;
+            margin-bottom: 1.6em;
+            max-width: 100%;
+            overflow: auto;
+            display: block;
+            word-wrap: break-word;
+        }
+    }
+    /* 1. Enable smooth scrolling */
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    .FullContent {
+        margin-left: 80px;
+    }
+    
+    @media only screen and (max-width: 650px) {
+        .FullContent {
+            margin-left: 10px;
+            width: 62vw;
+        }
+    }
+    /* 2. Make nav sticky */
+    
+    main>nav {
+        overflow: auto;
+        position: sticky;
+        top: 6.8rem;
+        align-self: start;
+        height: 80vh;
+        padding-top: 15px;
+        overflow-y: scroll;
+        background-color: rgba(173, 177, 173, 0.122);
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+    }
+    /* 3. ScrollSpy active styles (see JS tab for activation) */
+    
+    .section-nav li.active>a {
+        color: #333;
+        font-weight: 500;
+    }
+    /* Sidebar Navigation */
+    
+    .section-nav {
+        padding-left: 0;
+        border-left: 2px solid #efefef;
+    }
+    
+    .section-nav a {
+        text-decoration: none;
+        display: block;
+        padding: .125rem 0;
+        color: #ccc;
+        transition: all 50ms ease-in-out;
+        /* 💡 This small transition makes setting of the active state smooth */
+    }
+    
+    .section-nav a:hover,
+    .section-nav a:focus {
+        color: #666;
+    }
+    /** Poor man's reset **/
+    
+    * {
+        box-sizing: border-box;
+    }
+    
+    .subtopic-ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 1vw;
+    }
+    
+    .subtopic-li {
+        margin-left: 1rem;
+        font-size: 1vw;
+    }
+    
+    @media only screen and (max-width: 800px) {
+        .subtopic-li {
+            margin-left: 1rem;
+            font-size: 10px;
+        }
+    }
+    
+    @media only screen and (max-width: 500px) {
+        .subtopic-li {
+            margin-left: 0.5rem;
+            font-size: 2vw;
+        }
+    }
+    /* Topic li and ul */
+    
+    .topic-ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 1vw;
+    }
+    
+    .topic-li {
+        margin-left: 1rem;
+        font-size: 1vw;
+    }
+    
+    @media only screen and (max-width: 800px) {
+        .topic-li {
+            margin-left: 1rem;
+            font-size: 10px;
+        }
+    }
+    
+    @media only screen and (max-width: 500px) {
+        .topic-li {
+            margin-left: 0.5rem;
+            font-size: 2vw;
+        }
+    }
+    /* level li and ul */
+    
+    .level-ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 1vw;
+    }
+    
+    .level-li {
+        margin-left: 1rem;
+        font-size: 1vw;
+    }
+    
+    @media only screen and (max-width: 800px) {
+        .level-li {
+            margin-left: 1rem;
+            font-size: 10px;
+        }
+    }
+    
+    @media only screen and (max-width: 500px) {
+        .level-li {
+            margin-left: 0.5rem;
+            font-size: 2vw;
+        }
+    }
+    /* ul-li ends */
+    
+    h1 {
+        font-weight: 300;
+    }
+    /** page layout **/
+    
+    main {
+        display: grid;
+        grid-template-columns: 1fr 15%;
+        max-width: 98%;
+        width: 99%;
+        margin: 0 0;
+    }
+    
+    @media only screen and (max-width: 800px) {
+        main {
+            display: grid;
+            grid-template-columns: 1fr 120px;
+            max-width: 99%;
+            width: 95%;
+            margin: 0 0;
+        }
+    }
+    
+    @media only screen and (max-width: 500px) {
+        p {
+            font-size: 10px;
+        }
+        .table {
+            font-size: 3.6vw;
+            margin-right: 4px;
+        }
+    }
+    
+    @media only screen and (max-width: 700px) {
+        h3 {
+            font-size: 4vw;
+        }
+        a>h6 {
+            font-size: 3vw;
+        }
+        .h4 {
+            font-size: 4vw;
+        }
+        h5 {
+            font-size: 4vw;
+        }
+        h5>b {
+            font-size: 4vw;
+        }
+        h1 {
+            font-size: 30px;
+        }
+    }
+    
+    section {
+        padding-top: 60px;
+    }
+</style>
+<!------------------------ Css Addition endss here  ------------>
+
+
+<!------------------------ Adding Javascript  ------------------->
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                if (entry.intersectionRatio > 0) {
+                    document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.add('active');
+                } else {
+                    document.querySelector(`nav li a[href="#${id}"]`).parentElement.classList.remove('active');
+                }
+            });
+        });
+
+        // Track all sections that have an `id` applied
+        document.querySelectorAll('section[id]').forEach((section) => {
+            observer.observe(section);
+        });
+
+    });
+</script>
+
+
+
+{% endblock contents %}
