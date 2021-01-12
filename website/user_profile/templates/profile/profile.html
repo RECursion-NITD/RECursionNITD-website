@@ -84,20 +84,21 @@
                {% for act in activity %}
                {% if act.get_cname == "Post" %}
                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                       <h5>Blogs Posted</h5>
-                       <a href="{% url 'blog:detail_blogs' act.id %}">Posted this Blog: {{ act.title }}</a><br>
+                       <h5>Post Shared</h5>
+                       <a href="{% url 'blog:detail_blogs' act.id %}">Shared this Post on RECursion Blog: {{ act.title }}</a><br>
                </div>
                {% elif act.get_cname == "Reply" %}
                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                       <h5>Blogs Commented</h5>
-                       <a href="{% url 'blog:detail_blogs' act.post_id.id  %}">Commented on this Blog: {{ act.post_id.title }}</a><br>
+                       <h5>Commented on Post</h5>
+                       <a href="{% url 'blog:detail_blogs' act.post_id.id  %}">Commented on this Post on RECursion Blog: {{ act.post_id.title }}</a><br>
                </div>
                {% elif act.get_cname == "Comment_Reply" %}
                <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded" style="background: white ;padding: 10px">
-                       <h5>Replies on Comments</h5>
-                       <a href="{% url 'blog:detail_blogs' act.reply.post_id.id  %}">Replied to this Comment: {{ act.reply.post_id.title }}</a>
+                       <h5>Replied to a Comment on Post</h5>
+                       <a href="{% url 'blog:detail_blogs' act.reply.post_id.id  %}">Replied to a Comment on this Post on RECursion Blog: {{ act.reply.post_id.title }}</a>
                </div>
-               {% endif %}<br>
+               {% endif %}
+               <br>
                 {% endfor %}
             </ul>
             </div>

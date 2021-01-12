@@ -37,11 +37,10 @@ from forum.models import *
 from blog.models import *
 
 def view_profile(request, id=None):
-    print(id)
     if id == None:
         id = request.user.id
     try:
-        user = get_object_or_404(User, pk=id)
+        user = get_object_or_404(User, pk=id) 
     except:
         print(request.user.id)
         return HttpResponse("User does not exist!")
@@ -65,12 +64,12 @@ def view_profile(request, id=None):
         required.append(question)
     for answer in answers:
         required.append(answer)
-    for comment in comments:
-        required.append(comment)
+    for comment_q in comments:
+        required.append(comment_q)
     for com_a in comments_ans:
         required.append(com_a)
     
-    for post in posts:
+    for post in posts:  
         required.append(post)
     for reply in replys:
         required.append(reply)
