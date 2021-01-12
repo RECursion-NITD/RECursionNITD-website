@@ -80,12 +80,12 @@
     </div>
     <div class="collapse navbar-collapse flex-grow-1 text-right py-0" id="myNavbar">
         <ul class="navbar-nav ml-auto flex-nowrap"> 
-            <li class="nav-item {% block Blogs_active %}{% endblock %}">
-              <a href="{% url 'blog:list_blogs' %}" class="nav-link m-2 menu-item">Blog</a>
-            </li>
             <li class="nav-item {% block AskREC_active %}{% endblock %}">
                 <a href="{% url 'forum:list_questions' %}" class="nav-link m-2 menu-item">AskREC</a>
             </li>
+            <li class="nav-item {% block Blogs_active %}{% endblock %}">
+                <a href="{% url 'blog:list_blogs' %}" class="nav-link m-2 menu-item">Blog</a>
+              </li>
             <li class="nav-item {% block interview_active %}{% endblock %}">
               <a href="{% url 'experience:list_experiences' %}" class="nav-link m-2 menu-item">Interview Experiences</a>
             </li>

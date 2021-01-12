@@ -14,7 +14,6 @@ class Postform(forms.ModelForm):
 
     def clean_description(self):
         data = self.cleaned_data['description']
-        print(len(data)<20)
         if len(data)<20:
             raise forms.ValidationError("Description too Short! Less than 20 words!")
         data = markdownify(data)

@@ -1,10 +1,10 @@
 {% autoescape off %}
 Hi {{ user.username }},
 
-An existing Comment to an Existing Comment to an existing Blog has been Updated in Blogs:
+An existing Comment to an Existing Comment to an existing Post has been Updated on RECursion Blog:
 
 {{ post.title }}
-http://{{ domain }}{% url 'blog:detail_posts' post.id %}
+http://{{ domain }}{% url 'blog:detail_blogs' post.id %}
 
 Sincerely,
 RECursion Team
