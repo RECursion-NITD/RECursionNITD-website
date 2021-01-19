@@ -75,6 +75,10 @@ website/db.sqlite3
 website/blog/migrations/
 website/events/migrations/
 website/forum/migrations/
+website/getting_started/migrations/
 website/interview_exp/migrations/
 website/team/migrations/
 website/user_profile/migrations/
+
+# Media files
+media/
