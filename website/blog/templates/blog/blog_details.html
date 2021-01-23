@@ -220,12 +220,12 @@
                     </div>
                     {% endif %} {% endif %} {% endfor %}
                     <div class="comment-content col-md-10 col-sm-10 ml-2 p-2">
-                        <div class="comment-body answerBoxMargin">
+                        <div class="comment-body answerBoxMargin" style="padding-bottom: 12px;">
                             {{reply.description|safe}}
                             <div id='reply_form{{reply.user_id.id}}{{reply.id}}'  > </div>
                             <div id='u_ans_form{{reply.id}}' com-id="{{reply.id}}"> </div>
-                            <span class="small comment-meta"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{ reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
-                            <span style="float:right;margin-bottom: 0px;">
+                            <span class="small comment-meta" style="font-size: 80%;"><a href="{% url 'user_profile:view_profile' reply.user_id.id  %}">{{ reply.user_id }}</a> last updated on {{reply.updated_at}}</span>
+                            <span style="float:right;margin-bottom: 0px;font-size: 80%;">
                                 {%if not user.is_authenticated%}
                                 <span><a class="voteReply text-right small p-1"> {{ reply.id|commentlike_count }} <i class="fas fa-arrow-up"></i></a> &nbsp;&nbsp;</span>
                                 {%else%}
