@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block getStart_active %}active{% endblock %} {% block content %}
+
+<body>
+
+    <div class="top mt-5" style="margin-top: 2%;">
+        <a href="{% url 'home' %}" class="text-muted small">
+            < Back to Home</a>
+                <br><br>
+
+                <h1> <b>Getting Started </b></h1>
+                <link href="https://fonts.googleapis.com/css?family=Pacifico&amp;display=swap" rel="stylesheet">
+                <p class="small" style="font-family: 'Pacifico', cursive;">"The secret of getting ahead is getting started"</p>
+
+    </div>
+    <hr> {% include 'level.html' %}
+
+
+    <style>
+        .top {
+            margin-left: 80px;
+        }
+        
+        hr {
+            margin-right: 5%;
+            margin-left: 5%;
+        }
+        
+        @media only screen and (max-width: 650px) {
+            .top {
+                margin-left: 10px;
+                width: 90%;
+            }
+        }
+    </style>
+</body>
+{% endblock %}

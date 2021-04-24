@@ -1,0 +1,133 @@
+{% extends 'base.html' %} {% load widget_tweaks %}
+{% block title %}Blog{% endblock %} 
+{% block css %} 
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/question_css.css'%}"> 
+{% endblock %} {% csrf_token %}
+<!--<h1 >Dashboard</h1>-->
+
+<!-- navigation bar -->
+{% block nav %} {% endblock%} 
+{% block Blogs_active %}active{% endblock %}
+{% block content %}
+<div class="container">
+  <a href="{% url 'home' %}" class="text-muted">< Back to Home</a>
+  <h2 class="mt-3"id="haveAQ">Have something to share?</h2>
+  <center>
+      <!--<button class="btn btn-success" style="border-radius: 15px;padding:5px 5px 5px 5px;"><i class="fa fa-search"></i></button>-->
+      <!--<form class="form-inline my-2 my-lg-0" style="float: right;position: relative;right:5%;">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</buforum:tton>
+        </form>-->
+  </center>
+  <!-- <div class="container-fluid"> -->
+      <div class="row">
+          <div class="col-lg-9 col-sm-12 mt-2">
+            <div class="card ml-0">
+              <div class="block row card-header m-0">
+                <div class="col-sm-12 col-lg-6">
+                  <form method="POST">
+                    <div class="row mt-2">
+                      <div style="max-width:60vw;">
+                      <!-- <input class="form-control m-2" type="text" placeholder="Search Tag" style="float:left;width:75%;"> -->
+                      {% render_field form_search.key class="form-control" placeholder="Search Tag" style="display:inline-block;"%} 
+                    <!-- <button type="submit" class="save btn btn-outline-primary" style="">Search</button> -->
+                      </div>
+                      <div >
+                      <button type="submit" href="#" class="save btn btn-sm btn-outline-primary mt-1 ml-2" style="display:inline-block;">    <i class="fas fa-search"></i>
+                      </button>
+                      </div>
+                    </div>
+                  </form>
+                  
+                
+                </div>
+                <div class="col-sm-12 col-lg-6">
+                <a class="btn" href="{% url 'blog:add_blog' %}" id="postQ">
+                    <button type="button" class="btn btn-outline-primary">
+                    Post&nbsp;&nbsp;<i class="far fa-edit"></i>&nbsp;</button>
+                </a>
+                </div>
+              </div><hr>
+              <ul>
+                  <div class="ml-0 mr-0">
+                      <div id="questions-list">
+                          {% include 'blog/blog_list.html' %}
+                      </div>
+                  </div>
+                  <!-- <div class="col-sm-2 col-lg-2" style="height:50px; width: 50px; background-color: red;"> -->
+              </ul>
+            </div>
+          </div>
+          <div class="col-sm-12 col-lg-3 mt-2">
+              <div class="ml-0">
+                  <div class=" mr-auto" style="">
+                    <div class="card p-2">
+                      <h3 style="display:inline-block;justify-content: center;">
+                        <span class="number">{{ p_count }}</span>
+                      {%if p_count < 2 %}
+                      <small>post</small></h2>
+                      {% else %}
+                      <small>posts</small></h2>
+                      {% endif %}
+                      <h3  style="display:inline-block;">
+                        <span class="number">{{ replys.count }}</span>
+                        {%if replys.count < 2 %}
+                       <small>comment</small></h3>
+                        {%else%}
+                        <small>comments</small></h3>
+                        {%endif%}
+                    </div>
+                      <br>
+                      <h4>Most Recent Tags {{ limit }}</h4>
+                      <ul>
+                          {% for tag in tags_recent %}
+                          <li style="display:inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                          {% endfor %}
+                          <br>
+                          <br>
+                          <hr>
+                          <br>
+                      </ul>
+                      <h4>Most Popular Tags</h4>
+                      <ul>
+                          {% for tag in tags_popular %}
+                          <li style="display: inline-block;"><a class="tagName" href="{% url 'blog:filter_blog' tag.id  %}">{{ tag.name }}</a></li>
+                          {% endfor %}
+                      </ul>
+                      <br>
+                      <a href="{% url 'blog:list_blogs' %}" class="mr-3"style="float:right;">
+                      <button type="button" class="btn btn-sm btn-outline-primary">
+                          Clear Filter&nbsp;&nbsp;<i class="far fa-trash-alt"></i>&nbsp;</button>
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- </div> -->
+{% endblock %}
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+    var page = 1;
+    var empty_page = false;
+    var block_request = false;
+
+    $(window).scroll(function() {
+        var margin = $(document).height() - $(window).height();
+        if ($(window).scrollTop() > margin && empty_page == false && block_request == false)
+            block_request = true;
+        page += 1;
+        $.get('?page=' + page, function(data) {
+            if (data == '') {
+                empty_page = true;
+            } else {
+                $('#questions-list').append(data);
+            }
+        });
+    });
+</script>
+{% endblock %}

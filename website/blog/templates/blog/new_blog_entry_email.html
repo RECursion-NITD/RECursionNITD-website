@@ -1,0 +1,12 @@
+{% autoescape off %}
+Hi {{ user.username }},
+
+A new Post has been shared on RECursion Blog:
+
+{{ post.title }}
+http://{{ domain }}{% url 'blog:detail_blogs' post.id %}
+
+Sincerely,
+RECursion Team
+
+{% endautoescape %}
