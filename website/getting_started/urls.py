@@ -6,5 +6,5 @@ from django.conf.urls.static import static
 
 app_name = "getting_started"
 urlpatterns = [
-    path('started/', getting_started, name='getting_started'),
+    path('', getting_started, name='getting_started'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
