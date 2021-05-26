@@ -66,7 +66,7 @@ def event_create(request):
             return HttpResponse("Downloadable Image Not Found!")
         event.image='../'+full_path
         event.save()
-        return redirect('events')
+        return redirect('events:events')
 
     return render(request, 'create_event.html',{'form':form,"perms":perms})
 
