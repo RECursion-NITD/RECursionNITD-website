@@ -17,10 +17,10 @@
     <ul>
         <h2>{% if events.count == 0  %}No events{% endif %}</h2>
         {% for event in events %}
-           <li><a href="{% url 'event_detail' event.id %}">{{ event}}</a>
+           <li><a href="{% url 'events:event_detail' event.id %}">{{ event}}</a>
                 {% if perms %}
                 <span>
-                    <a href="{% url 'event_update' event.id %}"> Update</a>
+                    <a href="{% url 'events:event_update' event.id %}"> Update</a>
                 </span>
                 {% endif %}
     </li>
