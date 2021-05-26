@@ -1,3 +1,4 @@
+{% load tz %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,14 +17,14 @@
                         Description:{{event.description}}
                 </li>
                 <li>
-                        Start Time:{{event.start_time}}
+                        Start Time:{{event.start_time|timezone:"Asia/Kolkata"}}
                 </li>
                 <li>
-                        End Time:{{event.end_time}}
+                        End Time:{{event.end_time|timezone:"Asia/Kolkata"}}
                 </li>
                 <li>
                       <span>
-                           {% if event.image.url != Null%}
+                           {% if event.image.url %}
                               <img src="{{ event.image.url }}" alt="Event Image">
                            {% endif %}
                       </span> 
