@@ -59,7 +59,7 @@ def event_create(request):
         event=form.save(commit=False)
         image_url=form.cleaned_data['image_url']
         type=valid_url_extension(image_url)
-        full_path='media/images/'+'event_'+str(id)+ '.png'
+        full_path = 'media/images/'+'event_'+str(event.pk) + '.png'
         try:
             urllib.request.urlretrieve(image_url,full_path)
         except:
