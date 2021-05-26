@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'social_django',
     'widget_tweaks',
     'markdownx',
+    'blog',
+    'getting_started',
 ]
 
 MIDDLEWARE = [

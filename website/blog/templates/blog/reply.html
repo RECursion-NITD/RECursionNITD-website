@@ -1,0 +1,65 @@
+
+        <form class='my-update-form' method="POST" data-url='{{ request.build_absolute_uri|safe }}'> {% csrf_token %}
+            <table>
+                {{upform.description}}
+                {{upform.media}}
+                <input type="hidden" name="ajax_update" value="True">
+            </table>
+                <br>
+                <center><button type="submit" class="save btn btn-sm btn-outline-primary">Update</button></center>
+        </form>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $("form.my-update-form").submit(function(task){
+        task.preventDefault()
+        
+
+
+    var $formData = $(this).serialize()
+    console.log("form  "+$formData)
+        $.ajax({
+    method: "POST",
+    url:$(this).attr('data-url') ,
+    data:$formData ,
+    success: function (data)
+    {
+        console.log(data)
+        $('form.my-update-form').hide()
+        $('#div_answers').html(data)
+        $(".u_ans").show()
+    },
+    error:handleFormError,
+ })
+        })
+
+        $('.u_ans').click(function(e){
+        e.preventDefault()
+        var id= $(this).attr('ans-id')
+       console.log(id)
+       $(this).toggle()//hiding update link
+        $('#ans_body_'+id).hide()
+        
+    $.ajax({
+    method: "GET",
+    url: "/blog/reply/"+id,
+    success: function (data)
+    {
+       var id_name = "#u_ans_form"+id
+       console.log(id_name)
+       $(id_name).html(data).show()
+    },
+    error:handleFormError,
+ })
+
+})   
+        function handleFormError(jqXHR, textStatus, errorThrown){
+        console.log(jqXHR)
+        console.log(textStatus)
+        console.log(errorThrown)
+    }
+})
+</script>
