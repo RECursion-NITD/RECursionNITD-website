@@ -99,7 +99,7 @@ def user_register(request):
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
-              if User.objects.filter(email=form.cleaned_data['email']).exists():
+              if User.objects.filter(email=form.cleaned_data['email'].lower()).exists():
                   return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False
@@ -256,7 +256,8 @@ def username_check(request):
 
     
 def email_check(request):
-    email_typed=request.POST.get('email')
+    email_typed=request.POST.get('email',"this email ID can't exist")
+    email_typed=email_typed.lower()
     if User.objects.filter(email = email_typed).exists():
         return HttpResponse("exists")
     return HttpResponse("success")
