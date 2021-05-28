@@ -38,7 +38,7 @@ def superuser_only(function):
 
 @superuser_only
 def events(request):
-    events=Events.objects.all()
+    qs=Events.objects.all()
     perms=0
     if request.user.is_superuser:
         perms=1
@@ -46,7 +46,7 @@ def events(request):
     form = Eventsform(request.POST or None)
 
     form = Eventsform(None)
-    return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
+    return render(request, 'events.html',{'form':form,'events': qs,"perms":perms})
 
 
 @superuser_only
@@ -121,7 +121,7 @@ def event_update(request,id):
 def upcoming_events(request):
     today=timezone.now()
     upto=today + timedelta(days=365)
-    events=Events.objects.filter(start_time__range=[today, upto])
+    qs=Events.objects.filter(start_time__range=[today, upto])
     perms=0
     if request.user.is_superuser:
         perms=1
@@ -130,10 +130,10 @@ def upcoming_events(request):
         form.save()
         return redirect('events:events')
     form = Eventsform(None)
-    return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
+    return render(request, 'events.html',{'form':form,'events': qs,"perms":perms,})
 
 
 def calender(request):
-    events=Events.objects.all().order_by('-start_time')
-    args={'events':events,}
+    qs=Events.objects.all().order_by('-start_time')
+    args={'events':qs,}
     return render(request, 'calender.html', args)
