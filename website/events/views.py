@@ -35,6 +35,7 @@ def superuser_only(function):
         return function(request, *args, **kwargs)
     return _inner
 
+
 @superuser_only
 def events(request):
     events=Events.objects.all()
@@ -46,6 +47,7 @@ def events(request):
 
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms})
+
 
 @superuser_only
 def event_create(request):
@@ -71,6 +73,7 @@ def event_create(request):
 
     return render(request, 'create_event.html',{'form':form,"perms":perms})
 
+
 @superuser_only
 def event_detail(request,id):
     try:
@@ -79,6 +82,7 @@ def event_detail(request,id):
         return HttpResponse("id does not exist")
     else:
         return render(request,'event_detail.html',{'event':event})
+
 
 @superuser_only
 def event_update(request,id):
@@ -112,6 +116,7 @@ def event_update(request,id):
                 return redirect('events:events')
         return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
+
 @superuser_only
 def upcoming_events(request):
     today=timezone.now()
@@ -126,6 +131,7 @@ def upcoming_events(request):
         return redirect('events:events')
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
+
 
 def calender(request):
     events=Events.objects.all().order_by('-start_time')
