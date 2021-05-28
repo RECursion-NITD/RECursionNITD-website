@@ -75,9 +75,9 @@ def event_create(request):
 
 
 @superuser_only
-def event_detail(request,id):
+def event_detail(request,event_id):
     try:
-        event =get_object_or_404( Events,pk=id)
+        event =get_object_or_404( Events,pk=event_id)
     except:
         return HttpResponse("id does not exist")
     else:
@@ -85,10 +85,10 @@ def event_detail(request,id):
 
 
 @superuser_only
-def event_update(request,id):
+def event_update(request,event_id):
     print("call")
     try:
-        event =get_object_or_404(Events, pk=id)
+        event =get_object_or_404(Events, pk=event_id)
 
     except Events.DoesNotExist:
         return HttpResponse("id does not exist")
@@ -106,7 +106,7 @@ def event_update(request,id):
                 event=upform.save(commit=False)
                 image_url=upform.cleaned_data['image_url']
                 type=valid_url_extension(image_url)
-                full_path='media/images/'+'event_'+str(id)+ '.png'
+                full_path='media/images/'+'event_'+str(event_id)+ '.png'
                 try:
                     urllib.request.urlretrieve(image_url,full_path)
                 except:
