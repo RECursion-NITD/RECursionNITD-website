@@ -108,7 +108,7 @@ def event_update(request,id):
                     return HttpResponse("Downloadable Image Not Found!")
                 event.image='../'+full_path
                 event.save()
-                return redirect('events')
+                return redirect('events:events')
         return render(request, 'update_event.html',{'upform':upform,"perms":perms})
 
 @superuser_only
@@ -122,7 +122,7 @@ def upcoming_events(request):
     form = Eventsform(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('events')
+        return redirect('events:events')
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': events,"perms":perms,})
 
