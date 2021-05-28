@@ -90,7 +90,7 @@ def event_update(request,id):
     try:
         event =get_object_or_404(Events, pk=id)
 
-    except:
+    except Events.DoesNotExist:
         return HttpResponse("id does not exist")
     else:
         perms=0
