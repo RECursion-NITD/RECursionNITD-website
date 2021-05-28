@@ -20,12 +20,12 @@ from io import BytesIO
 import urllib.request
 from PIL import Image
 import json
-import datetime
+from datetime import datetime
 from .validators import valid_url_extension
 from .validators import valid_url_mimetype
 from django.core.exceptions import PermissionDenied
 
-json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
+json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime) else None)
 
 
 def superuser_only(function):
@@ -59,7 +59,7 @@ def event_create(request):
 
         event=form.save(commit=False)
         image_url=form.cleaned_data['image_url']
-        full_path = 'media/images/'+'event_'+str(event.pk) + '.png'
+        full_path = 'media/images/'+'event_'+datetime.strftime(datetime.now(),"%Y-%m-%dT%H-%M-%S-%f") + '.png'
         try:
             urllib.request.urlretrieve(image_url,full_path)
         except:
@@ -101,7 +101,7 @@ def event_update(request,event_id):
 
                 event=upform.save(commit=False)
                 image_url=upform.cleaned_data['image_url']
-                full_path='media/images/'+'event_'+str(event_id)+ '.png'
+                full_path = 'media/images/event_' + datetime.strftime(datetime.now(),"%Y-%m-%dT%H-%M-%S-%f") + '.png'
                 try:
                     urllib.request.urlretrieve(image_url,full_path)
                 except:
