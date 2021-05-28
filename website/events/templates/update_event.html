@@ -6,7 +6,7 @@
           content="width=device-width, user-scalab=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
      <meta http-equiv="X-UA-Compatible" content="ie=edge">
      <title>Events</title>
-
+</head>
 <body>
 
 
@@ -25,7 +25,7 @@
                 </form>
               </div>
               {% else %}
-              <p><a href="/login/">LOGIN</a></p>
+              <p><a href="{% url 'login' %}">LOGIN</a></p>
         {% endif %}
     </li>
     <div id='msg'>
@@ -34,4 +34,4 @@
 
 
 </body>
-</head>
+</html>
