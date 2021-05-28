@@ -43,8 +43,6 @@ def events(request):
     if request.user.is_superuser:
         perms=1
 
-    form = Eventsform(request.POST or None)
-
     form = Eventsform(None)
     return render(request, 'events.html',{'form':form,'events': qs,"perms":perms})
 
@@ -61,7 +59,6 @@ def event_create(request):
 
         event=form.save(commit=False)
         image_url=form.cleaned_data['image_url']
-        type=valid_url_extension(image_url)
         full_path = 'media/images/'+'event_'+str(event.pk) + '.png'
         try:
             urllib.request.urlretrieve(image_url,full_path)
@@ -93,7 +90,6 @@ def event_update(request,event_id):
     except Events.DoesNotExist:
         return HttpResponse("id does not exist")
     else:
-        perms=0
         if request.user.is_superuser:
             perms=1
         else:
@@ -105,7 +101,6 @@ def event_update(request,event_id):
 
                 event=upform.save(commit=False)
                 image_url=upform.cleaned_data['image_url']
-                type=valid_url_extension(image_url)
                 full_path='media/images/'+'event_'+str(event_id)+ '.png'
                 try:
                     urllib.request.urlretrieve(image_url,full_path)
