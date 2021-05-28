@@ -27,12 +27,13 @@ from django.core.exceptions import PermissionDenied
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+
 def superuser_only(function):
-   def _inner(request, *args, **kwargs):
-       if not request.user.is_superuser:
-           raise PermissionDenied
-       return function(request, *args, **kwargs)
-   return _inner
+    def _inner(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return function(request, *args, **kwargs)
+    return _inner
 
 @superuser_only
 def events(request):
