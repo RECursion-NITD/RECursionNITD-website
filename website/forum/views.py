@@ -250,14 +250,23 @@ def update_questions(request, id):
     except:
         return HttpResponse("id does not exist")
     # import pdb;pdb.set_trace();
+    user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
+
+    if user==question.user_id or user_permission=='1' or user_permission=='2':
+        pass
+    else:
+        return redirect('forum:list_questions')
+
     form = Questionform(request.POST or None, instance=question)
     Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
         if form.is_valid() and  form2.is_valid():
             description = form.cleaned_data.get('description')
-            f = form.save(commit=False)
-            f.user_id = request.user
+            # f = form.save(commit=False)
+            # f.user_id = request.user
             form.save()
             to_del = Taggings.objects.filter(question=question)  # delete all prev taggings
             if to_del.exists():
