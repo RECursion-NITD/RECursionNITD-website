@@ -208,7 +208,7 @@ def detail_questions(request, id):
     try:
         questions =get_object_or_404( Questions,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     answers = Answers.objects.filter(question_id = questions)
     follows = Follows.objects.filter(question = questions)
     tags = Tags.objects.all()
@@ -248,7 +248,7 @@ def update_questions(request, id):
     try:
         question = get_object_or_404(Questions, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     # import pdb;pdb.set_trace();
     user = request.user
     user_profile = Profile.objects.get(user=user)
@@ -331,7 +331,7 @@ def add_answer(request, id):
         question = get_object_or_404(Questions, pk=id)
 
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
 
     ans=Answers.objects.filter(user_id=request.user).filter(question_id=question)
     if ans.count()>0:
@@ -396,7 +396,7 @@ def update_answer(request, id):
         answer =get_object_or_404(Answers, pk=id)
         question=answer.question_id
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     else:
         form = Answerform(request.POST or None, instance=answer)
         if request.method == 'POST':
@@ -455,7 +455,7 @@ def edit_following(request, id):
     try:
         question =get_object_or_404( Questions,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     user = request.user
     if user != question.user_id:
        if Follows.objects.filter(question=question, user=user).exists():
@@ -482,7 +482,7 @@ def add_comment(request, id):
     try:
         question = get_object_or_404(Questions, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     form = Commentform(request.POST or None)
     if form.is_valid():
         f = form.save(commit=False)
@@ -533,7 +533,7 @@ def update_comment(request, id):
         comment =get_object_or_404(Comments, pk=id)
         question=comment.question
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     else:
         if request.method == 'POST':
             form = Commentform(request.POST or None, instance=comment)
@@ -587,7 +587,7 @@ def voting(request, id):
         answer =get_object_or_404( Answers,pk=id)
         question=answer.question_id
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     user = request.user
     count=0
     if user != answer.user_id:
@@ -624,7 +624,7 @@ def filter_question(request ,id):
     try:
         required_tag=get_object_or_404(Tags, pk=id)
     except:
-        return HttpResponse("Tag does not exist!")
+        return render(request,'id_error.html',{'forum':1,'tag_error':1})
     questions=[]
     answers=Answers.objects.all()
     follows=Follows.objects.all()
@@ -679,7 +679,7 @@ def add_comment_answer(request, id):
     try:
         answer = get_object_or_404(Answers, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     form = Comment_Answerform(request.POST or None)
     if form.is_valid():
         question_id=answer.question_id
@@ -729,7 +729,7 @@ def update_comment_answer(request, id):
         comment =get_object_or_404(Comments_Answers, pk=id)
         answer=comment.answer
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     else:
         question_id=answer.question_id
         form = Comment_Answerform(request.POST or None, instance=comment)
@@ -786,7 +786,7 @@ def delete_answer(request, id):
         answer =get_object_or_404( Answers,pk=id)
         print(answer)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role
@@ -800,7 +800,7 @@ def delete_comment(request, id):
     try:
         comment =get_object_or_404( Comments,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role
@@ -814,7 +814,7 @@ def delete_answer_comment(request, id):
     try:
         answer_comment =get_object_or_404( Comments_Answers,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'forum':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role
