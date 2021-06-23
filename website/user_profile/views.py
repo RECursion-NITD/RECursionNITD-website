@@ -35,6 +35,9 @@ from django.contrib.auth.models import *
 import random
 from forum.models import *
 from blog.models import *
+from .utils import ProfileMatcher
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def view_profile(request, id=None):
     if id == None:
@@ -121,6 +124,33 @@ def user_register(request):
           form = EmailForm(None)
 
     return render(request, 'register.html', {'form': form})
+
+
+@login_required
+def search_user(request,query):
+    context={}
+    # print(query)
+    matcher=ProfileMatcher(query=query)
+    qs=Profile.objects.all()
+    scored_matches=[(matcher.matcher(i),i) for i in qs if matcher.matcher(i)>=matcher.ratio_threshold]
+    sorted_matches=sorted(scored_matches,key=lambda x: x[0],reverse=True)
+    final_qs= list(map(lambda x:x[1],sorted_matches))
+    # print(final_qs)
+    context['tot']=len(final_qs)
+    paginator = Paginator(final_qs, 20)
+    page = request.GET.get('page')
+    try:
+        final_qs = paginator.page(page)
+    except PageNotAnInteger:
+        final_qs = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+
+    context['matches']=final_qs
+    if request.is_ajax():
+        return render(request,'user_list.html',context=context)
+    return render(request, 'user_search_res.html', context=context)
 
 
 def account_activation_sent(request):

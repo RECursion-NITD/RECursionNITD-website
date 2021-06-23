@@ -21,5 +21,6 @@ urlpatterns = [
     path('register/username_check', username_check, name="username_check"),
     path('register/email_check', email_check,name="email_check"),
     path('editprofile/', edit_profile, name='edit_profile'),
+    path('search-user/<str:query>', search_user, name='search_user'),
     url(r'^markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
