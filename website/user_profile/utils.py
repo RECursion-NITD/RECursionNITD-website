@@ -6,7 +6,7 @@ class ProfileMatcher:
     A ProfileMatcher object contains the query and ratio_threshold
     """
 
-    def __init__(self, query: str, ratio_threshold=0.5):
+    def __init__(self, query: str, ratio_threshold=0.36):
         """
         :param query: The keyword to be searched (str)
         :param ratio_threshold: The threshold ratio (float)
@@ -18,7 +18,7 @@ class ProfileMatcher:
 
     def matcher(self, obj):
         score = max(
-            SequenceMatcher(None, obj.user.username.lower(), self.query).ratio(),
+            SequenceMatcher(None, obj.name.lower(), self.query).ratio(),
             -1
         )
         if score >= self.ratio_threshold:
