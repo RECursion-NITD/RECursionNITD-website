@@ -28,7 +28,7 @@
         font-family: 'Montserrat', sans-serif;
         display: inline-block;
         text-transform: uppercase;
-        color: blue;
+        color: black;
         text-decoration: none;
         border: 2px solid;
         background: transparent;
@@ -38,6 +38,7 @@
         margin: 10px;
         -webkit-transition: 0.2s all;
         transition: 0.2s all;
+        border-radius: 25px;
     }
 
     .notfound a:hover {
@@ -69,7 +70,7 @@
         align-items: center;
         margin: 20px;
         padding: 10px 10px;
-        color: blue;
+        color: black;
         border-radius: 10px;
         font-weight: 800;
         font: bolder;
@@ -118,20 +119,32 @@
             <blockquote lang="en">
                 {% if tag_error %}
                     Tag does not exist!!
+                {% elif blog %}
+                    The blog you are looking for is either missing or temporarily unavailable!!
+                {% elif forum %}
+                    The question you are looking for is either missing or temporarily unavailable!!
+                {% elif experience %}
+                    The interview experience you are looking for is either missing or temporarily unavailable!!
+                {% elif no_user %}
+                    The user you are looking for does not exist!!
+                {% elif no_profile %}
+                    The user you are looking for has not created a Profile yet!!
                 {% else %}
-                    The page yoy are looking for is either missing or temporarily unavailable!!
+                    The page you are looking for is either missing or temporarily unavailable!!
                 {% endif %}
             </blockquote>
 
             <!-- Redirect Buttons -->
-            <a href="{% url 'home' %}">Home</a> 
+            <a href="{% url 'home' %}">Home</a>
 
             {% if blog %}
-                <a href="{% url 'blog:list_blogs' %}">Blog</a>
+            <a href="{% url 'blog:list_blogs' %}">Blog</a>
             {% elif forum %}
-                <a href="{% url 'forum:list_questions' %}">AskREC</a>
+            <a href="{% url 'forum:list_questions' %}">AskREC</a>
             {% elif experience %}
-                <a href="{% url 'experience:list_experiences' %}">Interview Experiences</a>
+            <a href="{% url 'experience:list_experiences' %}">Interview Experiences</a>
+            {% elif no_profile or no_user %}
+            <a href="{% url 'profile:view_profile' %}">My Profile</a>
             {% endif %}
         </div>
     </div>
