@@ -127,9 +127,9 @@ def user_register(request):
 
 
 @login_required
-def search_user(request,query):
+def search_user(request):
     context={}
-    # print(query)
+    query=request.GET.get('query','')
     matcher=ProfileMatcher(query=query)
     qs=Profile.objects.all()
     scored_matches=[(matcher.matcher(i),i) for i in qs if matcher.matcher(i)>=matcher.ratio_threshold]
