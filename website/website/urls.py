@@ -34,7 +34,7 @@ urlpatterns = [
     path('team/',include('team.urls',namespace='team')),
     path('blog/',include('blog.urls',namespace='blog')),
     path('experience/',include('interview_exp.urls',namespace='interview_exp')),
-    path('getting_started/',include('getting_started.urls',namespace='getting_started')),
+    path('get_started/',include('getting_started.urls',namespace='getting_started')),
     # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 

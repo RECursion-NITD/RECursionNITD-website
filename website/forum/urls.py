@@ -8,7 +8,7 @@ from user_profile import urls
 app_name="forum"
 urlpatterns = [
     path('profile/', include('user_profile.urls')),
-    path('start/', getting_started, name='getting_started'),
+    #path('start/', getting_started, name='getting_started'),
     path('team/', team_page, name='team_page'),
     path('webdteam/', webd_team, name='webd_team'),
     path('faculty/', faculty, name='faculty'),

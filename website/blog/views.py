@@ -183,7 +183,7 @@ def detail_blogs(request, id):
     try:
         posts =get_object_or_404( Posts,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     reply = Reply.objects.filter(post_id = posts)
     tags = Tags.objects.all()
     taggings = Taggings.objects.all()
@@ -216,16 +216,25 @@ def update_blogs(request, id):
     try:
         post = get_object_or_404(Posts, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     # import pdb;pdb.set_trace();
+    user = request.user
+    user_profile = Profile.objects.get(user=user)
+    user_permission = user_profile.role
+
+    if user==post.user_id or user_permission=='1' or user_permission=='2':
+        pass
+    else:
+        return redirect('blog:list_blogs')
+
     form = Postform(request.POST or None, instance=post)
     Tagform = modelformset_factory(Tags, fields=('name',), extra=1)
     if request.method == 'POST':
         form2 = Tagform(request.POST or None)
         if form.is_valid() and  form2.is_valid():
             description = form.cleaned_data.get('description')
-            f = form.save(commit=False)
-            f.user_id = request.user
+            # f = form.save(commit=False)
+            # f.user_id = request.user
             form.save()
             to_del = Taggings.objects.filter(post=post)  # delete all prev taggings
             if to_del.exists():
@@ -288,7 +297,7 @@ def add_reply(request, id):
         post = get_object_or_404(Posts, pk=id)
 
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
 
     rep=Reply.objects.filter(user_id=request.user).filter(post_id=post)
     form = Replyform(request.POST or None)
@@ -349,7 +358,7 @@ def update_reply(request, id):
         reply =get_object_or_404(Reply, pk=id)
         post=reply.post_id
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     else:
         form = Replyform(request.POST or None, instance=reply)
         if request.method == 'POST':
@@ -408,7 +417,7 @@ def add_comment(request, id):
     try:
         post = get_object_or_404(Posts, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     form = Commentform(request.POST or None)
     if form.is_valid():
         f = form.save(commit=False)
@@ -457,7 +466,7 @@ def update_comment(request, id):
         comment =get_object_or_404(Comment, pk=id)
         post=comment.post
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     else:
         if request.method == 'POST':
             form = Commentform(request.POST or None, instance=comment)
@@ -511,7 +520,7 @@ def edit_postlike(request, id):
     try:
         post =get_object_or_404( Posts,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     if user != post.user_id:
        if PostLikes.objects.filter(post=post, user=user).exists():
@@ -547,7 +556,7 @@ def edit_postdislike(request, id):
     try:
         post =get_object_or_404( Posts,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     if user != post.user_id:
         if PostLikes.objects.filter(post=post, user=user).exists():
@@ -585,7 +594,7 @@ def like_votings(request, id):
         reply =get_object_or_404( Reply,pk=id)
         post=reply.post_id
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     count=0
     if user != reply.user_id:
@@ -623,7 +632,7 @@ def dislike_votings(request, id):
         reply =get_object_or_404( Reply,pk=id)
         post=reply.post_id
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     count=0 
     if user != reply.user_id:
@@ -666,7 +675,7 @@ def filter_blog(request ,id):
     try:
         required_tag=get_object_or_404(Tags, pk=id)
     except:
-        return HttpResponse("Tag does not exist!")
+        return render(request,'id_error.html',{'blog':1,'tag_error':1})
     posts=[]
     replys=Reply.objects.all()
     '''follows=Follows.objects.all()'''
@@ -722,7 +731,7 @@ def add_comment_reply(request, id):
     try:
         reply = get_object_or_404(Reply, pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     form = Comment_Replyform(request.POST or None)
     if form.is_valid():
         post_id=reply.post_id
@@ -771,7 +780,7 @@ def update_comment_reply(request, id):
         comment =get_object_or_404(Comment_Reply, pk=id)
         reply=comment.reply
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     else:
         post_id=reply.post_id
         form = Comment_Replyform(request.POST or None, instance=comment)
@@ -826,7 +835,7 @@ def delete_reply(request, id):
     try:
         reply =get_object_or_404( Reply,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role
@@ -840,7 +849,7 @@ def delete_comment(request, id):
     try:
         comment =get_object_or_404( Comment,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role
@@ -854,7 +863,7 @@ def delete_reply_comment(request, id):
     try:
         reply_comment =get_object_or_404(Comment_Reply,pk=id)
     except:
-        return HttpResponse("id does not exist")
+        return render(request,'id_error.html',{'blog':1})
     user = request.user
     user_profile = Profile.objects.get(user=user)
     user_permission = user_profile.role

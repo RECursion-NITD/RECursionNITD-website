@@ -35,6 +35,9 @@ from django.contrib.auth.models import *
 import random
 from forum.models import *
 from blog.models import *
+from .utils import ProfileMatcher
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 
 def view_profile(request, id=None):
     if id == None:
@@ -43,11 +46,11 @@ def view_profile(request, id=None):
         user = get_object_or_404(User, pk=id) 
     except:
         print(request.user.id)
-        return HttpResponse("User does not exist!")
+        return render(request,'id_error.html',{'no_user':1})
     try:
         profile = get_object_or_404(Profile, user=user)
     except:
-        return HttpResponse("User has not created a Profile yet!")
+        return render(request,'id_error.html',{'no_profile':1})
     posts = Posts.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     replys = Reply.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     comment = Comment.objects.filter(user = user).order_by('-updated_at')[:10:1]
@@ -99,7 +102,7 @@ def user_register(request):
     if request.method == 'POST':
       if request.POST.get('ajax_check') == "True":
           if form.is_valid():
-              if User.objects.filter(email=form.cleaned_data['email']).exists():
+              if User.objects.filter(email=form.cleaned_data['email'].lower()).exists():
                   return HttpResponse("A user with that Email already exists.")
               user = form.save(commit=False)
               user.is_active = False
@@ -121,6 +124,33 @@ def user_register(request):
           form = EmailForm(None)
 
     return render(request, 'register.html', {'form': form})
+
+
+@login_required
+def search_user(request):
+    context={}
+    query=request.GET.get('query','')
+    matcher=ProfileMatcher(query=query)
+    qs=Profile.objects.all()
+    scored_matches=[(matcher.matcher(i),i) for i in qs if matcher.matcher(i)>=matcher.ratio_threshold]
+    sorted_matches=sorted(scored_matches,key=lambda x: x[0],reverse=True)
+    final_qs= list(map(lambda x:x[1],sorted_matches))
+    # print(final_qs)
+    context['tot']=len(final_qs)
+    paginator = Paginator(final_qs, 20)
+    page = request.GET.get('page')
+    try:
+        final_qs = paginator.page(page)
+    except PageNotAnInteger:
+        final_qs = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+
+    context['matches']=final_qs
+    if request.is_ajax():
+        return render(request,'user_list.html',context=context)
+    return render(request, 'user_search_res.html', context=context)
 
 
 def account_activation_sent(request):
@@ -256,7 +286,8 @@ def username_check(request):
 
     
 def email_check(request):
-    email_typed=request.POST.get('email')
+    email_typed=request.POST.get('email',"this email ID can't exist")
+    email_typed=email_typed.lower()
     if User.objects.filter(email = email_typed).exists():
         return HttpResponse("exists")
     return HttpResponse("success")
