@@ -1,0 +1,65 @@
+  {% extends 'base.html' %}
+  {% block title%}User search{% endblock %}
+  {% block js %}
+  <!-- Import Google Fonts-->
+  <!--     <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+
+  <!-- Import Google Font Montserrat -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script>
+    var page = 1;
+    var empty_page = false;
+    var block_request = false;
+
+    $(window).scroll(function() {
+      var margin = $(document).height() - $(window).height();
+      if ($(window).scrollTop() > margin && empty_page == false && block_request == false)
+        block_request = true;
+      page += 1;
+      $.get('?page=' + page, function(data) {
+        if (data == '') {
+          empty_page = true;
+        } else {
+          $('#users-list').append(data);
+        }
+      });
+    });
+  </script>
+  {% endblock js %}
+  {% load widget_tweaks %}
+  {% block content %}
+  <div class="container">
+    <a href="{% url 'home' %}" class="text-muted small">< Back to Home</a> 
+    <h2 style="margin-top: 2%">User search results</h2>
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <p class="small" style="font-family: 'Pacifico', cursive;">Stalking, Huh? ;-)</p>
+    <div class="row">
+      <div class="col-lg-9 col-sm-12 mt-2">
+        <div class="card ml-0">
+            {% if matches %}
+                 <div id="users-list">
+                   {% include 'user_list.html' with matches=matches %}
+                 </div>
+            {% else %}
+                <h2>No one found.</h2>
+            {% endif %}
+        </div>
+     </div>
+     <div class="col-sm-12 col-lg-3 mt-2">
+      <div class="ml-0">
+        <div class=" mr-auto">
+          <div class="card">
+              <div class="number card-header  p-0"><h2 style="text-align:center;">
+                <p class="ml-auto mr-auto mb-0 mt-2" style="font-family:'Rajdhani',sans-serif;">{{ tot }}</p></h2>
+              </div>
+              <div class="mt-2">
+                <p style="text-align: center;">Profiles Found</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% for match in matches %}
+
+    <div class="row mt-2 mb-2  ml-2 mr-2">
+     <div class="col-sm-2 col-lg-1">
+        <img src="{{ match.image.url }}" class="rounded-circle mt-2 mb-1"width="55px" height="55px" alt="img">
+    </div>
+        <div class="col-lg-11 col-sm-9">
+            <a href="{% url 'profile:view_profile' match.user.id  %}" style="color:#5277CF;"><strong>{{ match.name }} </strong></a>
+            <ul>
+                <li><span style="color:#111111;">({{ match.college }})</span></li>
+            </ul>
+        </div>
+
+    </div>
+    <hr class="mt-0 mb-0">
+{% endfor %}
