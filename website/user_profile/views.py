@@ -43,11 +43,11 @@ def view_profile(request, id=None):
         user = get_object_or_404(User, pk=id) 
     except:
         print(request.user.id)
-        return HttpResponse("User does not exist!")
+        return render(request,'id_error.html',{'no_user':1})
     try:
         profile = get_object_or_404(Profile, user=user)
     except:
-        return HttpResponse("User has not created a Profile yet!")
+        return render(request,'id_error.html',{'no_profile':1})
     posts = Posts.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     replys = Reply.objects.filter(user_id = user).order_by('-updated_at')[:10:1]
     comment = Comment.objects.filter(user = user).order_by('-updated_at')[:10:1]

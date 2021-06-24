@@ -51,7 +51,7 @@ def update_experience(request, id):
     try:
         experience = get_object_or_404(Experiences, pk=id)
     except:
-        return HttpResponse("Content Does Not Exist :(")
+        return render(request,'id_error.html',{'experience':1})
     else:
         if experience.user != request.user and current_user_profile.role != '1':
             return redirect('interview_exp:list_experiences')
@@ -226,7 +226,7 @@ def detail_experiences(request, id):
     try:
         experience =get_object_or_404(Experiences, pk=id)
     except:
-        return HttpResponse("Content Does Not Exist!")
+        return render(request,'id_error.html',{'experience':1})
     if experience.verification_Status != 'Approved' and experience.user != request.user and current_user_profile.role == '3':
         return redirect('interview_exp:list_experiences')
     profile = Profile.objects.get(user=experience.user)
@@ -245,7 +245,7 @@ def revise_experience(request, id, action):
     try:
         experience = get_object_or_404(Experiences, pk=id)
     except:
-        return HttpResponse("Content Does Not Exist :(")
+        return render(request,'id_error.html',{'experience':1})
 
     if experience.verification_Status == 'Approved':
         return HttpResponseRedirect(reverse('interview_exp:detail_experiences', args=(id,)))
