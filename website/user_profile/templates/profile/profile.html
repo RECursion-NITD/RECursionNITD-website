@@ -50,12 +50,13 @@
                </div>
         <br>
         <br>
-        <div class="jumbotron container shadow-sm p-3 mb-1 bg-white rounded" style="background: white;">
-          <div style="text-align: center;">
+        {% if profile.user == request.user %}
+            <div class="jumbotron container shadow-sm p-3 mb-1 bg-white rounded" style="background: white;">
+            <div style="text-align: center;">
             <h5>StopStalk :</h5>
-          </div>
-          <hr>
-          <center>
+            </div>
+            <hr>
+            <center>
             <form method="get" action={% url "profile:search_user" %}>
             <div class="input-group justify-content-center align-content-center m-auto w-100">
               <input type="search" name="query" class="form-control rounded m-sm-0" placeholder="Search User" aria-label="Search"
@@ -65,10 +66,11 @@
             </div>
             </form>
           </center>
-        </div>
+            </div>
+            <br>
+            <br>
+        {% endif %}
 
-        <br>
-        <br>
       </div>
             <div class="col-lg-9 col-md-8 col-sm-12">
             <div class="jumbotron shadow-sm p-3 mb-1 bg-white rounded"  style="background: white">
