@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    #notfound {
+        position: relative;
+        height: 100vh;
+        /* margin-top: -30vh; */
+    }
+
+    #notfound .notfound {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }
+
+    .notfound {
+        max-width: 767px;
+        width: 100%;
+        line-height: 1.4;
+        text-align: center;
+    }
+
+    .notfound a {
+        font-family: 'Montserrat', sans-serif;
+        display: inline-block;
+        text-transform: uppercase;
+        color: blue;
+        text-decoration: none;
+        border: 2px solid;
+        background: transparent;
+        padding: 10px 40px;
+        font-size: 14px;
+        font-weight: 700;
+        margin: 10px;
+        -webkit-transition: 0.2s all;
+        transition: 0.2s all;
+        border-radius: 25px;
+    }
+
+    .notfound a:hover {
+        color: #FF7565;
+    }
+
+    .notfound img {
+        height: 100%;
+    }
+
+    blockquote::before {
+        content: open-quote;
+    }
+
+    blockquote::after {
+        content: close-quote;
+    }
+
+    blockquote::before,
+    blockquote::after {
+        opacity: 0.25;
+        padding: 0 5px;
+        font-size: 3em;
+    }
+
+    blockquote {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 20px;
+        padding: 10px 10px;
+        color: black;
+        border-radius: 10px;
+        font-weight: 800;
+        font: bolder;
+        background-color: #fff;
+    }
+
+
+
+    @media only screen and (max-width: 767px) {
+        .notfound h4 {
+            font-size: 24px;
+        }
+    }
+
+    @media only screen and (max-width: 480px) {
+        .notfound .notfound-404 h1 {
+            font-size: 182px;
+        }
+
+        .notfound a {
+            font-size: 8px;
+
+        }
+
+        .notfound img {
+            width: 80%;
+        }
+
+        h5 {
+            font-size: 15px;
+        }
+    }
+
+    /*--------------------------------------------FrameWork------------------------*/
+</style>
+<link href='https://fonts.googleapis.com/css?family=Anton|Passion+One|PT+Sans+Caption' rel='stylesheet' type='text/css'>
+
+<body>
+
+    <div id="notfound">
+        <div class="notfound">
+            <!-- <div class="notfound-404"> -->
+            {% load staticfiles %}
+            <img style="height: 400px;" src="{% static 'image/404_error.jpg'%}" alt="image">
+            <!-- </div> -->
+            <blockquote lang="en">
+                {% if tag_error %}
+                Tag does not exist!!
+                {% elif blog %}
+                The Blog you are looking for is either missing or temporarily unavailable!!
+                {% elif forum %}
+                The AskREC question you are looking for is either missing or temporarily unavailable!!
+                {% elif experience %}
+                The Interview experience you are looking for is either missing or temporarily unavailable!!
+                {% else %}
+                The page you are looking for is either missing or temporarily unavailable!!
+                {% endif %}
+            </blockquote>
+
+            <!-- Redirect Buttons -->
+            <a href="{% url 'home' %}">Home</a>
+
+            {% if blog %}
+            <a href="{% url 'blog:list_blogs' %}">Blog</a>
+            {% elif forum %}
+            <a href="{% url 'forum:list_questions' %}">AskREC</a>
+            {% elif experience %}
+            <a href="{% url 'experience:list_experiences' %}">Interview Experiences</a>
+            {% endif %}
+        </div>
+    </div>
+
+</body>
+{%endblock%}
