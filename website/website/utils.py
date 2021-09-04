@@ -3,11 +3,6 @@ from user_profile.models import Profile
 import urllib.request
 import random
 from django.shortcuts import redirect
-import shutil
-from django.urls import reverse
-import os
-from django.conf import settings
-
 
 def associate_by_email(**kwargs):
     try:
