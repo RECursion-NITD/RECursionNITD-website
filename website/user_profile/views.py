@@ -170,7 +170,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         profile = Profile.objects.get(user = user)
-        image_url = "https://api.adorable.io/avatars/65/" + str(random.randint(0000, 9999)) + ".png"
+        image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
         type = valid_url_extension(image_url)
         full_path = 'media/images/' + profile.user.username + '.png'
         try:
