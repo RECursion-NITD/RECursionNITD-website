@@ -62,7 +62,7 @@
       <a href="{% url 'user_profile:user_register' %}" class="btn btn-outline-success ml-2 mb-3">Signup</a>
       <hr class="mt-0">
       <div style="background-color:#DF4930;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
-     <a  href="{% url 'social:begin' 'google-oauth2' %}" 
+     <a  href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.get_full_path }}" 
       style="color:white;">Login with Google&nbsp;
      <i class="fab fa-google"></i>
       </a></div><br><br>
