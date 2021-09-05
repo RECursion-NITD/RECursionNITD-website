@@ -1,3 +1,4 @@
+
 {% extends 'base_loginpage.html' %}
 {% load widget_tweaks %}
 {% load staticfiles %}
@@ -5,96 +6,79 @@
 
 {% block css %}
 <style>
-  .title {
-    color: #F95C39;
-    font-size: 7vw;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  .subtitle {
-    font-size: 2.2vw;
-    color: #528CDD;
-  }
-
-  @media(min-width:768px) {
-    .mobileLine {
-      display: none;
+.title{
+  color: #F95C39;
+  font-size: 7vw; 
+  font-family: 'Montserrat', sans-serif;
+}
+.subtitle{
+  font-size: 2.2vw;color:#528CDD;
+}
+@media(min-width:768px){
+    .mobileLine{
+        display:none;
     }
-  }
-
-  @media(max-width:450px) {
-    .title {
-      font-size: 14vw;
+}
+@media(max-width:450px){
+    .title{
+      font-size:14vw;
     }
-
-    .subtitle {
+    .subtitle{
       font-size: 5vw;
     }
-  }
+}
 </style>
 {% endblock %}
 
 {% block content %}
 <center class="container" style="margin-top:7.5%;">
-  <a href="{% url 'home'%}"><small class="text-muted" style="float:left;">
-      < Back to home</small></a><br>
-  <center>
-    <h1 class="title mb-0 mt-2">RECursion</h1>
-  </center><br>
-  <center>
-    <h5 class="subtitle mb-4">Programming community of NIT Durgapur
-    </h5>
-  </center>
+  <a href="{% url 'home'%}"><small class="text-muted" style="float:left;"> < Back to home</small></a><br>
+      <center><h1 class="title mb-0 mt-2" >RECursion</h1></center><br>
+      <center><h5 class="subtitle mb-4">Programming community of NIT Durgapur
+</h5></center>
   <div class="row">
-    <form class="col-sm-10 col-md-5 col-lg-5 mb-3" style="margin-right:7vw;margin-left: 2vw;" method="post"
-      class="form-group">
+    <form class="col-sm-10 col-md-5 col-lg-5 mb-3" style="margin-right:7vw;margin-left: 2vw;" method="post" class="form-group">
       <center>
-        {% csrf_token %}
-        <p>
-          {% render_field form.username class="form-control mb-3 ml-2 mr-2" style="background:white;"
-          placeholder="Username" %}
+      {% csrf_token %}
+      <p>
+        {% render_field form.username class="form-control mb-3 ml-2 mr-2" style="background:white;" placeholder="Username" %}
 
-          {% render_field form.password class="form-control ml-2 mr-2" style="background:white;" placeholder="Password"
-          %}
-        </p>
-      </center>
+        {% render_field form.password class="form-control ml-2 mr-2" style="background:white;" placeholder="Password" %}
+      </p>
+    </center>
       <!-- LOGIN  -->
-      <button type="submit" class="btn btn-outline-success ml-2" style="float:right;">Login</button>
-      <a href="{% url 'profile:password_reset'%}"
-        style="position:relative;float:left;bottom:-5px;margin-left:10px;text-decoration: underline;">Forgot
-        password</a>
+      <button type="submit" class="btn btn-outline-success ml-2"style="float:right;">Login</button>
+      <a href="{% url 'profile:password_reset'%}" style="position:relative;float:left;bottom:-5px;margin-left:10px;text-decoration: underline;">Forgot password</a>
 
     </form>
     <div class="col-sm-10 col-md-5 col-lg-5">
-      {% if form.errors %}
-      <div class="alert alert-warning" role="alert">
-        Username or Password is Incorrect!
-      </div>
-      {% endif %}
-      <hr class="mobileLine">
+        {% if form.errors %}
+         <div class="alert alert-warning" role="alert">
+          Username or Password is Incorrect!
+         </div>
+        {% endif %}
+        <hr class="mobileLine">
       <span style="position: relative;bottom:10px;">Don't have an account, make one !</span>
       <!-- SIGN UP -->
       <a href="{% url 'user_profile:user_register' %}" class="btn btn-outline-success ml-2 mb-3">Signup</a>
       <hr class="mt-0">
-      <!-- <div style="background-color:#DF4930;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;"> -->
-      <button class="btn w-100" style="background-color: red;"><a href="{% url 'social:begin' 'google-oauth2' %}"
-          style="color:white; text-decoration: none;">Login
-          with Google&nbsp;
-        </a>
-      </button><br><br>
-      <!--<div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
+      <div>
+        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.get_full_path }}" class="btn w-100" style="background-color: #F95C39; color: white; ">Login with Google&nbsp;
+          <i class="fab fa-google"></i></a>
+      <br><br>
+        </div><br><br>
+    <!--<div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">
     <a  href="{% url 'social:begin' 'facebook' %}" 
     style="color:white;" disabled="true">Login with Facebook&nbsp;
   <i class="fab fa-facebook-f"></i></a>
   </div>-->
-    </div>
-  </div>
-  <hr style="color:#b1b1b1;">
-  <div style="font-size: 90%;">
-    <span><a href="{% url 'home' %}">About</a> </span>&emsp;
-    <span><a href="{% url 'team:team_page' %}">Team</a> </span>&emsp;
-    <!-- <span><a href="{% url 'home'%}">Contact</a> </span>&emsp; -->
-  </div>
+</div>
+</div><hr style="color:#b1b1b1;">
+<div style="font-size: 90%;">
+  <span><a href="{% url 'home' %}">About</a> </span>&emsp;
+  <span><a href="{% url 'team:team_page' %}">Team</a> </span>&emsp;
+  <!-- <span><a href="{% url 'home'%}">Contact</a> </span>&emsp; -->
+</div>
 </center>
 
 

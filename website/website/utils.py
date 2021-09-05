@@ -22,21 +22,32 @@ def set_image_for_new_users(backend, user, response, *args, **kwargs):
         if not user.profile.email_confirmed:
             user.profile.email_confirmed=True
             user.save()
-        if not user.profile.image:
-            user.profile.name = user.username
+
+        if not user.profile.name:
+            try:
+                user.profile.name = response.get('name')
+            except:
+                user.profile.name = user.username    
             user.profile.college = "none"
-            image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
+            user.save()
+                        
+        if not user.profile.image:
             full_path = 'media/images/' + user.username + '.png'
             try:
+                image_url = response['picture']
                 urllib.request.urlretrieve(image_url, full_path)
                 user.profile.image = '../' + full_path
                 user.save()
             except:
-                print("Downloadable Image Not Found!")
+                try:
+                    image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
+                    urllib.request.urlretrieve(image_url, full_path)
+                    user.profile.image = '../' + full_path
+                    user.save()          
+                except:
+                    print("Downloadable Image Not Found!")
             
-        
-    except:
+    except Exception as e:
+        print(e)
         print("error")
         pass
-
- 
