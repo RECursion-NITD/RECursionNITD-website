@@ -79,6 +79,8 @@ website/getting_started/migrations/
 website/interview_exp/migrations/
 website/team/migrations/
 website/user_profile/migrations/
+website/events_calendar/migrations/
+website/migrations/
 
 # Media files
 media/
