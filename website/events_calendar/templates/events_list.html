@@ -1,0 +1,40 @@
+{% load staticfiles %}
+{% for event in events %}
+<div class="row mt-2 mb-2  ml-2 mr-2">
+    <div class="col-sm-2 col-lg-1">
+        {% if event.image %}
+        <img src="{{ event.image.url }}" class="rounded-circle mt-2 mb-1"width="55px" height="55px" alt="img">
+        {% else %}
+        <img src="{% static 'image/Loader.jpeg'%}" class="rounded-circle mt-2 mb-1"width="55px" height="55px" alt="img">
+        {% endif %}
+    </div>
+    <div class="col-lg-11 col-sm-9">
+        <a href="{% url 'events_calendar:event_detail' event.id  %}" style="color:#5277CF;"><strong>{{ event.title }}  </strong></a>
+        {% if perms %}
+        <a href="{% url 'events_calendar:event_update' event.id  %}">
+            <i class="far fa-edit"></i>
+        </a>
+        {% endif %}
+        <ul>
+            <li><span style="color:#111111;">
+                {{event.event_type}}
+            </span> 
+            /
+            <span style="color:#F95c39;">
+                {{event.target_year}}
+            </span></li>
+            <div class="row small">
+                {% if event.link %}
+                <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{{ event.link }}">Click Here</a></li>
+                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
+                
+                {% else %}
+                <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{% url 'events_calendar:event_detail' event.id  %}">Click Here</a></li>
+                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
+                {% endif %}
+            </div>
+        </ul>
+    </div>
+</div>
+    <hr class="mt-0 mb-0">
+    {% endfor %}
