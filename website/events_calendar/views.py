@@ -55,7 +55,46 @@ def event_detail(request, event_id):
     return render(request, 'events_calendar.html', {})
 
 def search_event(request, key):
-    return render(request, 'events_calendar.html', {})
+
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+            key_req = search.cleaned_data
+            key = key_req.get('key')
+            return HttpResponseRedirect(reverse('events_calendar:search_event', args=(key,)))
+
+    perms = False
+    if request.user.is_authenticated:
+        current_user_profile = Profile.objects.get(user = request.user)
+        if current_user_profile.role == '1' or current_user_profile.role == '2':
+            perms = True
+
+    events_list = Events_Calendar.objects.all()
+    events_found = []
+    for event in events_list:
+        if SequenceMatcher(None, event.title.lower(), key.lower()).ratio() > 0.4:
+            events_found.append([SequenceMatcher(None, event.title.lower(), key.lower()).ratio(), event])
+        if SequenceMatcher(None, event.description.lower(), key.lower()).ratio() > 0.5:
+            events_found.append([SequenceMatcher(None, event.description.lower(), key.lower()).ratio(), event])
+    events = []
+    events_found.sort(key=lambda x: x[0], reverse=True)
+    for event in events_found:
+        if event[1] not in events:
+            events.append(event[1])
+
+    paginator = Paginator(events, 5)
+    page = request.GET.get('page')
+    try:
+        events_list = paginator.page(page)
+    except PageNotAnInteger:
+        events_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+    args = {'form_search':search, 'perms':perms, 'events': events_list}
+    if request.is_ajax():
+        return render(request, 'events_list.html', args)
+    return render(request, 'events_calendar.html', args)
 
 def filter_event(request, type):
     return render(request, 'events_calendar.html', {})
