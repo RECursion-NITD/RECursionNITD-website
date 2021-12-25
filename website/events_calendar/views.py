@@ -52,7 +52,20 @@ def event_update(request, event_id):
     return render(request, 'events_calendar.html', {})
 
 def event_detail(request, event_id):
-    return render(request, 'events_calendar.html', {})
+    
+    perms = False
+    if request.user.is_authenticated:
+        current_user_profile = Profile.objects.get(user = request.user)
+        if current_user_profile.role == '1' or current_user_profile.role == '2':
+            perms = True
+
+    try:
+        event = get_object_or_404(Events_Calendar, pk=event_id)
+    except:
+        return render(request,'id_error.html',{'event':1})
+
+    args = {'event': event, 'perms': perms,}
+    return render(request, 'event_details.html', args)
 
 def search_event(request, key):
 
