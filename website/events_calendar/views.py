@@ -97,4 +97,39 @@ def search_event(request, key):
     return render(request, 'events_calendar.html', args)
 
 def filter_event(request, type):
-    return render(request, 'events_calendar.html', {})
+
+    perms = False
+    if request.user.is_authenticated:
+        current_user_profile = Profile.objects.get(user = request.user)
+        if current_user_profile.role == '1' or current_user_profile.role == '2':
+            perms = True
+
+    search = SearchForm(request.POST or None)
+    if request.method == 'POST':
+        if search.is_valid():
+            key_req = search.cleaned_data
+            key = key_req.get('key')
+            return HttpResponseRedirect(reverse('events_calendar:search_event', args=(key,)))
+
+    events_list = Events_Calendar.objects.all()
+
+    if type == 'All':
+       events = events_list
+    else:
+        events = events_list.filter(event_type=type)
+
+    events = events.order_by('-start_time')
+    
+    paginator = Paginator(events, 5)
+    page = request.GET.get('page')
+    try:
+        events_list = paginator.page(page)
+    except PageNotAnInteger:
+        events_list = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return HttpResponse('')
+    args = {'form_search':search, 'perms':perms, 'events': events_list}
+    if request.is_ajax():
+        return render(request, 'events_list.html', args)
+    return render(request, 'events_calendar.html', args)
