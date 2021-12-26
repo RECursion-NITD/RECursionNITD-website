@@ -45,11 +45,50 @@ def list_events(request):
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)
 
+@login_required
 def create_event(request):
-    return render(request, 'events_calendar.html', {})
 
-def event_update(request, event_id):
-    return render(request, 'events_calendar.html', {})
+    perms = False
+    profile = Profile.objects.get(user = request.user)
+    if profile.role == '1' or profile.role == '2':
+        perms = True
+
+    form = Eventsform(request.POST or None, request.FILES)
+    if request.method == 'POST' and perms == True:
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.user = request.user
+            f.save()
+            return redirect('events_calendar:list_events')
+
+        if form.errors:
+            return render(request, 'event_form.html', {'form': form, 'perms':perms})
+
+    return render(request, 'event_form.html', {'form': form, 'perms':perms})
+
+@login_required
+def event_update(request,event_id):
+    try:
+        event = get_object_or_404(Events_Calendar, pk=event_id)
+    except:
+        return render(request,'id_error.html',{'event':1})
+
+    perms = False
+
+    profile = Profile.objects.get(user = request.user)
+    if profile.role == '1' or profile.role == '2':
+        perms = True
+
+    form = Eventsform(request.POST or None, request.FILES, instance=event)
+    if request.method == 'POST' and perms == True:
+        if form.is_valid():
+            form.save()
+            return redirect('events_calendar:list_events')
+
+        if form.errors:
+            return render(request, 'event_form.html', {'form': form, 'perms':perms})
+
+    return render(request, 'event_form.html', {'form': form, 'perms':perms})
 
 def event_detail(request, event_id):
     
