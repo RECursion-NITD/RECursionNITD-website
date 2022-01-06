@@ -43,6 +43,12 @@ class Eventsform(forms.ModelForm):
         data = markdownify(data)
         return data
     
+    def clean(self):
+        cd = self.cleaned_data
+        if cd.get('end_time') < cd.get('start_time'):
+            self.add_error('end_time', "End Time should be Greater than Start Time !")
+        return cd
+        
     class Meta:
         model=Events_Calendar
         fields=('title','event_type','target_year','link','description','image','start_time','end_time')

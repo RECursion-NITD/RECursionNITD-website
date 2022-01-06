@@ -51,6 +51,11 @@
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
                             {% render_field form.end_time class="form-control"  style="display:inline-block;max-width: 95%;" %}  
+                            {% if form.end_time.errors %}
+                            <div class="small alert alert-warning">
+                                {{ form.end_time.errors.0 }}
+                            </div>
+                            {% endif %}
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
