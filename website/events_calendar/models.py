@@ -30,6 +30,7 @@ class Events_Calendar(models.Model):
     link = models.URLField(null=True,blank=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+    duration = models.CharField(max_length=50, null=True, blank=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
