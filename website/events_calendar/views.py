@@ -12,8 +12,17 @@ from user_profile.models import *
 from django.db.models import Q
 from difflib import SequenceMatcher
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from dateutil.relativedelta import relativedelta
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime) else None)
+
+def get_event_duration(start_time, end_time):
+    delta = relativedelta(end_time,start_time)
+    attrs = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
+    human_readable = lambda delta: ['%d %s' % (getattr(delta, attr), attr if getattr(delta, attr) > 1 else attr[:-1]) for attr in attrs if getattr(delta, attr)]
+    dur = human_readable(delta)
+    duration = ' '.join([str(elem) for elem in dur])
+    return duration
 
 def list_events(request):
 
@@ -58,6 +67,7 @@ def create_event(request):
         if form.is_valid():
             f = form.save(commit=False)
             f.user = request.user
+            f.duration = get_event_duration(f.start_time,f.end_time)
             f.save()
             return redirect('events_calendar:list_events')
 
@@ -78,15 +88,20 @@ def event_update(request,event_id):
     profile = Profile.objects.get(user = request.user)
     if profile.role == '1' or profile.role == '2':
         perms = True
-
-    form = Eventsform(request.POST or None, request.FILES, instance=event)
+    
     if request.method == 'POST' and perms == True:
+        form = Eventsform(request.POST or None, request.FILES, instance=event)
         if form.is_valid():
-            form.save()
+            f = form.save(commit=False)
+            f.user = request.user
+            f.duration = get_event_duration(f.start_time,f.end_time)
+            f.save()
             return redirect('events_calendar:list_events')
 
         if form.errors:
             return render(request, 'event_form.html', {'form': form, 'perms':perms})
+    else:
+        form = Eventsform(request.POST or None, instance=event)
 
     return render(request, 'event_form.html', {'form': form, 'perms':perms})
 
@@ -103,7 +118,7 @@ def event_detail(request, event_id):
     except:
         return render(request,'id_error.html',{'event':1})
 
-    args = {'event': event, 'perms': perms,}
+    args = {'event': event, 'perms': perms}
     return render(request, 'event_details.html', args)
 
 def search_event(request, key):
