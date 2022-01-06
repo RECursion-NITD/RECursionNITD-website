@@ -25,7 +25,7 @@
             </span></li>
             <div class="row small">
                 {% if event.link %}
-                <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{{ event.link }}">Click Here</a></li>
+                <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{{ event.link }}" target=”_blank”>Click Here</a></li>
                 <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
                 
                 {% else %}
