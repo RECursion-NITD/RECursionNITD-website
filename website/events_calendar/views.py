@@ -39,6 +39,12 @@ def list_events(request):
             key = key_req.get('key')
             return HttpResponseRedirect(reverse('events_calendar:search_event', args=(key,)))
 
+    events_count={}
+    events_count['Total'] = Events_Calendar.objects.all().count()
+    year_list = Events_Calendar.objects.all().dates('start_time', 'year').reverse()[:5]
+    for years in year_list:
+        events_count[str(years.year)]=Events_Calendar.objects.filter(start_time__year = years.year).count()
+
     events = Events_Calendar.objects.all().order_by('-start_time')
     paginator = Paginator(events, 5)
     page = request.GET.get('page')
@@ -49,7 +55,7 @@ def list_events(request):
     except EmptyPage:
         if request.is_ajax():
             return HttpResponse('')
-    args = {'form_search':search, 'perms':perms, 'events': events_list}
+    args = {'form_search':search, 'perms':perms, 'events': events_list, 'events_count':events_count}
     if request.is_ajax():
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)
@@ -117,7 +123,6 @@ def event_detail(request, event_id):
         event = get_object_or_404(Events_Calendar, pk=event_id)
     except:
         return render(request,'id_error.html',{'event':1})
-
     args = {'event': event, 'perms': perms}
     return render(request, 'event_details.html', args)
 
@@ -135,6 +140,12 @@ def search_event(request, key):
         current_user_profile = Profile.objects.get(user = request.user)
         if current_user_profile.role == '1' or current_user_profile.role == '2':
             perms = True
+
+    events_count={}
+    events_count['Total'] = Events_Calendar.objects.all().count()
+    year_list = Events_Calendar.objects.all().dates('start_time', 'year').reverse()[:5]
+    for years in year_list:
+        events_count[str(years.year)]=Events_Calendar.objects.filter(start_time__year = years.year).count()
 
     events_list = Events_Calendar.objects.all()
     events_found = []
@@ -158,7 +169,7 @@ def search_event(request, key):
     except EmptyPage:
         if request.is_ajax():
             return HttpResponse('')
-    args = {'form_search':search, 'perms':perms, 'events': events_list}
+    args = {'form_search':search, 'perms':perms, 'events': events_list, 'events_count':events_count}
     if request.is_ajax():
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)
@@ -178,6 +189,12 @@ def filter_event(request, type):
             key = key_req.get('key')
             return HttpResponseRedirect(reverse('events_calendar:search_event', args=(key,)))
 
+    events_count={}
+    events_count['Total'] = Events_Calendar.objects.all().count()
+    year_list = Events_Calendar.objects.all().dates('start_time', 'year').reverse()[:5]
+    for years in year_list:
+        events_count[str(years.year)]=Events_Calendar.objects.filter(start_time__year = years.year).count()
+
     events_list = Events_Calendar.objects.all()
 
     if type == 'All':
@@ -196,7 +213,7 @@ def filter_event(request, type):
     except EmptyPage:
         if request.is_ajax():
             return HttpResponse('')
-    args = {'form_search':search, 'perms':perms, 'events': events_list}
+    args = {'form_search':search, 'perms':perms, 'events': events_list, 'events_count':events_count}
     if request.is_ajax():
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)
