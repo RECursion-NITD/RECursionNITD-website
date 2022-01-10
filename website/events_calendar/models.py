@@ -18,19 +18,21 @@ class Events_Calendar(models.Model):
         ('Event', 'Event'),
     )
     year_choices = (
-        ('First Year', 'First Year'),
-        ('Second Year', 'Second Year'),
-        ('NIT Durgapur', 'NIT Durgapur'),
-        ('Open To All', 'Open To All'),
+        ('First Year Students', 'First Year Students'),
+        ('Second Year Students', 'Second Year Students'),
+        ('First and Second Year Students', 'First and Second Year Students'),
+        ('NIT Durgapur Students', 'NIT Durgapur Students'),
+        ('Global Participants', 'Global Participants'),
     )
     event_type = models.CharField(max_length=20, choices=event_choices ,default='Class')
-    target_year = models.CharField(max_length=20, choices=year_choices ,default='First Year')
+    target_year = models.CharField(max_length=40, choices=year_choices ,default='First Year Students')
     description = MarkdownxField(null=True,blank=True)
     image = models.ImageField(blank=True, null=True, upload_to=content_file_name)
     link = models.URLField(null=True,blank=True)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    duration = models.CharField(max_length=50, null=True, blank=True)
+    duration = models.CharField(max_length=20, null=True, blank=True)
+    venue = models.CharField(max_length=20,default="Online",null=True)
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
 
@@ -38,7 +40,7 @@ class Events_Calendar(models.Model):
     @property
     def formatted_markdown(self):
         return markdownify(self.description)
-
+    
     def __str__(self):
         return self.event_type + " - " + self.title
     class Meta:

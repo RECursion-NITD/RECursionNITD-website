@@ -45,13 +45,14 @@ class Eventsform(forms.ModelForm):
     
     def clean(self):
         cd = self.cleaned_data
-        if cd.get('end_time') < cd.get('start_time'):
-            self.add_error('end_time', "End Time should be Greater than Start Time !")
+        if cd.get('end_time') and cd.get('start_time'):
+            if cd.get('end_time') < cd.get('start_time'):
+                self.add_error('end_time', "End Time should be Greater than Start Time !")
         return cd
         
     class Meta:
         model=Events_Calendar
-        fields=('title','event_type','target_year','link','description','image','start_time','end_time')
+        fields=('title','event_type','target_year','link','venue','description','image','start_time','end_time')
 
 class SearchForm(forms.Form):
     key = forms.CharField(max_length=25)
