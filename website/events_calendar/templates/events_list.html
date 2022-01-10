@@ -26,12 +26,12 @@
             <div class="row small">
                 {% if event.link %}
                 <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{{ event.link }}" target=”_blank”>Click Here</a></li>
-                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
-                
                 {% else %}
                 <li class="col-sm-5 col-md-3 col-lg-4">Event Link: <a href="{% url 'events_calendar:event_detail' event.id  %}">Click Here</a></li>
-                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
                 {% endif %}
+                <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.start_time }}</li>
+                <!-- <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/DateTime.png'%}" height='20px' width='20px'> {{ event.venue }}</li> -->
+                <li class="col-sm-6 col-md-4 col-lg-4"><i class="fas fa-map-marker-alt"></i>&nbsp{{ event.venue }}</li>
             </div>
         </ul>
     </div>

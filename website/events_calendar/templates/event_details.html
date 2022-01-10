@@ -30,19 +30,19 @@
 
                        <div class="card-body">
                            <ul style="font-size:100%">
-                                <li title="Event Type"><i class="fas fa-calendar btn btn-light mb-1"></i>&nbsp <b>Event Type: </b>{{ event.event_type }}</li>
-                                <li title="Audience"><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbsp <b>Target Audience: </b>{{ event.target_year }}</li>
-                                <li title="Link"><i class="fas fa-globe btn btn-light mb-1"></i>&nbsp <b> {{event.event_type}} Link: </b>
+                                <li title="Event Type"><i class="fas fa-calendar btn btn-light mb-1"></i>&nbsp <b>Event Category: </b>{{ event.event_type }}</li>
+                                <li title="Audience"><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbsp <b>Open To: </b>{{ event.target_year }}</li>
+                                <li title="Start Time"><i class="fas fa-calendar-check btn btn-light mb-1"></i>&nbsp <b>Start Time: </b>{{ event.start_time }} (IST)</li>
+                                <li title="End Time"><i class="fas fa-calendar-minus btn btn-light mb-1"></i>&nbsp <b>End Time: </b>{{ event.end_time }} (IST)</li>
+                                <li title="Duration"><i class="fas fa-clock btn btn-light mb-1"></i>&nbsp <b>Duration: </b>{{ event.duration }}</li>
+                                <li title="Venue"><i class="fas fa-map-marker-alt btn btn-light mb-1"></i>&nbsp <b>Venue: </b>
                                 {% if event.link %}
-                                <a href="{{ event.link }}" style="text-decoration: none;" target=”_blank”> Click Here</a>
+                                    <a href="{{ event.link }}" style="text-decoration: none;" target=”_blank”> {{event.venue}}</a>
                                 {% else %}
-                                <a href="{% url 'events_calendar:event_detail' event.id  %}" style="text-decoration: none;"> Click Here</a>
+                                {{event.venue}}
                                 {% endif %}
                                 </li>
-                                <li title="Start Time"><i class="fas fa-clock btn btn-light mb-1"></i>&nbsp <b>{{event.event_type}} Duration: </b>{{ event.duration }}</li>
-                                <li title="Start Time"><i class="fas fa-calendar-check btn btn-light mb-1"></i>&nbsp <b>Start Time: </b>{{ event.start_time }}</li>
-                                <li title="End Time"><i class="fas fa-calendar-minus btn btn-light mb-1"></i>&nbsp <b>End Time: </b>{{ event.end_time }}</li>
-                           </ul>
+                            </ul>
                            {% if event.image %}
                            <br>
                            <div class="col-lg-12">

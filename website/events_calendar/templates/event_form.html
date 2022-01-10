@@ -37,7 +37,14 @@
                         <span>Link</span>
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
-                            {% render_field form.link class="form-control" placeholder="Enter Event Link" style="display:inline-block;max-width: 95%;" %}  
+                            {% render_field form.link class="form-control" placeholder="Enter Event Link (Optional)" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Venue</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.venue class="form-control" placeholder="Enter Online or Specific venue name" style="display:inline-block;max-width: 95%;" %}  
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
@@ -50,12 +57,19 @@
                         <span>End Time:</span>
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
-                            {% render_field form.end_time class="form-control"  style="display:inline-block;max-width: 95%;" %}  
-                            {% if form.end_time.errors %}
-                            <div class="small alert alert-warning">
-                                {{ form.end_time.errors.0 }}
-                            </div>
-                            {% endif %}
+                        {% render_field form.end_time class="form-control"  style="display:inline-block;max-width: 95%;" %}  
+                        {% if form.end_time.errors %}
+                            <ol>
+                            {% for error in form.end_time.errors %}
+                                {% if error == "This field is required."%}
+                                {% else %}
+                                <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
+                                    <li>{{ error|escape }}</li>
+                                </div>
+                                    {%endif%}
+                            {% endfor %}
+                            </ol>
+                        {% endif %}
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
@@ -63,7 +77,7 @@
                     </div>
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
                             {% render_field form.image class="form-control" style="display:inline-block;max-width: 95%;" %}  
-                    </div>
+                        </div>
 
                     <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
                         <span >Description</span>
@@ -106,6 +120,10 @@
         <div class="modal-body">
             <pre class="small">
         For Code Formatting 
+
+        [Link Text](Link URL)
+        
+        ![Image Title](Image URL)
 
         ~~~~
         This is a 
