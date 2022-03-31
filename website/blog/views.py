@@ -277,7 +277,7 @@ def update_blogs(request, id):
                 msg = (subject, message, 'webmaster@localhost', [user.email])
                 if msg not in messages:
                     messages += (msg,)'''
-            result = send_mass_mail(messages, fail_silently=False)
+            # result = send_mass_mail(messages, fail_silently=False)
             return redirect('blog:list_blogs')
     else:
         import html2text
@@ -338,7 +338,7 @@ def add_reply(request, id):
                 msg = (subject, message, 'webmaster@localhost', [user.email])
                 if msg not in messages:
                     messages += (msg,)'''
-            result = send_mass_mail(messages, fail_silently=False)
+            # result = send_mass_mail(messages, fail_silently=False)
             user= request.user
             f_q_id=Posts.objects.get(pk=id)
             f.post_id=f_q_id
@@ -400,7 +400,7 @@ def update_reply(request, id):
                         msg = (subject, message, 'webmaster@localhost', [user.email])
                         if msg not in messages:
                             messages += (msg,)'''
-                    result = send_mass_mail(messages, fail_silently=False)
+                    # result = send_mass_mail(messages, fail_silently=False)
                     args = {'profile':prof,'replys': replys,  'comment_reply':comment_reply,'post':post }
                     return render(request, 'blog/div_reply.html',args)
 
@@ -450,7 +450,7 @@ def add_comment(request, id):
             msg = (subject, message, 'webmaster@localhost', [user.email])
             if msg not in messages:
                 messages += (msg,)'''
-        result = send_mass_mail(messages, fail_silently=False)
+        # result = send_mass_mail(messages, fail_silently=False)
         user= request.user
         comment=Comment.objects.filter(post = post)
         args = {'profile':prof,'post': post,  'comment':comment, }
@@ -502,7 +502,7 @@ def update_comment(request, id):
                         msg = (subject, message, 'webmaster@localhost', [user.email])
                         if msg not in messages:
                             messages += (msg,)'''
-                    result = send_mass_mail(messages, fail_silently=False)
+                    # result = send_mass_mail(messages, fail_silently=False)
                     comment=Comment.objects.filter(post = post)
                     prof=Profile.objects.all()  #all user profile
                     args = {'profile':prof,'post': post,  'comment':comment, }
@@ -764,7 +764,7 @@ def add_comment_reply(request, id):
             msg = (subject, message, 'webmaster@localhost', [user.email])
             if msg not in messages:
                 messages += (msg,)'''
-        result = send_mass_mail(messages, fail_silently=False)
+        # result = send_mass_mail(messages, fail_silently=False)
         prof=Profile.objects.all()
         replys=Reply.objects.filter(post_id=reply.post_id)
         comment_reply=Comment_Reply.objects.all()
@@ -815,7 +815,7 @@ def update_comment_reply(request, id):
                   msg = (subject, message, 'webmaster@localhost', [user.email])
                   if msg not in messages:
                      messages += (msg,)'''
-              result = send_mass_mail(messages, fail_silently=False)
+              #result = send_mass_mail(messages, fail_silently=False)
             prof=Profile.objects.all()
             replys=Reply.objects.filter(post_id=reply.post_id)
             comment_reply=Comment_Reply.objects.all()
