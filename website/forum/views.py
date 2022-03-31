@@ -44,6 +44,12 @@ from datetime import timedelta
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+#---------------------------farewell function------------------
+#def farewell(request):
+#	args={}
+#	return render(request, 'farewell.html',args)
+#---------------------------function ends----------------------
+ 
 def getting_started(request):
     args={}
     return render(request, 'getting_started.html', args)
@@ -141,7 +147,7 @@ def add_question(request):
                 })
                 msg=(subject, message, 'webmaster@localhost', [user.email])
                 messages += (msg,)
-                result = send_mass_mail(messages, fail_silently=False)
+                # result = send_mass_mail(messages, fail_silently=False)
             return redirect('forum:list_questions')
 
     else:
@@ -310,7 +316,7 @@ def update_questions(request, id):
                 msg = (subject, message, 'webmaster@localhost', [user.email])
                 if msg not in messages:
                     messages += (msg,)
-            result = send_mass_mail(messages, fail_silently=False)
+            # result = send_mass_mail(messages, fail_silently=False)
             return redirect('forum:list_questions')
     else:
         import html2text
@@ -376,7 +382,7 @@ def add_answer(request, id):
                 msg = (subject, message, 'webmaster@localhost', [user.email])
                 if msg not in messages:
                     messages += (msg,)
-            result = send_mass_mail(messages, fail_silently=False)
+            # result = send_mass_mail(messages, fail_silently=False)
             user= request.user
             f_q_id=Questions.objects.get(pk=id)
             f.question_id=f_q_id
@@ -438,7 +444,7 @@ def update_answer(request, id):
                         msg = (subject, message, 'webmaster@localhost', [user.email])
                         if msg not in messages:
                             messages += (msg,)
-                    result = send_mass_mail(messages, fail_silently=False)
+                    # result = send_mass_mail(messages, fail_silently=False)
                     args = {'profile':prof,'answers': answers,  'comments_answers':comments_answers,'question':question }
                     return render(request, 'forum/div_answers.html',args)
 
@@ -516,7 +522,7 @@ def add_comment(request, id):
             msg = (subject, message, 'webmaster@localhost', [user.email])
             if msg not in messages:
                 messages += (msg,)
-        result = send_mass_mail(messages, fail_silently=False)
+        # result = send_mass_mail(messages, fail_silently=False)
         user= request.user
         comments=Comments.objects.filter(question = question)
         args = {'profile':prof,'question': question,  'comments':comments, }
@@ -569,7 +575,7 @@ def update_comment(request, id):
                         msg = (subject, message, 'webmaster@localhost', [user.email])
                         if msg not in messages:
                             messages += (msg,)
-                    result = send_mass_mail(messages, fail_silently=False)
+                    # result = send_mass_mail(messages, fail_silently=False)
                     comments=Comments.objects.filter(question = question)
                     prof=Profile.objects.all()  #all user profile
                     args = {'profile':prof,'question': question,  'comments':comments, }
@@ -713,7 +719,7 @@ def add_comment_answer(request, id):
             msg = (subject, message, 'webmaster@localhost', [user.email])
             if msg not in messages:
                 messages += (msg,)
-        result = send_mass_mail(messages, fail_silently=False)
+        # result = send_mass_mail(messages, fail_silently=False)
         prof=Profile.objects.all()
         answers=Answers.objects.filter(question_id=answer.question_id)
         comments_answers=Comments_Answers.objects.all()
@@ -765,7 +771,7 @@ def update_comment_answer(request, id):
                   msg = (subject, message, 'webmaster@localhost', [user.email])
                   if msg not in messages:
                      messages += (msg,)
-              result = send_mass_mail(messages, fail_silently=False)
+              #result = send_mass_mail(messages, fail_silently=False)
             prof=Profile.objects.all()
             answers=Answers.objects.filter(question_id=answer.question_id)
             comments_answers=Comments_Answers.objects.all()
