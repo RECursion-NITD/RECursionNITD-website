@@ -194,7 +194,7 @@ def edit_profile(request):
     if form.is_valid():
         form.save()
         if form.cleaned_data['image'] is None or form.cleaned_data['image'] == False:
-          image_url = "https://api.adorable.io/avatars/65/"+ str(random.randint(0000,9999)) + ".png"
+          image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
           type = valid_url_extension(image_url)
           full_path = 'media/images/' + profile.user.username + '.png'
           try:
