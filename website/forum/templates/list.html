@@ -6,7 +6,7 @@
             <div class="col-sm-1 col-lg-1 mr-2">
                 {% for p in profile %}
                     {% if p.user == question.user_id %}
-                      {% if not question.anonymous_ask  %}
+                      {% if not question.anonymous_ask and p.image %}
                 <img src="{{ p.image.url }}" class="rounded-circle mt-2 mb-1" width="55px" height="55px" alt="img">
                     {% else %}
                     {% load staticfiles %}

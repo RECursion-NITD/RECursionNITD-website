@@ -89,7 +89,7 @@ def update_experience(request, id):
                     user = profile.user
                     current_site = get_current_site(request)
                     subject = 'New Activity in Interview Experiences Section'
-                    message = render_to_string('update_experience_to_all_email.html', {
+                    message = render_to_string('update_Experience_to_all_email.html', {
                         'user': user,
                         'domain': current_site.domain,
                         'experience': Experiences.objects.get(pk=experience.id),
