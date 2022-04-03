@@ -35,7 +35,7 @@ with open('import_scripts/user.csv', 'r') as csvfile:
         u.profile.college = row['College']
         u.profile.dept = row['Dept']
         u.profile.email_confirmed=True
-        image_url = "https://api.adorable.io/avatars/"+ str(random.randint(0000,9999))
+        image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
         full_path = 'media/images/' + username + '.png'
         try:
             urllib.request.urlretrieve(image_url, full_path)
