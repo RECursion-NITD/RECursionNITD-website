@@ -121,8 +121,14 @@
                     Tag does not exist!!
                 {% elif blog %}
                     The post you are looking for is either missing or temporarily unavailable!!
+                {% elif event and event_filter %}
+                    The event filter you are looking for does not exist!!
+                {% elif event %}
+                    The event you are looking for is either missing or temporarily unavailable!!
                 {% elif forum %}
                     The question you are looking for is either missing or temporarily unavailable!!
+                {% elif experience and experience_filter %}   
+                    The interview experience filter you are looking for does not exist!!
                 {% elif experience %}
                     The interview experience you are looking for is either missing or temporarily unavailable!!
                 {% elif no_user %}
@@ -143,6 +149,8 @@
             <a href="{% url 'forum:list_questions' %}">AskREC</a>
             {% elif experience %}
             <a href="{% url 'experience:list_experiences' %}">Interview Experiences</a>
+            {% elif event %}
+            <a href="{% url 'events_calendar:list_events' %}">Events</a>
             {% elif no_profile or no_user %}
             <a href="{% url 'profile:view_profile' %}">My Profile</a>
             {% endif %}
