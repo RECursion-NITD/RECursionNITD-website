@@ -56,7 +56,11 @@
        <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
         <div class="card">
             <div class="card-header">
+                {% if event.event_type == 'Class'%}
+                <span><h4 class="card-title mb-0"> {{event.event_type}} Material</span>
+                {% else %}
                 <span><h4 class="card-title mb-0"> {{event.event_type}} Description</span>
+                {% endif %}
             </div>
 
             <div class="card-body pb-2 mb-3">
