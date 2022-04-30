@@ -18,14 +18,14 @@ class Events_Calendar(models.Model):
         ('Event', 'Event'),
     )
     year_choices = (
-        ('First Year Students', 'First Year Students'),
-        ('Second Year Students', 'Second Year Students'),
-        ('First and Second Year Students', 'First and Second Year Students'),
-        ('NIT Durgapur Students', 'NIT Durgapur Students'),
+        ('First Year', 'First Year'),
+        ('Second Year', 'Second Year'),
+        ('First and Second Year', 'First and Second Year'),
+        ('NIT Durgapur', 'NIT Durgapur'),
         ('Global Participants', 'Global Participants'),
     )
     event_type = models.CharField(max_length=20, choices=event_choices ,default='Class')
-    target_year = models.CharField(max_length=40, choices=year_choices ,default='First Year Students')
+    target_year = models.CharField(max_length=40, choices=year_choices ,default='First Year')
     description = MarkdownxField(null=True,blank=True)
     image = models.ImageField(blank=True, null=True, upload_to=content_file_name)
     link = models.URLField(null=True,blank=True)
