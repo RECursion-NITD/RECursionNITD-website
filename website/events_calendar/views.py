@@ -16,6 +16,8 @@ from dateutil.relativedelta import relativedelta
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime) else None)
 
+pagination_per_page = 3
+
 def get_event_duration(start_time, end_time):
     delta = relativedelta(end_time,start_time)
     attrs = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
@@ -46,7 +48,7 @@ def list_events(request):
         events_count[str(years.year)]=Events_Calendar.objects.filter(start_time__year = years.year).count()
 
     events = Events_Calendar.objects.all().order_by('-start_time')
-    paginator = Paginator(events, 5)
+    paginator = Paginator(events, pagination_per_page)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
@@ -160,7 +162,7 @@ def search_event(request, key):
         if event[1] not in events:
             events.append(event[1])
 
-    paginator = Paginator(events, 5)
+    paginator = Paginator(events, pagination_per_page)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
@@ -189,22 +191,21 @@ def filter_event(request, type):
             key = key_req.get('key')
             return HttpResponseRedirect(reverse('events_calendar:search_event', args=(key,)))
 
-    events_count={}
-    events_count['Total'] = Events_Calendar.objects.all().count()
-    year_list = Events_Calendar.objects.all().dates('start_time', 'year').reverse()[:5]
-    for years in year_list:
-        events_count[str(years.year)]=Events_Calendar.objects.filter(start_time__year = years.year).count()
-
+    if type not in ['Contest', 'Class', 'Event']:
+        return render(request,'id_error.html',{'event_filter':1, 'event':1})
+    
     events_list = Events_Calendar.objects.all()
+    events_count={}
+    events_count['Total'] = events_list.count()
+    year_list = events_list.dates('start_time', 'year').reverse()[:5]
+    for years in year_list:
+        events_count[str(years.year)]=events_list.filter(start_time__year = years.year).count()
 
-    if type == 'All':
-       events = events_list
-    else:
-        events = events_list.filter(event_type=type)
+    events = events_list.filter(event_type=type)
 
     events = events.order_by('-start_time')
     
-    paginator = Paginator(events, 5)
+    paginator = Paginator(events, pagination_per_page)
     page = request.GET.get('page')
     try:
         events_list = paginator.page(page)
