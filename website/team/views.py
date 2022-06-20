@@ -8,7 +8,7 @@ def team_page(request):
     month = today.month
     year = today.year
 
-    if month == 7 or month == 8 or month == 9 or month == 10 or month == 11 or month == 12:
+    if month==6 or month == 7 or month == 8 or month == 9 or month == 10 or month == 11 or month == 12:
         curr_batch_year = year + 1
     else:
         curr_batch_year = year
