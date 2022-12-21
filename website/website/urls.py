@@ -51,5 +51,7 @@ urlpatterns = [
                   # JWT
                   path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
                   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+                  # Prometheus monitoring
+                  path('', include('django_prometheus.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

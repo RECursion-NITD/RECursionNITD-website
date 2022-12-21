@@ -8,6 +8,7 @@ defusedxml==0.7.1
 Django==3.2
 django-filter==22.1
 django-markdownx==3.0.1
+django-prometheus==2.2.0
 django-widget-tweaks==1.4.12
 djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
@@ -16,6 +17,7 @@ idna==3.4
 Markdown==3.4.1
 oauthlib==3.2.2
 Pillow==9.3.0
+prometheus-client==0.15.0
 pycparser==2.21
 PyJWT==2.6.0
 python-decouple==3.6
