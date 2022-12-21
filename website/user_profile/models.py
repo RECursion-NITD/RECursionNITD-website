@@ -15,6 +15,8 @@ import os
 from PIL import Image
 from io import BytesIO
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django_prometheus.models import ExportModelOperationsMixin
+
 import sys
 
 
@@ -24,7 +26,7 @@ def content_file_name(instance, filename):
     return os.path.join('images/', filename)
 
 
-class Profile(models.Model):
+class Profile(ExportModelOperationsMixin('profile'), models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     college = models.CharField(max_length=100)

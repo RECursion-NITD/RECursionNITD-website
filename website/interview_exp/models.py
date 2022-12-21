@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 from django.urls import reverse
+from django_prometheus.models import ExportModelOperationsMixin
 
 
 # Create your models here.
@@ -17,7 +18,7 @@ def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
 
-class Experiences(models.Model):
+class Experiences(ExportModelOperationsMixin('experience'), models.Model):
     company = models.CharField(max_length=100)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
@@ -68,7 +69,7 @@ class Experiences(models.Model):
         verbose_name_plural = 'Experiences'
 
 
-class Revisions(models.Model):
+class Revisions(ExportModelOperationsMixin('revision'), models.Model):
     experience = models.OneToOneField(Experiences, on_delete=models.CASCADE)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
