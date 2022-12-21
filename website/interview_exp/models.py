@@ -4,14 +4,18 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from django.urls import reverse
+
 
 # Create your models here.
 
 def current_year():
     return datetime.date.today().year
 
+
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
+
 
 class Experiences(models.Model):
     company = models.CharField(max_length=100)
@@ -46,13 +50,16 @@ class Experiences(models.Model):
     @property
     def formatted_markdown(self):
         return markdownify(self.interview_Questions)
-            
+
     def __str__(self):
         return str(self.company) + " " + str(self.user)
 
     def get_cname(self):
         class_name = "Experiences"
         return class_name
+
+    def get_absolute_url(self):
+        return reverse('experiences_api:ie_detail', kwargs={'slug': self.id})
 
     class Meta:
         managed = True
@@ -76,6 +83,9 @@ class Revisions(models.Model):
     def get_cname(self):
         class_name = "Revisions"
         return class_name
+
+    def get_absolute_url(self):
+        return reverse('experiences_api:revision_detail', kwargs={'id': self.id})
 
     class Meta:
         managed = True

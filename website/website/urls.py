@@ -15,27 +15,41 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path,include
+from django.urls import path, include
 from django.conf.urls import url, include
 from forum import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+from user_profile.api.views import MyTokenObtainPairView
 
 urlpatterns = [
 
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('forum.urls',namespace='forum')),
-    path('events/',include('events.urls',namespace='events')),
-    path('profile/',include('user_profile.urls',namespace='user_profile')),
-    path('team/',include('team.urls',namespace='team')),
-    path('blog/',include('blog.urls',namespace='blog')),
-    path('experience/',include('interview_exp.urls',namespace='interview_exp')),
-    path('get_started/',include('getting_started.urls',namespace='getting_started')),
-    # path('members/',include('members.urls')),
-    url(r'^markdownx/', include('markdownx.urls')),
+                  path('admin/', admin.site.urls),
+                  path('', views.home, name='home'),
+                  path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
+                  path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+                  path('oauth/', include('social_django.urls', namespace='social')),
+                  path('forum/', include('forum.urls', namespace='forum')),
+                  path('events/', include('events.urls', namespace='events')),
+                  path('profile/', include('user_profile.urls', namespace='user_profile')),
+                  path('team/', include('team.urls', namespace='team')),
+                  path('blog/', include('blog.urls', namespace='blog')),
+                  path('experience/', include('interview_exp.urls', namespace='interview_exp')),
+                  path('get_started/', include('getting_started.urls', namespace='getting_started')),
+                  # path('members/',include('members.urls')),
+                  url(r'^markdownx/', include('markdownx.urls')),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  # API region
+
+                  # API URLs
+                  path('api/users/', include('user_profile.api.urls', namespace='user_profile_api')),
+                  path('api/experiences/', include('interview_exp.api.urls', namespace='experiences_api')),
+
+                  # JWT
+                  path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
