@@ -15,11 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path,include
+from django.urls import path, include
 from django.conf.urls import url, include
 from forum import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import (
+    TokenRefreshView,
+)
+from user_profile.api.views import MyTokenObtainPairView
 
 urlpatterns = [
 
@@ -39,4 +43,14 @@ urlpatterns = [
     # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+                  # API region
+
+                  # API URLs
+                  path('api/users/', include('user_profile.api.urls', namespace='user_profile_api')),
+                  path('api/experiences/', include('interview_exp.api.urls', namespace='experiences_api')),
+
+                  # JWT
+                  path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
