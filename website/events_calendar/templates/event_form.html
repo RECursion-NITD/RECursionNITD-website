@@ -1,0 +1,158 @@
+{% extends 'base.html'%}
+{% block title%}Event form{% endblock %}
+{% block events_calendar_active %} active {% endblock %}
+{% block content %}
+{% load widget_tweaks %}
+<div class="container">
+    <h2 class="mb-3"style="margin-top:2%;">Event Form</h2>    
+    <div class="card">
+        {% if perms == True %}
+        <form method="POST" enctype="multipart/form-data" class="mr-lg-4 ml-lg-4 p-lg-5 p-1">
+            <div class="container">
+                <div class="form-group row mt-md-2 mt-sm-1">
+
+                    {% csrf_token %}
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Title</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.title class="form-control" placeholder="Enter Event Title" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span >Event Type</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
+                        {% render_field form.event_type class="form-control" style="display:inline-block;max-width:135px;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span >Target Year</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
+                        {% render_field form.target_year class="form-control" style="display:inline-block;max-width:135px;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Link</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.link class="form-control" placeholder="Enter Event Link (Optional)" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Venue</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.venue class="form-control" placeholder="Enter Online or Specific venue name" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Start Time:</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.start_time class="form-control" style="display:inline-block;max-width: 95%;" %}  
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>End Time:</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                        {% render_field form.end_time class="form-control"  style="display:inline-block;max-width: 95%;" %}  
+                        {% if form.end_time.errors %}
+                            <ol>
+                            {% for error in form.end_time.errors %}
+                                {% if error == "This field is required."%}
+                                {% else %}
+                                <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
+                                    <li>{{ error|escape }}</li>
+                                </div>
+                                    {%endif%}
+                            {% endfor %}
+                            </ol>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2 mt-2 mb-2" style="">
+                        <span>Image:</span>
+                    </div>
+                    <div class="col-sm-6 col-md-8 col-lg-10 mb-2">    
+                            {% render_field form.image class="form-control" style="display:inline-block;max-width: 95%;" %}  
+                        </div>
+
+                    <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
+                        <span >Description</span>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12 mb-2">
+                        {% render_field form.description class="form-control" placeholder="Event Description" style="display:inline-block;" %}  
+                        {{ form.media }}
+                        <br>
+                        <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter" style="float:right;">
+                        Markdown Help
+                        </button>
+                    </div>
+                    <button type="submit" class="btn btn-outline-success ml-auto mr-auto mt-2">Save</button>
+                </div>
+            </div>
+        </form>
+        {% else %}
+        <h2 style="text-align: center;">
+            <br>
+            Permission Denied - Contact Administration
+            <br>
+            <br>
+        </h2>
+         
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle" >Markdown Help</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <pre class="small">
+        For Code Formatting 
+
+        [Link Text](Link URL)
+        
+        ![Image Title](Image URL)
+
+        ~~~~
+        This is a 
+        piece of code 
+        in a block
+        ~~~~
+
+        This too
+        Italicise - *Emphasize* _emphasize_
+        Bold - Strong Strong
+
+        List -
+
+        * Item
+        * Item
+        - Item
+        - Item
+
+        Heading - 
+        # Header 1
+        ## Header 2
+        ### Header 3 
+        #### Header 4
+            </pre>
+        </div>
+    </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

@@ -95,11 +95,17 @@
 </div>
 <div class="jombotron notifydrop p-2 pb-0" style="max-width:250px;position:absolute;right:15px;top:109px;
   Z-INDEX:12;background:white;border:1px solid grey;border-radius:8px;">
-    <a class="small text-center" href="{% url 'events:calender' %}">Check out upcoming events!</a>
-    <hr class="mt-0"> {% for event in events %}
-    <h5 class="text-muted text-center" style="text-transform:uppercase;">{{ event.title }}</h5>
-    <span style="font-size:90%;">{{ event.formatted_markdown | safe }}</span><br>
+    <!-- <a class="small text-center" href="{#% url 'events:calender' %#}">Check out upcoming events!</a> -->
+    <a class="small text-center" href="{% url 'events_calendar:list_events' %}">Check out upcoming events!</a>
+    <hr class="mt-0">
+    {% for event in events %}
+    <h5 class="text-muted text-center" style="text-decoration: none;"><a href="{% url 'events_calendar:event_detail' event.id %}">{{ event.title }}</a></h5>
+    <!-- <h5 class="text-muted text-center" style="text-transform:uppercase;">{{ event.title }}</h5> -->
+    <h6 class="text-muted text-center" style="text-decoration: none;"> Category: {{ event.event_type }}</h6>
+    <h6 class="text-muted text-center" style="text-decoration: none;"> Open To: {{event.target_year}}</h6>
     <p class="small mb-0" style="color:#666666; float:right;">on {{ event.start_time }}</p>
+    <hr class="mt-0">
+    <hr class="mt-0">
     {%endfor%}
 </div>
 <div class="row">
@@ -264,15 +270,15 @@
                     <center class="text-muted">So far we have witnessed<br>
                         <div class="box m-3" style="display:inline-block;">
                             <i class="fas fa-chalkboard-teacher fa-3x"></i><br><br>
-                            <h3>300+</h3>hours of Teaching
+                            <h3>{{ hours_teaching }}+</h3>hours of Teaching
                         </div>
                         <div class="box m-3" style="display:inline-block;">
                             <i class="fas fa-lightbulb fa-3x"></i><br><br>
-                            <h3>6+ </h3>years of Experience
+                            <h3>{{ year_of_experience }}+</h3> years of Experience
                         </div>
                         <div class="box m-3" style="display:inline-block;">
                             <i class="fas fa-code fa-3x"></i><br><br>
-                            <h3>50+</h3>Online / Offline Contests
+                            <h3>{{ contest_count }}+</h3>Online / Offline Contests
                         </div>
                         <div class="box m-3" style="display:inline-block;">
                             <i class="fas fa-users fa-3x"></i><br><br>

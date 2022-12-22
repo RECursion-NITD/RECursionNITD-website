@@ -1,0 +1,75 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block title%}Event Details{% endblock %}
+{% block events_calendar_active %} active {% endblock %}
+{% block content %} 
+{% load widget_tweaks %}
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+
+<div class="container">
+   {% csrf_token %}
+
+   <!-- BACK BUTTON -->
+   <small><a href="{% url 'events_calendar:list_events' %}" class="text-muted">< Back to Events</a></small>
+   <br>
+
+   <div class="row mt-4">
+
+       <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+               <div class="card">
+                       <div class="card-header">
+                               <!-- Event Title -->
+                               <span><h4 class="card-title mb-0"> {{ event.title }}
+                               {% if perms == True %}
+                               <a href="{% url 'events_calendar:event_update' event.id  %}"><button style="float: right;" type="button" class="btn btn-sm btn-outline-primary">Update</button></a></h4>
+                               {% endif %}
+                               </span>
+                       </div>
+
+                       <div class="card-body">
+                           <ul style="font-size:100%">
+                                <li title="Event Type"><i class="fas fa-calendar btn btn-light mb-1"></i>&nbsp <b>Event Category: </b>{{ event.event_type }}</li>
+                                <li title="Audience"><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbsp <b>Open To: </b>{{ event.target_year }}</li>
+                                <li title="Start Time"><i class="fas fa-calendar-check btn btn-light mb-1"></i>&nbsp <b>Start Time: </b>{{ event.start_time }} (IST)</li>
+                                <li title="End Time"><i class="fas fa-calendar-minus btn btn-light mb-1"></i>&nbsp <b>End Time: </b>{{ event.end_time }} (IST)</li>
+                                <li title="Duration"><i class="fas fa-clock btn btn-light mb-1"></i>&nbsp <b>Duration: </b>{{ event.duration }}</li>
+                                <li title="Venue"><i class="fas fa-map-marker-alt btn btn-light mb-1"></i>&nbsp <b>Venue: </b>
+                                {% if event.link %}
+                                    <a href="{{ event.link }}" style="text-decoration: none;" target=”_blank”> {{event.venue}}</a>
+                                {% else %}
+                                {{event.venue}}
+                                {% endif %}
+                                </li>
+                            </ul>
+                           {% if event.image %}
+                           <br>
+                           <div class="col-lg-12">
+                            <center><img src="{{ event.image.url }}" style="height: auto; width:100%"> </center>
+                            </div>
+                           {% endif %}
+                       </div>
+               </div>
+       </div>
+
+       <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
+        <div class="card">
+            <div class="card-header">
+                {% if event.event_type == 'Class'%}
+                <span><h4 class="card-title mb-0"> {{event.event_type}} Material</span>
+                {% else %}
+                <span><h4 class="card-title mb-0"> {{event.event_type}} Description</span>
+                {% endif %}
+            </div>
+
+            <div class="card-body pb-2 mb-3">
+                <blockquote class="mb-0">
+                    <p>{{ event.formatted_markdown | safe }}</p>
+                </blockquote>
+            </div>
+        </div>
+       </div>
+    </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% load staticfiles %}
+
+<style>
+    
+    
+    .item {
+        padding: 10px;
+    }
+    
+    .item-card {
+        transition: 0.5s;
+        cursor: pointer;
+    
+    }
+    
+    .item-card-title {
+        font-size: 15px;
+        transition: 1s;
+        cursor: pointer;
+    }
+    
+    .item-card-title i {
+        font-size: 15px;
+        transition: 1s;
+        cursor: pointer;
+       
+    }
+    
+    .card-title i:hover {
+        transform: scale(1.25) rotate(100deg);
+        color: #18d4ca;
+    }
+    
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 10px 10px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    .card::before,
+    .card::after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        transform: scale3d(0, 0, 1);
+        transition: transform .3s ease-out 0s;
+        background: rgba(255, 255, 255, 0.1);
+        content: '';
+        pointer-events: none;
+    }
+    
+    .card::before {
+        transform-origin: left top;
+    }
+    
+    .card::after {
+        transform-origin: right bottom;
+    }
+    
+    /* .card:hover::before,
+    .card:hover::after,
+    .card:focus::before,
+    .card:focus::after {
+        transform: scale3d(1, 1, 1);
+    } */
+    .card{
+        background-color:whitesmoke;
+    }
+    @media (max-width:500px)
+    {
+        h5{
+            font-size: 5px;
+        }
+
+    }
+    .card-text, .card-title{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+</style>
+
+
+<div class="container bg-light mt-2">
+
+    <div class="row">
+        {% for event in events %}
+        <div class="col-md-4 lg-4 col-sm-6 item">
+            <div class="card item-card card-block p-3">
+
+                {% if event.image %}
+                <img src="{{ event.image.url }}" style="height: 200px!important;width: 200px!important ;border:0.5px solid #343A40; margin: 0 auto;" alt="RECursion Event Poster"> 
+                {% else %}
+                <img src="{% static 'image/logo_event.png'%}" style="height: 200px!important;width: 200px!important ;border:0.5px solid #343A40; margin: 0 auto;" alt="RECursion Event Poster"> 
+                {% endif %}
+               
+                <h5 class="card-title text-center  mt-3 mb-3" style="font-size: 20px;color:#343A40;"><strong style="text-decoration: none;">
+                    <a href="{% url 'events_calendar:event_detail' event.id  %}" style="text-decoration: none; color: #323744;">
+                        
+                        <!-- {% ifnotequal event.title|truncatechars_html:20|length event.title|truncatechars_html:21|length %}
+                            <marquee scrollamount="3">{{ event.title }}</marquee>
+                        {% else %}
+                            {{ event.title}}
+                        {% endifnotequal %} -->
+                        {{event.title}}
+                    </a>
+                </strong>
+                    {% if perms %}
+                    <br>
+                    <a href="{% url 'events_calendar:event_update' event.id  %}">(Update)</a>
+                    {% endif %}
+                </h5>
+                
+                
+                <p class="card-text"><strong>{{event.event_type}} </strong> : {{event.target_year}}</p>
+                
+                <p class="card-text"><i class="fas fa-calendar"></i> {{ event.start_time }}</p>
+                <p class="card-text"><i class="fas fa-map-marker-alt"></i>&nbsp {{event.venue}} </p>
+                <a href="{% url 'events_calendar:event_detail' event.id  %}">
+                <button class="btn w-100" style="background-color:#343A40;color: white;">Know more</button></a>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}Events{% endblock %}
+{% block events_calendar_active %} active {% endblock %}
+{% load widget_tweaks %}
+{% block content %}
+    <style>
+        .highlight_filter {
+            background-color: #6C757D;
+            color: white;
+        }
+
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+          integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+          crossorigin="anonymous"/>
+    <div class="container">
+        <a href="{% url 'home' %}" class="text-muted" style="font-size: small;">< Back to Home</a>
+        <h2 style="margin-top: 2%">Events</h2>
+        <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+        <p class="small" style="font-family: 'Pacifico', cursive;">We don't remember the dates, we remember events!</p>
+        <div class="row">
+            <div class="col-lg-9 col-sm-12 mt-2">
+                <div class="card ml-0" style="transform: none; transition: none; box-shadow: none;">
+                    <div class="block row card-header m-0">
+                        <div class="col-sm-12 col-lg-6 ">
+                            <div class="btn-group col-sm-12 col-md-6 col-lg-5" role="group">
+                                {% if 'All' in request.path or 'filter' not in request.path and 'search' not in request.path %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 highlight_filter"
+                                       href="{% url 'events_calendar:list_events' %}"
+                                       style="text-decoration: none;">All</a>
+                                {% else %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 "
+                                       href="{% url 'events_calendar:list_events' %}"
+                                       style="text-decoration: none;">All</a>
+                                {% endif %}
+                                {% if 'Class' in request.path %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 highlight_filter"
+                                       href="{% url 'events_calendar:filter_event' 'Class' %}"
+                                       style="text-decoration: none;">Classes</a>
+                                {% else %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 "
+                                       href="{% url 'events_calendar:filter_event' 'Class' %}"
+                                       style="text-decoration: none;">Classes</a>
+                                {% endif %}
+                                {% if 'Contest' in request.path %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 highlight_filter"
+                                       href="{% url 'events_calendar:filter_event' 'Contest' %}"
+                                       style="text-decoration: none;">Contests</a>
+                                {% else %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 "
+                                       href="{% url 'events_calendar:filter_event' 'Contest' %}"
+                                       style="text-decoration: none;">Contests</a>
+                                {% endif %}
+                                {% if 'Event' in request.path %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 highlight_filter"
+                                       href="{% url 'events_calendar:filter_event' 'Event' %}"
+                                       style="text-decoration: none;">Events</a>
+                                {% else %}
+                                    <a class="btn btn-outline-secondary btn-md mt-1 "
+                                       href="{% url 'events_calendar:filter_event' 'Event' %}"
+                                       style="text-decoration: none;">Events</a>
+                                {% endif %}
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12 col-lg-6">
+                            <form method="GET">
+                                <div class="mt-1 mb-1">
+                                    {% render_field form_search.q class="form-control mr-1" placeholder="Search" style="display:inline-block;min-width:150px; max-width:20vw;" %}
+
+                                    <button type="submit" class="save btn btn-sm btn-outline-primary"
+                                            style="display: inline-block;"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% if perms == True %}
+                        <a class="btn" href="{% url 'events_calendar:create_event' %}" style="float:right">
+                            <button type="button" class="btn btn-primary w-100 btn-sm">
+                                Add Event&nbsp;&nbsp;<i class="far fa-edit"></i>
+                            </button>
+                        </a>
+                    {% endif %}
+
+
+                    <div id="events-list">
+                        {% include 'events_list.html' %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-lg-3 mt-2">
+                <div class="ml-0">
+                    <div class=" mr-auto">
+                        {% for key, value in events_count.items %}
+                            {% if key == 'Total' %}
+                                <div class="card" style="transform: none; transition: none; box-shadow: none;">
+                                    <div class="number card-header  p-0">
+                                        <h2 style="text-align:center;">
+                                            <p class="ml-auto mr-auto mb-0 mt-2"
+                                               style="font-family:'Rajdhani',sans-serif;">{{ value }}</p></h2>
+                                    </div>
+                                    <div class="mt-2">
+                                        {% if event_type %}
+                                            <p style="text-align: center;">{{ event_type }} Organized</p>
+                                        {% else %}
+                                            <p style="text-align: center;">Events Organized</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="card" style="transform: none; transition: none; box-shadow: none;">
+                                    <div class="number card-header  p-0">
+                                        <h2 style="text-align:center;">
+                                            <p class="ml-auto mr-auto mb-0 mt-2"
+                                               style="font-family:'Rajdhani',sans-serif;">{{ value }}</p></h2>
+                                    </div>
+                                    <div class="mt-2">
+                                        <p style="text-align: center;">In {{ key }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block js %}
+    <!-- Import Google Fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
+
+    <!-- Import Google Font Montserrat -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        var page = 1;
+        var empty_page = false;
+        var block_request = false;
+
+        $(window).scroll(function () {
+            var margin = $(document).height() - $(window).height();
+            if ($(window).scrollTop() > margin && empty_page == false && block_request == false)
+                block_request = true;
+            page += 1;
+            const urlSearchParams = new URLSearchParams(window.location.search);
+            const params = Object.fromEntries(urlSearchParams.entries());
+            let initialQuery = '?';
+            if (params.q) {
+                initialQuery += 'q=' + params.q + '&';
+            }
+            $.get(initialQuery + 'page=' + page, function (data) {
+                if (data == '') {
+                    empty_page = true;
+                } else {
+                    $('#events-list').append(data);
+                }
+            });
+        });
+    </script>
+{% endblock js %}

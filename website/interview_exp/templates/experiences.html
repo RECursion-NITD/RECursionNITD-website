@@ -31,6 +31,12 @@
   {% endblock js %}
   {% load widget_tweaks %}
   {% block content %}
+  <style>
+    .highlight_filter{
+      background-color: #6C757D;
+      color: white;
+    }
+  </style>
   <div class="container">
     <a href="{% url 'home' %}" class="text-muted small">< Back to Home</a> 
     <h2 style="margin-top: 2%">Interview Experiences</h2>
@@ -62,9 +68,21 @@
             </a>
             <!-- <strong>Filter</strong> -->
             <div class="btn-group col-sm-12 col-md-6 col-lg-4" role="group" style="float: right;">
-             <a class="btn btn-outline-secondary btn-sm mt-1 " href="{% url 'experience:filter_experience' 'All'  %}" style="text-decoration: none;">All</a>
-             <a class="btn btn-outline-secondary btn-sm mt-1 " href="{% url 'experience:filter_experience' 'Internship'  %}" style="text-decoration: none;">Internship</a>
-             <a class="btn btn-outline-secondary btn-sm mt-1 "href="{% url 'experience:filter_experience' 'Full Time'  %}"  style="text-decoration: none;">Full Time</a>
+              {% if 'All' in request.path or 'filter' not in request.path and 'search' not in request.path %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 highlight_filter" href="{% url 'experience:filter_experience' 'All'  %}" style="text-decoration: none;">All</a>
+              {% else %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 " href="{% url 'experience:filter_experience' 'All'  %}" style="text-decoration: none;">All</a>
+              {% endif %}
+              {% if 'Internship' in request.path and 'filter' in request.path %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 highlight_filter" href="{% url 'experience:filter_experience' 'Internship'  %}" style="text-decoration: none;">Internship</a>
+              {% else %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 " href="{% url 'experience:filter_experience' 'Internship'  %}" style="text-decoration: none;">Internship</a>
+              {% endif %}
+              {% if 'Full Time' in request.path and 'filter' in request.path %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 highlight_filter" href="{% url 'experience:filter_experience' 'Full Time'  %}" style="text-decoration: none;">Full Time</a>
+              {% else %}
+                <a class="btn btn-outline-secondary btn-sm mt-1 " href="{% url 'experience:filter_experience' 'Full Time'  %}" style="text-decoration: none;">Full Time</a>
+              {% endif %}
            </div>
          </div>
          <div id="experiences-list">

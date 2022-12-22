@@ -89,8 +89,11 @@
             <li class="nav-item {% block interview_active %}{% endblock %}">
               <a href="{% url 'experience:list_experiences' %}" class="nav-link m-2 menu-item">Interview Experiences</a>
             </li>
-            <li class="nav-item {% block Events_active %}{% endblock %}">
-                <a href="{% url 'events:calender' %}" class="nav-link m-2 menu-item">Events</a>
+            <!-- <li class="nav-item {% block Events_active %}{% endblock %}">
+                <a href="{#% url 'events:calender' %#}" class="nav-link m-2 menu-item">Events</a>
+            </li> -->
+            <li class="nav-item {% block events_calendar_active %}{% endblock %}">
+                <a href="{% url 'events_calendar:list_events' %}" class="nav-link m-2 menu-item">Events</a>
             </li>
             <li class="nav-item {% block getStart_active %}{% endblock %}">
                 <a href="{% url 'getting_started:getting_started' %}" class="nav-link m-2 menu-item">Get Started</a>
@@ -169,7 +172,8 @@
                         <ul class="nav-list ml-1">
                             <li><a  style="text-decoration:none" href="{% url 'forum:list_questions' %}">AskREC</a></li>
                             <li><a  style="text-decoration:none" href="{% url 'blog:list_blogs' %}">Blog</a></li>
-                            <li><a  style="text-decoration:none" href="{% url 'events:calender' %}">Events</a></li>
+                            <li><a  style="text-decoration:none" href="{% url 'events_calendar:list_events' %}">Events</a></li>
+                            <!-- <li><a  style="text-decoration:none" href="{#% url 'events:calender' %#}">Events</a></li> -->
                             <li><a  style="text-decoration:none" href="{% url 'getting_started:getting_started' %}">Get Started</a></li>
                             <li><a   style="text-decoration:none" href="{% url 'forum:faculty'%}">Faculty Advisors</a></li>
                             <li><a   style="text-decoration:none" href="{% url 'team:team_page'%}">Team</a></li>
