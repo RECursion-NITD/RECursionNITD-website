@@ -55,4 +55,4 @@ class Eventsform(forms.ModelForm):
         fields=('title','event_type','target_year','link','venue','description','image','start_time','end_time')
 
 class SearchForm(forms.Form):
-    key = forms.CharField(max_length=25)
+    q = forms.CharField(max_length=25)
