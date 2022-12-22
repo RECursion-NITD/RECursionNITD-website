@@ -1,7 +1,8 @@
 from django.contrib import admin
 from .models import *
-# Register your models here.
+
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('name', 'user__email', 'user__username')
+    list_filter = ('role',)
