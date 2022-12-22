@@ -68,17 +68,20 @@ def faculty(request):
     return render(request, 'faculty.html', args)
 
 def home(request):
-    n=3
+    n = 3
     today = timezone.now()
-    
-    founding_date = datetime.datetime(2014,9,1,00,00)
-    year_of_experience = today.year - founding_date.year - ((today.month, today.day) < (founding_date.month, founding_date.day))
-    
+
+    founding_date = datetime.datetime(2014, 9, 1, 00, 00)
+    year_of_experience = today.year - founding_date.year - (
+            (today.month, today.day) < (founding_date.month, founding_date.day))
+
     upto = today + timedelta(days=365)
-    # events = Events.objects.filter(start_time__range=[today, upto]).order_by('start_time')[:n:1]
     events = Events_Calendar.objects.filter(start_time__range=[today, upto]).order_by('start_time')[:n:1]
-    
-    args={'events':events,'year_of_experience':year_of_experience}
+    hours_teaching = 300 + Events_Calendar.objects.filter(event_type='Class').count() * 2
+    contest_count = 40 + Events_Calendar.objects.filter(event_type='Contest').count()
+
+    args = {'events': events, 'year_of_experience': year_of_experience, 'hours_teaching': hours_teaching,
+            'contest_count': contest_count}
     return render(request, 'home.html', args)
 
 def tagging_add(q_id, t_id):
