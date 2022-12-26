@@ -96,6 +96,63 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
             return qs.filter(Q(user=user) | Q(verification_Status='Approved'))
         return qs
 
+    def perform_update(self, serializer):
+        exp = serializer.save()
+        curr_status = exp.verification_Status
+        emails = []
+        if curr_status == 'Approved':
+            exp.verification_Status = 'Review Pending'
+        elif curr_status == 'Changes Requested':
+            revision = Revisions.objects.filter(experience=exp)
+            if revision.exists():
+                revision = revision.first()
+                reviewer = revision.reviewer
+            else:  # send the mail to a random member/superuser(exceptional case that revision is not found)
+                reviewer = Profile.objects.filter(~Q(role='3')).first()
+            ## mailing part
+            domain = get_current_site(self.request).domain
+            subject = 'New Activity in Interview Experiences Section'
+            messages = [
+                EmailMessage(
+                    subject,
+                    render_to_string(
+                        'update_experience_email.html',
+                        {
+                            'user': reviewer,
+                            'domain': domain,
+                            'experience': exp,
+                        }
+                    ),
+                    to=[TRIAL_REC_MAIL, ],  # to=[reviewer.email, ]
+                )
+            ]
+            # uncomment below to mail
+            threaded_mail = ThreadedMailing(messages, fail_silently=True, verbose=1)
+            threaded_mail.start()
+        else:
+            member_users = User.objects.filter(~Q(profile__role='3'))
+            domain = get_current_site(self.request).domain
+            subject = 'New Activity in Interview Experiences Section'
+            messages = [
+                EmailMessage(
+                    subject,
+                    render_to_string(
+                        'update_Experience_to_all_email.html',
+                        {
+                            'user': user,
+                            'domain': domain,
+                            'experience': exp,
+                        }
+                    ),
+                    to=[TRIAL_REC_MAIL, ],  # to=[reviewer.email, ]
+                )
+                for user in member_users
+            ]
+            # uncomment below to mail
+            threaded_mail = ThreadedMailing(messages, fail_silently=True, verbose=1)
+            threaded_mail.start()
+        exp.save()
+
 
 class RevisionsListView(ListAPIView):
     serializer_class = RevisionSerializer
