@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.core.mail import send_mass_mail
 from rest_framework.permissions import IsAdminUser, IsAuthenticated, AllowAny
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle
@@ -57,7 +58,29 @@ class IEListView(ListCreateAPIView):
         # send thank you mail for posting
         user = self.request.user
         exp = serializer.save(user=user, verification_Status='Review Pending')
-        ## mailing part
+
+        ### mailing part
+
+        # # region old mailing
+        # profiles = Profile.objects.filter(~Q(role = '3'))
+        # messages = ()
+        # f=exp
+        # for profile in profiles:
+        #     user = profile.user
+        #     current_site = get_current_site(self.request)
+        #     subject = 'New Activity in Interview Experiences Section'
+        #     message = render_to_string('new_experience_entry_email.html', {
+        #         'user': user,
+        #         'domain': current_site.domain,
+        #         'experience': Experiences.objects.get(pk=f.id),
+        #     })
+        #     msg = (subject, message, 'webmaster@localhost', [TRIAL_REC_MAIL,])
+        #     if msg not in messages:
+        #         messages += (msg,)
+        # result = send_mass_mail(messages, fail_silently=False)
+        # # endregion
+
+        # region new mailing
         member_users = User.objects.filter(~Q(profile__role='3'))
         domain = get_current_site(self.request).domain
         subject = 'New Activity in Interview Experiences Section'
@@ -78,8 +101,9 @@ class IEListView(ListCreateAPIView):
             for user in member_users
         ]
         # uncomment below to mail
-        threaded_mail = ThreadedMailing(messages, fail_silently=True, verbose=1)
+        threaded_mail = ThreadedMailing(messages, fail_silently=False, verbose=1)
         threaded_mail.start()
+        # endregion
 
 
 class RetrieveUpdateIEView(RetrieveUpdateAPIView):
