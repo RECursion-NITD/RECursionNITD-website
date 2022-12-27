@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.urls import reverse
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 import os
@@ -45,6 +46,9 @@ class Events_Calendar(models.Model):
 
     def __str__(self):
         return self.event_type + " - " + self.title
+
+    def get_absolute_url(self):
+        return reverse('events_api:event_detail', kwargs={'id': self.id})
 
     class Meta:
         managed = True
