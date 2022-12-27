@@ -27,21 +27,21 @@ from user_profile.api.views import MyTokenObtainPairView
 
 urlpatterns = [
 
-    path('admin/', admin.site.urls),
-    path('', views.home, name='home'),
-    path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
-    path('oauth/', include('social_django.urls', namespace='social')),
-    path('forum/',include('forum.urls',namespace='forum')),
-    # path('events/',include('events.urls',namespace='events')),
-    path('events/',include('events_calendar.urls',namespace='events_calendar')),
-    path('profile/',include('user_profile.urls',namespace='user_profile')),
-    path('team/',include('team.urls',namespace='team')),
-    path('blog/',include('blog.urls',namespace='blog')),
-    path('experience/',include('interview_exp.urls',namespace='interview_exp')),
-    path('get_started/',include('getting_started.urls',namespace='getting_started')),
-    # path('members/',include('members.urls')),
-    url(r'^markdownx/', include('markdownx.urls')),
+                  path('admin/', admin.site.urls),
+                  path('', views.home, name='home'),
+                  path('login/', auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
+                  path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+                  path('oauth/', include('social_django.urls', namespace='social')),
+                  path('forum/', include('forum.urls', namespace='forum')),
+                  # path('events/',include('events.urls',namespace='events')),
+                  path('events/', include('events_calendar.urls', namespace='events_calendar')),
+                  path('profile/', include('user_profile.urls', namespace='user_profile')),
+                  path('team/', include('team.urls', namespace='team')),
+                  path('blog/', include('blog.urls', namespace='blog')),
+                  path('experience/', include('interview_exp.urls', namespace='interview_exp')),
+                  path('get_started/', include('getting_started.urls', namespace='getting_started')),
+                  # path('members/',include('members.urls')),
+                  url(r'^markdownx/', include('markdownx.urls')),
 
                   # API region
 
@@ -49,6 +49,7 @@ urlpatterns = [
                   path('api/users/', include('user_profile.api.urls', namespace='user_profile_api')),
                   path('api/experiences/', include('interview_exp.api.urls', namespace='experiences_api')),
                   path('api/events/', include('events_calendar.api.urls', namespace='events_api')),
+                  path('api/team/', include('team.api.urls', namespace='team_api')),
 
                   # JWT
                   path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
