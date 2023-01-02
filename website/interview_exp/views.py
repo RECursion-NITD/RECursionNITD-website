@@ -192,7 +192,7 @@ def filter_experience(request, role):
           key = key_req.get('key')
           return HttpResponseRedirect(reverse('interview_exp:search_experience', args=(key,)))
 
-    if role not in ['Internship','Full Time']:
+    if role not in ['All','Internship','Full Time']:
         return render(request,'id_error.html',{'experience_filter':1, 'experience':1})
 
     current_user_profile = Profile.objects.get(user=request.user)
