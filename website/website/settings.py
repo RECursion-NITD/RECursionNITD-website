@@ -24,6 +24,7 @@ SECRET_KEY = '9%b%-x(_!zd(ffdc!s=8j(clv&(_92d!+lh@#o9&t8*y40v1+3'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -49,10 +50,12 @@ INSTALLED_APPS = [
     'django_filters',
     'django_prometheus',
     'events_calendar',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django_prometheus.middleware.PrometheusBeforeMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
