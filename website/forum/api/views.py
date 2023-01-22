@@ -27,7 +27,7 @@ def home_view(request) -> Response:
     founding_date = datetime.datetime(2014, 9, 1, 00, 00, tzinfo=today.tzinfo)
     data['years_of_experience'] = (today - founding_date).days // 365  # roughly
     upcoming_events = Events_Calendar.objects.filter(
-        start_time__range=[today - datetime.timedelta(days=150), today + datetime.timedelta(days=70)]
+        start_time__range=[today, today + datetime.timedelta(days=7)]
     )[:max_events]  # expects QS to be sorted by start date
     data['upcoming_events'] = EventsSerializer(upcoming_events, many=True, context={'request': request}).data
     data['hours_teaching'] = 300 + Events_Calendar.objects.filter(event_type='Class').count() * 2
