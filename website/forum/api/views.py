@@ -16,7 +16,7 @@ from user_profile.api.serializers import ProfileSerializer, UserSerializer
 def home_view(request) -> Response:
     data = {}
     user = request.user
-    max_events = 3
+    max_events = 4
     if user.is_authenticated:
         data['user_profile'] = ProfileSerializer(Profile.objects.get(user=user),
                                                  context={'request': request}).data
