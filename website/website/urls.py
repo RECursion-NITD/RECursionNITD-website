@@ -24,6 +24,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 from user_profile.api.views import MyTokenObtainPairView
+from forum.api.views import home_view
 
 urlpatterns = [
 
@@ -46,6 +47,7 @@ urlpatterns = [
                   # API region
 
                   # API URLs
+                  path('api/', home_view, name='api_home'),
                   path('api/users/', include('user_profile.api.urls', namespace='user_profile_api')),
                   path('api/experiences/', include('interview_exp.api.urls', namespace='experiences_api')),
                   path('api/events/', include('events_calendar.api.urls', namespace='events_api')),
