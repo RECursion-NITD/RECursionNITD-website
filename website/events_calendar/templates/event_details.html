@@ -8,6 +8,11 @@
 
 <link rel="stylesheet" href="{% static 'css/detail.css' %}">
 
+<head>
+    <meta property="og:image" content="{% static 'image/logo.png' %}">
+    <meta property="og:title" content="{{ event.title }}">
+</head>
+
 <div class="container">
    {% csrf_token %}
 
