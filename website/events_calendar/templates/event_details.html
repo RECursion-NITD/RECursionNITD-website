@@ -2,16 +2,15 @@
 {% load static %}
 {% block title%}Event Details{% endblock %}
 {% block events_calendar_active %} active {% endblock %}
-{% block content %} 
-{% load widget_tweaks %}
 {% load staticfiles %}
-
-<link rel="stylesheet" href="{% static 'css/detail.css' %}">
-
-<head>
-    <meta property="og:image" content="{% static 'image/logo.png' %}">
+{% block meta %}
     <meta property="og:title" content="{{ event.title }}">
     <meta property="og:description" content="RECursion {{event.event_type}} for {{event.target_year}}">
+    {% if event.image %}
+    <meta property="og:image" content="{{ event.image.url }}">
+    {% else %}
+    <meta property="og:image" content="{% static 'image/logo_event.png'%}">
+    {% endif %}
     <!-- No need to change anything here -->
     <meta property="og:type" content="website" />
     <meta property="og:image:type" content="image/png">
@@ -19,7 +18,11 @@
     <!--Anything above 300px will not work in WhatsApp -->
     <meta property="og:image:width" content="250">
     <meta property="og:image:height" content="250">
-</head>
+{% endblock %}
+{% block content %} 
+{% load widget_tweaks %}
+
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
 
 <div class="container">
    {% csrf_token %}
