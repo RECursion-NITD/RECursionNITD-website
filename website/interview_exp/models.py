@@ -4,16 +4,21 @@ import datetime
 from django.core.validators import MaxValueValidator, MinValueValidator
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from django.urls import reverse
+from django_prometheus.models import ExportModelOperationsMixin
+
 
 # Create your models here.
 
 def current_year():
     return datetime.date.today().year
 
+
 def max_value_current_year(value):
     return MaxValueValidator(current_year())(value)
 
-class Experiences(models.Model):
+
+class Experiences(ExportModelOperationsMixin('experience'), models.Model):
     company = models.CharField(max_length=100)
     year = models.PositiveIntegerField(
         default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
@@ -46,13 +51,16 @@ class Experiences(models.Model):
     @property
     def formatted_markdown(self):
         return markdownify(self.interview_Questions)
-            
+
     def __str__(self):
         return str(self.company) + " " + str(self.user)
 
     def get_cname(self):
         class_name = "Experiences"
         return class_name
+
+    def get_absolute_url(self):
+        return reverse('experiences_api:ie_detail', kwargs={'slug': self.id})
 
     class Meta:
         managed = True
@@ -61,7 +69,7 @@ class Experiences(models.Model):
         verbose_name_plural = 'Experiences'
 
 
-class Revisions(models.Model):
+class Revisions(ExportModelOperationsMixin('revision'), models.Model):
     experience = models.OneToOneField(Experiences, on_delete=models.CASCADE)
     reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
@@ -76,6 +84,9 @@ class Revisions(models.Model):
     def get_cname(self):
         class_name = "Revisions"
         return class_name
+
+    def get_absolute_url(self):
+        return reverse('experiences_api:revision_detail', kwargs={'id': self.id})
 
     class Meta:
         managed = True
