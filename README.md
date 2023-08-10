@@ -22,3 +22,6 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET='googleSECRET'
 4. run ```python manage.py makemigrations```
 5. run ```python manage.py migrate```
 6. run ```python manage.py runserver```
+
+POSTMAN API
+COLLECTION: [REC DRF](https://postman.com/rec-drf-backend-00/workspace/recursion-drf-port-backend/api/3ccf67a5-e059-4d31-8d22-8f3302f94876/version/b021621d-8a18-4f86-aede-8e2737156e9c)

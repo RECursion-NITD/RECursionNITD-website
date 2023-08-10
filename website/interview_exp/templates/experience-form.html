@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% load static %}
 {% block title%}Interview form{% endblock %}
 {% block content %}
 {% load widget_tweaks %}
@@ -6,7 +7,7 @@
     <a href="{% url 'experience:list_experiences' %}" class="text-muted small">< Back to Home</a>
     <h2 class="mb-3"style="margin-top:2%;">Interview Experience Form</h2>    
     <div class="card">
-        <form method="POST" class="mr-lg-4 ml-lg-4 p-lg-5 p-1">
+        <form method="POST" onsubmit={submitDisabler()} class="mr-lg-4 ml-lg-4 p-lg-5 p-1">
             <div class="container">
                 <div class="form-group row mt-md-2 mt-sm-1">
                     {% csrf_token %}
@@ -45,9 +46,9 @@
                     <div class="col-sm-6 col-md-8 col-lg-10 mb-2">
                         {% render_field form.no_of_Rounds class="form-control" placeholder="Enter Job Profile" style="display:inline-block;max-width:135px;" %}  
                         {% if form.no_of_Rounds.errors %}
-                            <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
-                                {{ form.no_of_Rounds.errors.0 }}
-                            </div>
+                        <div class="small alert alert-warning ml-auto mr-lg-5 mt-2">
+                            {{ form.no_of_Rounds.errors.0 }}
+                        </div>
                         {% endif %}
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-12 mt-2 mb-2">
@@ -57,7 +58,8 @@
                         {% render_field form.interview_Questions class="form-control" placeholder="Enter Details" style="display:inline-block;" %}  
                         {{ form.media }}
                     </div>
-                    <button type="submit" class="btn btn-outline-success ml-auto mr-auto mt-2">Save</button>
+                    <button id="submitBtn" type="submit" class="btn btn-outline-success ml-auto mr-auto mt-2">Save</button>
+                    <script src="{% static 'js/submitScript.js' %}"></script>
                 </div>
             </div>
         </form>
