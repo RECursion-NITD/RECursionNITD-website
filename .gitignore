@@ -20,6 +20,9 @@ var/
 .installed.cfg
 *.egg
 
+# python env folders
+/web
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt

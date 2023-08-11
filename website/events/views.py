@@ -28,6 +28,9 @@ from django.core.exceptions import PermissionDenied
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime) else None)
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def superuser_only(function):
     def _inner(request, *args, **kwargs):
         if not request.user.is_superuser:

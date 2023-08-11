@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 
 <style>
     
@@ -98,11 +98,7 @@
                 <h5 class="card-title text-center  mt-3 mb-3" style="font-size: 20px;color:#343A40;"><strong style="text-decoration: none;">
                     <a href="{% url 'events_calendar:event_detail' event.id  %}" style="text-decoration: none; color: #323744;">
                         
-                        <!-- {% ifnotequal event.title|truncatechars_html:20|length event.title|truncatechars_html:21|length %}
-                            <marquee scrollamount="3">{{ event.title }}</marquee>
-                        {% else %}
-                            {{ event.title}}
-                        {% endifnotequal %} -->
+                        
                         {{event.title}}
                     </a>
                 </strong>

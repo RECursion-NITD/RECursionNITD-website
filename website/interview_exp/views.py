@@ -13,6 +13,10 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mass_mail
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
+
 @login_required
 def add_experience(request):
     form = ExperienceForm(request.POST or None)
@@ -127,13 +131,13 @@ def list_experiences(request):
     except PageNotAnInteger:
         experiences_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request=request):
             return HttpResponse('')
             experiences_list = paginator.page(paginator.num_pages)
     ie_count = len(experiences)
     profiles = Profile.objects.all()
     args = {'form_search':search, 'profile':profiles, 'experiences': experiences_list, 'ie_count':ie_count}
-    if request.is_ajax():
+    if is_ajax(request=request):
         return render(request, 'exp_list.html', args)
     return render(request, 'experiences.html', args)
 

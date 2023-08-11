@@ -22,7 +22,7 @@
             <li><span style="color:#111111;">{{ experience.job_Profile }}</span> / <span style="color:#F95c39;">{{experience.role_Type}}</span></li>
             <div class="row small">
                 <li class="col-sm-5 col-md-3 col-lg-4">Added by <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a></li>
-                {% load staticfiles %}
+                {% load static %}
                 <li class="col-sm-6 col-md-4 col-lg-4"><img src="{% static 'image/Datetime.png'%}" height='20px' width='20px'> {{ experience.updated_at }}</li>
             </div>
         </ul>

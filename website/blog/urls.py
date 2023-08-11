@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import path,include
-from django.conf.urls import url, include
+from django.conf.urls import include
 from .import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -26,5 +26,5 @@ urlpatterns = [
     path('deletecomment_reply/<int:id>/', views.delete_reply_comment, name='delete_reply_comment'),
     path('filter/<int:id>/', views.filter_blog, name='filter_blog'),
     path('search/<str:key>', views.search_blog, name='search_blog'),
-    url(r'^markdownx/', include('markdownx.urls')),
+    path(r'^markdownx/', include('markdownx.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
