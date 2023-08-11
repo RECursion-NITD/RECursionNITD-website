@@ -28,7 +28,7 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from .tokens import password_reset_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -50,6 +50,10 @@ json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, 
 #	args={}
 #	return render(request, 'farewell.html',args)
 #---------------------------function ends----------------------
+
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
  
 def getting_started(request):
     args={}
@@ -180,7 +184,7 @@ def list_questions(request):
     except PageNotAnInteger:
         questions_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request=request):
             return HttpResponse('')
         questions_list = paginator.page(paginator.num_pages)
     q_count=questions.count()
@@ -213,7 +217,7 @@ def list_questions(request):
         count+=1
     profiles=Profile.objects.all()
     args = {'form_search':search, 'profile':profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
-    if request.is_ajax():
+    if is_ajax(request=request):
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
 
@@ -681,12 +685,12 @@ def filter_question(request ,id):
     except PageNotAnInteger:
         questions_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request=request):
             return HttpResponse('')
         questions_list = paginator.page(paginator.num_pages)
     profiles = Profile.objects.all()
     args = {'form_search':search, 'profile': profiles, 'questions':questions_list, 'answers':answers, 'follows':follows, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'q_count':q_count}
-    if request.is_ajax():
+    if is_ajax(request=request):
         return render(request, 'list.html', args)
     return render(request, 'questions.html', args)
 
@@ -899,13 +903,13 @@ def search_question(request, key):
      except PageNotAnInteger:
          questions_list = paginator.page(1)
      except EmptyPage:
-         if request.is_ajax():
+         if is_ajax(request=request):
              return HttpResponse('')
          questions_list = paginator.page(paginator.num_pages)
      profiles = Profile.objects.all() 
      args = {'form_search':search, 'profile': profiles, 'questions': questions_list, 'answers': answers, 'follows': follows,
              'tags': tags_recent, 'taggings': taggings_recent, 'tags_recent': tags_recent_record,
              'tags_popular': tags_popular_record, 'q_count': q_count}
-     if request.is_ajax():
+     if is_ajax(request=request):
          return render(request, 'list.html', args)
      return render(request, 'questions.html', args) 

@@ -20,6 +20,9 @@ json.JSONEncoder.default = lambda self, obj: (obj.isoformat() if isinstance(obj,
 pagination_per_page = 9
 
 
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
+
 def get_event_duration(start_time, end_time):
     delta = relativedelta(end_time, start_time)
     attrs = ['years', 'months', 'days', 'hours', 'minutes', 'seconds']
@@ -65,10 +68,10 @@ def list_events(request):
     except PageNotAnInteger:
         events_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request = request):
             return HttpResponse('')
     args = {'form_search': search, 'perms': perms, 'events': events_list, 'events_count': events_count}
-    if request.is_ajax():
+    if is_ajax(request = request):
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)
 
@@ -172,11 +175,11 @@ def filter_event(request, type):
     except PageNotAnInteger:
         events_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request = request):
             return HttpResponse('')
     event_type = type + 's' if type != 'Class' else type + 'es'
     args = {'form_search': search, 'perms': perms, 'events': events_list, 'events_count': events_count,
             'event_type': event_type}
-    if request.is_ajax():
+    if is_ajax(request = request):
         return render(request, 'events_list.html', args)
     return render(request, 'events_calendar.html', args)

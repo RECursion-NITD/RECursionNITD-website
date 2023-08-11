@@ -25,7 +25,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
@@ -42,6 +42,9 @@ from datetime import timedelta
 
 json.JSONEncoder.default = lambda self,obj: (obj.isoformat() if isinstance(obj, datetime.datetime) else None)
 
+
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 def tagging_add(q_id, t_id):
     p = Taggings.objects.create(question=get_object_or_404(Posts, pk=q_id), tag=get_object_or_404(Tags, pk=t_id))
@@ -138,7 +141,7 @@ def list_blogs(request):
     except PageNotAnInteger:
         posts_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request=request):
             return HttpResponse('')
         posts_list = paginator.page(paginator.num_pages)
     p_count=posts.count()
@@ -172,7 +175,7 @@ def list_blogs(request):
     profiles=Profile.objects.all()
 
     args = {'form_search':search, 'profile':profiles, 'posts':posts_list, 'replys':replys,'tags':tags_recent, 'taggings':taggings_recent,'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count,}
-    if request.is_ajax():
+    if is_ajax(request=request):
         return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
 
@@ -716,12 +719,12 @@ def filter_blog(request ,id):
     except PageNotAnInteger:
         posts_list = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():
+        if is_ajax(request=request):
             return HttpResponse('')
         posts_list = paginator.page(paginator.num_pages)
     profiles = Profile.objects.all()
     args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys':replys, 'tags':tags_recent, 'taggings':taggings_recent, 'tags_recent':tags_recent_record, 'tags_popular':tags_popular_record, 'p_count':p_count}
-    if request.is_ajax():
+    if is_ajax(request=request):
         return render(request, 'blog/blog_list.html', args)
     return render(request, 'blog/blog_homepage.html', args)
 
@@ -932,13 +935,13 @@ def search_blog(request, key):
      except PageNotAnInteger:
          posts_list = paginator.page(1)
      except EmptyPage:
-         if request.is_ajax():
+         if is_ajax(request=request):
              return HttpResponse('')
          posts_list = paginator.page(paginator.num_pages)
      profiles = Profile.objects.all() 
      args = {'form_search':search, 'profile': profiles, 'posts':posts_list, 'replys': replys,
              'tags': tags_recent, 'taggings': taggings_recent, 'tags_recent': tags_recent_record,
              'tags_popular': tags_popular_record, 'p_count': p_count}
-     if request.is_ajax():
+     if is_ajax(request=request):
          return render(request, 'blog/blog_list.html', args)
      return render(request, 'blog/blog_homepage.html', args) 
