@@ -64,8 +64,6 @@ class GoogleLoginApi(APIView):
     def post(self, request):
         access_token = request.data.get('token')
         GOOGLE_CLIENT_ID = getattr(settings, "GOOGLE_CLIENT_ID", None)
-
-        print(GOOGLE_CLIENT_ID)
         try:
             TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v2/tokeninfo?access_token="+access_token
             headers = {
