@@ -23,7 +23,7 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
-from user_profile.api.views import MyTokenObtainPairView
+from user_profile.api.views import MyTokenObtainPairView, GoogleLoginApi
 from forum.api.views import home_view
 
 urlpatterns = [
@@ -55,6 +55,7 @@ urlpatterns = [
 
                   # JWT
                   path('api/token/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/tokenforgoogle/', GoogleLoginApi.as_view(), name='token_for_google'),
                   path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
                   # Prometheus monitoring
                   path('', include('django_prometheus.urls')),
