@@ -48,8 +48,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-#Google Login api handler
-class GoogleLoginApi(APIView):
+# Google Login api handler
+class LoginWithGoogleView(APIView):
 
     def generate_token(self,user):
         refresh = RefreshToken.for_user(user)
@@ -80,7 +80,7 @@ class GoogleLoginApi(APIView):
                     }
                     user_info = requests.get(USER_INFO_URL ,data = {} ,headers = headers).json()
                     user, created = User.objects.get_or_create(
-                        username = user_info['email'],
+                        username = user_info['email'].split('@')[0],
                         first_name = user_info['given_name'],
                         last_name = user_info['family_name'],
                         email = user_info['email']
