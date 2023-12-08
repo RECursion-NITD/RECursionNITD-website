@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.throttling import AnonRateThrottle
@@ -17,6 +19,11 @@ from user_profile.models import Profile
 from user_profile.utils import send_verification_mail
 from user_profile.utils_permissions import ViewUpdatePermission
 from user_profile.utils import ProfileMatcher
+
+import requests
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.conf import settings
+
 
 from .serializers import (
     RegistrationSerializer,
@@ -39,6 +46,56 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # data['isStudent'] = self.user.groups.first().name == 'student'
         # data['user'] = UserSerializer(self.user).data
         return data
+
+
+# Google Login api handler
+class LoginWithGoogleView(APIView):
+
+    def generate_token(self,user):
+        refresh = RefreshToken.for_user(user)
+
+        refresh['email'] = user.email
+
+        return {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+
+    def post(self, request):
+        access_token = request.data.get('token')
+        GOOGLE_CLIENT_ID = getattr(settings, "GOOGLE_CLIENT_ID", None)
+        try:
+            TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v2/tokeninfo?access_token="+access_token
+            headers = {
+                "Authorization": "Bearer {access_token}",
+               "Content-Type": "application/json"
+            }
+            token_info = requests.get(TOKEN_INFO_URL ,data = {} ,headers = headers).json()
+            if token_info['issued_to'] == GOOGLE_CLIENT_ID:
+                try:
+                    USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?access_token="+access_token
+                    headers = {
+                        "Authorization": "Bearer {access_token}",
+                        "Content-Type": "application/json"
+                    }
+                    user_info = requests.get(USER_INFO_URL ,data = {} ,headers = headers).json()
+                    user, created = User.objects.get_or_create(
+                        username = user_info['email'].split('@')[0],
+                        first_name = user_info['given_name'],
+                        last_name = user_info['family_name'],
+                        email = user_info['email']
+                    )
+                    tokens = self.generate_token(user)
+                    return Response(data={'access': tokens['access'],'refresh':tokens['refresh'], 'response':'valid'}, status=200)
+                except Exception as e:
+                    print(e)
+                    return Response(data={'response': 'Unauthorized'}, status=401)
+            else:
+                return Response(data={'response': 'Unauthorized'}, status=401)
+        except Exception as e:
+            print(e)
+            return Response(data={'response': 'Invalid token'}, status=400)
+
 
 
 # For customised tokens. Don't use if not needed

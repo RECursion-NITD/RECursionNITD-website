@@ -8,6 +8,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from dotenv import load_dotenv
+load_dotenv()
 from decouple import config
 from datetime import timedelta
 
@@ -19,6 +21,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '9%b%-x(_!zd(ffdc!s=8j(clv&(_92d!+lh@#o9&t8*y40v1+3'
+
+# GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -236,6 +242,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_PASSWORD")
+GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
+
 
 TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
 
