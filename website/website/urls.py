@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
-from django.conf.urls import url, include
+from django.urls import include, re_path
 from forum import views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -42,7 +42,7 @@ urlpatterns = [
                   path('experience/', include('interview_exp.urls', namespace='interview_exp')),
                   path('get_started/', include('getting_started.urls', namespace='getting_started')),
                   # path('members/',include('members.urls')),
-                  url(r'^markdownx/', include('markdownx.urls')),
+                  re_path(r'^markdownx/', include('markdownx.urls')),
 
                   # API region
 

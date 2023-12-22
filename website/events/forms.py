@@ -3,7 +3,7 @@ from .models import *
 from django.contrib.auth.models import User
 from .validators import valid_url_extension
 from .validators import valid_url_mimetype
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext_lazy as _
 from markdownx.fields import MarkdownxFormField
 import mimetypes
 import pytz,datetime

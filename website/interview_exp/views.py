@@ -44,7 +44,8 @@ def add_experience(request):
 
     return render(request, 'experience-form.html', {'form': form})
 
-
+def is_ajax(request):
+    return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 @login_required
 def update_experience(request, id):
     current_user_profile = Profile.objects.get(user = request.user)
@@ -133,7 +134,7 @@ def list_experiences(request):
     ie_count = len(experiences)
     profiles = Profile.objects.all()
     args = {'form_search':search, 'profile':profiles, 'experiences': experiences_list, 'ie_count':ie_count}
-    if request.is_ajax():
+    if is_ajax(request):
         return render(request, 'exp_list.html', args)
     return render(request, 'experiences.html', args)
 
