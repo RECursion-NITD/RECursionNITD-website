@@ -13,7 +13,7 @@ class IESerializer(serializers.ModelSerializer):
     class Meta:
         model = Experiences
         fields = '__all__'
-        read_only_fields = ['user', 'created_at', 'updated_at', 'verifier']
+        read_only_fields = ['user', 'created_at', 'updated_at', 'verifier', 'selected']
 
 
 class RevisionSerializer(serializers.ModelSerializer):
@@ -33,4 +33,4 @@ class RevisionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Revisions
         fields = '__all__'
-        read_only_fields = ['created_at', 'updated_at', 'id', 'reviewer']
+        read_only_fields = ['created_at', 'updated_at', 'id', 'reviewer', 'selected']
