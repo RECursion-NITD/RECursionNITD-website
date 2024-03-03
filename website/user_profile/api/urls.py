@@ -8,6 +8,7 @@ from .views import (
     UserSearchView,
     username_existence_check,
     email_existence_check,
+    GetProfileRoleView
 )
 from user_profile.views import activate
 
@@ -22,7 +23,7 @@ urlpatterns = [
     path('search', UserSearchView.as_view(), name='user_search'),
     path('username-check', username_existence_check, name='username_exists'),
     path('email-check', email_existence_check, name='email_exists'),
-
+    path('roles', GetProfileRoleView.as_view(), name='roles'),
     # Account Activation
     path('activate/<slug:uidb64>/<slug:token>/', activate, name='activate'),
 

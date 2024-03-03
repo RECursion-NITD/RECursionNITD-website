@@ -47,6 +47,7 @@ class IEListView(ListCreateAPIView):
     ordering_fields = ['updated_at', 'total_Compensation', 'year']
 
     def get_queryset(self):
+        print('yes')
         qs = Experiences.objects.all()
         user = self.request.user
         if user.profile.role == '3':
@@ -54,6 +55,7 @@ class IEListView(ListCreateAPIView):
         return qs
 
     def perform_create(self, serializer):
+        print("yes")
         # TODO
         # send thank you mail for posting
         user = self.request.user
@@ -181,7 +183,7 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
 class RevisionsListView(ListAPIView):
     serializer_class = RevisionSerializer
 
-    permission_classes = (IsMemberOrAbove,)
+    # permission_classes = (IsMemberOrAbove,)
 
     def get_queryset(self):
         qs = Revisions.objects.prefetch_related('experience').prefetch_related('reviewer').all()
@@ -190,18 +192,20 @@ class RevisionsListView(ListAPIView):
 
 class RetrieveUpdateRevisionView(RetrieveUpdateAPIView):
     serializer_class = RevisionSerializer
-    permission_classes = (IsMemberOrAbove,)
-    lookup_field = 'id'
+    # permission_classes = (IsMemberOrAbove,)
+    lookup_field = 'experience_id'
     lookup_url_kwarg = 'id'
 
     def get_queryset(self):
         qs = Revisions.objects.prefetch_related('experience').prefetch_related('reviewer').all()
+        if (qs[0].experience.verification_Status=="Approved"):
+            Revisions.objects.filter(experience=qs[0].experience).update(message="No Changes Required")
         return qs
 
 
 class CreateRevision(CreateAPIView):
     serializer_class = RevisionSerializer
-    permission_classes = (IsMemberOrAbove,)
+    # permission_classes = (IsMemberOrAbove,)
 
     def perform_create(self, serializer):
         """
