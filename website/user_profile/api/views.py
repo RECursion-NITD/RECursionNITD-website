@@ -97,6 +97,18 @@ class LoginWithGoogleView(APIView):
             return Response(data={'response': 'Invalid token'}, status=400)
 
 
+# For Getting The Role of the User
+class GetProfileRoleView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        try:
+            profile = Profile.objects.get(user=request.user)
+            return Response(data={'role': profile.role}, status=200)
+        except Exception as e:
+            print(e)
+            return Response(data={'response': 'Unauthorized'}, status=401)
+
 
 # For customised tokens. Don't use if not needed
 class MyTokenObtainPairView(TokenObtainPairView):

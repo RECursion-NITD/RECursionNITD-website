@@ -191,11 +191,13 @@ class RevisionsListView(ListAPIView):
 class RetrieveUpdateRevisionView(RetrieveUpdateAPIView):
     serializer_class = RevisionSerializer
     permission_classes = (IsMemberOrAbove,)
-    lookup_field = 'id'
+    lookup_field = 'experience_id'
     lookup_url_kwarg = 'id'
 
     def get_queryset(self):
         qs = Revisions.objects.prefetch_related('experience').prefetch_related('reviewer').all()
+        if (qs.first().experience.verification_Status=="Approved"):
+            Revisions.objects.filter(experience=qs.first().experience).update(message="No Changes Required")
         return qs
 
 
