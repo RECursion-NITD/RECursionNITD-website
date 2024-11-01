@@ -52,7 +52,7 @@
                                 <p>{{ experience.formatted_markdown | safe }}</p>
                                 <p class="card-text">
                                     <i>
-                                        <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img">
+                                        {% comment %} <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img"> {% endcomment %}
                                         <small class="mb-0" style="position:relative; top:15px;">
                                           &nbsp
                                             <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a>
@@ -82,6 +82,8 @@
                                     <li title="Job Profile"><i class="fas fa-user-tie btn btn-light mb-1"></i>&nbsp {{ experience.job_Profile }}</li>
                                     <li title="Year"><i class="fas fa-calendar-alt btn btn-light mb-1"></i>&nbsp {{ experience.year }}</li>
                                     <li title="Rounds"><i class="fas fa-user-edit btn btn-light mb-1"></i>&nbsp {{ experience.no_of_Rounds }}</li>
+                                    {% comment %} <li title="selected"><i class="fas fa-user-edit btn btn-light mb-1"></i>&nbsp {{ experience.selected }}</li> {% endcomment %}
+
                                     
                                 </ul>
                         </div>

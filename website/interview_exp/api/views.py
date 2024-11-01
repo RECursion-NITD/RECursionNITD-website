@@ -43,7 +43,7 @@ class IEListView(ListCreateAPIView):
     serializer_class = IESerializer
     filter_backends = (filters.DjangoFilterBackend, SearchFilter, OrderingFilter)
     filterset_class = ExperiencesFilter
-    search_fields = ['company', 'user__username', 'year']
+    search_fields = ['company', 'user__username', 'year','selected']    
     ordering_fields = ['updated_at', 'total_Compensation', 'year']
 
     def get_queryset(self):

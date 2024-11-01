@@ -7,7 +7,7 @@ class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experiences
         interview_Questions = MarkdownxFormField()
-        fields = ['company', 'year', 'job_Profile', 'role_Type', 'no_of_Rounds', 'interview_Questions', 'total_Compensation']
+        fields = ['company', 'year', 'job_Profile', 'role_Type', 'no_of_Rounds', 'interview_Questions', 'total_Compensation', 'selected']
 
 class SearchForm(forms.Form):
     key = forms.CharField(max_length=25)

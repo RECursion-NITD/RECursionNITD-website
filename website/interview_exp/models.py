@@ -47,6 +47,7 @@ class Experiences(ExportModelOperationsMixin('experience'), models.Model):
     # AUTOGENERATE DATETIME
     created_at = models.DateTimeField(auto_now=False, auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, auto_now_add=False)
+    selected = models.BooleanField(default = True)    
 
     @property
     def formatted_markdown(self):
