@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 from decouple import config
 from datetime import timedelta
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +30,8 @@ GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
@@ -160,12 +162,10 @@ SIMPLE_JWT = {
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    'default': dj_database_url.config(
+        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+    )
 }
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -245,6 +245,7 @@ GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
 
 
 TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
