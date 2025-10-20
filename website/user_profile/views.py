@@ -1,41 +1,31 @@
-from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from .models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.template import loader, RequestContext
+from django.template.loader import render_to_string
 from .forms import *
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.forms import modelformset_factory
-from django.contrib.auth.forms import UserCreationForm
 from itertools import chain
 from django.core.files.base import ContentFile
 from io import BytesIO
 import urllib.request
 from PIL import Image
 from django.contrib.sites.shortcuts import get_current_site
-from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from .tokens import password_reset_token
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_text
+from .tokens import account_activation_token, password_reset_token
 from django.contrib import messages
-from django.contrib.auth import update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import SetPasswordForm
-from django.contrib.auth.models import *
+from .utils import ProfileMatcher, valid_url_extension
 import random
 from forum.models import *
 from blog.models import *
-from .utils import ProfileMatcher
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
@@ -109,10 +99,12 @@ def user_register(request):
               user.save()
               current_site = get_current_site(request)
               subject = 'Activate Your RECursion Account'
+              # ensure uid is a clean string (urlsafe_base64_encode returns str in recent Django)
+              uid = urlsafe_base64_encode(force_bytes(user.pk))
               message = render_to_string('account_activation_email.html', {
                   'user': user,
                   'domain': current_site.domain,
-                  'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                  'uid': uid,
                   'token': account_activation_token.make_token(user),
               })
               user.email_user(subject, message)
@@ -171,7 +163,8 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         profile = Profile.objects.get(user = user)
         image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-        type = valid_url_extension(image_url)
+        # valid_url_extension imported from .utils
+        _ = valid_url_extension(image_url)
         full_path = 'media/images/' + profile.user.username + '.png'
         try:
             urllib.request.urlretrieve(image_url, full_path)
@@ -216,7 +209,7 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('profile:edit_profile')
+            return redirect('user_profile:edit_profile')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -237,10 +230,11 @@ def password_reset(request):
               user.save()
               current_site = get_current_site(request)
               subject = 'Reset Your RECursion Account Password'
+              uid = urlsafe_base64_encode(force_bytes(user.pk))
               message = render_to_string('registration/password_reset_email.html', {
                   'user': user,
                   'domain': current_site.domain,
-                  'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                  'uid': uid,
                   'token': password_reset_token.make_token(user),
               })
               user.email_user(subject, message)
@@ -262,15 +256,21 @@ def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    if user is not None and account_activation_token.check_token(user, token):
-        form = SetPasswordForm(user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            user.is_active = True
-            user.save()
-            return redirect('login')
-        return render(request, 'registration/password_reset_confirm.html', {'form': form})
+    # Use password_reset_token (was incorrectly using account_activation_token)
+    if user is not None and password_reset_token.check_token(user, token):
+        if request.method == 'POST':
+            form = SetPasswordForm(user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)  # Important!
+                user.is_active = True
+                user.save()
+                return redirect('login')
+            # if invalid, re-render with errors
+            return render(request, 'registration/password_reset_confirm.html', {'form': form})
+        else:
+            form = SetPasswordForm(user)
+            return render(request, 'registration/password_reset_confirm.html', {'form': form})
     else:
         return render(request, 'registration/password_reset_invalid.html')
 
