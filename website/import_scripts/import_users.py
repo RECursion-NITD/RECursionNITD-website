@@ -35,6 +35,10 @@ with open('import_scripts/user.csv', 'r') as csvfile:
         u.profile.college = row['College']
         u.profile.dept = row['Dept']
         u.profile.email_confirmed=True
+        #Development
+        #For development
+        # image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
+        #Production
         image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
         full_path = 'media/images/' + username + '.png'
         try:

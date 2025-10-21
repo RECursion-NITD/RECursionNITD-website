@@ -162,6 +162,9 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         profile = Profile.objects.get(user = user)
+        #For development
+        # image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
+        #For production
         image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
         # valid_url_extension imported from .utils
         _ = valid_url_extension(image_url)
@@ -187,6 +190,10 @@ def edit_profile(request):
     if form.is_valid():
         form.save()
         if form.cleaned_data['image'] is None or form.cleaned_data['image'] == False:
+          #Development
+          #For development
+          #image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
+          #Production
           image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
           type = valid_url_extension(image_url)
           full_path = 'media/images/' + profile.user.username + '.png'

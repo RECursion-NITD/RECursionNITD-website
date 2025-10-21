@@ -236,7 +236,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../website/media')
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 
 # Sender addresses
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='avishekpaul814@gmail.com')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='recursion2026@gmail.com')
 SERVER_EMAIL = config('SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
 # SMTP settings (used when EMAIL_BACKEND is set to SMTP)
@@ -248,6 +248,11 @@ EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD', default='')
 
 TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'website/static'),
+# ]
+
 
 # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
