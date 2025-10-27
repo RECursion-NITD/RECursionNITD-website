@@ -23,6 +23,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .tokens import account_activation_token, password_reset_token
 from django.contrib import messages
 from .utils import ProfileMatcher, valid_url_extension
+from website.utils import save_local_profile_pic_to_media
 import random
 from forum.models import *
 from blog.models import *
@@ -162,20 +163,21 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
         user.save()
         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
         profile = Profile.objects.get(user = user)
-        #For development
-        # image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-        #For production
-        image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-        # valid_url_extension imported from .utils
-        _ = valid_url_extension(image_url)
-        full_path = 'media/images/' + profile.user.username + '.png'
+        # Copy a local static profile pic into MEDIA and set ImageField
         try:
-            urllib.request.urlretrieve(image_url, full_path)
-        except:
-            return HttpResponse("Downloadable Image Not Found!")
-        if profile.user == request.user:
-            profile.image = '../' + full_path
+            rel_media = save_local_profile_pic_to_media(profile.user.username)
+        except Exception as e:
+            print("activate: save_local_profile_pic_to_media exception:", repr(e))
+            rel_media = False
+
+        if not rel_media:
+            print("Downloadable Image Not Found!")
+        else:
+            profile.image.name = rel_media  # set path relative to MEDIA_ROOT
             profile.save()
+
+        if profile.user == request.user:
+            return redirect('user_profile:edit_profile')
         return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
@@ -189,21 +191,16 @@ def edit_profile(request):
     form = Profileform(request.POST or None, request.FILES or None,  instance=profile)
     if form.is_valid():
         form.save()
-        if form.cleaned_data['image'] is None or form.cleaned_data['image'] == False:
-          #Development
-          #For development
-          #image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-          #Production
-          image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-          type = valid_url_extension(image_url)
-          full_path = 'media/images/' + profile.user.username + '.png'
-          try:
-              urllib.request.urlretrieve(image_url, full_path)
-          except:
-              return HttpResponse("Downloadable Image Not Found!")
-          if profile.user == request.user:
-              profile.image = '../' + full_path
-              form.save()
+        # ensure a local default exists if no image supplied
+        if not profile.image:
+            try:
+                rel_media = save_local_profile_pic_to_media(profile.user.username)
+            except Exception as e:
+                print("edit_profile: save_local_profile_pic_to_media exception:", repr(e))
+                rel_media = False
+            if rel_media:
+                profile.image.name = rel_media
+                profile.save()
         return HttpResponseRedirect(reverse('user_profile:view_profile', args=(id,)))
     return render(request, 'create.html', {'form': form, })
 
