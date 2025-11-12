@@ -52,7 +52,11 @@
                                 <p>{{ experience.formatted_markdown | safe }}</p>
                                 <p class="card-text">
                                     <i>
-                                        <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img">
+                                        {% if profile and profile.image %}
+                                          <img src="{{ profile.image.url }}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="img">
+                                        {% else %}
+                                          <img src="{% static 'image/profile_pic/default.png' %}" width="5%" height="5%" style="border-radius: 30px; float: left;" alt="default profile">
+                                        {% endif %}
                                         <small class="mb-0" style="position:relative; top:15px;">
                                           &nbsp
                                             <a href="{% url 'user_profile:view_profile' experience.user.id  %}">{{experience.user}}</a>
