@@ -60,6 +60,7 @@ website/db.sqlit
 .env
 .venv
 env/
+myEnv/
 venv/
 ENV/
 env.bak/
@@ -84,3 +85,6 @@ website/migrations/
 
 # Media files
 media/
+
+staticfiles/
+.agent/

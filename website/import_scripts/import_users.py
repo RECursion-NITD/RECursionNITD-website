@@ -6,6 +6,7 @@ import random
 import csv
 from random import choice
 from string import ascii_uppercase
+from website.utils import save_local_profile_pic_to_media
 
 
 randhash = ''.join(choice(ascii_uppercase) for i in range(32))
@@ -35,18 +36,25 @@ with open('import_scripts/user.csv', 'r') as csvfile:
         u.profile.college = row['College']
         u.profile.dept = row['Dept']
         u.profile.email_confirmed=True
-        image_url = 'https://recursionnitd.in/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
-        full_path = 'media/images/' + username + '.png'
+        #Development
+        #For development
+        # image_url = 'http://127.0.0.1:8000/'+'static/image/profile_pic/' + str(random.randint(1,15)) + '.png'
+        #Production: copy local static into MEDIA instead of fetching external URL
         try:
-            urllib.request.urlretrieve(image_url, full_path)
-        except:
-            print("Downloadable Image Not Found!")
-        u.profile.image = '../' + full_path
-        u.save()
-        
-        
+            rel_media = save_local_profile_pic_to_media(username)
+        except Exception as e:
+            print("import_users: save_local_profile_pic_to_media exception:", repr(e))
+            rel_media = False
 
-        
+        if not rel_media:
+            print("Downloadable Image Not Found!")
+        else:
+            u.profile.image = rel_media  # relative to MEDIA_ROOT
+        u.save()
+
+
+
+
 
 
 

@@ -102,3 +102,20 @@ def send_verification_mail(domain, user, *args, **kwargs):
     threaded_mail.start()
 
     return message
+
+
+def valid_url_extension(url, allowed=('.jpg', '.jpeg', '.png', '.gif', '.webp')):
+    """
+    Return True if the URL's path ends with an allowed image extension.
+    Keeps a lightweight check so views can safely attempt to download image files.
+    """
+    try:
+        from urllib.parse import urlparse
+        path = urlparse(url).path or ''
+        path = path.lower()
+        for ext in allowed:
+            if path.endswith(ext):
+                return True
+        return False
+    except Exception:
+        return False

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
+from utils.content_filter import check_content_safety
 from .models import *
 from .forms import *
 from django.http import HttpResponse, HttpResponseRedirect
@@ -13,10 +14,20 @@ from django.template.loader import render_to_string
 from django.core.mail import send_mass_mail
 
 
+from django_ratelimit.decorators import ratelimit
+
 @login_required
+@ratelimit(key='user', rate='1/10m', method='POST', block=True)
 def add_experience(request):
     form = ExperienceForm(request.POST or None)
     if form.is_valid():
+            interview_Questions = form.cleaned_data.get('interview_Questions')
+            company = form.cleaned_data.get('company')
+            job_profile = form.cleaned_data.get('job_Profile')
+            title = f"{company} - {job_profile}"
+            if not check_content_safety(interview_Questions, title):
+                form.add_error('interview_Questions', "Your post contains irrelevant/inappropriate content and cannot be published.")
+                return render(request, 'experience-form.html', {'form': form})
             f = form.save(commit=False)
             f.user = request.user
             f.save()

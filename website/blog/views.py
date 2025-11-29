@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404, get_list_or_404
+from utils.content_filter import check_content_safety
+from django_ratelimit.decorators import ratelimit
 from .models import *
 from user_profile.models import *
 from events.models import *
@@ -78,6 +80,7 @@ def valid_url_extension(url, extension_list=VALID_IMAGE_EXTENSIONS):
     return type
 
 @login_required
+@ratelimit(key='user', rate='1/10m', method='POST', block=True)
 def add_blog(request):
     form = Postform(request.POST or None)
 
@@ -85,6 +88,11 @@ def add_blog(request):
     if request.method=='POST':
         form2 = Tagform(request.POST)
         if form.is_valid() and form2.is_valid():
+            description = form.cleaned_data.get('description')
+            title = form.cleaned_data.get('title')
+            if not check_content_safety(description, title):
+                form.add_error('description', "Your post contains irrelevant/inappropriate content and cannot be published.")
+                return render(request, 'blog/blog_form.html', {'form': form,'form2':form2,})
             f = form.save(commit=False)
             f.user_id = request.user
             form.save()
