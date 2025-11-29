@@ -87,3 +87,4 @@ website/migrations/
 media/
 
 staticfiles/
+.agent/

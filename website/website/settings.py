@@ -10,7 +10,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 from dotenv import load_dotenv
 load_dotenv()
-from decouple import config
+from decouple import config, Csv
 from datetime import timedelta
 import dj_database_url
 
@@ -28,9 +28,9 @@ GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -236,7 +236,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '../website/media')
 EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
 
 # Sender addresses
-DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL', default='recursion2026@gmail.com')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = config('SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
 # SMTP settings (used when EMAIL_BACKEND is set to SMTP)
