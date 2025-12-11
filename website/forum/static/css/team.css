@@ -27,7 +27,9 @@
 
 .pic img {
 	width: 100%;
-	height: auto;
+    aspect-ratio: 1 / 1;
+	height: 100%;
+    object-fit: cover;
 }
 
 .our-team .social-links {
