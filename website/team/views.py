@@ -22,7 +22,7 @@ def team_page(request):
             year_set.append(a.batch_year)
 
     presi = Members.objects.filter(batch_year = curr_batch_year, designation = "President")
-    convener = Members.objects.filter(batch_year=curr_batch_year, designation="Convener")
+    convener = Members.objects.filter(batch_year=curr_batch_year, designation="Convenor")
     treasurer = Members.objects.filter(batch_year=curr_batch_year, designation="Treasurer")
     vice_presi = Members.objects.filter(batch_year=curr_batch_year, designation="Vice President")
     gen_sec = Members.objects.filter(batch_year=curr_batch_year, designation="General Secretary")
