@@ -61,6 +61,7 @@ website/db.sqlit
 .venv
 env/
 myEnv/
+myenv/
 venv/
 ENV/
 env.bak/
