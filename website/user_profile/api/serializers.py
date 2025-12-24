@@ -6,12 +6,43 @@ from user_profile.models import Profile
 from user_profile.utils import LowerEmailField
 
 
+# class RegistrationSerializer(serializers.ModelSerializer):
+#     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+#     email = LowerEmailField(
+#         required=True,
+#         allow_blank=False,
+#         label='Email address',
+#         max_length=30,
+#         validators=[UniqueValidator(queryset=User.objects.all())],
+#     )
+
+#     class Meta:
+#         model = User
+#         fields = ['username', 'email', 'password', 'password2']
+#         extra_kwargs = {
+#             'password': {'write_only': True}
+#         }
+
+#     def save(self):
+#         password = self.validated_data['password']
+#         password2 = self.validated_data['password2']
+#         if password != password2:
+#             raise serializers.ValidationError({'confirm_password': 'Passwords must match!'})
+#         account = User(
+#             username=self.validated_data['username'],
+#             email=self.validated_data['email'].lower(),
+#             is_active=False  # TO BE CHANGED TO FALSE
+#         )
+#         account.set_password(password)
+#         account.save()
+#         return account
+
 class RegistrationSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
+    password2 = serializers.CharField(write_only=True)
+
     email = LowerEmailField(
         required=True,
         allow_blank=False,
-        label='Email address',
         max_length=30,
         validators=[UniqueValidator(queryset=User.objects.all())],
     )
@@ -23,19 +54,24 @@ class RegistrationSerializer(serializers.ModelSerializer):
             'password': {'write_only': True}
         }
 
-    def save(self):
-        password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if password != password2:
-            raise serializers.ValidationError({'confirm_password': 'Passwords must match!'})
-        account = User(
-            username=self.validated_data['username'],
-            email=self.validated_data['email'].lower(),
-            is_active=False  # TO BE CHANGED TO FALSE
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({
+                'password2': 'Passwords must match!'
+            })
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop('password2')
+
+        user = User.objects.create_user(
+            username=validated_data['username'],
+            email=validated_data['email'].lower(),
+            password=validated_data['password'],
+            is_active=False
         )
-        account.set_password(password)
-        account.save()
-        return account
+        return user
+
 
 
 class UserSerializer(serializers.ModelSerializer):
