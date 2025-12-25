@@ -276,7 +276,7 @@ def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.
                 user.save()
                 return HttpResponse("Changed.")
             # if invalid, re-render with errors
-            return render(request, 'registration/password_reset_confirm.html', {'form': form})
+            return HttpResponse(form)
         else:
             form = SetPasswordForm(user)
             return render(request, 'registration/password_reset_confirm.html', {'form': form})
