@@ -177,7 +177,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
             profile.save()
 
         if profile.user == request.user:
-            return redirect('user_profile:edit_profile')
+            return redirect('http://localhost:3000/login')
         return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
