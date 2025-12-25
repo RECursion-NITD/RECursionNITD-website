@@ -21,7 +21,7 @@ class EventsListCreateView(ListCreateAPIView):
     ordering_fields = ['start_time', 'end_time', 'updated_at', 'duration']
 
     def get_queryset(self):
-        return Events_Calendar.objects.select_related('user').all()
+        return Events_Calendar.objects.all().order_by('-start_time')
 
     def perform_create(self, serializer):
         start_time, end_time = serializer.validated_data.get('start_time'), serializer.validated_data.get('end_time')
