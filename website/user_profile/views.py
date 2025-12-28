@@ -260,18 +260,23 @@ def password_reset_confirm(request, uidb64, token, backend='django.contrib.auth.
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
+
     # Use password_reset_token (was incorrectly using account_activation_token)
     if user is not None and password_reset_token.check_token(user, token):
         if request.method == 'POST':
-            form = SetPasswordForm(user, request.POST)
+            data = {
+                'new_password1': request.POST.get('password'),
+                'new_password2': request.POST.get('confirmPassword'),
+            }
+            form = SetPasswordForm(user, data=data)
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 user.is_active = True
                 user.save()
-                return redirect('login')
+                return HttpResponse("Changed.")
             # if invalid, re-render with errors
-            return render(request, 'registration/password_reset_confirm.html', {'form': form})
+            return HttpResponse(form)
         else:
             form = SetPasswordForm(user)
             return render(request, 'registration/password_reset_confirm.html', {'form': form})
