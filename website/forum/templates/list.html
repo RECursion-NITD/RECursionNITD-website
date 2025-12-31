@@ -9,7 +9,7 @@
                       {% if not question.anonymous_ask and p.image %}
                 <img src="{{ p.image.url }}" class="rounded-circle mt-2 mb-1" width="55px" height="55px" alt="img">
                     {% else %}
-                    {% load staticfiles %}
+                    {% load static %}
                 <img src="{% static 'image/annonymous_user.jpg'%}" width="50px" height="50px" alt="img">      
                     {% endif %}
                     {% endif %}
