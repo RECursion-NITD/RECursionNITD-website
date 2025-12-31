@@ -19,6 +19,7 @@ from django.urls import path,include
 from django.conf.urls import include
 from django.urls import re_path as url
 from forum import views
+from team.views import team_api, alumni_api
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -37,6 +38,9 @@ urlpatterns = [
     path('blog/',include('blog.urls',namespace='blog')),
     path('experience/',include('interview_exp.urls',namespace='interview_exp')),
     path('get_started/',include('getting_started.urls',namespace='getting_started')),
+    # API endpoints
+    path('api/team/', team_api, name='team_api'),
+    path('api/alumni/', alumni_api, name='alumni_api'),
     # path('members/',include('members.urls')),
     url(r'^markdownx/', include('markdownx.urls')),
 
