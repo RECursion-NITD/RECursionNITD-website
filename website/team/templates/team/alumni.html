@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block css%}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/team.css'%}">
+{% endblock%}
+{% block team_page %}active{% endblock %}
+{% block content %}
+
+{% load static %}
+
+<!--ALUMNI SECTION-->
+<div style="background:#111;padding:40px 0;">
+
+{% for year in year_set %}
+    <center>
+        <h2 style="color:#45c3ff;margin:50px 0 30px 0;letter-spacing:2px;">
+            BATCH OF {{ year }}
+        </h2>
+    </center>
+
+    <div style="
+        display:flex;
+        flex-wrap:wrap;
+        justify-content:center;
+        margin-bottom:40px;
+    ">
+
+    {% for alumnus in alumni %}
+        {% if alumnus.batch_year == year %}
+            <div style="
+                width:300px;
+                margin:15px;
+                background:white;
+                border-radius:8px;
+                padding:20px;
+                text-align:center;
+                box-shadow:0 4px 8px rgba(0,0,0,0.3);
+            ">
+                <img src="{{ alumnus.image.url }}" style="
+                    width:100px;
+                    height:100px;
+                    object-fit:cover;
+                    border-radius:50%;
+                    border:4px solid #45c3ff;
+                    margin-bottom:15px;
+                ">
+                <div style="font-size:18px;font-weight:bold;color:#333;margin-bottom:5px;">
+                    {{ alumnus.name }}
+                </div>
+                <div style="font-size:14px;color:#666;margin-bottom:10px;">
+                    B.Tech. in {{ alumnus.branch }}
+                </div>
+                <div style="margin-top:15px;">
+                    {% if alumnus.url_LinkedIn %}
+                        <a href="{{ alumnus.url_LinkedIn }}" target="_blank" style="
+                            background:#0077B5;
+                            color:white;
+                            padding:8px 15px;
+                            border-radius:4px;
+                            text-decoration:none;
+                            font-size:12px;
+                            margin-right:10px;
+                        ">
+                            LinkedIn
+                        </a>
+                    {% endif %}
+                    {% if alumnus.url_Facebook %}
+                        <a href="{{ alumnus.url_Facebook }}" target="_blank" style="
+                            background:#1877F2;
+                            color:white;
+                            padding:8px 15px;
+                            border-radius:4px;
+                            text-decoration:none;
+                            font-size:12px;
+                        ">
+                            Facebook
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}

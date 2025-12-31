@@ -1,7 +1,7 @@
 
 {% extends 'base_loginpage.html' %}
 {% load widget_tweaks %}
-{% load staticfiles %}
+{% load static %}
 <link rel="stylesheet" href="{% static 'css/login_css.css' %}">
 
 {% block css %}
@@ -63,8 +63,6 @@
       <a href="{% url 'user_profile:user_register' %}" class="btn btn-outline-success ml-2 mb-3">Signup</a>
       <hr class="mt-0">
       <div>
-        <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.get_full_path }}" class="btn w-100" style="background-color: #F95C39; color: white; ">Login with Google&nbsp;
-          <i class="fab fa-google"></i></a>
       <br><br>
         </div><br><br>
     <!--<div style="background-color:#385899;padding:10px;border-radius: 4px;float:left;width:100%;font-size: 90%;">

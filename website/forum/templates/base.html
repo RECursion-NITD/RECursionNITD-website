@@ -23,7 +23,7 @@
  -->
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
     <!--File Imports-->
-    {% load staticfiles %}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
     <link rel="stylesheet" href="{% static 'css/custom_checkbox.css' %}">
 
@@ -31,7 +31,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/static/image/favicon-96x96.png">
 
     <!--File Imports-->
-    {% load staticfiles %}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/base_css.css' %}">
     <link rel="stylesheet" href="{% static 'css/loader_css.css' %}">
 
@@ -67,7 +67,7 @@
             <div class="d-flex flex-grow-1 py-0">
                 <span class="w-100 d-lg-none d-block"><!-- hidden spacer to center brand on mobile --></span>
                 <a class="navbar-brand" href="{% url 'home' %}">
-          {% load staticfiles %}
+          {% load static %}
           <img id="logoREC" src="{% static 'image/logoInverted.png'%}" style="max-width:50px; padding-bottom: 4px" alt="logo">
           <strong>REC</strong>ursion
         </a>
