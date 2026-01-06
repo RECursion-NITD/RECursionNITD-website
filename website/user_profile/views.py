@@ -177,7 +177,7 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
             profile.save()
 
         if profile.user == request.user:
-            return redirect('http://localhost:3000/login')
+            return redirect(settings.FRONTEND_BASE_URL + '/login')
         return redirect('user_profile:edit_profile')
     else:
         return render(request, 'account_activation_invalid.html')
@@ -240,6 +240,7 @@ def password_reset(request):
                   'domain': current_site.domain,
                   'uid': uid,
                   'token': password_reset_token.make_token(user),
+                  'frontend_base_url': settings.FRONTEND_BASE_URL,
               })
               user.email_user(subject, message)
               return HttpResponse("We've emailed you instructions for setting your password, if an account exists with the email you entered! You should receive them shortly."

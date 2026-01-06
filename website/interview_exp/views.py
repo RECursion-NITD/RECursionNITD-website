@@ -43,7 +43,7 @@ def add_experience(request):
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=f.id),
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
             result = send_mass_mail(messages, fail_silently=False)
@@ -88,7 +88,7 @@ def update_experience(request, id):
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
@@ -105,7 +105,7 @@ def update_experience(request, id):
                         'domain': current_site.domain,
                         'experience': Experiences.objects.get(pk=experience.id),
                     })
-                    msg = (subject, message, 'webmaster@localhost', [user.email])
+                    msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                     if msg not in messages:
                         messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
@@ -302,7 +302,7 @@ def revise_experience(request, id, action):
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
@@ -329,7 +329,7 @@ def revise_experience(request, id, action):
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
