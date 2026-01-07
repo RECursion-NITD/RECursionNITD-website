@@ -17,8 +17,8 @@ class IESerializer(serializers.ModelSerializer):
 
 
 class RevisionSerializer(serializers.ModelSerializer):
-    experience = IESerializer()
-    reviewer = UserSerializer()
+    experience = IESerializer(read_only=True)
+    reviewer = UserSerializer(read_only=True)
 
     # experience = serializers.HyperlinkedRelatedField(view_name='experiences_api:ie_detail',
     #                                                  lookup_field='id',

@@ -120,7 +120,7 @@ def add_blog(request):
                     'domain': current_site.domain,
                     'post' : Posts.objects.get(pk=f.id),
                 })
-                msg=(subject, message, 'webmaster@localhost', [user.email])
+                msg=(subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
                 result = send_mass_mail(messages, fail_silently=False)
             return redirect('blog:list_blogs')
@@ -271,7 +271,7 @@ def update_blogs(request, id):
                     'domain': current_site.domain,
                     'post': post,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
             '''for follow in follows:
                 user = follow.user
@@ -332,7 +332,7 @@ def add_reply(request, id):
                     'domain': current_site.domain,
                     'post': post,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
             '''for follow in follows:
                 user = follow.user
@@ -394,7 +394,7 @@ def update_reply(request, id):
                             'domain': current_site.domain,
                             'post': post,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         messages += (msg,)
                     '''for follow in follows:
                         user = follow.user
@@ -444,7 +444,7 @@ def add_comment(request, id):
                 'domain': current_site.domain,
                 'post': post,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             messages += (msg,)
         '''for follow in follows:
             user = follow.user
@@ -496,7 +496,7 @@ def update_comment(request, id):
                             'domain': current_site.domain,
                             'post': post,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         messages += (msg,)
                     '''for follow in follows:
                         user = follow.user
@@ -758,7 +758,7 @@ def add_comment_reply(request, id):
                 'domain': current_site.domain,
                 'post': reply.post_id,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             messages += (msg,)
         '''for follow in follows:
             user = follow.user
@@ -809,7 +809,7 @@ def update_comment_reply(request, id):
                       'domain': current_site.domain,
                       'post': reply.post_id,
                   })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                   messages += (msg,)
               '''for follow in follows:
                   user = follow.user

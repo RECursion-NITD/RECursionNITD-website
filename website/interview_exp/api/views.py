@@ -34,8 +34,6 @@ from .serializers import (
 )
 
 # email only for trial purposes
-# TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
-TRIAL_REC_MAIL = settings.TRIAL_REC_MAIL
 
 
 class IEListView(ListCreateAPIView):
@@ -74,7 +72,7 @@ class IEListView(ListCreateAPIView):
         #         'domain': current_site.domain,
         #         'experience': Experiences.objects.get(pk=f.id),
         #     })
-        #     msg = (subject, message, 'webmaster@localhost', [TRIAL_REC_MAIL,])
+        #     msg = (subject, message, 'webmaster@localhost', ["example@gmail.com",])
         #     if msg not in messages:
         #         messages += (msg,)
         # result = send_mass_mail(messages, fail_silently=False)
@@ -95,8 +93,8 @@ class IEListView(ListCreateAPIView):
                         'experience': exp,
                     }
                 ),
-                to=[TRIAL_REC_MAIL, ],
-
+                # to=[user.email, ],
+                to=[user.email, ],
             )
             for user in member_users
         ]
@@ -147,7 +145,7 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
                             'experience': exp,
                         }
                     ),
-                    to=[TRIAL_REC_MAIL, ],  # to=[reviewer.email, ]
+                    to=[reviewer.email, ],  # to=[reviewer.email, ]
                 )
             ]
             # uncomment below to mail
@@ -168,7 +166,7 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
                             'experience': exp,
                         }
                     ),
-                    to=[TRIAL_REC_MAIL, ],  # to=[reviewer.email, ]
+                    to=[user.email, ],  # to=[reviewer.email, ]
                 )
                 for user in member_users
             ]
@@ -219,7 +217,7 @@ class CreateRevision(CreateAPIView):
         review_code = self.kwargs.get('review_code', '')
         print(self.kwargs)
         if review_code == 'acc':  # Accepted
-            exp.verification_Status = 'Accepted'
+            exp.verification_Status = 'Approved'
             exp.verifier = curr_user
             # TODO
             # Send mail to the author about publication
@@ -243,9 +241,10 @@ class CreateRevision(CreateAPIView):
                             'user': exp.user,
                             'domain': domain,
                             'experience': exp,
+                            'message': msg,
                         }
                     ),
-                    to=[TRIAL_REC_MAIL, ],  # exp.user.email
+                    to=[exp.user.email],  # exp.user.email
 
                 )
             ]

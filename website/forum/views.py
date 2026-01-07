@@ -163,7 +163,7 @@ def add_question(request):
                     'domain': current_site.domain,
                     'question' : Questions.objects.get(pk=f.id),
                 })
-                msg=(subject, message, 'webmaster@localhost', [user.email])
+                msg=(subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
                 # result = send_mass_mail(messages, fail_silently=False)
             return redirect('forum:list_questions')
@@ -320,7 +320,7 @@ def update_questions(request, id):
                     'domain': current_site.domain,
                     'question': question,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
             for follow in follows:
                 user = follow.user
@@ -331,7 +331,7 @@ def update_questions(request, id):
                     'domain': current_site.domain,
                     'question': question,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
             # result = send_mass_mail(messages, fail_silently=False)
@@ -386,7 +386,7 @@ def add_answer(request, id):
                     'domain': current_site.domain,
                     'question': question,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 messages += (msg,)
             for follow in follows:
                 user = follow.user
@@ -397,7 +397,7 @@ def add_answer(request, id):
                     'domain': current_site.domain,
                     'question': question,
                 })
-                msg = (subject, message, 'webmaster@localhost', [user.email])
+                msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
                     messages += (msg,)
             # result = send_mass_mail(messages, fail_silently=False)
@@ -448,7 +448,7 @@ def update_answer(request, id):
                             'domain': current_site.domain,
                             'question': question,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         messages += (msg,)
                     for follow in follows:
                         user = follow.user
@@ -459,7 +459,7 @@ def update_answer(request, id):
                             'domain': current_site.domain,
                             'question': question,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         if msg not in messages:
                             messages += (msg,)
                     # result = send_mass_mail(messages, fail_silently=False)
@@ -526,7 +526,7 @@ def add_comment(request, id):
                 'domain': current_site.domain,
                 'question': question,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             messages += (msg,)
         for follow in follows:
             user = follow.user
@@ -537,7 +537,7 @@ def add_comment(request, id):
                 'domain': current_site.domain,
                 'question': question,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             if msg not in messages:
                 messages += (msg,)
         # result = send_mass_mail(messages, fail_silently=False)
@@ -579,7 +579,7 @@ def update_comment(request, id):
                             'domain': current_site.domain,
                             'question': question,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         messages += (msg,)
                     for follow in follows:
                         user = follow.user
@@ -590,7 +590,7 @@ def update_comment(request, id):
                             'domain': current_site.domain,
                             'question': question,
                         })
-                        msg = (subject, message, 'webmaster@localhost', [user.email])
+                        msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                         if msg not in messages:
                             messages += (msg,)
                     # result = send_mass_mail(messages, fail_silently=False)
@@ -723,7 +723,7 @@ def add_comment_answer(request, id):
                 'domain': current_site.domain,
                 'question': answer.question_id,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             messages += (msg,)
         for follow in follows:
             user = follow.user
@@ -734,7 +734,7 @@ def add_comment_answer(request, id):
                 'domain': current_site.domain,
                 'question': answer.question_id,
             })
-            msg = (subject, message, 'webmaster@localhost', [user.email])
+            msg = (subject, message, settings.SERVER_EMAIL, [user.email])
             if msg not in messages:
                 messages += (msg,)
         # result = send_mass_mail(messages, fail_silently=False)
@@ -775,7 +775,7 @@ def update_comment_answer(request, id):
                       'domain': current_site.domain,
                       'question': answer.question_id,
                   })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                   messages += (msg,)
               for follow in follows:
                   user = follow.user
@@ -786,7 +786,7 @@ def update_comment_answer(request, id):
                       'domain': current_site.domain,
                       'question': answer.question_id,
                   })
-                  msg = (subject, message, 'webmaster@localhost', [user.email])
+                  msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                   if msg not in messages:
                      messages += (msg,)
               #result = send_mass_mail(messages, fail_silently=False)

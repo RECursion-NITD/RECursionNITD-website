@@ -32,10 +32,12 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
+FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3000')
+
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000"
+    FRONTEND_BASE_URL
 ]
 
 CORS_ALLOW_CREDENTIALS = True
