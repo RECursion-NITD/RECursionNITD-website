@@ -23,6 +23,7 @@ from user_profile.utils import ProfileMatcher
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
+from django.core.files.base import ContentFile
 
 
 from .serializers import (
@@ -64,34 +65,57 @@ class LoginWithGoogleView(APIView):
     def post(self, request):
         access_token = request.data.get('token')
         GOOGLE_CLIENT_ID = getattr(settings, "GOOGLE_CLIENT_ID", None)
+        if not GOOGLE_CLIENT_ID:
+            GOOGLE_CLIENT_ID = getattr(settings, "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None)
+
         try:
-            TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v2/tokeninfo?access_token="+access_token
+            TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=" + access_token
             headers = {
-                "Authorization": "Bearer {access_token}",
+                "Authorization": f"Bearer {access_token}",
                 "Content-Type": "application/json"
             }
-            token_info = requests.get(TOKEN_INFO_URL ,data = {} ,headers = headers).json()
+            token_info = requests.get(TOKEN_INFO_URL, data={}, headers=headers).json()
+            
+            if 'error' in token_info:
+                print(f"Google API Error: {token_info}")
+                return Response(data={'response': 'Invalid token from Google'}, status=400)
+
             if token_info['issued_to'] == GOOGLE_CLIENT_ID:
                 try:
-                    USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?access_token="+access_token
-                    user_info = requests.get(USER_INFO_URL ,data = {} ,headers = headers).json()
+                    USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token
+                    user_info = requests.get(USER_INFO_URL, data={}, headers=headers).json()
                     user, created = User.objects.get_or_create(
-                        username = user_info['email'].split('@')[0],
-                        defaults = {
+                        username=user_info['email'].split('@')[0],
+                        defaults={
                             'first_name': user_info.get('name', ''),
                             'last_name': user_info.get('given_name', ''),
                             'email': user_info['email']
                         }
                     )
+                    
+                    if created:
+                        try:
+                            profile = user.profile
+                            profile.name = user_info.get('name', '')
+                            picture_url = user_info.get('picture')
+                            if picture_url:
+                                image_response = requests.get(picture_url)
+                                if image_response.status_code == 200:
+                                    profile.image.save(f"{user.username}_google.jpg", ContentFile(image_response.content), save=False)
+                            profile.save()
+                        except Exception as e:
+                            print(f"Error saving user profile data from Google: {e}")
+
                     tokens = self.generate_token(user)
-                    return Response(data={'access': tokens['access'],'refresh':tokens['refresh'], 'response':'valid'}, status=200)
+                    return Response(data={'access': tokens['access'], 'refresh': tokens['refresh'], 'response': 'valid', 'is_new_user': created}, status=200)
                 except Exception as e:
-                    print(e)
+                    print(f"User creation/retrieval error: {e}")
                     return Response(data={'response': 'Unauthorized'}, status=401)
             else:
-                return Response(data={'response': 'Unauthorized'}, status=401)
+                print(f"Client ID mismatch. Expected: {GOOGLE_CLIENT_ID}, Got: {token_info.get('issued_to')}")
+                return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
         except Exception as e:
-            print(e)
+            print(f"Top level error in LoginWithGoogleView: {e}")
             return Response(data={'response': 'Invalid token'}, status=400)
 
 
