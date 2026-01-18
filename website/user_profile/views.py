@@ -28,6 +28,7 @@ import random
 from forum.models import *
 from blog.models import *
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 def view_profile(request, id=None):
@@ -177,8 +178,8 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
             profile.save()
 
         if profile.user == request.user:
-            return redirect(settings.FRONTEND_BASE_URL + '/login')
-        return redirect('user_profile:edit_profile')
+            return redirect(settings.FRONTEND_BASE_URL + '/profile/edit?activated=true')
+        return redirect(settings.FRONTEND_BASE_URL + '/profile/edit?activated=true')
     else:
         return render(request, 'account_activation_invalid.html')
 

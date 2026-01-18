@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 app_name="profile"
 urlpatterns = [
     path('account_activation_sent/', account_activation_sent, name='account_activation_sent'),
-    path('activate/(<uidb64>[0-9A-Za-z_\-]+)/(<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/',
+    path('activate/<str:uidb64>/<str:token>/',
         activate, name='activate'),
     path('change_password/', change_password, name='change_password'),
     path('password_reset/', password_reset, name='password_reset'),

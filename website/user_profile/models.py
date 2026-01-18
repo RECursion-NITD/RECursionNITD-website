@@ -36,7 +36,7 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
         ('3', 'User')
     )
     role = models.CharField(max_length=50, choices=role_choices, default='3')
-    dept = models.CharField(max_length=20, blank=True, null=True)
+    dept = models.CharField(max_length=70, blank=True, null=True)
     url_CodeChef = models.URLField(blank=True, null=True)
     url_Codeforces = models.URLField(blank=True, null=True)
     url_SPOJ = models.URLField(blank=True, null=True)

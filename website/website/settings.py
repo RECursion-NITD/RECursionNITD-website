@@ -32,6 +32,10 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
+
+API_ONLY_MODE = config('API_ONLY_MODE', default=False, cast=bool)
+API_MODE_WHITELIST = []
+
 FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3000')
 
 # CORS_ALLOW_ALL_ORIGINS = True
@@ -81,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_prometheus.middleware.PrometheusAfterMiddleware',
+    'website.middleware.APIModeMiddleware',
 ]
 
 AUTHENTICATION_BACKENDS = (

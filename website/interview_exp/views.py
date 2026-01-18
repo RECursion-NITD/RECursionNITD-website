@@ -12,6 +12,7 @@ from django.db.models import Q
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import send_mass_mail
+from django.conf import settings
 
 
 from django_ratelimit.decorators import ratelimit
@@ -42,6 +43,7 @@ def add_experience(request):
                     'user': user,
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=f.id),
+                    'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                 })
                 msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
@@ -87,6 +89,7 @@ def update_experience(request, id):
                     'user': user,
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
+                    'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                 })
                 msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
@@ -104,6 +107,7 @@ def update_experience(request, id):
                         'user': user,
                         'domain': current_site.domain,
                         'experience': Experiences.objects.get(pk=experience.id),
+                        'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                     })
                     msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                     if msg not in messages:
@@ -301,6 +305,7 @@ def revise_experience(request, id, action):
                     'user': user,
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
+                    'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                 })
                 msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
@@ -328,6 +333,7 @@ def revise_experience(request, id, action):
                     'user': user,
                     'domain': current_site.domain,
                     'experience': Experiences.objects.get(pk=experience.id),
+                    'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                 })
                 msg = (subject, message, settings.SERVER_EMAIL, [user.email])
                 if msg not in messages:
