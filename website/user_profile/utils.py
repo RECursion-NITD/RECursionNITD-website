@@ -40,15 +40,7 @@ class ProfileMatcher:
         return 'ProfileMatcher object with query="{}", ratio_threshold={} .'.format(self.query, self.ratio_threshold)
 
 
-class TokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, user, timestamp):
-        return (
-                six.text_type(user.pk) + six.text_type(timestamp) +
-                six.text_type(user.is_active)
-        )
-
-
-account_activation_token = TokenGenerator()
+from .tokens import account_activation_token
 
 
 class LowerEmailField(serializers.EmailField):
@@ -90,7 +82,7 @@ def send_verification_mail(domain, user, *args, **kwargs):
         'uid': urlsafe_base64_encode(force_bytes(user.id)),
         'token': account_activation_token.make_token(user),
     })
-    to_email = settings.TRIAL_REC_MAIL
+    to_email = user.email
     mail = EmailMessage(
         mail_subject,
         message,

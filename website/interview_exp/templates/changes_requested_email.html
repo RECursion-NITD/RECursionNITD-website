@@ -6,7 +6,7 @@ They Said:
 "{{ message }}"
 
 Kindly, make them by clicking on the link below:
-http://{{ domain }}{% url 'interview_exp:detail_experiences' experience.id %}
+{{ FRONTEND_BASE_URL }}{% url 'interview_exp:detail_experiences' experience.id %}
 
 Sincerely,
 RECursion Team

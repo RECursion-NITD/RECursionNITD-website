@@ -91,6 +91,7 @@ class IEListView(ListCreateAPIView):
                         'user': user,
                         'domain': domain,
                         'experience': exp,
+                        'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                     }
                 ),
                 # to=[user.email, ],
@@ -143,6 +144,7 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
                             'user': reviewer,
                             'domain': domain,
                             'experience': exp,
+                            'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                         }
                     ),
                     to=[reviewer.email, ],  # to=[reviewer.email, ]
@@ -164,6 +166,7 @@ class RetrieveUpdateIEView(RetrieveUpdateAPIView):
                             'user': user,
                             'domain': domain,
                             'experience': exp,
+                            'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                         }
                     ),
                     to=[user.email, ],  # to=[reviewer.email, ]
@@ -242,6 +245,7 @@ class CreateRevision(CreateAPIView):
                             'domain': domain,
                             'experience': exp,
                             'message': msg,
+                            'FRONTEND_BASE_URL': settings.FRONTEND_BASE_URL,
                         }
                     ),
                     to=[exp.user.email],  # exp.user.email

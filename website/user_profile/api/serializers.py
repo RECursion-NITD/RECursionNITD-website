@@ -39,6 +39,7 @@ from user_profile.utils import LowerEmailField
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
+    dept = serializers.CharField(max_length=70, required=False, allow_blank=True)
 
     email = LowerEmailField(
         required=True,
@@ -49,7 +50,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ['username', 'email', 'password', 'password2', 'dept']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -63,6 +64,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
+        dept = validated_data.pop('dept', None)
 
         user = User.objects.create_user(
             username=validated_data['username'],
@@ -70,6 +72,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             is_active=False
         )
+        
+        if dept:
+            user.profile.dept = dept
+            user.profile.save()
+
         return user
 
 
@@ -91,3 +98,24 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         exclude = ('id',)
         read_only_fields = ('user', 'role', 'email_confirmed', 'created_at', 'updated_at',)
+
+
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        if not User.objects.filter(email=value.lower()).exists():
+            raise serializers.ValidationError("No user with that Email exists.")
+        return value.lower()
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    uidb64 = serializers.CharField()
+    token = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['confirm_password']:
+            raise serializers.ValidationError({"confirm_password": "Passwords must match."})
+        return attrs
