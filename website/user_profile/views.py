@@ -177,20 +177,9 @@ def activate(request, uidb64, token, backend='django.contrib.auth.backends.Model
             profile.image.name = rel_media  # set path relative to MEDIA_ROOT
             profile.save()
 
-        # Redirect based on client type
-        client_type = profile.client_type
-
-        if client_type == 'flutter' or client_type == 'android':
-            # For Flutter/Android app - use deep link with app package name
-            deep_link = f"com.recursionnitd.app://verify?email={user.email}&status=success"
-            return redirect(deep_link)
-        elif client_type == 'ios':
-            # For iOS app - use app scheme
-            deep_link = f"com.recursionnitd.app://verify?email={user.email}&status=success"
-            return redirect(deep_link)
-        else:
-            # For web - use website URL
+        if profile.user == request.user:
             return redirect(settings.FRONTEND_BASE_URL + '/profile/edit?activated=true')
+        return redirect(settings.FRONTEND_BASE_URL + '/profile/edit?activated=true')
     else:
         return render(request, 'account_activation_invalid.html')
 
