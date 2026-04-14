@@ -44,16 +44,6 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
     image_url = models.URLField(blank=True, null=True)
     image = models.ImageField(blank=True, null=True, upload_to=content_file_name)
     email_confirmed = models.BooleanField(default=False)
-    client_type = models.CharField(
-        max_length=20,
-        choices=[
-            ('web', 'Web'),
-            ('flutter', 'Flutter App'),
-            ('ios', 'iOS App'),
-            ('android', 'Android App'),
-        ],
-        default='web'
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

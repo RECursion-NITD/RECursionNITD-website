@@ -40,7 +40,6 @@ from user_profile.utils import LowerEmailField
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     dept = serializers.CharField(max_length=70, required=False, allow_blank=True)
-    client_type = serializers.CharField(max_length=20, required=False, default='web', write_only=True)
 
     email = LowerEmailField(
         required=True,
@@ -51,7 +50,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2', 'dept', 'client_type']
+        fields = ['username', 'email', 'password', 'password2', 'dept']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -66,7 +65,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data.pop('password2')
         dept = validated_data.pop('dept', None)
-        client_type = validated_data.pop('client_type', 'web')
 
         user = User.objects.create_user(
             username=validated_data['username'],
@@ -75,9 +73,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
             is_active=False
         )
         
-        if dept or client_type:
+        if dept:
             user.profile.dept = dept
-            user.profile.client_type = client_type
             user.profile.save()
 
         return user
