@@ -39,6 +39,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from user_profile.tokens import password_reset_token
 from django.template.loader import render_to_string
+import os
 
 
 
@@ -61,6 +62,24 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 # Google Login api handler
 class LoginWithGoogleView(APIView):
 
+    def _allowed_client_ids(self):
+        allowed_client_ids = {
+            getattr(settings, "GOOGLE_ANDROID_CLIENT_ID", None),
+            getattr(settings, "GOOGLE_WEB_CLIENT_ID", None),
+            getattr(settings, "GOOGLE_CLIENT_ID", None),
+            getattr(settings, "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None),
+        }
+        return {client_id for client_id in allowed_client_ids if client_id}
+
+    def _is_allowed_email_domain(self, email):
+        domains = os.getenv("SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS", "")
+        allowed_domains = [domain.strip().lower() for domain in domains.split(",") if domain.strip()]
+        if not allowed_domains:
+            return True
+
+        email_domain = email.split("@")[-1].lower() if email and "@" in email else ""
+        return email_domain in allowed_domains
+
     def generate_token(self,user):
         refresh = RefreshToken.for_user(user)
 
@@ -72,57 +91,119 @@ class LoginWithGoogleView(APIView):
         }
 
     def post(self, request):
-        access_token = request.data.get('token')
-        GOOGLE_CLIENT_ID = getattr(settings, "GOOGLE_CLIENT_ID", None)
-        if not GOOGLE_CLIENT_ID:
-            GOOGLE_CLIENT_ID = getattr(settings, "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None)
+        access_token = request.data.get("access_token") or request.data.get("token")
+        id_token = request.data.get("id_token")
+        client_id = request.data.get("client_id")
+        allowed_client_ids = self._allowed_client_ids()
 
         try:
-            TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v2/tokeninfo?access_token=" + access_token
-            headers = {
-                "Authorization": f"Bearer {access_token}",
-                "Content-Type": "application/json"
-            }
-            token_info = requests.get(TOKEN_INFO_URL, data={}, headers=headers).json()
-            
-            if 'error' in token_info:
-                print(f"Google API Error: {token_info}")
-                return Response(data={'response': 'Invalid token from Google'}, status=400)
+            if access_token:
+                headers = {
+                    "Authorization": f"Bearer {access_token}",
+                    "Content-Type": "application/json",
+                }
+                token_info = requests.get(
+                    "https://www.googleapis.com/oauth2/v2/tokeninfo",
+                    params={"access_token": access_token},
+                    timeout=10,
+                ).json()
 
-            if token_info['issued_to'] == GOOGLE_CLIENT_ID:
-                try:
-                    USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo?access_token=" + access_token
-                    user_info = requests.get(USER_INFO_URL, data={}, headers=headers).json()
-                    user, created = User.objects.get_or_create(
-                        username=user_info['email'].split('@')[0],
-                        defaults={
-                            'first_name': user_info.get('name', ''),
-                            'last_name': user_info.get('given_name', ''),
-                            'email': user_info['email']
-                        }
-                    )
-                    
-                    if created:
-                        try:
-                            profile = user.profile
-                            profile.name = user_info.get('name', '')
-                            picture_url = user_info.get('picture')
-                            if picture_url:
-                                image_response = requests.get(picture_url)
-                                if image_response.status_code == 200:
-                                    profile.image.save(f"{user.username}_google.jpg", ContentFile(image_response.content), save=False)
-                            profile.save()
-                        except Exception as e:
-                            print(f"Error saving user profile data from Google: {e}")
+                if 'error' in token_info:
+                    print(f"Google API Error: {token_info}")
+                    return Response(data={'response': 'Invalid token from Google'}, status=400)
 
-                    tokens = self.generate_token(user)
-                    return Response(data={'access': tokens['access'], 'refresh': tokens['refresh'], 'response': 'valid', 'is_new_user': created}, status=200)
-                except Exception as e:
-                    print(f"User creation/retrieval error: {e}")
-                    return Response(data={'response': 'Unauthorized'}, status=401)
+                issued_to = token_info.get('issued_to')
+                if client_id and client_id not in allowed_client_ids:
+                    return Response(data={'response': 'Unauthorized client_id'}, status=401)
+                if issued_to not in allowed_client_ids:
+                    print(f"Client ID mismatch. Expected one of: {allowed_client_ids}, Got: {issued_to}")
+                    return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
+
+                USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
+                user_info = requests.get(
+                    USER_INFO_URL,
+                    headers=headers,
+                    timeout=10,
+                ).json()
+
+                if 'error' in user_info:
+                    return Response(data={'response': 'Failed to fetch user information'}, status=400)
+
+            elif id_token:
+                token_info = requests.get(
+                    "https://oauth2.googleapis.com/tokeninfo",
+                    params={"id_token": id_token},
+                    timeout=10,
+                ).json()
+
+                if 'error' in token_info:
+                    error_desc = token_info.get('error_description', token_info.get('error', 'Unknown error'))
+                    return Response(data={'response': f'Invalid id token: {error_desc}'}, status=400)
+
+                aud = token_info.get('aud')
+                if aud not in allowed_client_ids:
+                    print(f"Client ID mismatch. Expected one of: {allowed_client_ids}, Got: {aud}")
+                    return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
+
+                user_info = {
+                    'email': token_info.get('email'),
+                    'name': token_info.get('name', ''),
+                    'given_name': token_info.get('given_name', ''),
+                    'picture': token_info.get('picture'),
+                }
+
             else:
-                print(f"Client ID mismatch. Expected: {GOOGLE_CLIENT_ID}, Got: {token_info.get('issued_to')}")
-                return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
+                return Response(data={'response': 'Token missing'}, status=400)
+
+            email = user_info.get('email')
+            if not email:
+                return Response(data={'response': 'Email missing from Google token'}, status=400)
+
+            if not self._is_allowed_email_domain(email):
+                return Response(data={'response': 'Unauthorized email domain'}, status=401)
+
+            try:
+                user, created = User.objects.get_or_create(
+                    username=email.split('@')[0],
+                    defaults={
+                        'first_name': user_info.get('name', ''),
+                        'last_name': user_info.get('given_name', ''),
+                        'email': email,
+                    }
+                )
+
+                if not created and user.email != email:
+                    user.email = email
+                    user.first_name = user_info.get('name', user.first_name)
+                    user.last_name = user_info.get('given_name', user.last_name)
+                    user.save(update_fields=['email', 'first_name', 'last_name'])
+
+                if created:
+                    try:
+                        profile = user.profile
+                        profile.name = user_info.get('name', '')
+                        picture_url = user_info.get('picture')
+                        if picture_url:
+                            image_response = requests.get(picture_url, timeout=10)
+                            if image_response.status_code == 200:
+                                profile.image.save(f"{user.username}_google.jpg", ContentFile(image_response.content), save=False)
+                        profile.save()
+                    except Exception as e:
+                        print(f"Error saving user profile data from Google: {e}")
+
+                tokens = self.generate_token(user)
+                return Response(
+                    data={
+                        'access': tokens['access'],
+                        'refresh': tokens['refresh'],
+                        'response': 'valid',
+                        'is_new_user': created,
+                    },
+                    status=200,
+                )
+            except Exception as e:
+                print(f"User creation/retrieval error: {e}")
+                return Response(data={'response': 'Unauthorized'}, status=401)
         except Exception as e:
             print(f"Top level error in LoginWithGoogleView: {e}")
             return Response(data={'response': 'Invalid token'}, status=400)

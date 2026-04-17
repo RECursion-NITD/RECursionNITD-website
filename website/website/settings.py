@@ -9,7 +9,12 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from dotenv import load_dotenv
-load_dotenv()
+
+# Always load workspace root .env and override pre-existing OS env vars.
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR = os.path.dirname(CURRENT_DIR)
+REPO_ROOT = os.path.dirname(PROJECT_DIR)
+load_dotenv(dotenv_path=os.path.join(REPO_ROOT, '.env'), override=True)
 from decouple import config, Csv
 from datetime import timedelta
 import dj_database_url
@@ -26,11 +31,19 @@ SECRET_KEY = '9%b%-x(_!zd(ffdc!s=8j(clv&(_92d!+lh@#o9&t8*y40v1+3'
 # GOOGLE_CLIENT_ID
 GOOGLE_CLIENT_ID = config('GOOGLE_CLIENT_ID', None)
 
+GOOGLE_ANDROID_CLIENT_ID = config('GOOGLE_ANDROID_CLIENT_ID', None)
+GOOGLE_WEB_CLIENT_ID = config('GOOGLE_WEB_CLIENT_ID', None)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
+
+# ngrok/proxy support for correct absolute URL generation during OAuth callbacks.
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 
 API_ONLY_MODE = config('API_ONLY_MODE', default=False, cast=bool)
@@ -223,6 +236,14 @@ LOGIN_REDIRECT_URL = 'home'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
 
+# Whitelist domains for OAuth
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = [
+    'recursionnitd.in',
+    'localhost',
+    '127.0.0.1',
+    'gmail.com'
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
@@ -258,6 +279,10 @@ EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD', default='')
+
+TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 EMAIL_HOST_PASSWORD = config('EMAIL_PASSWORD', default='')
 
 TRIAL_REC_MAIL = 'jiwegaw290@randrai.com'
