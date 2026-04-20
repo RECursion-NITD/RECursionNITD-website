@@ -66,7 +66,6 @@ class LoginWithGoogleView(APIView):
         allowed_client_ids = {
             getattr(settings, "GOOGLE_ANDROID_CLIENT_ID", None),
             getattr(settings, "GOOGLE_WEB_CLIENT_ID", None),
-            getattr(settings, "GOOGLE_CLIENT_ID", None),
             getattr(settings, "SOCIAL_AUTH_GOOGLE_OAUTH2_KEY", None),
         }
         return {client_id for client_id in allowed_client_ids if client_id}
@@ -115,8 +114,10 @@ class LoginWithGoogleView(APIView):
                 issued_to = token_info.get('issued_to')
                 if client_id and client_id not in allowed_client_ids:
                     return Response(data={'response': 'Unauthorized client_id'}, status=401)
-                if issued_to not in allowed_client_ids:
-                    print(f"Client ID mismatch. Expected one of: {allowed_client_ids}, Got: {issued_to}")
+                
+                # Validate token's issued_to (must match one of allowed client IDs)
+                if not issued_to or issued_to not in allowed_client_ids:
+                    print(f"Client ID mismatch. Token issued_to={issued_to}. Allowed: {allowed_client_ids}")
                     return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
 
                 USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -140,10 +141,20 @@ class LoginWithGoogleView(APIView):
                     error_desc = token_info.get('error_description', token_info.get('error', 'Unknown error'))
                     return Response(data={'response': f'Invalid id token: {error_desc}'}, status=400)
 
+                # Check both 'azp' (Authorized Party - who token was issued to)
+                # and 'aud' (Audience - who it's for) since Flutter sends Android OAuth tokens
+                azp = token_info.get('azp')
                 aud = token_info.get('aud')
-                if aud not in allowed_client_ids:
-                    print(f"Client ID mismatch. Expected one of: {allowed_client_ids}, Got: {aud}")
-                    return Response(data={'response': 'Unauthorized - Client ID mismatch'}, status=401)
+                
+                # Validate provided client_id if given
+                if client_id and client_id not in allowed_client_ids:
+                    print(f"Provided client_id not in allowed list. Got: {client_id}")
+                    return Response(data={'response': 'Unauthorized client_id'}, status=401)
+                
+                # Accept if EITHER azp OR aud is in allowed list
+                if azp not in allowed_client_ids and aud not in allowed_client_ids:
+                    print(f"Client ID mismatch. Token aud={aud}, azp={azp}. Allowed: {allowed_client_ids}")
+                    return Response(data={'response': f'Unauthorized - Client ID mismatch'}, status=401)
 
                 user_info = {
                     'email': token_info.get('email'),
