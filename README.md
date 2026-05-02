@@ -59,9 +59,19 @@
 
 ### 2. Clone the repository
 
-```powershell
-cd C:\Users\hp\Downloads\RECursion_Website\RECursionNITD-website
-```
+1.Fork and Clone the Repository
+Go to: https://github.com/RECursion-NITD/RECursionNITD-website
+Click Fork to create your own copy
+Clone your fork:
+git clone https://github.com/<your-username>/RECursionNITD-website.git
+```cd RECursionNITD-website```
+
+2.Add upstream remote:
+git remote add upstream https://github.com/RECursion-NITD/RECursionNITD-website.git
+```git remote -v```
+
+3.Checkout development branch:
+```git checkout dev-api```
 
 ### 3. Create a virtual environment
 
