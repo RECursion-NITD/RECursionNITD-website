@@ -57,21 +57,45 @@
 - Git
 - Optional: Microsoft Visual C++ Build Tools if package compilation fails
 
-### 2. Clone the repository
+#### Install Python 3.11
 
-1.Fork and Clone the Repository
-Go to: https://github.com/RECursion-NITD/RECursionNITD-website
-Click Fork to create your own copy
-Clone your fork:
+- Download Python 3.11 from the official website:  
+  https://www.python.org/downloads/release/python-3110/
+- *Windows (via winget)*: winget install -e --id Python.Python.3.11
+- *macOS (via Homebrew)*: brew install python@3.11
+- *Linux (Ubuntu/Debian)*: sudo apt update && sudo apt install python3.11 python3.11-venv
+
+
+Verify Python version:
+
+```python --version```
+
+Expected output:
+
+```Python 3.11.x```
+
+### 2. Fork and Clone the Repository
+
+- Go to:
+  https://github.com/RECursion-NITD/RECursionNITD-website
+
+- Click Fork to create your own copy
+
+- Clone your fork:
+
+```
 git clone https://github.com/<your-username>/RECursionNITD-website.git
-```cd RECursionNITD-website```
+cd RECursionNITD-website
 
-2.Add upstream remote:
+Add upstream remote:
+
 git remote add upstream https://github.com/RECursion-NITD/RECursionNITD-website.git
-```git remote -v```
+git remote -v
 
-3.Checkout development branch:
-```git checkout dev-api```
+Checkout development branch:
+
+git checkout dev-api
+```
 
 ### 3. Create a virtual environment
 
