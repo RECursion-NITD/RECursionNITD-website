@@ -14,10 +14,9 @@ from django.urls import reverse
 import os
 from PIL import Image
 from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
 from django_prometheus.models import ExportModelOperationsMixin
-
-import sys
 
 
 def content_file_name(instance, filename):
@@ -51,15 +50,36 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        if self.image:
+        previous_image_name = None
+        if self.pk:
+            previous = Profile.objects.filter(pk=self.pk).only('image').first()
+            if previous and previous.image:
+                previous_image_name = previous.image.name
+
+        # Only process when a new image file is uploaded.
+        if self.image and not getattr(self.image, '_committed', True):
             img = Image.open(self.image)
+            img = img.convert('RGB')
             output = BytesIO()
             img = img.resize((100, 100))
             img.save(output, format='PNG', quality=100)
             output.seek(0)
-            self.image = InMemoryUploadedFile(output, 'ImageField', ".png", 'image/png',
-                                              sys.getsizeof(output), None)
-        super(Profile, self).save()
+
+            canonical_name = content_file_name(self, self.image.name or '')
+            if default_storage.exists(canonical_name):
+                default_storage.delete(canonical_name)
+
+            self.image.save(canonical_name, ContentFile(output.getvalue()), save=False)
+
+        super(Profile, self).save(*args, **kwargs)
+
+        new_image_name = self.image.name if self.image else None
+        if (
+            previous_image_name
+            and previous_image_name != new_image_name
+            and default_storage.exists(previous_image_name)
+        ):
+            default_storage.delete(previous_image_name)
 
     def get_absolute_url(self):
         return reverse('user_profile_api:user_detail', kwargs={'username': self.user.username})
@@ -72,4 +92,3 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-    instance.profile.save()

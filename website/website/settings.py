@@ -9,7 +9,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 
 import os
 from dotenv import load_dotenv
-load_dotenv()
+# Always load .env from the Django project root, regardless of current cwd.
+load_dotenv(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env'))
 from decouple import config, Csv
 from datetime import timedelta
 import dj_database_url
@@ -38,11 +39,15 @@ API_MODE_WHITELIST = []
 
 FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3000')
 
-# CORS_ALLOW_ALL_ORIGINS = True
+# Add explicit local dev origins by default while keeping env-driven control.
+CORS_ALLOWED_ORIGINS = config(
+    'CORS_ALLOWED_ORIGINS',
+    default='http://localhost:3000,http://127.0.0.1:3000,https://www.recursionnitd.in',
+    cast=Csv(),
+)
 
-CORS_ALLOWED_ORIGINS = [
-    FRONTEND_BASE_URL
-]
+if FRONTEND_BASE_URL and FRONTEND_BASE_URL not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(FRONTEND_BASE_URL)
 
 CORS_ALLOW_CREDENTIALS = True
 
