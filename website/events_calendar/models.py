@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 import os
 
 
@@ -46,6 +47,21 @@ class Events_Calendar(models.Model):
 
     def __str__(self):
         return self.event_type + " - " + self.title
+
+    def save(self, *args, **kwargs):
+        # If a brand-new image is being uploaded, delete the old one from disk first.
+        # Event images are named by title (e.g. Introduction_to_STL.png). Without this
+        # deletion, every admin save would create Introduction_to_STL_XXXXXXX.png variants.
+        if self.image and isinstance(self.image, (InMemoryUploadedFile, TemporaryUploadedFile)):
+            try:
+                old = Events_Calendar.objects.get(pk=self.pk)
+                if old.image:
+                    storage = old.image.storage
+                    if storage.exists(old.image.name):
+                        storage.delete(old.image.name)
+            except Events_Calendar.DoesNotExist:
+                pass  # New event — no old image to remove.
+        super(Events_Calendar, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('events_api:event_detail', kwargs={'id': self.id})
