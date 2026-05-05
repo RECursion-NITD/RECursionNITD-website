@@ -2,9 +2,9 @@
 asgiref==3.8.1
 beautifulsoup4==4.11.1
 certifi==2023.11.17
-cffi==1.16.0
+cffi==1.17.1
 charset-normalizer==2.1.1
-cryptography==41.0.7
+cryptography==43.0.3
 defusedxml==0.7.1
 dj-database-url==0.5.0
 Django==3.2.25
@@ -18,9 +18,9 @@ djangorestframework-simplejwt==5.2.2
 html2markdown==0.1.7
 idna==3.4
 Markdown==3.4.1
-mysqlclient==2.2.6
+mysqlclient==2.2.7
 oauthlib==3.2.2
-Pillow==10.1.0
+Pillow==10.4.0
 prometheus-client==0.15.0
 pycparser==2.21
 PyJWT==2.10.1

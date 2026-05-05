@@ -3,6 +3,7 @@ import datetime
 import os
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 
 def current_year():
     return datetime.date.today().year
@@ -32,6 +33,21 @@ class Members(models.Model):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        # If a brand-new image is being uploaded, delete the old one from disk first.
+        # This prevents Django from appending a random suffix (e.g. _XXXXXXX) to the
+        # filename because the old file at that path already existed.
+        if isinstance(self.image, (InMemoryUploadedFile, TemporaryUploadedFile)):
+            try:
+                old = Members.objects.get(pk=self.pk)
+                if old.image:
+                    storage = old.image.storage
+                    if storage.exists(old.image.name):
+                        storage.delete(old.image.name)
+            except Members.DoesNotExist:
+                pass  # New member record — no old image to remove.
+        super(Members, self).save(*args, **kwargs)
 
     def get_cname(self):
         class_name = "Member"

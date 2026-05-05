@@ -14,7 +14,7 @@ from django.urls import reverse
 import os
 from PIL import Image
 from io import BytesIO
-from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.files.uploadedfile import InMemoryUploadedFile, TemporaryUploadedFile
 from django_prometheus.models import ExportModelOperationsMixin
 
 import sys
@@ -51,15 +51,43 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
         return self.user.username
 
     def save(self, *args, **kwargs):
-        if self.image:
+        # Only resize/re-encode when a BRAND NEW image is being uploaded.
+        # InMemoryUploadedFile = file uploaded via a form (small, held in RAM).
+        # TemporaryUploadedFile = file uploaded via a form (large, spooled to /tmp).
+        # An existing ImageFieldFile (already on disk) must NOT be re-processed — that
+        # was the root cause of all the _XXXXXXX suffix duplicates.
+        is_new_upload = isinstance(self.image, (InMemoryUploadedFile, TemporaryUploadedFile))
+
+        if self.image and is_new_upload:
+            # Step 1: Delete the old image file from disk before writing the new one.
+            # This prevents Django from appending a random suffix because it found an
+            # existing file at the same target path.
+            try:
+                old = Profile.objects.get(pk=self.pk)
+                if old.image:
+                    storage = old.image.storage
+                    if storage.exists(old.image.name):
+                        storage.delete(old.image.name)
+            except Profile.DoesNotExist:
+                pass  # Brand-new profile — no old image to clean up.
+
+            # Step 2: Resize the new upload to 100x100 pixels.
             img = Image.open(self.image)
             output = BytesIO()
             img = img.resize((100, 100))
             img.save(output, format='PNG', quality=100)
             output.seek(0)
-            self.image = InMemoryUploadedFile(output, 'ImageField', ".png", 'image/png',
-                                              sys.getsizeof(output), None)
-        super(Profile, self).save()
+
+            # Step 3: Wrap the resized bytes in an InMemoryUploadedFile.
+            # Pass the STABLE filename (username.png) so content_file_name returns
+            # images/username.png — and since we just deleted that file, Django will
+            # write it cleanly with NO random suffix.
+            self.image = InMemoryUploadedFile(
+                output, 'ImageField', f"{self.user.username}.png",
+                'image/png', sys.getsizeof(output), None
+            )
+
+        super(Profile, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('user_profile_api:user_detail', kwargs={'username': self.user.username})
@@ -71,5 +99,16 @@ class Profile(ExportModelOperationsMixin('profile'), models.Model):
 @receiver(post_save, sender=User)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
+        # A new User was just registered — create their Profile.
+        # Profile.objects.create() already calls save() internally, so we stop here.
         Profile.objects.create(user=instance)
-    instance.profile.save()
+    else:
+        # An existing User was updated (password reset, email confirm, admin edit, etc.).
+        # We still need to save the profile to persist any in-memory field changes
+        # (e.g. profile.email_confirmed = True set before user.save() was called).
+        # This is now SAFE because Profile.save() only re-processes genuinely new uploads.
+        try:
+            instance.profile.save()
+        except Profile.DoesNotExist:
+            # Edge case: user exists but has no profile yet — create one.
+            Profile.objects.create(user=instance)
