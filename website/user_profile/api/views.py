@@ -174,20 +174,29 @@ class LoginWithGoogleView(APIView):
                 return Response(data={'response': 'Unauthorized email domain'}, status=401)
 
             try:
-                user, created = User.objects.get_or_create(
-                    username=email.split('@')[0],
-                    defaults={
-                        'first_name': user_info.get('name', ''),
-                        'last_name': user_info.get('given_name', ''),
-                        'email': email,
-                    }
-                )
+                try:
+                    user = User.objects.get(email=email)
+                    created = False
+                except User.DoesNotExist:
+                    base_username = email.split('@')[0]
+                    username = base_username
+                    counter = 1
+                    while User.objects.filter(username=username).exists():
+                        username = f"{base_username}{counter}"
+                        counter += 1
+                    
+                    user = User.objects.create(
+                        username=username,
+                        email=email,
+                        first_name=user_info.get('name', ''),
+                        last_name=user_info.get('given_name', '')
+                    )
+                    created = True
 
-                if not created and user.email != email:
-                    user.email = email
+                if not created:
                     user.first_name = user_info.get('name', user.first_name)
                     user.last_name = user_info.get('given_name', user.last_name)
-                    user.save(update_fields=['email', 'first_name', 'last_name'])
+                    user.save(update_fields=['first_name', 'last_name'])
 
                 if created:
                     try:
@@ -251,6 +260,7 @@ class RegistrationView(CreateAPIView):
 
 
 class ListProfileView(ListAPIView):
+    permission_classes = (IsAdminUser,)
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
