@@ -20,7 +20,8 @@ class Events(models.Model):
     # Create a property that returns the markdown instead
     @property
     def formatted_markdown(self):
-        return markdownify(self.description)
+        from utils.content_filter import sanitize_markdown
+        return sanitize_markdown(markdownify(self.description))
 
     def __str__(self):
         return self.title
