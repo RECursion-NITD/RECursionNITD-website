@@ -1,6 +1,26 @@
 import os
 import requests
 import json
+import bleach
+
+def sanitize_markdown(html):
+    allowed_tags = [
+        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'br', 'strong', 'b', 
+        'em', 'i', 'u', 'a', 'ul', 'ol', 'li', 'blockquote', 'pre', 
+        'code', 'hr', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 
+        'td', 'span', 'div', 'del', 'sup', 'sub'
+    ]
+    allowed_attributes = {
+        '*': ['class', 'style', 'id'],
+        'a': ['href', 'title', 'target'],
+        'img': ['src', 'alt', 'title', 'width', 'height']
+    }
+    from bleach.css_sanitizer import CSSSanitizer
+    allowed_styles = [
+        'color', 'background-color', 'font-size', 'text-align', 'font-weight', 'font-style'
+    ]
+    css_sanitizer = CSSSanitizer(allowed_css_properties=allowed_styles)
+    return bleach.clean(html, tags=allowed_tags, attributes=allowed_attributes, css_sanitizer=css_sanitizer)
 
 def check_content_safety(text, title=None):
     """

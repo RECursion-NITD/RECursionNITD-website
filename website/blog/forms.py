@@ -7,6 +7,7 @@ from .validators import *
 from django.contrib.auth.forms import UserCreationForm
 from markdownx.fields import MarkdownxFormField
 from markdownx.utils import markdownify
+from utils.content_filter import sanitize_markdown
 
 class Postform(forms.ModelForm):
     title = models.CharField(max_length=100)
@@ -16,7 +17,7 @@ class Postform(forms.ModelForm):
         data = self.cleaned_data['description']
         if len(data)<20:
             raise forms.ValidationError("Description too Short! Less than 20 words!")
-        data = markdownify(data)
+        data = sanitize_markdown(markdownify(data))
         return data
 
     class Meta:
@@ -42,7 +43,7 @@ class Replyform(forms.ModelForm):
 
     def clean_description(self):
         data = self.cleaned_data['description']
-        data = markdownify(data)
+        data = sanitize_markdown(markdownify(data))
         return data
 
 
@@ -55,7 +56,7 @@ class Commentform(forms.ModelForm):
 
     def clean_body(self):
         data = self.cleaned_data['body']
-        data = markdownify(data)
+        data = sanitize_markdown(markdownify(data))
         return data
 
     class Meta:
@@ -67,7 +68,7 @@ class Comment_Replyform(forms.ModelForm):
 
     def clean_body(self):
         data = self.cleaned_data['body']
-        data = markdownify(data)
+        data = sanitize_markdown(markdownify(data))
         return data
 
     class Meta:

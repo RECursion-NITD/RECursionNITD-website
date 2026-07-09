@@ -50,7 +50,8 @@ class Experiences(ExportModelOperationsMixin('experience'), models.Model):
 
     @property
     def formatted_markdown(self):
-        return markdownify(self.interview_Questions)
+        from utils.content_filter import sanitize_markdown
+        return sanitize_markdown(markdownify(self.interview_Questions))
 
     def __str__(self):
         return str(self.company) + " " + str(self.user)
