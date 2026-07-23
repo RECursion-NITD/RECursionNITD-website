@@ -20,19 +20,18 @@ services:
     restart: always
 
   frontend:
-    build:
-      context: ../RECursionNITD-Frontend
-      dockerfile: Dockerfile
+    image: node:20-slim
     container_name: recursion-frontend
+    working_dir: /app
     ports:
       - "3000:3000"
     volumes:
-      - ../RECursionNITD-Frontend/src:/app/src
-      - ../RECursionNITD-Frontend/public:/app/public
+      - ../RECursionNITD-Frontend:/app
     env_file:
       - ../RECursionNITD-Frontend/.env
     environment:
       - REACT_APP_BACKEND_URL=http://localhost:8000
+    command: sh -c "npm config set fetch-retry-maxtimeout 600000 && npm config set fetch-retries 5 && npm config set fetch-retry-mintimeout 10000 && npm install --no-audit --no-fund && npm start"
     # Required for Create React App to stay alive in Docker
     stdin_open: true
     tty: true
