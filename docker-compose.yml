@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recursion-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the website folder to preserve the db.sqlite3 and allow hot-reloading
+      - ./website:/app/website
+    env_file:
+      - ./website/.env
+    environment:
+      # Override the host-specific database path to the container path
+      - DATABASE_URL=sqlite:////app/website/db.sqlite3
+      - FRONTEND_BASE_URL=http://localhost:3000
+    restart: always
+
+  frontend:
+    build:
+      context: ../RECursionNITD-Frontend
+      dockerfile: Dockerfile
+    container_name: recursion-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../RECursionNITD-Frontend/src:/app/src
+      - ../RECursionNITD-Frontend/public:/app/public
+    env_file:
+      - ../RECursionNITD-Frontend/.env
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8000
+    # Required for Create React App to stay alive in Docker
+    stdin_open: true
+    tty: true
+    restart: always
+    depends_on:
+      - backend
