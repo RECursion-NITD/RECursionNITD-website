@@ -31,6 +31,12 @@ class Profileform(forms.ModelForm):
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Mandatory')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email', '').strip().lower()
+        if is_disposable_email(email):
+            raise forms.ValidationError(_("Temporary or disposable email addresses are not allowed. Please use a permanent email address."))
+        return email
+
     class Meta:
         model = User
         fields = ('username', 'email', 'password1', 'password2', )
