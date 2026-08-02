@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 from user_profile.models import Profile
 from user_profile.utils import LowerEmailField
+from user_profile.validators import is_disposable_email
 
 
 # class RegistrationSerializer(serializers.ModelSerializer):
@@ -54,6 +55,15 @@ class RegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True}
         }
+
+    def validate_email(self, value):
+        value = value.strip().lower()
+        if is_disposable_email(value):
+            raise serializers.ValidationError(
+                "Temporary or disposable email addresses are not allowed. "
+                "Please use a permanent email address."
+            )
+        return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:

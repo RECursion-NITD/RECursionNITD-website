@@ -40,3 +40,4 @@ typing_extensions==4.12.2
 tzdata==2024.2
 urllib3==2.1.0
 django-ratelimit==4.1.0
+disposable-email-domains>=0.0.95
