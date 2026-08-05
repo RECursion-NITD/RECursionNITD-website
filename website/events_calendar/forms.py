@@ -39,8 +39,10 @@ class Eventsform(forms.ModelForm):
         return final_dt
 
     def clean_description(self):
+        from markdownx.utils import markdownify
+        from utils.content_filter import sanitize_markdown
         data = self.cleaned_data['description']
-        data = markdownify(data)
+        data = sanitize_markdown(markdownify(data))
         return data
     
     def clean(self):
