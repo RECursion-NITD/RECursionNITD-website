@@ -54,7 +54,9 @@ FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3000')
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    FRONTEND_BASE_URL
+    FRONTEND_BASE_URL,
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -84,6 +86,7 @@ INSTALLED_APPS = [
     'django_prometheus',
     'events_calendar',
     'corsheaders',
+    'leaderboard.apps.LeaderboardConfig',
     'rest_framework_simplejwt.token_blacklist'
 ]
 
@@ -155,6 +158,19 @@ REST_FRAMEWORK = {
 
 # REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
+
+# Redis Cache configuration
+REDIS_URL = config('REDIS_URL', default='redis://127.0.0.1:6379/1')
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'IGNORE_EXCEPTIONS': True,
+        }
+    }
+}
 
 # JWT SETTINGS
 SIMPLE_JWT = {
