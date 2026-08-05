@@ -1,4 +1,5 @@
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from getting_started.models import Topic, SubTopic, Level
 from .serializers import LevelSerializer , SubTopicContentSerializer
 
@@ -6,6 +7,7 @@ from .serializers import LevelSerializer , SubTopicContentSerializer
 
 class TopicListAPIView(ListAPIView):
     queryset = Level.objects.all()
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     serializer_class = LevelSerializer
 
     def get_queryset(self):
@@ -16,6 +18,7 @@ class TopicListAPIView(ListAPIView):
 class SubTopicRetrieveAPIView(RetrieveUpdateAPIView):
     queryset = SubTopic.objects.all()
     serializer_class = SubTopicContentSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     lookup_field = 'id'
     lookup_url_kwarg = 'subtopic_id'
 
