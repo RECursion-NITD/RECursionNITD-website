@@ -30,6 +30,7 @@ class ListCreateMembersView(ListCreateAPIView):
 
 class AlumniYearWiseView(generics.ListAPIView):
     serializer_class = MemberSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = MembersFilter
 
@@ -38,3 +39,4 @@ class AlumniYearWiseView(generics.ListAPIView):
         if year:
             return Members.objects.filter(batch_year=year).order_by('-batch_year', 'name')
         return Members.objects.all().order_by('-batch_year', 'name')  # Default to all alumni if no year is specified
+
