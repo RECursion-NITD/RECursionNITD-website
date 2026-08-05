@@ -41,3 +41,6 @@ tzdata==2024.2
 urllib3==2.1.0
 django-ratelimit==4.1.0
 disposable-email-domains>=0.0.95
+bleach[css]==6.2.0
+tinycss2==1.4.0
+
