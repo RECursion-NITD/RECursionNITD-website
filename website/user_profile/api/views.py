@@ -260,7 +260,8 @@ class RegistrationView(CreateAPIView):
 
 
 class ListProfileView(ListAPIView):
-    permission_classes = (IsAdminUser,)
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAdminUser]
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
@@ -277,13 +278,16 @@ class RetrieveUpdateProfileView(RetrieveUpdateAPIView):
 
 
 class UserSearchView(ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
         search_query = self.request.query_params.get('query')
+        if not search_query:  # returns empty list if no query is provided
+            return Profile.objects.none()
         qs = Profile.objects.all()
-        if not search_query:  # returns all profiles in case of empty query
-            return qs
+
         matcher = ProfileMatcher(query=search_query)
         # using generator to save on space
         unsorted_matches = ((matcher.matcher(i), i) for i in qs if matcher.matcher(i) >= 0.5)
