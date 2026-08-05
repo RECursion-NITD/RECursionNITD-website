@@ -23,6 +23,7 @@ from user_profile.utils import ProfileMatcher
 
 import requests
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.conf import settings
 from django.core.files.base import ContentFile
 
