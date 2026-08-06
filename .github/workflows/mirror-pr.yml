@@ -1,0 +1,75 @@
+name: Auto-Mirror PR between testing2 and dev-api
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  mirror-pull-request:
+    if: >
+      (github.base_ref == 'testing2' || github.base_ref == 'dev-api') &&
+      github.actor != 'github-actions[bot]' &&
+      !contains(github.event.pull_request.title, '[Auto-Mirror]')
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Calculate Target Alternate Branch
+        id: config
+        run: |
+          ORIG_BASE="${{ github.base_ref }}"
+          if [ "$ORIG_BASE" = "testing2" ]; then
+            ALT_BASE="dev-api"
+          else
+            ALT_BASE="testing2"
+          fi
+          echo "alt_base=$ALT_BASE" >> $GITHUB_OUTPUT
+          echo "orig_base=$ORIG_BASE" >> $GITHUB_OUTPUT
+
+      - name: Check Existing Mirror & Create Companion PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HEAD_LABEL: ${{ github.event.pull_request.head.label }}
+          PR_TITLE: "[Auto-Mirror] ${{ github.event.pull_request.title }}"
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          ALT_BASE: ${{ steps.config.outputs.alt_base }}
+          ORIG_BASE: ${{ steps.config.outputs.orig_base }}
+        run: |
+          # 1. Check if a PR from this head branch to the alternate base already exists
+          EXISTING_PR=$(gh pr list \
+            --repo "${{ github.repository }}" \
+            --head "$HEAD_LABEL" \
+            --base "$ALT_BASE" \
+            --state open \
+            --json number \
+            --jq '.[0].number')
+
+          if [ -n "$EXISTING_PR" ] && [ "$EXISTING_PR" != "null" ]; then
+            echo "A companion PR already exists (#$EXISTING_PR) for base $ALT_BASE. Skipping creation."
+            exit 0
+          fi
+
+          # 2. Construct the body with link to original PR and instructions
+          PR_BODY=$(cat <<EOF
+          > 🤖 **Automated Companion PR**: This PR was automatically opened for \`$ALT_BASE\` to match [#$PR_NUMBER]($PR_URL) opened by @$PR_AUTHOR targeting \`$ORIG_BASE\`.
+
+          ---
+
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
+
+          # 3. Create the mirror PR using GitHub CLI
+          echo "Creating companion PR for base branch: $ALT_BASE from head: $HEAD_LABEL..."
+          gh pr create \
+            --repo "${{ github.repository }}" \
+            --base "$ALT_BASE" \
+            --head "$HEAD_LABEL" \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY"
