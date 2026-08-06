@@ -1,8 +1,14 @@
 name: Auto-Mirror PR between testing2 and dev-api
 
-on:
+"on":
   pull_request_target:
     types: [opened, reopened]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to mirror for manual testing"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -11,36 +17,73 @@ permissions:
 jobs:
   mirror-pull-request:
     if: >
-      (github.base_ref == 'testing2' || github.base_ref == 'dev-api') &&
-      github.actor != 'github-actions[bot]' &&
-      !contains(github.event.pull_request.title, '[Auto-Mirror]')
+      github.event_name == 'workflow_dispatch' || (
+        (github.base_ref == 'testing2' || github.base_ref == 'dev-api') &&
+        github.actor != 'github-actions[bot]' &&
+        !contains(github.event.pull_request.title, '[Auto-Mirror]')
+      )
     
     runs-on: ubuntu-latest
 
     steps:
       - name: Calculate Target Alternate Branch
         id: config
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_RAW_BODY: ${{ github.event.pull_request.body }}
         run: |
-          ORIG_BASE="${{ github.base_ref }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            PR_JSON=$(gh pr view "${{ inputs.pr_number }}" --repo "${{ github.repository }}" --json baseRefName,headRefName,title,body,number,url,author)
+            ORIG_BASE=$(echo "$PR_JSON" | jq -r '.baseRefName')
+            HEAD_LABEL=$(echo "$PR_JSON" | jq -r '.headRefName')
+            PR_TITLE=$(echo "$PR_JSON" | jq -r '.title')
+            PR_NUMBER=$(echo "$PR_JSON" | jq -r '.number')
+            PR_URL=$(echo "$PR_JSON" | jq -r '.url')
+            PR_AUTHOR=$(echo "$PR_JSON" | jq -r '.author.login')
+            echo "$PR_JSON" | jq -r '.body' > pr_orig_body.md
+          else
+            ORIG_BASE="${{ github.base_ref }}"
+            HEAD_LABEL="${{ github.event.pull_request.head.label }}"
+            PR_TITLE="${{ github.event.pull_request.title }}"
+            PR_NUMBER="${{ github.event.pull_request.number }}"
+            PR_URL="${{ github.event.pull_request.html_url }}"
+            PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+            printf "%s\n" "$PR_RAW_BODY" > pr_orig_body.md
+          fi
+
           if [ "$ORIG_BASE" = "testing2" ]; then
             ALT_BASE="dev-api"
-          else
+          elif [ "$ORIG_BASE" = "dev-api" ]; then
             ALT_BASE="testing2"
+          else
+            echo "Base branch $ORIG_BASE is neither testing2 nor dev-api. Skipping."
+            exit 0
           fi
+
           echo "alt_base=$ALT_BASE" >> $GITHUB_OUTPUT
           echo "orig_base=$ORIG_BASE" >> $GITHUB_OUTPUT
+          echo "head_label=$HEAD_LABEL" >> $GITHUB_OUTPUT
+          echo "pr_title=[Auto-Mirror] $PR_TITLE" >> $GITHUB_OUTPUT
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+          echo "pr_url=$PR_URL" >> $GITHUB_OUTPUT
+          echo "pr_author=$PR_AUTHOR" >> $GITHUB_OUTPUT
 
       - name: Check Existing Mirror & Create Companion PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HEAD_LABEL: ${{ github.event.pull_request.head.label }}
-          PR_TITLE: "[Auto-Mirror] ${{ github.event.pull_request.title }}"
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          HEAD_LABEL: ${{ steps.config.outputs.head_label }}
           ALT_BASE: ${{ steps.config.outputs.alt_base }}
           ORIG_BASE: ${{ steps.config.outputs.orig_base }}
+          PR_TITLE: ${{ steps.config.outputs.pr_title }}
+          PR_NUMBER: ${{ steps.config.outputs.pr_number }}
+          PR_URL: ${{ steps.config.outputs.pr_url }}
+          PR_AUTHOR: ${{ steps.config.outputs.pr_author }}
         run: |
+          if [ -z "$ALT_BASE" ] || [ -z "$HEAD_LABEL" ]; then
+            echo "No target configuration found. Exiting."
+            exit 0
+          fi
+
           # 1. Check if a PR from this head branch to the alternate base already exists
           EXISTING_PR=$(gh pr list \
             --repo "${{ github.repository }}" \
@@ -55,21 +98,20 @@ jobs:
             exit 0
           fi
 
-          # 2. Construct the body with link to original PR and instructions
-          PR_BODY=$(cat <<EOF
-          > 🤖 **Automated Companion PR**: This PR was automatically opened for \`$ALT_BASE\` to match [#$PR_NUMBER]($PR_URL) opened by @$PR_AUTHOR targeting \`$ORIG_BASE\`.
+          # 2. Build the final PR body safely into a file
+          echo "> 🤖 **Automated Companion PR**: This PR was automatically opened for \`$ALT_BASE\` to match [#$PR_NUMBER]($PR_URL) opened by @$PR_AUTHOR targeting \`$ORIG_BASE\`." > mirror_body.md
+          echo "" >> mirror_body.md
+          echo "---" >> mirror_body.md
+          echo "" >> mirror_body.md
+          if [ -f pr_orig_body.md ]; then
+            cat pr_orig_body.md >> mirror_body.md
+          fi
 
-          ---
-
-          ${{ github.event.pull_request.body }}
-          EOF
-          )
-
-          # 3. Create the mirror PR using GitHub CLI
+          # 3. Create the mirror PR
           echo "Creating companion PR for base branch: $ALT_BASE from head: $HEAD_LABEL..."
           gh pr create \
             --repo "${{ github.repository }}" \
             --base "$ALT_BASE" \
             --head "$HEAD_LABEL" \
             --title "$PR_TITLE" \
-            --body "$PR_BODY"
+            --body-file mirror_body.md
