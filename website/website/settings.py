@@ -51,6 +51,10 @@ API_MODE_WHITELIST = []
 
 FRONTEND_BASE_URL = config('FRONTEND_BASE_URL', default='http://localhost:3000')
 
+CLIST_USERNAME = config('CLIST_USERNAME', default='')
+CLIST_API_KEY = config('CLIST_API_KEY', default='')
+CLIST_RESOURCE_IDS = config('CLIST_RESOURCE_IDS', default='1,2,93')
+
 # CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
@@ -83,6 +87,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_prometheus',
     'events_calendar',
+    'contest_notifications',
     'corsheaders',
     'rest_framework_simplejwt.token_blacklist',
     'url_shortener',

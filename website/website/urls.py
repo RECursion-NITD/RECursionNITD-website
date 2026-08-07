@@ -53,7 +53,11 @@ urlpatterns = [
                   path('api/events/', include('events_calendar.api.urls', namespace='events_api')),
                   path('api/team/', include('team.api.urls', namespace='team_api')),
                   path('api/getting_started/', include('getting_started.api.urls', namespace='getting_started_api')),
+
                   path('api/url/', include('url_shortener.urls', namespace='url_shortener')),
+
+                  path('api/contests/', include('contest_notifications.api.urls', namespace='contest_notifications_api')),
+
 
                   # JWT
                   path('api/token/google/', LoginWithGoogleView.as_view(), name='token_for_google'),
