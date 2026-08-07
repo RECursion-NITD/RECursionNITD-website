@@ -102,13 +102,3 @@ def update_user_profile(sender, instance, created, **kwargs):
         # A new User was just registered — create their Profile.
         # Profile.objects.create() already calls save() internally, so we stop here.
         Profile.objects.create(user=instance)
-    else:
-        # An existing User was updated (password reset, email confirm, admin edit, etc.).
-        # We still need to save the profile to persist any in-memory field changes
-        # (e.g. profile.email_confirmed = True set before user.save() was called).
-        # This is now SAFE because Profile.save() only re-processes genuinely new uploads.
-        try:
-            instance.profile.save()
-        except Profile.DoesNotExist:
-            # Edge case: user exists but has no profile yet — create one.
-            Profile.objects.create(user=instance)
