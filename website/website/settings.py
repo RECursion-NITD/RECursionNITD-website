@@ -87,7 +87,8 @@ INSTALLED_APPS = [
     'events_calendar',
     'corsheaders',
     'leaderboard.apps.LeaderboardConfig',
-    'rest_framework_simplejwt.token_blacklist'
+    'rest_framework_simplejwt.token_blacklist',
+    'url_shortener',
 ]
 
 MIDDLEWARE = [
