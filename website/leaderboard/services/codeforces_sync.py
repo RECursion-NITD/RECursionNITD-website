@@ -37,10 +37,17 @@ def fetch_codeforces_org_members(org_id="785"):
     Since scraping the org page is blocked by Cloudflare on AWS, 
     we fetch all rated users globally via API and filter for NIT Durgapur.
     """
-    url = "https://codeforces.com/api/user.ratedList?activeOnly=false"
+    url_all = "https://codeforces.com/api/user.ratedList?activeOnly=false"
+    url_active = "https://codeforces.com/api/user.ratedList?activeOnly=true"
     members = {}
     try:
-        res = requests.get(url, timeout=30)
+        active_handles = set()
+        active_res = requests.get(url_active, timeout=30)
+        if active_res.status_code == 200:
+            for u in active_res.json().get('result', []):
+                active_handles.add(u.get('handle', '').lower())
+
+        res = requests.get(url_all, timeout=30)
         if res.status_code == 200:
             data = res.json()
             if data.get('status') == 'OK':
@@ -55,7 +62,7 @@ def fetch_codeforces_org_members(org_id="785"):
                                 'handle': clean_h,
                                 'contests': 0,
                                 'rating': u.get('rating', 0),
-                                'is_active': True
+                                'is_active': clean_h.lower() in active_handles
                             }
     except Exception as e:
         logger.error(f"Failed to fetch CF org members via API: {e}")
