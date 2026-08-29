@@ -54,6 +54,7 @@ urlpatterns = [
                   path('api/team/', include('team.api.urls', namespace='team_api')),
                   path('api/getting_started/', include('getting_started.api.urls', namespace='getting_started_api')),
                   path('api/url/', include('url_shortener.urls', namespace='url_shortener')),
+                  path('api/leaderboard/', include('leaderboard.api.urls', namespace='leaderboard_api')),
 
                   # JWT
                   path('api/token/google/', LoginWithGoogleView.as_view(), name='token_for_google'),
