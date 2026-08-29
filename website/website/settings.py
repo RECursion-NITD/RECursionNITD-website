@@ -86,8 +86,9 @@ INSTALLED_APPS = [
     'django_prometheus',
     'events_calendar',
     'corsheaders',
+    'rest_framework_simplejwt.token_blacklist',
+    'url_shortener',
     'leaderboard.apps.LeaderboardConfig',
-    'rest_framework_simplejwt.token_blacklist'
 ]
 
 MIDDLEWARE = [
