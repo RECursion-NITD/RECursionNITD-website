@@ -46,7 +46,8 @@ def fetch_codeforces_org_members(org_id="785"):
             if data.get('status') == 'OK':
                 for u in data.get('result', []):
                     org = u.get('organization', '').lower()
-                    if 'durgapur' in org or 'nitd' in org or 'nit d' in org:
+                    org = org.replace(',', ' ')
+                    if 'nit durgapur' in org or ('national institute of technology' in org and 'durgapur' in org):
                         handle = u.get('handle')
                         clean_h = extract_cf_handle(handle)
                         if clean_h:
