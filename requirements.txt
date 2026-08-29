@@ -44,3 +44,4 @@ disposable-email-domains>=0.0.95
 bleach[css]==6.2.0
 tinycss2==1.4.0
 
+cloudscraper==1.2.71
