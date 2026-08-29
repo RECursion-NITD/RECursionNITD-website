@@ -34,52 +34,30 @@ def extract_cf_handle(url_or_handle):
 
 def fetch_codeforces_org_members(org_id="785"):
     """
-    Scrapes the official Codeforces organization ratings page for NIT Durgapur (org_id=785).
-    Returns a dict mapping handle_lower -> { 'handle': h, 'contests': int, 'table_rating': int }
+    Since scraping the org page is blocked by Cloudflare on AWS, 
+    we fetch all rated users globally via API and filter for NIT Durgapur.
     """
-    url = f"https://codeforces.com/ratings/organization/{org_id}"
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    }
+    url = "https://codeforces.com/api/user.ratedList?activeOnly=false"
     members = {}
     try:
-        res = requests.get(url, headers=headers, timeout=20)
+        res = requests.get(url, timeout=30)
         if res.status_code == 200:
-            soup = BeautifulSoup(res.text, 'html.parser')
-            page_content = soup.find('div', id='pageContent')
-            if page_content:
-                table = page_content.find('table')
-                if table:
-                    rows = table.find_all('tr')
-                    for row in rows[1:]:
-                        tds = row.find_all('td')
-                        if len(tds) >= 4:
-                            rank_text = tds[0].get_text().strip()
-                            is_active = (rank_text != '-' and bool(re.search(r'\d+', rank_text)))
-                            handle_tag = tds[1].find('a')
-                            if handle_tag:
-                                handle = handle_tag.get_text().strip()
-                                contests_text = tds[2].get_text().strip()
-                                rating_text = tds[3].get_text().strip()
-                                try:
-                                    contests = int(contests_text)
-                                except (ValueError, TypeError):
-                                    contests = 0
-                                try:
-                                    rating = int(rating_text)
-                                except (ValueError, TypeError):
-                                    rating = 0
-
-                                clean_h = extract_cf_handle(handle)
-                                if clean_h:
-                                    members[clean_h.lower()] = {
-                                        'handle': clean_h,
-                                        'contests': contests,
-                                        'rating': rating,
-                                        'is_active': is_active
-                                    }
+            data = res.json()
+            if data.get('status') == 'OK':
+                for u in data.get('result', []):
+                    org = u.get('organization', '').lower()
+                    if 'durgapur' in org or 'nitd' in org or 'nit d' in org:
+                        handle = u.get('handle')
+                        clean_h = extract_cf_handle(handle)
+                        if clean_h:
+                            members[clean_h.lower()] = {
+                                'handle': clean_h,
+                                'contests': 0,
+                                'rating': u.get('rating', 0),
+                                'is_active': True
+                            }
     except Exception as e:
-        logger.error(f"Failed to scrape Codeforces Org {org_id}: {e}")
+        logger.error(f"Failed to fetch CF org members via API: {e}")
     return members
 
 
