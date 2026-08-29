@@ -44,7 +44,8 @@ def fetch_codechef_institution_members(max_pages=5):
     Uses CodeChef's rating API with session cookies and CSRF token extraction.
     Returns a dict mapping handle_lower -> { 'handle', 'name', 'rating', 'stars', 'global_rank' }
     """
-    s = requests.Session()
+    import cloudscraper
+    s = cloudscraper.create_scraper()
     page_url = (
         "https://www.codechef.com/ratings/all?"
         "filterBy=Country%3DIndia%3BInstitution%3DNational%20Institute%20of%20Technology%2C%20Durgapur%20"
@@ -56,7 +57,7 @@ def fetch_codechef_institution_members(max_pages=5):
 
     members = {}
     try:
-        r = s.get(page_url, headers=headers, timeout=15)
+        r = s.get(page_url, headers=headers, timeout=45)
         m = re.search(r'window\.csrfToken\s*=\s*["\']([^"\']+)["\']', r.text)
         csrf_token = m.group(1) if m else None
 
@@ -74,7 +75,7 @@ def fetch_codechef_institution_members(max_pages=5):
                 "Referer": page_url
             }
 
-            resp = s.get(api_url, headers=api_headers, timeout=15)
+            resp = s.get(api_url, headers=api_headers, timeout=45)
             if resp.status_code != 200:
                 break
 
